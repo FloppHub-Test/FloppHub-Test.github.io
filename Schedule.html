@@ -1,1 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horario Grupo 1C - Cancún 4</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        :root {
+            --primary: #1a2a6c;
+            --secondary: #2c3e50;
+            --accent: #3498db;
+            --text: #ecf0f1;
+            --bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .datetime {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .current-class-container {
+            background: var(--card-bg);
+            color: var(--secondary);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            text-align: center;
+            animation: fadeIn 0.8s ease;
+            transition: var(--transition);
+            border: 3px solid transparent;
+        }
+
+        .current-class-container.active {
+            border-color: var(--accent);
+            transform: scale(1.02);
+        }
+
+        .current-class-container.recess {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .current-class-container.free {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: var(--secondary);
+        }
+
+        .current-subject {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        .current-details {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        .teacher-name {
+            font-size: 1.5rem;
+            margin-top: 15px;
+            font-weight: 600;
+            color: var(--accent);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition);
+        }
+
+        .teacher-name.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .schedule-table {
+            background: var(--card-bg);
+            color: var(--secondary);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            animation: fadeInUp 0.6s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 20px 10px;
+            font-size: 1.1rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        td {
+            padding: 15px 10px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+
+        td:hover {
+            background: rgba(52, 152, 219, 0.1);
+            transform: translateY(-2px);
+        }
+
+        td.active {
+            background: var(--accent);
+            color: white;
+            font-weight: bold;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 5;
+        }
+
+        .subject-cell {
+            font-weight: 600;
+            border-radius: 10px;
+            margin: 5px;
+        }
+
+        .recess-cell {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
+            color: white;
+            font-weight: bold;
+        }
+
+        .free-cell {
+            background: #ecf0f1;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .tooltip {
+            position: fixed;
+            background: var(--primary);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+            z-index: 1000;
+            white-space: nowrap;
+            box-shadow: var(--shadow);
+        }
+
+        .tooltip.show {
+            opacity: 1;
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: var(--primary);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            .current-subject { font-size: 2rem; }
+            .schedule-table { font-size: 0.9rem; overflow-x: auto; }
+            th, td { padding: 10px 5px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Horario Grupo 1C</h1>
+            <div class="datetime" id="datetime"></div>
+        </header>
+
+        <div class="current-class-container" id="currentClassContainer">
+            <div class="current-subject" id="currentSubject">--</div>
+            <div class="current-details" id="currentDetails">--</div>
+            <div class="teacher-name" id="teacherName"></div>
+        </div>
+
+        <div class="schedule-table">
+            <table id="scheduleTable">
+                <thead>
+                    <tr>
+                        <th>Hora</th>
+                        <th>Lunes</th>
+                        <th>Martes</th>
+                        <th>Miércoles</th>
+                        <th>Jueves</th>
+                        <th>Viernes</th>
+                    </tr>
+                </thead>
+                <tbody id="scheduleBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Datos del horario del grupo 1C
+        const scheduleData = {
+            'Lunes': [
+                { time: '07:00-07:50', code: 'HUMA A15', name: 'HUMANIDADES I', teacher: 'BRENDA YAZMIN CORONA SÁNCHEZ' },
+                { time: '08:00-08:50', code: 'AFDC A11', name: 'ACTIVIDADES FÍSICAS DEPORTIVAS Y CULTURALES I', teacher: 'LUIS HUMBERTO CONCHA CABALLERO' },
+                { time: '09:00-09:45', code: 'CUDI LAB INFO', name: 'CULTURA DIGITAL I', teacher: 'VACANTE 3' },
+                { time: '09:45-10:15', code: 'RECESO', name: 'RECESO', teacher: null },
+                { time: '10:15-11:00', code: 'INGLÉS A3', name: 'INGLÉS I', teacher: 'GRACIELA ROSALIA MAY POLANCO' },
+                { time: '11:05-11:50', code: 'INGLÉS A3', name: 'INGLÉS I', teacher: 'GRACIELA ROSALIA MAY POLANCO' },
+                { time: '12:00-12:50', code: 'PEMA A10', name: 'PENSAMIENTO MATEMÁTICO I', teacher: 'NANCY SÁNCHEZ PUC' },
+                { time: '13:00-13:50', code: 'CISO A6', name: 'CIENCIAS SOCIALES I', teacher: 'JESÚS ISRAEL PUC MAGAÑA' }
+            ],
+            'Martes': [
+                { time: '07:00-07:50', code: null, name: 'LIBRE', teacher: null },
+                { time: '08:00-08:50', code: 'LA MATERIA Y SUS INTERACCIONES A8', name: 'LA MATERIA Y SUS INTERACCIONES', teacher: 'TERESA BEATRIZ UN CEN' },
+                { time: '09:00-09:45', code: 'CISO A6', name: 'CIENCIAS SOCIALES I', teacher: 'JESÚS ISRAEL PUC MAGAÑA' },
+                { time: '09:45-10:15', code: 'RECESO', name: 'RECESO', teacher: null },
+                { time: '10:15-11:00', code: 'PEMA A10', name: 'PENSAMIENTO MATEMÁTICO I', teacher: 'NANCY SÁNCHEZ PUC' },
+                { time: '11:05-11:50', code: 'LEYCO A3', name: 'LENGUA Y COMUNICACIÓN I', teacher: 'GRACIELA ROSALIA MAY POLANCO' },
+                { time: '12:00-12:50', code: 'HUMA A15', name: 'HUMANIDADES I', teacher: 'BRENDA YAZMIN CORONA SÁNCHEZ' },
+                { time: '13:00-13:50', code: null, name: 'LIBRE', teacher: null }
+            ],
+            'Miércoles': [
+                { time: '07:00-07:50', code: null, name: 'LIBRE', teacher: null },
+                { time: '08:00-08:50', code: 'LADEIN A6', name: 'LABORATORIO DE INVESTIGACIÓN', teacher: 'JESÚS ISRAEL PUC MAGAÑA' },
+                { time: '09:00-09:45', code: 'LADEIN A6', name: 'LABORATORIO DE INVESTIGACIÓN', teacher: 'JESÚS ISRAEL PUC MAGAÑA' },
+                { time: '09:45-10:15', code: 'RECESO', name: 'RECESO', teacher: null },
+                { time: '10:15-11:00', code: 'LA MATERIA Y SUS INTERACCIONES A8', name: 'LA MATERIA Y SUS INTERACCIONES', teacher: 'TERESA BEATRIZ UN CEN' },
+                { time: '11:05-11:50', code: 'LEYCO A3', name: 'LENGUA Y COMUNICACIÓN I', teacher: 'GRACIELA ROSALIA MAY POLANCO' },
+                { time: '12:00-12:50', code: 'LEYCO A3', name: 'LENGUA Y COMUNICACIÓN I', teacher: 'GRACIELA ROSALIA MAY POLANCO' },
+                { time: '13:00-13:50', code: 'EDIESYG A5', name: 'EDUCACIÓN INTEGRAL EN SEXUALIDAD Y GÉNERO I', teacher: 'ZAFIRO FLOR SILVESTRE DEL ÁNGEL PONCE' }
+            ],
+            'Jueves': [
+                { time: '07:00-07:50', code: 'TUTOR', name: 'TUTORÍA', teacher: null },
+                { time: '08:00-08:50', code: 'HUMA A15', name: 'HUMANIDADES I', teacher: 'BRENDA YAZMIN CORONA SÁNCHEZ' },
+                { time: '09:00-09:45', code: 'HUMA A15', name: 'HUMANIDADES I', teacher: 'BRENDA YAZMIN CORONA SÁNCHEZ' },
+                { time: '09:45-10:15', code: 'RECESO', name: 'RECESO', teacher: null },
+                { time: '10:15-11:00', code: 'INGLÉS A3', name: 'INGLÉS I', teacher: 'GRACIELA ROSALIA MAY POLANCO' },
+                { time: '11:05-11:50', code: 'CUDI LAB INFO', name: 'CULTURA DIGITAL I', teacher: 'VACANTE 3' },
+                { time: '12:00-12:50', code: 'CUDI LAB INFO', name: 'CULTURA DIGITAL I', teacher: 'VACANTE 3' },
+                { time: '13:00-13:50', code: 'AFDC A11', name: 'ACTIVIDADES FÍSICAS DEPORTIVAS Y CULTURALES I', teacher: 'LUIS HUMBERTO CONCHA CABALLERO' }
+            ],
+            'Viernes': [
+                { time: '07:00-07:50', code: null, name: 'LIBRE', teacher: null },
+                { time: '08:00-08:50', code: 'PEMA A10', name: 'PENSAMIENTO MATEMÁTICO I', teacher: 'NANCY SÁNCHEZ PUC' },
+                { time: '09:00-09:45', code: 'PEMA A10', name: 'PENSAMIENTO MATEMÁTICO I', teacher: 'NANCY SÁNCHEZ PUC' },
+                { time: '09:45-10:15', code: 'RECESO', name: 'RECESO', teacher: null },
+                { time: '10:15-11:00', code: 'LA MATERIA Y SUS INTERACCIONES A8/LM2', name: 'LA MATERIA Y SUS INTERACCIONES', teacher: 'TERESA BEATRIZ UN CEN' },
+                { time: '11:05-11:50', code: 'LA MATERIA Y SUS INTERACCIONES A8/LM2', name: 'LA MATERIA Y SUS INTERACCIONES', teacher: 'TERESA BEATRIZ UN CEN' },
+                { time: '12:00-12:50', code: 'EDIESYG A5', name: 'EDUCACIÓN INTEGRAL EN SEXUALIDAD Y GÉNERO I', teacher: 'ZAFIRO FLOR SILVESTRE DEL ÁNGEL PONCE' },
+                { time: '13:00-13:50', code: 'LADEIN A6', name: 'LABORATORIO DE INVESTIGACIÓN', teacher: 'JESÚS ISRAEL PUC MAGAÑA' }
+            ]
+        };
+
+        const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+        const timeSlots = [
+            '07:00-07:50', '08:00-08:50', '09:00-09:45', '09:45-10:15',
+            '10:15-11:00', '11:05-11:50', '12:00-12:50', '13:00-13:50'
+        ];
+
+        // Función para obtener la fecha y hora actual en zona horaria de Cancún
+        function getCurrentDateTime() {
+            const options = {
+                timeZone: 'America/Cancun',
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            };
+            return new Date().toLocaleString('es-MX', options);
+        }
+
+        // Función para obtener el día actual
+        function getCurrentDay() {
+            const options = { timeZone: 'America/Cancun', weekday: 'long' };
+            const dayName = new Date().toLocaleDateString('es-MX', options);
+            // Convertir primera letra a mayúscula
+            return dayName.charAt(0).toUpperCase() + dayName.slice(1);
+        }
+
+        // Función para obtener la hora actual en formato HH:MM
+        function getCurrentTime() {
+            const options = { timeZone: 'America/Cancun', hour12: false, hour: '2-digit', minute: '2-digit' };
+            return new Date().toLocaleTimeString('es-MX', options);
+        }
+
+        // Función para verificar si el horario está dentro del rango escolar
+        function isSchoolTime() {
+            const now = new Date(new Date().toLocaleString("en-US", {timeZone: "America/Cancun"}));
+            const hour = now.getHours();
+            const minute = now.getMinutes();
+            const currentMinutes = hour * 60 + minute;
+            
+            // Horario escolar: 7:00 a 13:50
+            const startMinutes = 7 * 60;
+            const endMinutes = 13 * 60 + 50;
+            
+            return currentMinutes >= startMinutes && currentMinutes <= endMinutes;
+        }
+
+        // Función para obtener la clase actual
+        function getCurrentClass() {
+            const currentDay = getCurrentDay();
+            const currentTime = getCurrentTime();
+            
+            if (!days.includes(currentDay) || !isSchoolTime()) {
+                return null;
+            }
+
+            const daySchedule = scheduleData[currentDay];
+            if (!daySchedule) return null;
+
+            // Convertir tiempo actual a minutos
+            const [hours, minutes] = currentTime.split(':').map(Number);
+            const currentMinutes = hours * 60 + minutes;
+
+            for (const slot of daySchedule) {
+                const [startTime, endTime] = slot.time.split(' - ');
+                const [startHour, startMin] = slot.time.split('-')[0].split(':').map(Number);
+                const [endHour, endMin] = slot.time.split('-')[1].split(':').map(Number);
+                
+                const startMinutes = startHour * 60 + startMin;
+                const endMinutes = endHour * 60 + endMin;
+
+                if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
+                    return { ...slot, day: currentDay };
+                }
+            }
+
+            return null;
+        }
+
+        // Actualizar la clase actual en pantalla
+        function updateCurrentClass() {
+            const container = document.getElementById('currentClassContainer');
+            const subjectEl = document.getElementById('currentSubject');
+            const detailsEl = document.getElementById('currentDetails');
+            const teacherEl = document.getElementById('teacherName');
+            
+            const currentClass = getCurrentClass();
+            
+            if (!currentClass) {
+                const currentDay = getCurrentDay();
+                const isWeekday = days.includes(currentDay);
+                
+                if (!isWeekday) {
+                    subjectEl.textContent = '🎉 Fin de semana';
+                    detailsEl.textContent = '¡Disfruta tu descanso!';
+                    container.className = 'current-class-container free';
+                } else if (!isSchoolTime()) {
+                    subjectEl.textContent = '🏠 Fuera de horario';
+                    detailsEl.textContent = 'El horario escolar es de 7:00 AM a 1:50 PM';
+                    container.className = 'current-class-container free';
+                } else {
+                    subjectEl.textContent = '⏸️ No hay clase';
+                    detailsEl.textContent = 'Espacio libre o tutoría';
+                    container.className = 'current-class-container free';
+                }
+                teacherEl.textContent = '';
+                teacherEl.classList.remove('show');
+                return;
+            }
+
+            subjectEl.textContent = currentClass.name;
+            detailsEl.textContent = `${currentClass.day} - ${currentClass.time}`;
+            
+            if (currentClass.code === 'RECESO') {
+                container.className = 'current-class-container recess';
+                teacherEl.textContent = '😎 ¡Hora de descansar!';
+            } else if (currentClass.teacher) {
+                teacherEl.textContent = `Prof. ${currentClass.teacher}`;
+            } else {
+                teacherEl.textContent = 'Sin profesor asignado';
+            }
+            
+            teacherEl.classList.add('show');
+            container.classList.add('active');
+        }
+
+        // Crear la tabla del horario
+        function createScheduleTable() {
+            const tbody = document.getElementById('scheduleBody');
+            
+            timeSlots.forEach((timeSlot, rowIndex) => {
+                const tr = document.createElement('tr');
+                
+                // Celda de hora
+                const timeCell = document.createElement('td');
+                timeCell.textContent = timeSlot;
+                timeCell.style.fontWeight = 'bold';
+                timeCell.style.background = 'rgba(26, 42, 108, 0.1)';
+                tr.appendChild(timeCell);
+                
+                // Celdas de cada día
+                days.forEach(day => {
+                    const td = document.createElement('td');
+                    const slot = scheduleData[day][rowIndex];
+                    
+                    if (slot.code === 'RECESO') {
+                        td.textContent = slot.name;
+                        td.className = 'subject-cell recess-cell';
+                    } else if (slot.code === null || slot.code === 'TUTOR') {
+                        td.textContent = slot.name;
+                        td.className = 'subject-cell free-cell';
+                    } else {
+                        td.textContent = slot.name;
+                        td.className = 'subject-cell';
+                        td.dataset.teacher = slot.teacher || 'Sin profesor asignado';
+                        td.dataset.subject = slot.name;
+                        td.dataset.time = slot.time;
+                    }
+                    
+                    // Verificar si es la clase actual
+                    const currentClass = getCurrentClass();
+                    if (currentClass && currentClass.day === day && currentClass.time === slot.time) {
+                        td.classList.add('active');
+                    }
+                    
+                    tr.appendChild(td);
+                });
+                
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Mostrar tooltip con el nombre del profesor
+        function showTooltip(e) {
+            const tooltip = document.getElementById('tooltip');
+            const target = e.target;
+            
+            if (target.classList.contains('subject-cell') && target.dataset.teacher) {
+                tooltip.textContent = `Prof. ${target.dataset.teacher}`;
+                tooltip.style.left = e.clientX + 'px';
+                tooltip.style.top = (e.clientY - 40) + 'px';
+                tooltip.classList.add('show');
+                
+                // Ocultar automáticamente después de 3 segundos
+                setTimeout(() => {
+                    tooltip.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        // Ocultar tooltip
+        function hideTooltip() {
+            document.getElementById('tooltip').classList.remove('show');
+        }
+
+        // Actualizar fecha y hora
+        function updateDateTime() {
+            document.getElementById('datetime').textContent = getCurrentDateTime();
+        }
+
+        // Inicializar la página
+        function init() {
+            updateDateTime();
+            updateCurrentClass();
+            createScheduleTable();
+            
+            // Event listeners
+            document.getElementById('scheduleTable').addEventListener('click', (e) => {
+                if (e.target.classList.contains('subject-cell') && e.target.dataset.teacher) {
+                    showTooltip(e);
+                }
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('subject-cell')) {
+                    hideTooltip();
+                }
+            });
+            
+            // Actualizar cada minuto
+            setInterval(() => {
+                updateDateTime();
+                updateCurrentClass();
+            }, 60000);
+            
+            // Actualizar cada segundo para la hora
+            setInterval(updateDateTime, 1000);
+        }
+
+        // Ejecutar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
