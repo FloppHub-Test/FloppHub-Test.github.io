@@ -76,8 +76,7 @@
             backdrop-filter: blur(10px);
             animation: pulse 4s infinite;
         }
-        
-        /* Resto del CSS sin cambios */
+
         .class-cards {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -334,6 +333,15 @@
             margin: 15px 0;
         }
 
+        .modal-aula {
+            background: rgba(25, 118, 210, 0.1);
+            color: var(--primary);
+            padding: 8px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -462,13 +470,14 @@
             <span class="close-btn" id="closeModal">&times;</span>
             <h3 id="modalSubject"></h3>
             <p class="profesor" id="modalTeacher"></p>
+            <p class="modal-aula" id="modalAula"></p>
             <p id="modalTime"></p>
             <p id="modalDay"></p>
         </div>
     </div>
 
     <script>
-        // Datos del horario del grupo 1C
+        // Datos del horario del grupo 1C (actualizado profesor de tutoría)
         const scheduleData = {
             'Lunes': [
                 { time: '07:00-07:50', code: 'HUMA A15', name: 'HUMANIDADES I', teacher: 'BRENDA YAZMIN CORONA SÁNCHEZ' },
@@ -501,7 +510,7 @@
                 { time: '13:00-13:50', code: 'EDIESYG A5', name: 'EDUCACIÓN INTEGRAL EN SEXUALIDAD Y GÉNERO I', teacher: 'ZAFIRO FLOR SILVESTRE DEL ÁNGEL PONCE' }
             ],
             'Jueves': [
-                { time: '07:00-07:50', code: 'TUTOR', name: 'TUTORÍA', teacher: 'TUTOR RESPONSABLE DE GRUPO A6' },
+                { time: '07:00-07:50', code: 'TUTOR A6', name: 'TUTORÍA', teacher: 'JESÚS ISRAEL PUC MAGAÑA' },
                 { time: '08:00-08:50', code: 'HUMA A15', name: 'HUMANIDADES I', teacher: 'BRENDA YAZMIN CORONA SÁNCHEZ' },
                 { time: '09:00-09:45', code: 'HUMA A15', name: 'HUMANIDADES I', teacher: 'BRENDA YAZMIN CORONA SÁNCHEZ' },
                 { time: '09:45-10:15', code: 'RECESO', name: 'RECESO', teacher: null },
@@ -536,6 +545,17 @@
         function convertTimeRangeTo12Hour(range) {
             const [start, end] = range.split('-');
             return `${convertTo12HourFormat(start.trim())} - ${convertTo12HourFormat(end.trim())}`;
+        }
+
+        // Función para extraer el número de aula del código
+        function extractAula(code) {
+            if (!code || code === 'RECESO' || code === 'TUTOR A6' || code === 'CUDI LAB INFO') {
+                return code === 'CUDI LAB INFO' ? 'LAB INFO' : 
+                       code === 'TUTOR A6' ? 'A6' : 
+                       'N/A';
+            }
+            const match = code.match(/A\d+/);
+            return match ? match[0] : 'N/A';
         }
 
         // Funciones de utilidad
@@ -576,22 +596,18 @@
         }
 
         function parseTimeToMinutes(timeStr) {
-            // Esta función sigue usando formato 24h internamente para cálculos
             const [hours, minutes] = timeStr.split(':').map(Number);
             return hours * 60 + minutes;
         }
 
         function getCurrentClass() {
             const currentDay = getCurrentDay();
-            const currentTime = getCurrentTime();
             
             if (!days.includes(currentDay) || !isSchoolTime()) {
                 return null;
             }
 
             const daySchedule = scheduleData[currentDay];
-            
-            // Para cálculos, usamos la hora actual en formato 24h
             const now = new Date(new Date().toLocaleString("en-US", {timeZone: "America/Cancun"}));
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
@@ -610,8 +626,6 @@
 
         function getNextClass() {
             const currentDay = getCurrentDay();
-            
-            // Para cálculos, usamos la hora actual en formato 24h
             const now = new Date(new Date().toLocaleString("en-US", {timeZone: "America/Cancun"}));
             let currentMinutes = now.getHours() * 60 + now.getMinutes();
 
@@ -621,7 +635,6 @@
 
             const daySchedule = scheduleData[currentDay];
             
-            // Buscar la siguiente clase del día actual
             for (const slot of daySchedule) {
                 const [startTime] = slot.time.split('-');
                 const startMinutes = parseTimeToMinutes(startTime.trim());
@@ -631,7 +644,6 @@
                 }
             }
 
-            // Buscar el siguiente día con clases
             const currentIndex = days.indexOf(currentDay);
             for (let i = currentIndex + 1; i < days.length; i++) {
                 const nextDaySchedule = scheduleData[days[i]];
@@ -744,6 +756,7 @@
                     td.dataset.time = timeSlot;
                     td.dataset.teacher = slot.teacher || '';
                     td.dataset.subject = slot.name;
+                    td.dataset.aula = extractAula(slot.code);
                     
                     if (slot.code === 'RECESO') {
                         td.textContent = slot.name;
@@ -751,12 +764,9 @@
                     } else if (slot.code === null) {
                         td.textContent = 'LIBRE';
                         td.className = 'free-cell';
-                    } else if (slot.code === 'TUTOR') {
-                        td.textContent = 'TUTORÍA';
-                        td.className = 'free-cell';
                     } else {
                         td.textContent = slot.name;
-                        td.title = `Haz clic para ver el profesor`;
+                        td.title = `Haz clic para ver más información`;
                     }
                     
                     const currentClass = getCurrentClass();
@@ -765,28 +775,13 @@
                     }
                     
                     td.addEventListener('click', () => {
-                        if (slot.code === 'RECESO') {
-                            showTeacherModal({
-                                subject: 'RECESO',
-                                teacher: '¡Hora de descansar!',
-                                time: convertTimeRangeTo12Hour(slot.time),
-                                day: day
-                            });
-                        } else if (slot.code === null || slot.code === 'TUTOR') {
-                            showTeacherModal({
-                                subject: slot.name,
-                                teacher: slot.teacher || 'Sin profesor asignado',
-                                time: convertTimeRangeTo12Hour(slot.time),
-                                day: day
-                            });
-                        } else {
-                            showTeacherModal({
-                                subject: slot.name,
-                                teacher: slot.teacher || 'Sin profesor asignado',
-                                time: convertTimeRangeTo12Hour(slot.time),
-                                day: day
-                            });
-                        }
+                        showTeacherModal({
+                            subject: slot.name,
+                            teacher: slot.teacher || 'Sin profesor asignado',
+                            aula: extractAula(slot.code),
+                            time: convertTimeRangeTo12Hour(slot.time),
+                            day: day
+                        });
                     });
                     
                     tr.appendChild(td);
@@ -800,6 +795,7 @@
             const modal = document.getElementById('teacherModal');
             document.getElementById('modalSubject').textContent = info.subject;
             document.getElementById('modalTeacher').textContent = `Prof. ${info.teacher}`;
+            document.getElementById('modalAula').textContent = `Aula: ${info.aula}`;
             document.getElementById('modalTime').textContent = `Horario: ${info.time}`;
             document.getElementById('modalDay').textContent = `Día: ${info.day}`;
             modal.classList.add('show');
