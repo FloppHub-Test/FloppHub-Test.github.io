@@ -76,8 +76,8 @@
             backdrop-filter: blur(10px);
             animation: pulse 4s infinite;
         }
-
-        /* Tarjetas de clase actual y siguiente */
+        
+        /* Resto del CSS sin cambios */
         .class-cards {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -111,6 +111,22 @@
 
         .current-class-container:hover::before, .next-class-container:hover::before {
             left: 100%;
+        }
+
+        .current-class-container.active {
+            border-color: var(--accent);
+            transform: scale(1.02);
+        }
+
+        .current-class-container.recess {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-color: #f5576c;
+        }
+
+        .current-class-container.free {
+            background: linear-gradient(135deg, var(--accent-light) 0%, #E1F5FE 100%);
+            color: var(--text);
         }
 
         .class-header {
@@ -153,7 +169,6 @@
             transform: translateY(0);
         }
 
-        /* Tabla de horario */
         .schedule-section {
             background: var(--card-bg);
             border-radius: 15px;
@@ -237,7 +252,6 @@
             font-style: italic;
         }
 
-        /* Modal de información */
         .teacher-info-modal {
             position: fixed;
             top: 0;
@@ -320,7 +334,6 @@
             margin: 15px 0;
         }
 
-        /* Animaciones */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -351,7 +364,6 @@
             50% { opacity: 0.8; }
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -512,6 +524,20 @@
 
         const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
 
+        // Función para convertir formato 24h a 12h con AM/PM
+        function convertTo12HourFormat(time24) {
+            const [hours, minutes] = time24.split(':').map(Number);
+            const period = hours >= 12 ? 'PM' : 'AM';
+            const hours12 = hours % 12 || 12;
+            return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+        }
+
+        // Función para convertir rangos de tiempo
+        function convertTimeRangeTo12Hour(range) {
+            const [start, end] = range.split('-');
+            return `${convertTo12HourFormat(start.trim())} - ${convertTo12HourFormat(end.trim())}`;
+        }
+
         // Funciones de utilidad
         function getCurrentDateTime() {
             const options = {
@@ -523,7 +549,7 @@
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
-                hour12: false
+                hour12: true  // Cambiado a true
             };
             return new Date().toLocaleString('es-MX', options);
         }
@@ -535,7 +561,7 @@
         }
 
         function getCurrentTime() {
-            const options = { timeZone: 'America/Cancun', hour12: false, hour: '2-digit', minute: '2-digit' };
+            const options = { timeZone: 'America/Cancun', hour12: true, hour: '2-digit', minute: '2-digit' };
             return new Date().toLocaleTimeString('es-MX', options);
         }
 
@@ -544,12 +570,13 @@
             const hour = now.getHours();
             const minute = now.getMinutes();
             const currentMinutes = hour * 60 + minute;
-            const startMinutes = 7 * 60;
-            const endMinutes = 13 * 60 + 50;
+            const startMinutes = 7 * 60;  // 7:00 AM
+            const endMinutes = 13 * 60 + 50;  // 1:50 PM
             return currentMinutes >= startMinutes && currentMinutes <= endMinutes;
         }
 
         function parseTimeToMinutes(timeStr) {
+            // Esta función sigue usando formato 24h internamente para cálculos
             const [hours, minutes] = timeStr.split(':').map(Number);
             return hours * 60 + minutes;
         }
@@ -563,8 +590,10 @@
             }
 
             const daySchedule = scheduleData[currentDay];
-            const [currentHour, currentMin] = currentTime.split(':').map(Number);
-            const currentMinutes = currentHour * 60 + currentMin;
+            
+            // Para cálculos, usamos la hora actual en formato 24h
+            const now = new Date(new Date().toLocaleString("en-US", {timeZone: "America/Cancun"}));
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
             for (const slot of daySchedule) {
                 const [startTime, endTime] = slot.time.split('-');
@@ -581,8 +610,10 @@
 
         function getNextClass() {
             const currentDay = getCurrentDay();
-            const currentTime = getCurrentTime();
-            let currentMinutes = parseTimeToMinutes(currentTime);
+            
+            // Para cálculos, usamos la hora actual en formato 24h
+            const now = new Date(new Date().toLocaleString("en-US", {timeZone: "America/Cancun"}));
+            let currentMinutes = now.getHours() * 60 + now.getMinutes();
 
             if (!days.includes(currentDay)) {
                 return { name: '🎉 Fin de semana', details: 'Disfruta tu descanso', teacher: null };
@@ -649,7 +680,7 @@
             }
 
             subjectEl.textContent = currentClass.name;
-            detailsEl.textContent = `${currentClass.day} | ${currentClass.time}`;
+            detailsEl.textContent = `${currentClass.day} | ${convertTimeRangeTo12Hour(currentClass.time)}`;
             
             if (currentClass.code === 'RECESO') {
                 container.className = 'current-class-container recess';
@@ -677,7 +708,7 @@
             subjectEl.textContent = nextClass.name;
             
             if (nextClass.day && nextClass.time) {
-                detailsEl.textContent = `${nextClass.day} | ${nextClass.time}`;
+                detailsEl.textContent = `${nextClass.day} | ${convertTimeRangeTo12Hour(nextClass.time)}`;
                 iconEl.textContent = '⏭️';
             } else {
                 detailsEl.textContent = nextClass.details;
@@ -699,7 +730,7 @@
                 tr.dataset.time = timeSlot;
                 
                 const timeCell = document.createElement('td');
-                timeCell.textContent = timeSlot;
+                timeCell.textContent = convertTimeRangeTo12Hour(timeSlot);
                 timeCell.style.fontWeight = 'bold';
                 timeCell.style.background = 'rgba(13, 71, 161, 0.08)';
                 timeCell.style.color = 'var(--primary)';
@@ -738,21 +769,21 @@
                             showTeacherModal({
                                 subject: 'RECESO',
                                 teacher: '¡Hora de descansar!',
-                                time: slot.time,
+                                time: convertTimeRangeTo12Hour(slot.time),
                                 day: day
                             });
                         } else if (slot.code === null || slot.code === 'TUTOR') {
                             showTeacherModal({
                                 subject: slot.name,
                                 teacher: slot.teacher || 'Sin profesor asignado',
-                                time: slot.time,
+                                time: convertTimeRangeTo12Hour(slot.time),
                                 day: day
                             });
                         } else {
                             showTeacherModal({
                                 subject: slot.name,
                                 teacher: slot.teacher || 'Sin profesor asignado',
-                                time: slot.time,
+                                time: convertTimeRangeTo12Hour(slot.time),
                                 day: day
                             });
                         }
