@@ -22,6 +22,7 @@
             --card-bg: rgba(255, 255, 255, 0.95);
             --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --hover-glow: 0 0 20px rgba(41, 182, 246, 0.4);
         }
 
         body {
@@ -30,22 +31,22 @@
             min-height: 100vh;
             color: var(--text);
             line-height: 1.6;
+            padding: 20px;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 15px;
         }
 
         header {
             text-align: center;
-            padding: 20px 0;
+            padding: 30px 0;
             animation: fadeInDown 0.6s ease;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border-radius: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             box-shadow: var(--shadow);
         }
 
@@ -73,6 +74,15 @@
             border-radius: 20px;
             display: inline-block;
             backdrop-filter: blur(10px);
+            animation: pulse 4s infinite;
+        }
+
+        /* Tarjetas de clase actual y siguiente */
+        .class-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
         }
 
         .current-class-container, .next-class-container {
@@ -80,27 +90,27 @@
             padding: 25px;
             border-radius: 15px;
             box-shadow: var(--shadow);
-            margin-bottom: 25px;
             animation: fadeIn 0.8s ease;
             border: 3px solid transparent;
             transition: var(--transition);
             backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
         }
 
-        .current-class-container.active {
-            border-color: var(--accent);
-            transform: scale(1.02);
+        .current-class-container::before, .next-class-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s;
         }
 
-        .current-class-container.recess {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            border-color: #f5576c;
-        }
-
-        .current-class-container.free {
-            background: linear-gradient(135deg, var(--accent-light) 0%, #E1F5FE 100%);
-            color: var(--text);
+        .current-class-container:hover::before, .next-class-container:hover::before {
+            left: 100%;
         }
 
         .class-header {
@@ -113,10 +123,11 @@
 
         .class-icon {
             font-size: 2rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
         }
 
         .current-subject, .next-subject {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: bold;
             margin-bottom: 5px;
         }
@@ -128,7 +139,7 @@
         }
 
         .teacher-name {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             color: var(--accent);
             opacity: 0;
@@ -142,51 +153,34 @@
             transform: translateY(0);
         }
 
-        .day-selector {
-            display: none;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .day-btn {
-            padding: 10px 15px;
-            border: none;
-            background: var(--card-bg);
-            color: var(--text);
-            border-radius: 25px;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: var(--shadow);
-            font-weight: 600;
-        }
-
-        .day-btn.active {
-            background: var(--accent);
-            color: white;
-            transform: scale(1.05);
-        }
-
-        .schedule-table {
+        /* Tabla de horario */
+        .schedule-section {
             background: var(--card-bg);
             border-radius: 15px;
-            overflow: hidden;
+            padding: 25px;
             box-shadow: var(--shadow);
             animation: fadeInUp 0.6s ease;
         }
 
-        .desktop-view {
-            display: block;
+        .schedule-title {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .mobile-view {
-            display: none;
+        .schedule-table {
+            overflow-x: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 800px;
+            background: white;
         }
 
         th {
@@ -198,98 +192,65 @@
             top: 0;
             z-index: 10;
             text-transform: uppercase;
+            transition: var(--transition);
+        }
+
+        th:hover {
+            background: var(--secondary);
         }
 
         td {
-            padding: 12px 10px;
+            padding: 12px 8px;
             text-align: center;
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.08);
             transition: var(--transition);
             cursor: pointer;
             position: relative;
             font-weight: 500;
+            transform-origin: center;
         }
 
         td:hover {
-            background: rgba(41, 182, 246, 0.1);
-            transform: translateY(-2px);
+            background: rgba(41, 182, 246, 0.08);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--hover-glow);
+            z-index: 5;
         }
 
         td.active {
-            background: var(--accent);
-            color: white;
+            background: var(--accent) !important;
+            color: white !important;
             font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .subject-cell {
-            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(41, 182, 246, 0.5);
+            animation: pulse 2s infinite;
         }
 
         .recess-cell {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
             color: white;
+            font-weight: bold;
         }
 
         .free-cell {
-            background: #ECEFF1;
+            background: #F5F7FA;
             color: #90A4AE;
             font-style: italic;
         }
 
-        .mobile-card {
-            background: var(--card-bg);
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 15px;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-
-        .mobile-card.active {
-            border-left: 5px solid var(--accent);
-            background: linear-gradient(to right, rgba(41, 182, 246, 0.1), var(--card-bg));
-        }
-
-        .mobile-card.recess {
-            border-left: 5px solid #f5576c;
-            background: linear-gradient(to right, rgba(245, 87, 108, 0.1), var(--card-bg));
-        }
-
-        .mobile-time {
-            font-weight: bold;
-            color: var(--primary);
-            font-size: 1.1rem;
-        }
-
-        .mobile-subject {
-            font-size: 1.2rem;
-            margin: 8px 0;
-            color: var(--text);
-        }
-
-        .mobile-teacher {
-            font-size: 0.9rem;
-            color: var(--accent);
-            display: none;
-        }
-
-        .mobile-teacher.show {
-            display: block;
-        }
-
+        /* Modal de información */
         .teacher-info-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 1000;
             animation: fadeIn 0.3s ease;
+            backdrop-filter: blur(5px);
         }
 
         .teacher-info-modal.show {
@@ -298,56 +259,76 @@
 
         .modal-content {
             background: var(--card-bg);
-            padding: 30px;
+            padding: 35px;
             border-radius: 20px;
-            max-width: 400px;
+            max-width: 450px;
             width: 90%;
             text-align: center;
             position: relative;
             animation: slideUp 0.4s ease;
             box-shadow: var(--shadow);
             border: 2px solid var(--accent);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-content:hover {
+            transform: scale(1);
         }
 
         .close-btn {
             position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 1.8rem;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
             cursor: pointer;
             color: var(--text-light);
             transition: var(--transition);
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
         }
 
         .close-btn:hover {
             color: var(--accent);
-            transform: scale(1.2);
+            background: rgba(41, 182, 246, 0.1);
+            transform: rotate(90deg);
         }
 
         .modal-content h3 {
             margin-bottom: 15px;
             color: var(--primary);
+            font-size: 1.5rem;
         }
 
         .modal-content p {
             margin: 10px 0;
             color: var(--text);
+            font-size: 1rem;
         }
 
         .modal-content .profesor {
             font-weight: bold;
             color: var(--accent);
             font-size: 1.2rem;
+            padding: 10px;
+            background: rgba(41, 182, 246, 0.1);
+            border-radius: 10px;
+            margin: 15px 0;
         }
 
+        /* Animaciones */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
 
         @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from { transform: translateY(30px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(0.95); opacity: 1; }
         }
 
         @keyframes fadeInDown {
@@ -362,59 +343,45 @@
 
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-8px); }
         }
 
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .container {
+            body {
                 padding: 10px;
             }
 
-            header {
-                padding: 15px 0;
+            .class-cards {
+                grid-template-columns: 1fr;
+                gap: 15px;
             }
 
             h1 {
                 font-size: 1.5rem;
             }
 
-            .school-name {
-                font-size: 0.8rem;
-            }
-
-            .datetime {
-                font-size: 0.9rem;
-                padding: 6px 12px;
-            }
-
-            .current-class-container, .next-class-container {
-                padding: 20px;
-            }
-
             .current-subject, .next-subject {
-                font-size: 1.4rem;
-            }
-
-            .day-selector {
-                display: flex;
-            }
-
-            .desktop-view {
-                display: none !important;
-            }
-
-            .mobile-view {
-                display: block !important;
+                font-size: 1.3rem;
             }
 
             th {
-                padding: 10px 5px;
-                font-size: 0.8rem;
+                padding: 12px 5px;
+                font-size: 0.9rem;
             }
 
             td {
-                padding: 8px 5px;
+                padding: 10px 5px;
                 font-size: 0.85rem;
+            }
+
+            .modal-content {
+                padding: 25px;
             }
         }
 
@@ -423,13 +390,12 @@
                 font-size: 1.3rem;
             }
 
-            .current-subject, .next-subject {
-                font-size: 1.2rem;
+            .container {
+                padding: 5px;
             }
 
-            .day-btn {
-                padding: 8px 12px;
-                font-size: 0.85rem;
+            .schedule-section {
+                padding: 15px;
             }
         }
     </style>
@@ -443,46 +409,39 @@
             <div class="datetime" id="datetime"></div>
         </header>
 
-        <div class="current-class-container" id="currentClassContainer">
-            <div class="class-icon" id="currentIcon">📖</div>
-            <div class="current-subject" id="currentSubject">--</div>
-            <div class="current-details" id="currentDetails">--</div>
-            <div class="teacher-name" id="teacherName"></div>
+        <div class="class-cards">
+            <div class="current-class-container" id="currentClassContainer">
+                <div class="class-icon" id="currentIcon">📖</div>
+                <div class="current-subject" id="currentSubject">--</div>
+                <div class="current-details" id="currentDetails">--</div>
+                <div class="teacher-name" id="teacherName"></div>
+            </div>
+
+            <div class="next-class-container" id="nextClassContainer">
+                <div class="class-icon" id="nextIcon">⏭️</div>
+                <div class="next-subject" id="nextSubject">--</div>
+                <div class="next-details" id="nextDetails">--</div>
+            </div>
         </div>
 
-        <div class="next-class-container" id="nextClassContainer">
-            <div class="class-icon" id="nextIcon">⏭️</div>
-            <div class="next-subject" id="nextSubject">--</div>
-            <div class="next-details" id="nextDetails">--</div>
-        </div>
-
-        <div class="day-selector" id="daySelector">
-            <button class="day-btn" data-day="Lunes">Lunes</button>
-            <button class="day-btn" data-day="Martes">Martes</button>
-            <button class="day-btn" data-day="Miércoles">Miércoles</button>
-            <button class="day-btn" data-day="Jueves">Jueves</button>
-            <button class="day-btn" data-day="Viernes">Viernes</button>
-        </div>
-
-        <div class="schedule-table desktop-view">
-            <table id="scheduleTable">
-                <thead>
-                    <tr>
-                        <th>Hora</th>
-                        <th>Lunes</th>
-                        <th>Martes</th>
-                        <th>Miércoles</th>
-                        <th>Jueves</th>
-                        <th>Viernes</th>
-                    </tr>
-                </thead>
-                <tbody id="scheduleBody">
-                </tbody>
-            </table>
-        </div>
-
-        <div class="mobile-view" id="mobileSchedule">
-            <!-- Vista mobile generada dinámicamente -->
+        <div class="schedule-section">
+            <h2 class="schedule-title">📋 Horario Completo</h2>
+            <div class="schedule-table">
+                <table id="scheduleTable">
+                    <thead>
+                        <tr>
+                            <th>Hora</th>
+                            <th>Lunes</th>
+                            <th>Martes</th>
+                            <th>Miércoles</th>
+                            <th>Jueves</th>
+                            <th>Viernes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scheduleBody">
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -497,7 +456,7 @@
     </div>
 
     <script>
-        // Datos del horario del grupo 1C (corregidos y completos)
+        // Datos del horario del grupo 1C
         const scheduleData = {
             'Lunes': [
                 { time: '07:00-07:50', code: 'HUMA A15', name: 'HUMANIDADES I', teacher: 'BRENDA YAZMIN CORONA SÁNCHEZ' },
@@ -552,7 +511,6 @@
         };
 
         const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-        let currentDayIndex = 0;
 
         // Funciones de utilidad
         function getCurrentDateTime() {
@@ -626,7 +584,6 @@
             const currentTime = getCurrentTime();
             let currentMinutes = parseTimeToMinutes(currentTime);
 
-            // Si no es un día escolar, buscar el siguiente lunes
             if (!days.includes(currentDay)) {
                 return { name: '🎉 Fin de semana', details: 'Disfruta tu descanso', teacher: null };
             }
@@ -635,7 +592,7 @@
             
             // Buscar la siguiente clase del día actual
             for (const slot of daySchedule) {
-                const [startTime, endTime] = slot.time.split('-');
+                const [startTime] = slot.time.split('-');
                 const startMinutes = parseTimeToMinutes(startTime.trim());
                 
                 if (currentMinutes < startMinutes) {
@@ -643,7 +600,7 @@
                 }
             }
 
-            // Si es la última clase, buscar el siguiente día
+            // Buscar el siguiente día con clases
             const currentIndex = days.indexOf(currentDay);
             for (let i = currentIndex + 1; i < days.length; i++) {
                 const nextDaySchedule = scheduleData[days[i]];
@@ -654,7 +611,6 @@
                 }
             }
 
-            // Si no hay más días, es fin de semana
             return { name: '🏁 Fin de clases', details: 'No hay más clases esta semana', teacher: null };
         }
 
@@ -729,8 +685,9 @@
             }
         }
 
-        function createDesktopSchedule() {
+        function createScheduleTable() {
             const tbody = document.getElementById('scheduleBody');
+            tbody.innerHTML = '';
             
             const timeSlots = [
                 '07:00-07:50', '08:00-08:50', '09:00-09:45', '09:45-10:15',
@@ -745,6 +702,7 @@
                 timeCell.textContent = timeSlot;
                 timeCell.style.fontWeight = 'bold';
                 timeCell.style.background = 'rgba(13, 71, 161, 0.08)';
+                timeCell.style.color = 'var(--primary)';
                 tr.appendChild(timeCell);
 
                 days.forEach(day => {
@@ -753,21 +711,21 @@
                     
                     td.dataset.day = day;
                     td.dataset.time = timeSlot;
+                    td.dataset.teacher = slot.teacher || '';
+                    td.dataset.subject = slot.name;
                     
                     if (slot.code === 'RECESO') {
                         td.textContent = slot.name;
-                        td.className = 'subject-cell recess-cell';
+                        td.className = 'recess-cell';
                     } else if (slot.code === null) {
-                        td.textContent = slot.name;
-                        td.className = 'subject-cell free-cell';
+                        td.textContent = 'LIBRE';
+                        td.className = 'free-cell';
                     } else if (slot.code === 'TUTOR') {
                         td.textContent = 'TUTORÍA';
-                        td.className = 'subject-cell free-cell';
+                        td.className = 'free-cell';
                     } else {
                         td.textContent = slot.name;
-                        td.className = 'subject-cell';
-                        td.dataset.teacher = slot.teacher || 'Sin profesor asignado';
-                        td.dataset.subject = slot.name;
+                        td.title = `Haz clic para ver el profesor`;
                     }
                     
                     const currentClass = getCurrentClass();
@@ -775,7 +733,31 @@
                         td.classList.add('active');
                     }
                     
-                    td.addEventListener('click', () => handleCellClick(slot, day));
+                    td.addEventListener('click', () => {
+                        if (slot.code === 'RECESO') {
+                            showTeacherModal({
+                                subject: 'RECESO',
+                                teacher: '¡Hora de descansar!',
+                                time: slot.time,
+                                day: day
+                            });
+                        } else if (slot.code === null || slot.code === 'TUTOR') {
+                            showTeacherModal({
+                                subject: slot.name,
+                                teacher: slot.teacher || 'Sin profesor asignado',
+                                time: slot.time,
+                                day: day
+                            });
+                        } else {
+                            showTeacherModal({
+                                subject: slot.name,
+                                teacher: slot.teacher || 'Sin profesor asignado',
+                                time: slot.time,
+                                day: day
+                            });
+                        }
+                    });
+                    
                     tr.appendChild(td);
                 });
                 
@@ -783,87 +765,10 @@
             });
         }
 
-        function createMobileSchedule(selectedDay = null) {
-            const container = document.getElementById('mobileSchedule');
-            container.innerHTML = '';
-            
-            const dayToShow = selectedDay || getCurrentDay();
-            if (!days.includes(dayToShow)) {
-                container.innerHTML = '<div class="mobile-card free">No hay clases hoy</div>';
-                return;
-            }
-
-            const daySchedule = scheduleData[dayToShow];
-            const currentClass = getCurrentClass();
-
-            daySchedule.forEach(slot => {
-                const card = document.createElement('div');
-                card.className = 'mobile-card';
-                
-                const timeDiv = document.createElement('div');
-                timeDiv.className = 'mobile-time';
-                timeDiv.textContent = slot.time;
-                card.appendChild(timeDiv);
-                
-                const subjectDiv = document.createElement('div');
-                subjectDiv.className = 'mobile-subject';
-                subjectDiv.textContent = slot.name;
-                card.appendChild(subjectDiv);
-
-                if (slot.teacher && slot.code !== 'RECESO') {
-                    const teacherDiv = document.createElement('div');
-                    teacherDiv.className = 'mobile-teacher';
-                    teacherDiv.textContent = `Prof. ${slot.teacher}`;
-                    card.appendChild(teacherDiv);
-
-                    card.addEventListener('click', () => {
-                        teacherDiv.classList.toggle('show');
-                    });
-                }
-
-                if (slot.code === 'RECESO') {
-                    card.classList.add('recess');
-                } else if (slot.code === null) {
-                    card.classList.add('free');
-                }
-
-                if (currentClass && currentClass.time === slot.time) {
-                    card.classList.add('active');
-                }
-
-                container.appendChild(card);
-            });
-        }
-
-        function handleCellClick(slot, day) {
-            if (slot.code && slot.code !== 'RECESO' && slot.teacher) {
-                showTeacherModal({
-                    subject: slot.name,
-                    teacher: slot.teacher,
-                    time: slot.time,
-                    day: day
-                });
-            } else if (slot.code === 'RECESO') {
-                showTeacherModal({
-                    subject: 'RECESO',
-                    teacher: '¡Hora de descansar!',
-                    time: slot.time,
-                    day: day
-                });
-            } else if (slot.code === null) {
-                showTeacherModal({
-                    subject: 'LIBRE',
-                    teacher: 'No hay clase asignada',
-                    time: slot.time,
-                    day: day
-                });
-            }
-        }
-
         function showTeacherModal(info) {
             const modal = document.getElementById('teacherModal');
             document.getElementById('modalSubject').textContent = info.subject;
-            document.getElementById('modalTeacher').textContent = info.teacher;
+            document.getElementById('modalTeacher').textContent = `Prof. ${info.teacher}`;
             document.getElementById('modalTime').textContent = `Horario: ${info.time}`;
             document.getElementById('modalDay').textContent = `Día: ${info.day}`;
             modal.classList.add('show');
@@ -871,30 +776,6 @@
 
         function hideTeacherModal() {
             document.getElementById('teacherModal').classList.remove('show');
-        }
-
-        function updateDaySelector() {
-            const currentDay = getCurrentDay();
-            const buttons = document.querySelectorAll('.day-btn');
-            
-            buttons.forEach(btn => {
-                if (btn.dataset.day === currentDay) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-        }
-
-        function initDaySelector() {
-            const buttons = document.querySelectorAll('.day-btn');
-            buttons.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    buttons.forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active');
-                    createMobileSchedule(e.target.dataset.day);
-                });
-            });
         }
 
         function updateDateTime() {
@@ -905,10 +786,7 @@
             updateDateTime();
             updateCurrentClass();
             updateNextClass();
-            createDesktopSchedule();
-            createMobileSchedule();
-            updateDaySelector();
-            initDaySelector();
+            createScheduleTable();
             
             document.getElementById('closeModal').addEventListener('click', hideTeacherModal);
             document.getElementById('teacherModal').addEventListener('click', (e) => {
@@ -919,8 +797,7 @@
                 updateDateTime();
                 updateCurrentClass();
                 updateNextClass();
-                createDesktopSchedule();
-                createMobileSchedule();
+                createScheduleTable();
             }, 60000);
             
             setInterval(updateDateTime, 1000);
