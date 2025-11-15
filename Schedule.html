@@ -25,6 +25,20 @@
             --hover-glow: 0 0 20px rgba(41, 182, 246, 0.4);
         }
 
+        /* Modo oscuro variables - Fondo AMOLED puro */
+        body.dark-mode {
+            --primary: #1e40af;
+            --secondary: #3b82f6;
+            --accent: #60a5fa;
+            --accent-light: #93c5fd;
+            --text: #e0f0ff;
+            --text-light: #cbd5e1;
+            --bg: #000000;  /* Negro puro AMOLED */
+            --card-bg: #0a0f1c;  /* Fondo de tarjetas muy oscuro */
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            --hover-glow: 0 0 20px rgba(96, 165, 250, 0.4);
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--bg);
@@ -32,6 +46,7 @@
             color: var(--text);
             line-height: 1.6;
             padding: 20px;
+            transition: var(--transition);
         }
 
         .container {
@@ -48,6 +63,7 @@
             border-radius: 15px;
             margin-bottom: 30px;
             box-shadow: var(--shadow);
+            transition: var(--transition);
         }
 
         .school-logo {
@@ -95,6 +111,26 @@
             backdrop-filter: blur(10px);
             position: relative;
             overflow: hidden;
+            color: var(--text); /* Asegurar color de texto */
+        }
+
+        /* Ajustes específicos para modo oscuro en contenedores activos */
+        body.dark-mode .current-class-container.active {
+            background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+            color: #0a0f1c; /* Texto oscuro para mejor contraste */
+            border-color: var(--accent);
+        }
+
+        body.dark-mode .current-class-container.recess {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: #0a0f1c; /* Texto oscuro para mejor contraste */
+            border-color: #f5576c;
+        }
+
+        body.dark-mode .current-class-container.free,
+        body.dark-mode .next-class-container {
+            background: var(--card-bg);
+            color: var(--text);
         }
 
         .current-class-container::before, .next-class-container::before {
@@ -115,11 +151,13 @@
         .current-class-container.active {
             border-color: var(--accent);
             transform: scale(1.02);
+            background: var(--accent);
+            color: white; /* Texto blanco en modo claro */
         }
 
         .current-class-container.recess {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
+            color: white; /* Texto blanco en modo claro */
             border-color: #f5576c;
         }
 
@@ -195,6 +233,11 @@
             border-collapse: collapse;
             min-width: 800px;
             background: white;
+            transition: var(--transition);
+        }
+
+        body.dark-mode table {
+            background: var(--card-bg);
         }
 
         th {
@@ -222,6 +265,12 @@
             position: relative;
             font-weight: 500;
             transform-origin: center;
+            background: white; /* Fondo blanco sólido para todas las casillas */
+        }
+
+        body.dark-mode td {
+            background: var(--card-bg); /* Fondo oscuro sólido para todas las casillas */
+            border-color: rgba(255,255,255,0.1);
         }
 
         td:hover {
@@ -229,6 +278,10 @@
             transform: translateY(-3px) scale(1.02);
             box-shadow: var(--hover-glow);
             z-index: 5;
+        }
+
+        body.dark-mode td:hover {
+            background: rgba(96, 165, 250, 0.15);
         }
 
         td.active {
@@ -249,6 +302,22 @@
             background: #F5F7FA;
             color: #90A4AE;
             font-style: italic;
+        }
+
+        body.dark-mode .free-cell {
+            background: #1a1f2e;
+            color: #64748b;
+        }
+
+        /* Estilo para tutoría - mismo fondo que las casillas normales */
+        .tutor-cell {
+            background: white;
+            color: var(--text);
+        }
+
+        body.dark-mode .tutor-cell {
+            background: var(--card-bg);
+            color: var(--text);
         }
 
         .teacher-info-modal {
@@ -342,6 +411,36 @@
             margin: 10px 0;
         }
 
+        /* Botón de toggle modo oscuro */
+        .theme-toggle {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: none;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            z-index: 999;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: var(--hover-glow);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -402,6 +501,14 @@
 
             .modal-content {
                 padding: 25px;
+            }
+
+            .theme-toggle {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+                bottom: 20px;
+                right: 20px;
             }
         }
 
@@ -465,6 +572,11 @@
         </div>
     </div>
 
+    <!-- Botón de toggle modo oscuro -->
+    <button class="theme-toggle" id="themeToggle" title="Cambiar tema">
+        <span id="themeIcon">🌙</span>
+    </button>
+
     <div class="teacher-info-modal" id="teacherModal">
         <div class="modal-content">
             <span class="close-btn" id="closeModal">&times;</span>
@@ -477,7 +589,7 @@
     </div>
 
     <script>
-        // Datos del horario del grupo 1C (actualizado profesor de tutoría)
+        // Datos del horario del grupo 1C
         const scheduleData = {
             'Lunes': [
                 { time: '07:00-07:50', code: 'HUMA A15', name: 'HUMANIDADES I', teacher: 'BRENDA YAZMIN CORONA SÁNCHEZ' },
@@ -549,10 +661,8 @@
 
         // Función para extraer el número de aula del código
         function extractAula(code) {
-            if (!code || code === 'RECESO' || code === 'TUTOR A6' || code === 'CUDI LAB INFO') {
-                return code === 'CUDI LAB INFO' ? 'LAB INFO' : 
-                       code === 'TUTOR A6' ? 'A6' : 
-                       'N/A';
+            if (!code || code === 'RECESO' || code === 'CUDI LAB INFO') {
+                return code === 'CUDI LAB INFO' ? 'LAB INFO' : 'N/A';
             }
             const match = code.match(/A\d+/);
             return match ? match[0] : 'N/A';
@@ -569,7 +679,7 @@
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
-                hour12: true  // Cambiado a true
+                hour12: true
             };
             return new Date().toLocaleString('es-MX', options);
         }
@@ -590,8 +700,8 @@
             const hour = now.getHours();
             const minute = now.getMinutes();
             const currentMinutes = hour * 60 + minute;
-            const startMinutes = 7 * 60;  // 7:00 AM
-            const endMinutes = 13 * 60 + 50;  // 1:50 PM
+            const startMinutes = 7 * 60;
+            const endMinutes = 13 * 60 + 50;
             return currentMinutes >= startMinutes && currentMinutes <= endMinutes;
         }
 
@@ -766,6 +876,7 @@
                         td.className = 'free-cell';
                     } else {
                         td.textContent = slot.name;
+                        td.className = ''; // Sin clase especial, fondo normal
                         td.title = `Haz clic para ver más información`;
                     }
                     
@@ -809,16 +920,53 @@
             document.getElementById('datetime').textContent = getCurrentDateTime();
         }
 
+        // Función para alternar tema
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('darkMode', 'false');
+            } else {
+                body.classList.add('dark-mode');
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('darkMode', 'true');
+            }
+        }
+
+        // Función para aplicar tema guardado
+        function applySavedTheme() {
+            const savedTheme = localStorage.getItem('darkMode');
+            const themeIcon = document.getElementById('themeIcon');
+            
+            if (savedTheme === 'true') {
+                document.body.classList.add('dark-mode');
+                themeIcon.textContent = '☀️';
+            } else {
+                document.body.classList.remove('dark-mode');
+                themeIcon.textContent = '🌙';
+            }
+        }
+
         function init() {
+            // Aplicar tema guardado al cargar
+            applySavedTheme();
+            
             updateDateTime();
             updateCurrentClass();
             updateNextClass();
             createScheduleTable();
             
+            // Event listeners
             document.getElementById('closeModal').addEventListener('click', hideTeacherModal);
             document.getElementById('teacherModal').addEventListener('click', (e) => {
                 if (e.target.id === 'teacherModal') hideTeacherModal();
             });
+            
+            // Botón de toggle
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
             
             setInterval(() => {
                 updateDateTime();
