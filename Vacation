@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Christmas Countdown</title>
+    <style>
+        body {
+            background-color: #0c2340;
+            color: #ffffff;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .countdown {
+            font-size: 2em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Countdown to December 10th</h1>
+    <div class="countdown" id="countdown"></div>
+    <script>
+        function updateCountdown() {
+            const targetDate = new Date('2022-12-10T00:00:00-06:00');
+            const currentDate = new Date();
+            const timeLeft = targetDate - currentDate;
+            const daysLeft = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            document.getElementById('countdown').innerText = `Days left: ${daysLeft}`;
+        }
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
