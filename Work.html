@@ -1,1 +1,421 @@
-hi
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSeInt - Informe Completo para Impresión</title>
+    <style>
+        @page {
+            margin: 2cm;
+            size: letter;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .portada {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .logo {
+            width: 180px;
+            margin: 0 auto 20px;
+            display: block;
+        }
+        .info {
+            margin: 20px 0;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+        .info strong {
+            color: #2c3e50;
+            display: block;
+            margin-top: 10px;
+        }
+        .titulo-investigacion {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 25px 0 15px;
+            color: #2c3e50;
+        }
+        h2 {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-top: 25px;
+            border-bottom: 1px solid #ecf0f1;
+            padding-bottom: 5px;
+        }
+        h3 {
+            font-size: 16px;
+            color: #3498db;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            font-size: 14px;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 12px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            border-left: 4px solid #3498db;
+            margin: 20px 0;
+        }
+        .indice ul {
+            padding-left: 20px;
+        }
+        .indice li {
+            margin: 8px 0;
+        }
+        .fuentes {
+            margin-top: 40px;
+        }
+        .fuentes a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .fuentes a:hover {
+            text-decoration: underline;
+        }
+        @media print {
+            body {
+                padding: 0;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PORTADA -->
+    <div class="portada">
+        <img src="https://i.postimg.cc/TwFpcH2F/BACHO.png" alt="Logo Colegio de Bachilleres Plantel Cancún" class="logo" />
+        <h1>Informe: PSeInt - Introducción al Pensamiento Algorítmico con Pseudocódigo</h1>
+        <div class="info">
+            <strong>Nombre:</strong> Eduardo Antonio Kinil Estrada<br>
+            <strong>Grado y Grupo:</strong> 1C<br>
+            <strong>Escuela:</strong> Colegio de Bachilleres Plantel Cancún<br>
+            <strong>Materia:</strong> Cultura Digital<br>
+        </div>
+    </div>
+
+    <!-- ÍNDICE -->
+    <h2>ÍNDICE</h2>
+    <div class="indice">
+        <ul>
+            <li>1. ¿Qué es PSeInt?</li>
+            <li>2. ¿Quiénes pueden usarlo?</li>
+            <li>3. ¿Cómo se instala PSeInt?</li>
+            <li>4. Entorno de PSeInt</li>
+            <li>5. Cómo escribir mi primer pseudocódigo</li>
+            <li>6. Etapas del algoritmo</li>
+            <li>7. Comandos fundamentales en PSeInt</li>
+            <li>8. Los 4 tipos de algoritmos</li>
+            <li>9. Tipos de datos en PSeInt</li>
+            <li>10. Ventajas, desventajas y características de PSeInt</li>
+            <li>11. Los 4 tipos de programación</li>
+            <li>12. Ejemplos prácticos</li>
+            <li>13. Fuentes de información</li>
+        </ul>
+    </div>
+
+    <!-- CONTENIDO -->
+    <h2>1. ¿Qué es PSeInt?</h2>
+    <p><strong>PSeInt</strong> (abreviatura de <em>Pseudocódigo en Español</em>) es un entorno educativo gratuito y de código abierto diseñado para enseñar y practicar la lógica de programación mediante <strong>pseudocódigo</strong>, un lenguaje intermedio entre el lenguaje natural y los lenguajes de programación reales.</p>
+    <p>Su propósito principal es facilitar el aprendizaje inicial de la programación, especialmente para principiantes, eliminando la complejidad sintáctica de lenguajes como Python, Java o C++. PSeInt permite escribir algoritmos en español, ejecutarlos paso a paso y visualizar su funcionamiento, lo que refuerza la comprensión del razonamiento lógico.</p>
+
+    <h2>2. ¿Quiénes pueden usarlo?</h2>
+    <ul>
+        <li>Estudiantes de secundaria y universidad en cursos introductorios de programación.</li>
+        <li>Docentes que buscan una herramienta visual y sencilla para enseñar lógica algorítmica.</li>
+        <li>Autodidactas que quieren aprender a pensar como programadores sin necesidad de dominar sintaxis complejas.</li>
+        <li>Programadores experimentados que usan PSeInt para planificar algoritmos antes de implementarlos en otros lenguajes.</li>
+    </ul>
+
+    <h2>3. ¿Cómo se instala PSeInt?</h2>
+    <p>PSeInt es compatible con Windows, macOS y Linux (a través de Java). Aquí los pasos:</p>
+    <h3>Para Windows:</h3>
+    <ol>
+        <li>Visita el sitio oficial: <a href="https://pseint.sourceforge.net/">https://pseint.sourceforge.net/</a></li>
+        <li>Descarga la versión más reciente (por ejemplo, <code>pseint-20240511.zip</code>).</li>
+        <li>Descomprime el archivo en una carpeta de tu elección.</li>
+        <li>Ejecuta el archivo <code>pseint.jar</code> (requiere Java instalado).</li>
+        <li>Si no tienes Java: descárgalo desde <a href="https://www.java.com">https://www.java.com</a></li>
+        <li>¡Listo! Al abrirlo por primera vez, se creará una carpeta de configuración automáticamente.</li>
+    </ol>
+    <p><strong>Nota:</strong> No requiere instalación tradicional. Es portable: puedes llevarlo en una USB y usarlo en cualquier PC con Java.</p>
+
+    <h2>4. Entorno de PSeInt</h2>
+    <p>El entorno es minimalista, intuitivo y enfocado en el aprendizaje:</p>
+    <ul>
+        <li><strong>Barra de menús:</strong> Archivo, Edición, Ejecutar, Ayuda.</li>
+        <li><strong>Área de edición:</strong> Donde escribes el pseudocódigo en español.</li>
+        <li><strong>Panel de ejecución:</strong> Muestra la salida, variables y paso a paso.</li>
+        <li><strong>Botón “Ejecutar”:</strong> Permite correr el algoritmo y ver cómo cambian las variables.</li>
+        <li><strong>Botón “Paso a Paso”:</strong> Ideal para depurar lógica.</li>
+        <li><strong>Soporte para español:</strong> Todos los comandos están en español (<code>escribir</code>, <code>leer</code>, <code>si</code>, <code>mientras</code>, etc.).</li>
+    </ul>
+    <p>El diseño es sencillo, sin distracciones, enfocado en la lógica, no en la estética —ideal para aprender sin sobrecarga.</p>
+
+    <h2>5. Cómo escribir mi primer pseudocódigo</h2>
+    <p>Aquí un ejemplo simple: <em>“Pedir dos números y mostrar su suma”</em></p>
+    <pre>Algoritmo SumaSimple
+    Definir num1, num2, suma Como Entero
+    
+    Escribir "Ingrese el primer número:"
+    Leer num1
+    
+    Escribir "Ingrese el segundo número:"
+    Leer num2
+    
+    suma = num1 + num2
+    
+    Escribir "La suma es: ", suma
+FinAlgoritmo</pre>
+
+    <h2>6. Etapas del algoritmo</h2>
+    <p>Todo algoritmo bien estructurado sigue estas etapas:</p>
+    <ol>
+        <li><strong>Entrada (Input):</strong> Recibir datos del usuario o sistema. → <code>Leer</code></li>
+        <li><strong>Procesamiento:</strong> Realizar cálculos, comparaciones, transformaciones. → Operadores matemáticos, condicionales, bucles.</li>
+        <li><strong>Salida (Output):</strong> Mostrar resultados al usuario. → <code>Escribir</code></li>
+        <li><strong>Almacenamiento:</strong> Guardar datos en variables. → Declaración y asignación de variables.</li>
+    </ol>
+
+    <h2>7. Comandos fundamentales en PSeInt</h2>
+    <table>
+        <tr>
+            <th>Comando</th>
+            <th>Función</th>
+            <th>Ejemplo</th>
+        </tr>
+        <tr>
+            <td><code>Algoritmo ... FinAlgoritmo</code></td>
+            <td>Define el inicio y fin del algoritmo</td>
+            <td><code>Algoritmo Saludo</code></td>
+        </tr>
+        <tr>
+            <td><code>Definir</code></td>
+            <td>Declara una variable y su tipo</td>
+            <td><code>Definir edad Como Entero</code></td>
+        </tr>
+        <tr>
+            <td><code>Leer</code></td>
+            <td>Captura entrada del usuario</td>
+            <td><code>Leer nombre</code></td>
+        </tr>
+        <tr>
+            <td><code>Escribir</code></td>
+            <td>Muestra salida en pantalla</td>
+            <td><code>Escribir "Hola, ", nombre</code></td>
+        </tr>
+        <tr>
+            <td><code>Si ... Entonces ... Sino ... FinSi</code></td>
+            <td>Condición lógica</td>
+            <td><code>Si edad >= 18 Entonces</code></td>
+        </tr>
+        <tr>
+            <td><code>Mientras ... Hacer ... FinMientras</code></td>
+            <td>Bucle mientras se cumpla condición</td>
+            <td><code>Mientras i < 10 Hacer</code></td>
+        </tr>
+        <tr>
+            <td><code>Para ... Hasta ... Hacer ... FinPara</code></td>
+            <td>Bucle con contador</td>
+            <td><code>Para i = 1 Hasta 5 Hacer</code></td>
+        </tr>
+        <tr>
+            <td><code>Hacer ... Mientras</code></td>
+            <td>Bucle do-while</td>
+            <td><code>Hacer Escribir(i); i = i + 1 Mientras i < 6</code></td>
+        </tr>
+        <tr>
+            <td><code>Dimension</code></td>
+            <td>Declara arreglos</td>
+            <td><code>Dimension numeros[10]</code></td>
+        </tr>
+    </table>
+
+    <h2>8. Los 4 tipos de algoritmos</h2>
+    <ol>
+        <li><strong>Lineales:</strong> Secuencia de pasos sin saltos ni repeticiones. → Ejemplo: Calcular el área de un rectángulo.</li>
+        <li><strong>Condicionales (Decisión):</strong> Toman decisiones basadas en condiciones. → Ejemplo: Determinar si un número es par o impar.</li>
+        <li><strong>Cíclicos (Iterativos):</strong> Repiten acciones hasta cumplir una condición. → Ejemplo: Contar del 1 al 10.</li>
+        <li><strong>Recursivos:</strong> Llamadas a sí mismos para resolver un problema. → Ejemplo: Factorial de un número.</li>
+    </ol>
+
+    <h2>9. Tipos de datos en PSeInt</h2>
+    <table>
+        <tr>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Ejemplo</th>
+        </tr>
+        <tr>
+            <td>Entero</td>
+            <td>Números sin decimales</td>
+            <td><code>5</code>, <code>-3</code></td>
+        </tr>
+        <tr>
+            <td>Real</td>
+            <td>Números con decimales</td>
+            <td><code>3.14</code>, <code>-0.5</code></td>
+        </tr>
+        <tr>
+            <td>Carácter</td>
+            <td>Un solo símbolo</td>
+            <td><code>'A'</code>, <code>'5'</code></td>
+        </tr>
+        <tr>
+            <td>Cadena</td>
+            <td>Serie de caracteres</td>
+            <td><code>"Hola mundo"</code></td>
+        </tr>
+        <tr>
+            <td>Lógico</td>
+            <td>Verdadero o Falso</td>
+            <td><code>Verdadero</code>, <code>Falso</code></td>
+        </tr>
+        <tr>
+            <td>Arreglo</td>
+            <td>Colección de elementos del mismo tipo</td>
+            <td><code>Dimension nombres[5]</code></td>
+        </tr>
+    </table>
+
+    <h2>10. Ventajas, desventajas y características de PSeInt</h2>
+    <h3>✅ Ventajas:</h3>
+    <ul>
+        <li>Lenguaje en español → accesible para hispanohablantes.</li>
+        <li>Sin errores de sintaxis → enfocado en lógica, no en reglas.</li>
+        <li>Visualización paso a paso → excelente para aprender depuración.</li>
+        <li>Gratuito y sin publicidad.</li>
+        <li>Ideal para escuelas y universidades.</li>
+    </ul>
+    <h3>❌ Desventajas:</h3>
+    <ul>
+        <li>No es un lenguaje real → no se usa en industria.</li>
+        <li>Limitado en funcionalidades (no hay POO, APIs, archivos complejos).</li>
+        <li>No es portable para proyectos reales.</li>
+        <li>Interfaz anticuada (no es moderna ni responsive).</li>
+    </ul>
+    <h3>🔍 Características clave:</h3>
+    <ul>
+        <li>Soporte para pseudocódigo estructurado.</li>
+        <li>Depurador visual.</li>
+        <li>Generación de diagramas de flujo (opcional).</li>
+        <li>Compatible con múltiples idiomas (aunque se usa en español).</li>
+        <li>Ligero y sin requerimientos de hardware.</li>
+    </ul>
+
+    <h2>11. Los 4 tipos de programación</h2>
+    <ol>
+        <li><strong>Imperativa:</strong> Instrucciones que cambian el estado. → Ejemplo: C, Java, PSeInt.</li>
+        <li><strong>Orientada a Objetos (POO):</strong> Objetos con atributos y métodos. → Ejemplo: Java, Python.</li>
+        <li><strong>Funcional:</strong> Funciones puras, sin estados cambiantes. → Ejemplo: Haskell, Lisp.</li>
+        <li><strong>Lógica:</strong> Hechos y reglas. → Ejemplo: Prolog.</li>
+    </ol>
+    <p>PSeInt enseña <strong>programación imperativa</strong>, la base para entender los otros tipos.</p>
+
+    <h2>12. Ejemplos prácticos</h2>
+    <h3>Ejemplo 1: Número mayor entre dos</h3>
+    <pre>Algoritmo MayorEntreDos
+    Definir a, b Como Entero
+    
+    Escribir "Ingrese el primer número:"
+    Leer a
+    Escribir "Ingrese el segundo número:"
+    Leer b
+    
+    Si a > b Entonces
+        Escribir "El mayor es: ", a
+    Sino
+        Si b > a Entonces
+            Escribir "El mayor es: ", b
+        Sino
+            Escribir "Ambos números son iguales."
+        FinSi
+    FinSi
+FinAlgoritmo</pre>
+
+    <h3>Ejemplo 2: Tabla de multiplicar</h3>
+    <pre>Algoritmo TablaMultiplicar
+    Definir n, i Como Entero
+    
+    Escribir "Ingrese un número para ver su tabla:"
+    Leer n
+    
+    Para i = 1 Hasta 10 Hacer
+        Escribir n, " x ", i, " = ", n * i
+    FinPara
+FinAlgoritmo</pre>
+
+    <h3>Ejemplo 3: Contador de pares e impares</h3>
+    <pre>Algoritmo ContarParesImpares
+    Definir num, pares, impares, i Como Entero
+    pares = 0
+    impares = 0
+    
+    Para i = 1 Hasta 5 Hacer
+        Escribir "Ingrese el número ", i, ":"
+        Leer num
+        Si num MOD 2 = 0 Entonces
+            pares = pares + 1
+        Sino
+            impares = impares + 1
+        FinSi
+    FinPara
+    
+    Escribir "Pares: ", pares, " - Impares: ", impares
+FinAlgoritmo</pre>
+
+    <h2>13. Fuentes de información</h2>
+    <ol class="fuentes">
+        <li><a href="https://pseint.sourceforge.net/">Sitio Oficial de PSeInt</a> — Documentación, descargas y ejemplos oficiales.</li>
+        <li><em>Manual de Usuario de PSeInt (PDF)</em> — Disponible en la página oficial bajo “Documentación”.</li>
+        <li><a href="https://www.youtube.com">YouTube: “PSeInt para principiantes”</a> — Canales recomendados: “Programación con PSeInt” por Juan David Gómez.</li>
+        <li><em>Libro: “Lógica de Programación y Algoritmos” – Antonio José Sánchez</em> — Ideal para complementar con ejercicios teóricos.</li>
+        <li><a href="https://www.unal.edu.co">Universidad Nacional de Colombia – Curso de Algoritmos</a> — Recursos gratuitos de pseudocódigo y lógica.</li>
+        <li><a href="https://es.wikipedia.org/wiki/Pseudocódigo">Wikipedia – Pseudocódigo</a></li>
+    </ol>
+
+    <p style="text-align: center; margin-top: 50px; font-size: 12px; color: #666;">
+        © 2025 Eduardo Antonio Kinil Estrada — Colegio de Bachilleres Plantel Cancún | Este documento se creó exclusivamente para uso educativo.  
+        No se permite su reproducción comercial sin autorización.
+    </p>
+
+</body>
+</html>
