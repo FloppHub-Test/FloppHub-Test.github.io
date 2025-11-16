@@ -20,29 +20,48 @@
             background: white;
         }
 
-        /* Evitar que un título quede solo al final */
-        h2, h3 {
-            page-break-after: avoid;
-            page-break-inside: avoid;
-            break-after: avoid;
-            break-before: avoid;
-        }
-
-        /* Secciones completas no deben dividirse */
+        /* Forzar salto de página después de cada sección */
         section {
             display: block;
-            page-break-inside: avoid;
-            break-inside: avoid;
-            margin-bottom: 20px;
+            page-break-before: always;
+            break-before: page;
         }
 
-        /* Evitar cortes en tablas */
+        /* Evitar que el primer contenido empiece en la portada */
+        .portada {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            page-break-after: always;
+        }
+
+        .logo {
+            width: 180px;
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        .info {
+            margin: 20px 0;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        h2 {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-top: 25px;
+            border-bottom: 1px solid #ecf0f1;
+            padding-bottom: 5px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
-            page-break-inside: avoid;
-            break-inside: avoid;
         }
         th, td {
             border: 1px solid #ddd;
@@ -55,7 +74,6 @@
             font-weight: bold;
         }
 
-        /* Bloques de código: nunca partirlos */
         pre {
             background-color: #f8f9fa;
             padding: 12px;
@@ -65,61 +83,15 @@
             font-size: 13px;
             border-left: 4px solid #3498db;
             margin: 20px 0;
-            page-break-inside: avoid;
-            break-inside: avoid;
-            page-break-before: auto;
         }
 
-        /* Portada: debe estar completa en una página */
-        .portada {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 30px 20px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            page-break-after: always; /* Fuerza salto después de portada */
-        }
-        .logo {
-            width: 180px;
-            margin: 0 auto 20px;
-            display: block;
-        }
-        .info {
-            margin: 20px 0;
-            font-size: 16px;
-            line-height: 1.8;
-        }
-
-        /* Índice */
         .indice ul {
             padding-left: 20px;
         }
         .indice li {
             margin: 8px 0;
         }
-        .indice {
-            page-break-after: always; /* Fuerza nueva página tras índice */
-        }
 
-        /* Títulos de sección */
-        h2 {
-            font-size: 18px;
-            color: #2c3e50;
-            margin-top: 25px;
-            border-bottom: 1px solid #ecf0f1;
-            padding-bottom: 5px;
-            break-after: avoid;
-            break-before: avoid;
-        }
-
-        /* Para evitar que una lista empiece justo abajo sin espacio */
-        ul, ol {
-            page-break-inside: avoid;
-            break-inside: avoid;
-        }
-
-        /* Pie de página */
         footer {
             page-break-before: always;
             text-align: center;
@@ -128,7 +100,6 @@
             margin-top: 50px;
         }
 
-        /* Enlaces */
         .fuentes a {
             color: #3498db;
             text-decoration: none;
@@ -174,13 +145,14 @@
         </div>
     </section>
 
-    <!-- SECCIONES DEL CONTENIDO -->
+    <!-- SECCIÓN 1 -->
     <section>
         <h2>1. ¿Qué es PSeInt?</h2>
         <p><strong>PSeInt</strong> (abreviatura de <em>Pseudocódigo en Español</em>) es un entorno educativo gratuito y de código abierto diseñado para enseñar y practicar la lógica de programación mediante <strong>pseudocódigo</strong>, un lenguaje intermedio entre el lenguaje natural y los lenguajes de programación reales.</p>
         <p>Su propósito principal es facilitar el aprendizaje inicial de la programación, especialmente para principiantes, eliminando la complejidad sintáctica de lenguajes como Python, Java o C++. PSeInt permite escribir algoritmos en español, ejecutarlos paso a paso y visualizar su funcionamiento, lo que refuerza la comprensión del razonamiento lógico.</p>
     </section>
 
+    <!-- SECCIÓN 2 -->
     <section>
         <h2>2. ¿Quiénes pueden usarlo?</h2>
         <ul>
@@ -191,6 +163,7 @@
         </ul>
     </section>
 
+    <!-- SECCIÓN 3 -->
     <section>
         <h2>3. ¿Cómo se instala PSeInt?</h2>
         <p>PSeInt es compatible con Windows, macOS y Linux (a través de Java). Aquí los pasos:</p>
@@ -205,6 +178,7 @@
         <p><strong>Nota:</strong> No requiere instalación tradicional. Es portable: puedes llevarlo en una USB y usarlo en cualquier PC con Java.</p>
     </section>
 
+    <!-- SECCIÓN 4 -->
     <section>
         <h2>4. Entorno de PSeInt</h2>
         <p>El entorno es minimalista, intuitivo y enfocado en el aprendizaje:</p>
@@ -219,6 +193,7 @@
         <p>El diseño es sencillo, sin distracciones, enfocado en la lógica, no en la estética —ideal para aprender sin sobrecarga.</p>
     </section>
 
+    <!-- SECCIÓN 5 -->
     <section>
         <h2>5. Cómo escribir mi primer pseudocódigo</h2>
         <p>Aquí un ejemplo simple: <em>“Pedir dos números y mostrar su suma”</em></p>
@@ -237,6 +212,7 @@
 FinAlgoritmo</pre>
     </section>
 
+    <!-- SECCIÓN 6 -->
     <section>
         <h2>6. Etapas del algoritmo</h2>
         <p>Todo algoritmo bien estructurado sigue estas etapas:</p>
@@ -248,6 +224,7 @@ FinAlgoritmo</pre>
         </ol>
     </section>
 
+    <!-- SECCIÓN 7 -->
     <section>
         <h2>7. Comandos fundamentales en PSeInt</h2>
         <table>
@@ -304,6 +281,7 @@ FinAlgoritmo</pre>
         </table>
     </section>
 
+    <!-- SECCIÓN 8 -->
     <section>
         <h2>8. Los 4 tipos de algoritmos</h2>
         <ol>
@@ -314,6 +292,7 @@ FinAlgoritmo</pre>
         </ol>
     </section>
 
+    <!-- SECCIÓN 9 -->
     <section>
         <h2>9. Tipos de datos en PSeInt</h2>
         <table>
@@ -355,6 +334,7 @@ FinAlgoritmo</pre>
         </table>
     </section>
 
+    <!-- SECCIÓN 10 -->
     <section>
         <h2>10. Ventajas, desventajas y características de PSeInt</h2>
         <h3>✅ Ventajas:</h3>
@@ -382,6 +362,7 @@ FinAlgoritmo</pre>
         </ul>
     </section>
 
+    <!-- SECCIÓN 11 -->
     <section>
         <h2>11. Los 4 tipos de programación</h2>
         <ol>
@@ -393,6 +374,7 @@ FinAlgoritmo</pre>
         <p>PSeInt enseña <strong>programación imperativa</strong>, la base para entender los otros tipos.</p>
     </section>
 
+    <!-- SECCIÓN 12 -->
     <section>
         <h2>12. Ejemplos prácticos</h2>
         <h3>Ejemplo 1: Número mayor entre dos</h3>
@@ -447,6 +429,7 @@ FinAlgoritmo</pre>
 FinAlgoritmo</pre>
     </section>
 
+    <!-- SECCIÓN 13 -->
     <section>
         <h2>13. Fuentes de información</h2>
         <ol>
