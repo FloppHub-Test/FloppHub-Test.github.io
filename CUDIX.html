@@ -1,1 +1,365 @@
-hi
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Investigación sobre PSeInt — Eduardo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* Tipografía y base */
+    :root {
+      --font-body: "Georgia", "Times New Roman", serif;
+      --font-head: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --color-text: #222;
+      --color-muted: #555;
+      --color-accent: #0a6cff;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--color-text);
+      background: #fff;
+      font-family: var(--font-body);
+      line-height: 1.6;
+    }
+    @page {
+      size: A4;
+      margin: 20mm;
+    }
+    /* Diseño general */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 {
+      font-family: var(--font-head);
+      margin: 0 0 0.4rem 0;
+      line-height: 1.25;
+    }
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.4rem; margin-top: 1.4rem; }
+    h3 { font-size: 1.15rem; margin-top: 1rem; }
+    p { margin: 0 0 0.8rem 0; }
+    ul, ol { margin: 0.4rem 0 0.8rem 1.2rem; }
+    li { margin-bottom: 0.3rem; }
+    strong { font-weight: 700; }
+    .muted { color: var(--color-muted); }
+
+    /* Portada */
+    .cover {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      min-height: 90vh;
+      border: 2px solid #eee;
+      padding: 2rem;
+    }
+    .cover h1 {
+      font-size: 2.4rem;
+      letter-spacing: 0.5px;
+    }
+    .cover .meta {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+    .cover .accent {
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+
+    /* Índice (TOC) */
+    .toc {
+      border-top: 3px solid #eee;
+      padding-top: 1rem;
+    }
+    .toc h2 { margin-bottom: 0.6rem; }
+    .toc a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px dotted #ccc;
+    }
+
+    /* Cuerpo */
+    .section { margin-bottom: 1rem; }
+    .lead { font-size: 1.02rem; }
+    code, pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      background: #f7f7f7;
+      border: 1px solid #e6e6e6;
+      border-radius: 6px;
+    }
+    pre {
+      padding: 0.8rem 1rem;
+      overflow: auto;
+    }
+    .examples pre { margin-bottom: 0.8rem; }
+
+    /* Encabezado y pie para impresión */
+    header, footer {
+      font-family: var(--font-head);
+      font-size: 0.9rem;
+      color: var(--color-muted);
+    }
+    header { margin-bottom: 1rem; }
+    footer {
+      margin-top: 1rem;
+      border-top: 1px solid #eee;
+      padding-top: 0.6rem;
+    }
+    .page-break { page-break-before: always; }
+
+    /* Listas con etiquetas de claridad */
+    .labeled-list li > span.label {
+      font-weight: 700;
+    }
+
+    /* Enlaces al ancla de sección */
+    .anchor { scroll-margin-top: 2rem; }
+
+    /* Mejores márgenes en impresión */
+    @media print {
+      a { text-decoration: none; color: inherit; }
+      .cover { border: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Portada -->
+    <section class="cover">
+      <h1>Investigación sobre PSeInt</h1>
+      <p class="lead">Aprender lógica de programación en español con pseudocódigo y diagramas de flujo.</p>
+      <div class="meta">
+        <p><strong>Alumno:</strong> Eduardo</p>
+        <p><strong>Materia:</strong> Programación Básica</p>
+        <p><strong>Fecha:</strong> Noviembre 2025</p>
+        <p class="muted">Playa del Carmen, Quintana Roo, México</p>
+      </div>
+      <p class="accent">Documento listo para impresión en PDF</p>
+    </section>
+
+    <div class="page-break"></div>
+
+    <!-- Índice -->
+    <header>
+      <h2>Índice</h2>
+      <p class="muted">Haz clic en un título para ir a la sección (al imprimir, los números de página se asignan automáticamente).</p>
+    </header>
+    <nav class="toc">
+      <ol>
+        <li><a href="#que-es-pseint">¿Qué es PSeInt?</a></li>
+        <li><a href="#quienes-pueden-usarlo">¿Quiénes pueden usarlo?</a></li>
+        <li><a href="#como-se-instala">¿Cómo se instala PSeInt?</a></li>
+        <li><a href="#entorno-y-primer-pseudocodigo">Entorno de PSeInt y primer pseudocódigo</a></li>
+        <li><a href="#etapas-del-algoritmo">Etapas del algoritmo</a></li>
+        <li><a href="#comandos-del-algoritmo">Comandos del algoritmo</a></li>
+        <li><a href="#tipos-de-algoritmo">Tipos de algoritmos</a></li>
+        <li><a href="#tipos-de-datos">Tipos de datos en PSeInt</a></li>
+        <li><a href="#ventajas-desventajas-caracteristicas">Ventajas, desventajas y características de PSeInt</a></li>
+        <li><a href="#tipos-de-programacion">Tipos de programación</a></li>
+        <li><a href="#ejemplos">Ejemplos</a></li>
+        <li><a href="#fuentes">Fuentes de información</a></li>
+      </ol>
+    </nav>
+
+    <div class="page-break"></div>
+
+    <!-- Investigación -->
+    <main>
+      <section id="que-es-pseint" class="section anchor">
+        <h2>¿Qué es PSeInt?</h2>
+        <p>PSeInt es un intérprete de pseudocódigo libre en español diseñado para enseñar y practicar lógica de programación. Ofrece ejecución paso a paso, generación de diagramas de flujo y plantillas que pueden exportarse o servir de base para lenguajes como C, Java o Python.</p>
+        <p>Su enfoque educativo reduce la complejidad de la sintaxis estricta, permitiendo que el alumno se concentre en la estructura del algoritmo, el razonamiento y el diseño de soluciones.</p>
+      </section>
+
+      <section id="quienes-pueden-usarlo" class="section anchor">
+        <h2>¿Quiénes pueden usarlo?</h2>
+        <ul class="labeled-list">
+          <li><span class="label">Estudiantes:</span> Ideal para quienes comienzan en programación y necesitan consolidar conceptos fundamentales de algoritmos.</li>
+          <li><span class="label">Docentes:</span> Útil para impartir clases, diseñar ejercicios y evaluar la lógica sin depender de un lenguaje específico.</li>
+          <li><span class="label">Programadores:</span> Sirve para prototipar algoritmos y validar ideas rápidamente antes de implementarlas en un lenguaje formal.</li>
+        </ul>
+      </section>
+
+      <section id="como-se-instala" class="section anchor">
+        <h2>¿Cómo se instala PSeInt?</h2>
+        <ul class="labeled-list">
+          <li><span class="label">Descarga:</span> Obtén el instalador desde el sitio oficial de PSeInt según tu sistema (Windows, Linux, macOS).</li>
+          <li><span class="label">Instalación en Windows:</span> Ejecuta el archivo descargado y sigue el asistente gráfico (siguiente, aceptar, instalar).</li>
+          <li><span class="label">Linux y macOS:</span> Usa el paquete disponible o instala mediante repositorios/paquetes; en macOS puede requerir autorización de seguridad.</li>
+          <li><span class="label">Verificación:</span> Abre PSeInt y crea un algoritmo de prueba para confirmar que se ejecuta correctamente.</li>
+        </ul>
+      </section>
+
+      <section id="entorno-y-primer-pseudocodigo" class="section anchor">
+        <h2>Entorno de PSeInt y primer pseudocódigo</h2>
+        <h3>Entorno de trabajo</h3>
+        <ul class="labeled-list">
+          <li><span class="label">Editor:</span> Área principal para escribir pseudocódigo con resaltado básico y ayudas de sintaxis.</li>
+          <li><span class="label">Ejecución:</span> Panel para correr el algoritmo, ver salidas y depurar paso a paso.</li>
+          <li><span class="label">Diagrama de flujo:</span> Generación visual del algoritmo para comprender su estructura.</li>
+          <li><span class="label">Menús y herramientas:</span> Opciones para validar sintaxis, guardar, abrir ejemplos y configurar preferencias.</li>
+        </ul>
+        <h3>Mi primer pseudocódigo</h3>
+        <pre><code>Algoritmo HolaMundo
+    Escribir "Hola Mundo"
+FinAlgoritmo
+</code></pre>
+        <p>Guarda el archivo y ejecútalo: verás el texto “Hola Mundo” en la salida. Este ejemplo introduce la estructura básica de PSeInt: nombre del algoritmo, cuerpo y cierre.</p>
+      </section>
+
+      <section id="etapas-del-algoritmo" class="section anchor">
+        <h2>Etapas del algoritmo</h2>
+        <ol class="labeled-list">
+          <li><span class="label">Definición del problema:</span> Clarifica objetivos, entradas y salidas esperadas.</li>
+          <li><span class="label">Diseño:</span> Estructura la solución con pasos ordenados y reglas de negocio.</li>
+          <li><span class="label">Codificación:</span> Traduce el diseño a pseudocódigo claro y legible.</li>
+          <li><span class="label">Prueba y depuración:</span> Ejecuta, detecta errores y ajusta la lógica.</li>
+          <li><span class="label">Documentación y mantenimiento:</span> Registra decisiones y prepara el algoritmo para futuras mejoras.</li>
+        </ol>
+      </section>
+
+      <section id="comandos-del-algoritmo" class="section anchor">
+        <h2>Comandos del algoritmo</h2>
+        <ul class="labeled-list">
+          <li><span class="label">Escribir:</span> Muestra texto o valores en la salida.</li>
+          <li><span class="label">Leer:</span> Recibe datos del usuario.</li>
+          <li><span class="label">Definir:</span> Declara variables con tipo.</li>
+          <li><span class="label">Si ... Entonces ... FinSi:</span> Estructura condicional.</li>
+          <li><span class="label">Segun ... Hacer ... FinSegun:</span> Selección múltiple según un valor.</li>
+          <li><span class="label">Mientras ... Hacer ... FinMientras:</span> Bucle que repite mientras la condición sea verdadera.</li>
+          <li><span class="label">Repetir ... Hasta Que:</span> Bucle que se ejecuta al menos una vez y termina al cumplirse la condición.</li>
+          <li><span class="label">Para ... Hasta ... Con Paso ... Hacer ... FinPara:</span> Bucle controlado por contador.</li>
+          <li><span class="label">SubProceso / Funcion:</span> Bloques reutilizables de código.</li>
+        </ul>
+      </section>
+
+      <section id="tipos-de-algoritmo" class="section anchor">
+        <h2>Tipos de algoritmos</h2>
+        <ul class="labeled-list">
+          <li><span class="label">Secuenciales:</span> Pasos ejecutados en orden sin bifurcaciones.</li>
+          <li><span class="label">Condicionales:</span> Flujo que depende de condiciones (Si/Segun).</li>
+          <li><span class="label">Iterativos (cíclicos):</span> Repetición de pasos con bucles.</li>
+          <li><span class="label">Recursivos:</span> Llamadas a sí mismos para dividir problemas en subproblemas.</li>
+        </ul>
+      </section>
+
+      <section id="tipos-de-datos" class="section anchor">
+        <h2>Tipos de datos en PSeInt</h2>
+        <ul class="labeled-list">
+          <li><span class="label">Entero:</span> Números sin decimales.</li>
+          <li><span class="label">Real:</span> Números con decimales.</li>
+          <li><span class="label">Caracter:</span> Un símbolo individual.</li>
+          <li><span class="label">Cadena:</span> Texto compuesto por varios caracteres.</li>
+          <li><span class="label">Lógico:</span> Valores booleanos (Verdadero/Falso).</li>
+        </ul>
+      </section>
+
+      <section id="ventajas-desventajas-caracteristicas" class="section anchor">
+        <h2>Ventajas, desventajas y características de PSeInt</h2>
+        <h3>Ventajas</h3>
+        <ul class="labeled-list">
+          <li><span class="label">Gratuito y en español:</span> Accesible para aprendizaje en habla hispana.</li>
+          <li><span class="label">Fácil de usar:</span> Interfaz clara y ejecución paso a paso.</li>
+          <li><span class="label">Multiplataforma:</span> Disponible para Windows, Linux y macOS.</li>
+        </ul>
+        <h3>Desventajas</h3>
+        <ul class="labeled-list">
+          <li><span class="label">Uso educativo:</span> No está pensado para proyectos de producción profesional.</li>
+          <li><span class="label">Características avanzadas limitadas:</span> Menor soporte para paradigmas complejos o librerías externas.</li>
+        </ul>
+        <h3>Características</h3>
+        <ul class="labeled-list">
+          <li><span class="label">Entorno amigable:</span> Editor, ejecución y diagramas integrados.</li>
+          <li><span class="label">Validación de lógica:</span> Facilita el enfoque en el algoritmo antes del código real.</li>
+          <li><span class="label">Apoyo didáctico:</span> Ejemplos, ayudas y estructura clara de algoritmos.</li>
+        </ul>
+      </section>
+
+      <section id="tipos-de-programacion" class="section anchor">
+        <h2>Tipos de programación</h2>
+        <ul class="labeled-list">
+          <li><span class="label">Estructurada:</span> Basada en secuencias, decisiones y bucles, con énfasis en la claridad.</li>
+          <li><span class="label">Orientada a objetos:</span> Modela entidades como objetos con atributos y métodos.</li>
+          <li><span class="label">Funcional:</span> Centrada en funciones puras y composición; evita estados mutables.</li>
+          <li><span class="label">Lógica:</span> Declarativa, basada en reglas y deducción (por ejemplo, Prolog).</li>
+        </ul>
+      </section>
+
+      <section id="ejemplos" class="section anchor examples">
+        <h2>Ejemplos</h2>
+
+        <h3>Suma de dos números (secuencial)</h3>
+        <pre><code>Algoritmo Suma
+    Definir a, b, resultado Como Entero
+    Escribir "Ingrese el primer número:"
+    Leer a
+    Escribir "Ingrese el segundo número:"
+    Leer b
+    resultado &lt;- a + b
+    Escribir "La suma es: ", resultado
+FinAlgoritmo
+</code></pre>
+
+        <h3>Condicional simple (mayor de edad)</h3>
+        <pre><code>Algoritmo MayorDeEdad
+    Definir edad Como Entero
+    Escribir "Ingrese su edad:"
+    Leer edad
+    Si edad &gt;= 18 Entonces
+        Escribir "Es mayor de edad"
+    SiNo
+        Escribir "Es menor de edad"
+    FinSi
+FinAlgoritmo
+</code></pre>
+
+        <h3>Bucle mientras (contador)</h3>
+        <pre><code>Algoritmo ContarHastaN
+    Definir i, n Como Entero
+    Escribir "Ingrese un número:"
+    Leer n
+    i &lt;- 1
+    Mientras i &lt;= n Hacer
+        Escribir i
+        i &lt;- i + 1
+    FinMientras
+FinAlgoritmo
+</code></pre>
+
+        <h3>Selección múltiple (menú)</h3>
+        <pre><code>Algoritmo MenuSimple
+    Definir opcion Como Entero
+    Escribir "1) Sumar"
+    Escribir "2) Restar"
+    Escribir "3) Salir"
+    Leer opcion
+    Segun opcion Hacer
+        1: Escribir "Elegiste Sumar"
+        2: Escribir "Elegiste Restar"
+        3: Escribir "Hasta luego"
+        De Otro Modo: Escribir "Opción inválida"
+    FinSegun
+FinAlgoritmo
+</code></pre>
+      </section>
+
+      <section id="fuentes" class="section anchor">
+        <h2>Fuentes de información</h2>
+        <ul>
+          <li><strong>Guías de uso de PSeInt:</strong> Documentación y recursos educativos de la comunidad.</li>
+          <li><strong>Material docente de introducción a algoritmos:</strong> Apuntes y prácticas de cursos básicos de programación.</li>
+          <li><strong>Experiencia práctica:</strong> Ejemplos comunes y comandos esenciales aplicados en clase.</li>
+        </ul>
+        <p class="muted">Nota: Este documento se centra en información general y práctica para aprendizaje inicial de PSeInt.</p>
+      </section>
+    </main>
+
+    <footer>
+      <p>Elaborado por Eduardo — Noviembre 2025</p>
+      <p class="muted">Para guardar como PDF: en tu navegador, Archivo → Imprimir → Destino “Guardar como PDF”.</p>
+    </footer>
+  </div>
+</body>
+</html>
