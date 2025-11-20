@@ -3,572 +3,409 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blox Fruits Stock - Tracker en Tiempo Real</title>
+    <title>Stock de Blox Fruits</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #ff7700;
+            --secondary-color: #000000;
+            --accent-color: #ff5500;
+            --text-color: #ffffff;
+            --card-bg: rgba(0, 0, 0, 0.7);
+            --glow-color: rgba(255, 119, 0, 0.5);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
-            color: #fff;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #1a1a1a 100%);
+            color: var(--text-color);
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Animated background particles */
-        .particles {
-            position: fixed;
+        body::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
+            background: url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80') center/cover no-repeat;
+            opacity: 0.1;
             z-index: -1;
         }
 
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #ff6600;
-            border-radius: 50%;
-            opacity: 0.7;
-            animation: float 6s infinite ease-in-out;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-        }
-
-        /* Header with animated logo */
-        .header {
-            background: linear-gradient(90deg, #ff6600 0%, #ff8533 50%, #ff6600 100%);
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.5);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                45deg,
-                transparent 30%,
-                rgba(255, 255, 255, 0.1) 50%,
-                transparent 70%
-            );
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-
-        .logo-container {
-            display: inline-block;
-            position: relative;
-            z-index: 1;
-        }
-
-        .logo {
-            font-size: 48px;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .subtitle {
-            font-size: 18px;
-            margin-top: 10px;
-            opacity: 0.9;
-        }
-
-        /* Developer credit */
-        .developer {
-            background: linear-gradient(90deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
-            color: #ff6600;
-            padding: 15px;
-            text-align: center;
-            font-size: 16px;
-            font-weight: bold;
-            border-bottom: 2px solid #ff6600;
-            box-shadow: 0 2px 10px rgba(255, 102, 0, 0.3);
-        }
-
-        /* Main container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 30px 20px;
+            padding: 20px;
         }
 
-        /* Last update indicator */
-        .last-update {
+        header {
             text-align: center;
-            color: #ff6600;
-            font-size: 14px;
-            margin-bottom: 30px;
-            opacity: 0.8;
-        }
-
-        /* Stock sections */
-        .stock-section {
-            background: linear-gradient(145deg, #1c1c1c 0%, #252525 100%);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            border: 2px solid #ff6600;
+            padding: 20px 0;
             position: relative;
-            overflow: hidden;
+            margin-bottom: 30px;
         }
 
-        .stock-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 102, 0, 0.1), transparent);
-            transition: left 0.5s;
+        .logo {
+            font-size: 3rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px var(--glow-color);
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
         }
 
-        .stock-section:hover::before {
-            left: 100%;
-        }
-
-        .section-title {
-            font-size: 32px;
-            color: #ff6600;
-            margin-bottom: 20px;
-            text-align: center;
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
             text-transform: uppercase;
             letter-spacing: 2px;
-            position: relative;
         }
 
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 100px;
-            height: 3px;
-            background: linear-gradient(90deg, #ff6600, #ff8533);
-            margin: 10px auto;
-            border-radius: 2px;
+        .developer {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            margin-bottom: 20px;
+            font-style: italic;
         }
 
-        .stock-grid {
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 15px var(--glow-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .last-update {
+            font-size: 0.9rem;
+            color: #cccccc;
+        }
+
+        .refresh-info {
+            font-size: 0.9rem;
+            color: var(--primary-color);
+        }
+
+        .fruits-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
-            margin-top: 20px;
+            margin-bottom: 40px;
         }
 
-        /* Fruit cards */
         .fruit-card {
-            background: linear-gradient(135deg, #2a2a2a 0%, #333 100%);
+            background: var(--card-bg);
             border-radius: 15px;
             padding: 20px;
             text-align: center;
-            border: 2px solid #ff6600;
-            transition: all 0.3s ease;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            border: 1px solid transparent;
             position: relative;
             overflow: hidden;
-            cursor: pointer;
-        }
-
-        .fruit-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 102, 0, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .fruit-card:hover::before {
-            left: 100%;
         }
 
         .fruit-card:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 0 10px 25px rgba(255, 102, 0, 0.4);
-            border-color: #ff8533;
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px var(--glow-color);
+            border-color: var(--primary-color);
+        }
+
+        .fruit-card.in-stock {
+            border-color: #00ff00;
+        }
+
+        .fruit-card.out-of-stock {
+            border-color: #ff0000;
         }
 
         .fruit-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
-            display: block;
-            animation: bounce 2s infinite;
+            font-size: 3rem;
+            margin-bottom: 15px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        .fruit-icon img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
         }
 
         .fruit-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: #ff6600;
-            margin-bottom: 5px;
-        }
-
-        .fruit-price {
-            font-size: 16px;
-            color: #fff;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
             font-weight: bold;
         }
 
-        .fruit-rarity {
-            font-size: 12px;
-            color: #aaa;
-            margin-top: 5px;
-        }
-
-        /* Loading animation */
-        .loading {
+        .fruit-status {
+            font-size: 1.1rem;
+            padding: 5px 10px;
+            border-radius: 20px;
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 102, 0, 0.3);
-            border-radius: 50%;
-            border-top-color: #ff6600;
-            animation: spin 1s ease-in-out infinite;
-            margin-left: 10px;
+            margin-top: 10px;
+        }
+
+        .in-stock .fruit-status {
+            background-color: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+
+        .out-of-stock .fruit-status {
+            background-color: rgba(255, 0, 0, 0.2);
+            color: #ff0000;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .loading i {
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 119, 0, 0.3);
+            color: #cccccc;
+            font-size: 0.9rem;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        /* Error message */
-        .error {
-            background: rgba(255, 0, 0, 0.2);
-            border: 2px solid #ff0000;
-            color: #ff6666;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            margin: 20px 0;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Footer */
-        .footer {
-            background: #0a0a0a;
-            padding: 20px;
-            text-align: center;
-            border-top: 2px solid #ff6600;
-            margin-top: 50px;
+        .fruit-card {
+            animation: fadeIn 0.5s ease-out;
         }
 
-        .developer-credit {
-            font-size: 14px;
-            color: #ff6600;
-            opacity: 0.8;
-        }
-
-        /* Responsive */
+        /* Responsive adjustments */
         @media (max-width: 768px) {
+            .fruits-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
             .logo {
-                font-size: 36px;
+                font-size: 2.5rem;
             }
-            
-            .section-title {
-                font-size: 24px;
-            }
-            
-            .stock-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Refresh indicator */
-        .refresh-indicator {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 102, 0, 0.9);
-            color: #000;
-            padding: 10px 15px;
-            border-radius: 25px;
-            font-weight: bold;
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-        .refresh-indicator.show {
-            opacity: 1;
-            transform: translateY(0);
         }
     </style>
 </head>
 <body>
-    <!-- Animated background particles -->
-    <div class="particles" id="particles"></div>
-
-    <!-- Header -->
-    <header class="header">
-        <div class="logo-container">
-            <div class="logo">🍇 BLOX FRUITS STOCK 🍊</div>
-            <div class="subtitle">Tracker en Tiempo Real</div>
-        </div>
-    </header>
-
-    <!-- Developer credit -->
-    <div class="developer">
-        ⛧⃝𓄃 THE NOTORIUS B.H.R ♡♱ - Desarrollador Oficial
-    </div>
-
-    <!-- Refresh indicator -->
-    <div class="refresh-indicator" id="refreshIndicator">
-        🔄 Actualizando...
-    </div>
-
-    <!-- Main container -->
     <div class="container">
-        <div class="last-update" id="lastUpdate">
-            Cargando datos... <span class="loading"></span>
+        <header>
+            <div class="logo">
+                <i class="fas fa-apple-alt"></i>
+            </div>
+            <h1>Stock de Blox Fruits</h1>
+            <div class="developer">
+                Desarrollado por ⛧⃝𓄃THE NOTORIOUS B.H.R ♡♱
+            </div>
+        </header>
+
+        <div class="status-bar">
+            <div class="last-update">
+                Última actualización: <span id="last-update-time">Cargando...</span>
+            </div>
+            <div class="refresh-info">
+                <i class="fas fa-sync-alt"></i> Actualización automática cada 30 segundos
+            </div>
         </div>
 
-        <!-- Normal Stock Section -->
-        <section class="stock-section">
-            <h2 class="section-title">🛒 Stock Normal</h2>
-            <div class="stock-grid" id="normalStock">
-                <!-- Fruits will be loaded here -->
+        <div id="fruits-container" class="fruits-grid">
+            <div class="loading">
+                <i class="fas fa-spinner"></i> Cargando stock de frutas...
             </div>
-        </section>
+        </div>
 
-        <!-- Mirage Stock Section -->
-        <section class="stock-section">
-            <h2 class="section-title">✨ Stock Mirage</h2>
-            <div class="stock-grid" id="mirageStock">
-                <!-- Fruits will be loaded here -->
-            </div>
-        </section>
+        <footer>
+            <p>Stock en tiempo real de Blox Fruits - Todos los derechos reservados</p>
+        </footer>
     </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="developer-credit">
-            Desarrollado por ⛧⃝𓄃THE NOTORIUS B.H.R ♡♱ | API Personalizada
-        </div>
-    </footer>
 
     <script>
-        // Emoji mapping for fruits
-        const fruitEmojis = {
-            'Rocket-Rocket': '🚀',
-            'Spin-Spin': '🌀',
-            'Blade-Blade': '⚔️',
-            'Spring-Spring': '🌸',
-            'Bomb-Bomb': '💣',
-            'Smoke-Smoke': '💨',
-            'Spike-Spike': '🌵',
-            'Flame-Flame': '🔥',
-            'Ice-Ice': '❄️',
-            'Sand-Sand': '🏜️',
-            'Dark-Dark': '🌑',
-            'Eagle-Eagle': '🦅',
-            'Diamond-Diamond': '💎',
-            'Light-Light': '💡',
-            'Rubber-Rubber': '🦑',
-            'Ghost-Ghost': '👻',
-            'Magma-Magma': '🌋',
-            'Quake-Quake': '🌊',
-            'Buddha-Buddha': '🧘',
-            'Love-Love': '💕',
-            'Creation-Creation': '🎨',
-            'Spider-Spider': '🕷️',
-            'Sound-Sound': '🎵',
-            'Phoenix-Phoenix': '🔥',
-            'Portal-Portal': '🌀',
-            'Lightning-Lightning': '⚡',
-            'Pain-Pain': '💢',
-            'Blizzard-Blizzard': '🌨️',
-            'Gravity-Gravity': '🌍',
-            'Mammoth-Mammoth': '🦣',
-            'T-Rex-T-Rex': '🦖',
-            'Dough-Dough': '🍞',
-            'Shadow-Shadow': '🌑',
-            'Venom-Venom': '🐍',
-            'Control-Control': '🎮',
-            'Gas-Gas': '☁️',
-            'Spirit-Spirit': '👻',
-            'Tiger-Tiger': '🐅',
-            'Yeti-Yeti': '❄️',
-            'Kitsune-Kitsune': '🦊',
-            'Dragon-Dragon': '🐉'
+        // Mapeo de nombres de frutas a emojis/imágenes
+        const fruitIcons = {
+            "bomb": "💣",
+            "spike": "🌵",
+            "chop": "🪓",
+            "spring": "🦘",
+            "kilo": "⚖️",
+            "spin": "🌀",
+            "smoke": "💨",
+            "flame": "🔥",
+            "falcon": "🦅",
+            "ice": "❄️",
+            "sand": "🏜️",
+            "dark": "🌑",
+            "diamond": "💎",
+            "light": "💡",
+            "rubber": "🛞",
+            "barrier": "🛡️",
+            "ghost": "👻",
+            "magma": "🌋",
+            "quake": "🌍",
+            "buddha": "🪷",
+            "love": "💖",
+            "spider": "🕷️",
+            "sound": "🔊",
+            "phoenix": "🐦",
+            "portal": "🌀",
+            "rumble": "⚡",
+            "pain": "💀",
+            "blizzard": "🌨️",
+            "gravity": "🌌",
+            "mammoth": "🐘",
+            "dough": "🍞",
+            "shadow": "👤",
+            "venom": "🐍",
+            "control": "🎮",
+            "spirit": "👻",
+            "dragon": "🐉",
+            "leopard": "🐆",
+            "kitsune": "🦊"
         };
 
-        // Rarity based on price
-        function getRarity(price) {
-            if (price >= 3000000) return { name: 'MÍTICO', color: '#ff00ff' };
-            if (price >= 1000000) return { name: 'LEGENDARIO', color: '#ff6600' };
-            if (price >= 500000) return { name: 'RARO', color: '#ffcc00' };
-            if (price >= 100000) return { name: 'POCO COMÚN', color: '#00ff00' };
-            return { name: 'COMÚN', color: '#666666' };
-        }
+        // URLs de imágenes de ejemplo (en un caso real, usaríamos imágenes específicas)
+        const fruitImages = {
+            "bomb": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/6/6c/Bomb_Fruit.png",
+            "flame": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/8/8c/Flame_Fruit.png",
+            "ice": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/4/4b/Ice_Fruit.png",
+            "sand": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/9/9b/Sand_Fruit.png",
+            "dark": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/6/6e/Dark_Fruit.png",
+            "light": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/5/5c/Light_Fruit.png",
+            "magma": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/3/3a/Magma_Fruit.png",
+            "quake": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/4/4a/Quake_Fruit.png",
+            "buddha": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/0/0a/Buddha_Fruit.png",
+            "love": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/3/3e/Love_Fruit.png",
+            "spider": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/3/3a/Spider_Fruit.png",
+            "sound": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/2/2e/Sound_Fruit.png",
+            "phoenix": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/6/6c/Phoenix_Fruit.png",
+            "portal": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/0/0c/Portal_Fruit.png",
+            "rumble": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/5/5e/Rumble_Fruit.png",
+            "pain": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/4/4a/Pain_Fruit.png",
+            "blizzard": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/8/8c/Blizzard_Fruit.png",
+            "gravity": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/8/8c/Gravity_Fruit.png",
+            "mammoth": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/8/8c/Mammoth_Fruit.png",
+            "dough": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/8/8c/Dough_Fruit.png",
+            "shadow": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/8/8c/Shadow_Fruit.png",
+            "venom": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/8/8c/Venom_Fruit.png",
+            "control": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/8/8c/Control_Fruit.png",
+            "spirit": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/8/8c/Spirit_Fruit.png",
+            "dragon": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/8/8c/Dragon_Fruit.png",
+            "leopard": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/8/8c/Leopard_Fruit.png",
+            "kitsune": "https://static.wikia.nocookie.net/roblox-blox-fruits/images/8/8c/Kitsune_Fruit.png"
+        };
 
-        // Format price
-        function formatPrice(price) {
-            return new Intl.NumberFormat('es-ES').format(price);
-        }
-
-        // Get fruit icon (emoji fallback)
-        function getFruitIcon(name) {
-            return fruitEmojis[name] || '🍎';
-        }
-
-        // Update timestamp
-        function updateTimestamp() {
-            const now = new Date();
-            const timeString = now.toLocaleString('es-ES', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            });
-            document.getElementById('lastUpdate').innerHTML = 
-                `Última actualización: ${timeString} <span class="loading" style="display: none;"></span>`;
-        }
-
-        // Show refresh indicator
-        function showRefreshIndicator() {
-            const indicator = document.getElementById('refreshIndicator');
-            indicator.classList.add('show');
-            setTimeout(() => {
-                indicator.classList.remove('show');
-            }, 2000);
-        }
-
-        // Create fruit card HTML
-        function createFruitCard(fruit) {
-            const rarity = getRarity(fruit.price);
-            const icon = getFruitIcon(fruit.name);
-            
-            return `
-                <div class="fruit-card" onclick="this.style.animation='pulse 0.5s'">
-                    <span class="fruit-icon">${icon}</span>
-                    <div class="fruit-name">${fruit.name.replace(/-/g, ' ')}</div>
-                    <div class="fruit-price">$${formatPrice(fruit.price)}</div>
-                    <div class="fruit-rarity" style="color: ${rarity.color}">${rarity.name}</div>
-                </div>
-            `;
-        }
-
-        // Render stock
-        function renderStock(data) {
-            const normalContainer = document.getElementById('normalStock');
-            const mirageContainer = document.getElementById('mirageStock');
-            
-            // Clear containers
-            normalContainer.innerHTML = '';
-            mirageContainer.innerHTML = '';
-            
-            // Render normal stock
-            if (data.normal && data.normal.length > 0) {
-                data.normal.forEach(fruit => {
-                    normalContainer.innerHTML += createFruitCard(fruit);
-                });
-            } else {
-                normalContainer.innerHTML = '<div style="text-align: center; color: #ff6600;">No hay datos disponibles</div>';
-            }
-            
-            // Render mirage stock
-            if (data.mirage && data.mirage.length > 0) {
-                data.mirage.forEach(fruit => {
-                    mirageContainer.innerHTML += createFruitCard(fruit);
-                });
-            } else {
-                mirageContainer.innerHTML = '<div style="text-align: center; color: #ff6600;">No hay datos disponibles</div>';
-            }
-            
-            updateTimestamp();
-        }
-
-        // Fetch stock data
-        async function fetchStock() {
+        // Función para obtener datos de la API
+        async function fetchStockData() {
             try {
                 const response = await fetch('http://104.234.236.61:30200/api/stock?name=bf&mode=free');
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const data = await response.json();
-                
-                if (data.success) {
-                    renderStock(data);
-                    showRefreshIndicator();
-                } else {
-                    throw new Error('Datos inválidos recibidos');
-                }
+                return data;
             } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('normalStock').innerHTML = 
-                    `<div class="error">Error al cargar datos: ${error.message}</div>`;
-                document.getElementById('mirageStock').innerHTML = '';
+                console.error('Error al obtener datos de la API:', error);
+                return null;
             }
         }
 
-        // Create background particles
-        function createParticles() {
-            const container = document.getElementById('particles');
-            const particleCount = 50;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 6 + 's';
-                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
-                container.appendChild(particle);
-            }
+        // Función para formatear el nombre de la fruta
+        function formatFruitName(name) {
+            return name.charAt(0).toUpperCase() + name.slice(1);
         }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            createParticles();
-            fetchStock(); // Initial load
+        // Función para mostrar los datos en la página
+        function displayStockData(stockData) {
+            const container = document.getElementById('fruits-container');
             
-            // Auto refresh every 10 seconds
-            setInterval(fetchStock, 10000);
+            if (!stockData || !stockData.stock) {
+                container.innerHTML = '<div class="loading">Error al cargar los datos del stock</div>';
+                return;
+            }
+
+            let html = '';
             
-            // Add click animations to cards
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.fruit-card')) {
-                    const card = e.target.closest('.fruit-card');
-                    card.style.animation = 'pulse 0.5s';
-                    setTimeout(() => {
-                        card.style.animation = '';
-                    }, 500);
+            // Procesar cada fruta en el stock
+            Object.entries(stockData.stock).forEach(([fruitName, isAvailable]) => {
+                const formattedName = formatFruitName(fruitName);
+                const statusClass = isAvailable ? 'in-stock' : 'out-of-stock';
+                const statusText = isAvailable ? 'Disponible' : 'Agotado';
+                
+                // Intentar usar imagen, si no está disponible usar emoji
+                let iconHtml = '';
+                if (fruitImages[fruitName]) {
+                    iconHtml = `<img src="${fruitImages[fruitName]}" alt="${formattedName}" onerror="this.parentElement.innerHTML='${fruitIcons[fruitName] || '🍎'}'">`;
+                } else {
+                    iconHtml = fruitIcons[fruitName] || '🍎';
                 }
+                
+                html += `
+                    <div class="fruit-card ${statusClass}">
+                        <div class="fruit-icon">
+                            ${iconHtml}
+                        </div>
+                        <div class="fruit-name">${formattedName}</div>
+                        <div class="fruit-status">${statusText}</div>
+                    </div>
+                `;
             });
-        });
+            
+            container.innerHTML = html;
+            
+            // Actualizar la hora de la última actualización
+            document.getElementById('last-update-time').textContent = new Date().toLocaleTimeString();
+        }
+
+        // Función principal para cargar y actualizar datos
+        async function loadAndUpdateStock() {
+            const stockData = await fetchStockData();
+            displayStockData(stockData);
+        }
+
+        // Cargar datos iniciales
+        loadAndUpdateStock();
+
+        // Actualizar datos cada 30 segundos
+        setInterval(loadAndUpdateStock, 30000);
     </script>
 </body>
 </html>
