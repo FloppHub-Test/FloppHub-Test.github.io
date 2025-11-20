@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blox Fruits Stock - THE NOTORIUS B.H.R</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'bf-orange': '#FF8C00',
+                        'bf-dark': '#0a0a0a',
+                        'bf-card': '#141414',
+                        'bf-accent': '#ff4500'
+                    },
+                    fontFamily: {
+                        'display': ['Orbitron', 'sans-serif'],
+                        'body': ['Roboto', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            background-image: radial-gradient(circle at 50% 50%, #1a1000 0%, #000000 100%);
+            color: white;
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #FF8C00; border-radius: 4px; }
+
+        .fruit-card {
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 140, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .fruit-card:hover {
+            transform: translateY(-5px);
+            border-color: #FF8C00;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
+        }
+
+        .rarity-common { border-bottom: 3px solid #a0a0a0; }
+        .rarity-uncommon { border-bottom: 3px solid #4CAF50; }
+        .rarity-rare { border-bottom: 3px solid #2196F3; }
+        .rarity-legendary { border-bottom: 3px solid #9C27B0; }
+        .rarity-mythical { border-bottom: 3px solid #FF3D00; box-shadow: 0 0 15px rgba(255, 61, 0, 0.2); }
+
+        .loader {
+            border: 4px solid #1a1a1a;
+            border-top: 4px solid #FF8C00;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="font-body min-h-screen flex flex-col">
+
+    <header class="w-full p-4 border-b border-bf-orange/30 bg-bf-dark/90 sticky top-0 z-50 shadow-[0_4px_20px_rgba(255,140,0,0.2)]">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-skull-crossbones text-bf-orange text-3xl animate-pulse-slow"></i>
+                <div>
+                    <h1 class="font-display text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-bf-orange to-yellow-500 tracking-wider">
+                        BLOX FRUITS STOCK
+                    </h1>
+                    <p class="text-xs text-gray-400 tracking-[0.2em]">LIVE MARKET TRACKER</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4 bg-black/50 px-4 py-2 rounded-full border border-bf-orange/20">
+                <div id="status-indicator" class="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
+                <span id="timer" class="font-mono text-bf-orange text-sm">Actualizando...</span>
+                <button onclick="fetchStock()" class="text-white hover:text-bf-orange transition-colors">
+                    <i class="fa-solid fa-rotate"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto p-6">
+        
+        <div id="error-box" class="hidden bg-red-900/20 border border-red-500 text-red-200 p-4 rounded-lg mb-6 text-center">
+            <i class="fa-solid fa-triangle-exclamation mr-2"></i>
+            <span id="error-msg">Error.</span>
+        </div>
+
+        <div id="stock-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div class="col-span-full flex flex-col items-center justify-center py-20">
+                <div class="loader mb-4"></div>
+                <p class="text-bf-orange animate-pulse">Conectando al servidor de THE NOTORIUS B.H.R...</p>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-bf-dark border-t border-gray-800 mt-10 py-8">
+        <div class="container mx-auto text-center px-4">
+            <div class="flex flex-col items-center justify-center gap-4">
+                <div class="w-16 h-1 bg-gradient-to-r from-transparent via-bf-orange to-transparent mb-2"></div>
+                <p class="text-gray-400 text-sm uppercase tracking-widest mb-1">API & Web Development</p>
+                <h2 class="font-display text-xl md:text-2xl text-white relative group cursor-default">
+                    <span class="absolute -inset-1 bg-bf-orange blur opacity-20 group-hover:opacity-50 transition duration-500"></span>
+                    <span class="relative">⛧⃝𓄃 THE NOTORIUS B.H.R ♡♱</span>
+                </h2>
+                <p class="text-gray-600 text-xs mt-6">
+                    Blox Fruits Asset Tracker © 2024. All rights reserved by B.H.R.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // === CAMBIO IMPORTANTE: USANDO PROXY ===
+        // Tu API original (HTTP)
+        const ORIGINAL_API_URL = 'http://104.234.236.61:30200/api/stock?name=bf&mode=free';
+        
+        // Usamos 'allorigins' para convertir la petición HTTP en HTTPS y evitar el bloqueo
+        const PROXY_URL = `https://api.allorigins.win/get?url=${encodeURIComponent(ORIGINAL_API_URL)}`;
+
+        const REFRESH_RATE = 30;
+        let countdown = REFRESH_RATE;
+
+        const fruitDb = {
+            'Rocket': { emoji: '🚀', color: 'text-gray-400', rarity: 'common' },
+            'Spin': { emoji: '🌪️', color: 'text-yellow-200', rarity: 'common' },
+            'Chop': { emoji: '🔪', color: 'text-blue-300', rarity: 'common' },
+            'Spring': { emoji: '🌀', color: 'text-pink-300', rarity: 'common' },
+            'Bomb': { emoji: '💣', color: 'text-gray-900', rarity: 'common' },
+            'Smoke': { emoji: '☁️', color: 'text-gray-200', rarity: 'common' },
+            'Spike': { emoji: '🌵', color: 'text-green-400', rarity: 'common' },
+            'Flame': { emoji: '🔥', color: 'text-orange-500', rarity: 'uncommon' },
+            'Falcon': { emoji: '🦅', color: 'text-amber-700', rarity: 'uncommon' },
+            'Ice': { emoji: '🧊', color: 'text-cyan-300', rarity: 'uncommon' },
+            'Sand': { emoji: '🏜️', color: 'text-yellow-600', rarity: 'uncommon' },
+            'Dark': { emoji: '⚫', color: 'text-purple-900', rarity: 'uncommon' },
+            'Ghost': { emoji: '👻', color: 'text-green-200', rarity: 'rare' },
+            'Revive': { emoji: '💀', color: 'text-green-200', rarity: 'rare' },
+            'Diamond': { emoji: '💎', color: 'text-cyan-100', rarity: 'rare' },
+            'Light': { emoji: '💡', color: 'text-yellow-300', rarity: 'rare' },
+            'Love': { emoji: '💗', color: 'text-pink-500', rarity: 'rare' },
+            'Rubber': { emoji: '👒', color: 'text-purple-400', rarity: 'rare' },
+            'Barrier': { emoji: '🚧', color: 'text-green-600', rarity: 'rare' },
+            'Magma': { emoji: '🌋', color: 'text-red-600', rarity: 'rare' },
+            'Quake': { emoji: '🌏', color: 'text-blue-800', rarity: 'legendary' },
+            'Buddha': { emoji: '🧘', color: 'text-yellow-500', rarity: 'legendary' },
+            'Spider': { emoji: '🕷️', color: 'text-gray-300', rarity: 'legendary' },
+            'Sound': { emoji: '🎵', color: 'text-red-400', rarity: 'legendary' },
+            'Phoenix': { emoji: '🐦', color: 'text-blue-400', rarity: 'legendary' },
+            'Portal': { emoji: '🚪', color: 'text-indigo-400', rarity: 'legendary' },
+            'Rumble': { emoji: '⚡', color: 'text-blue-200', rarity: 'legendary' },
+            'Pain': { emoji: '🐾', color: 'text-pink-800', rarity: 'legendary' },
+            'Blizzard': { emoji: '❄️', color: 'text-white', rarity: 'legendary' },
+            'Gravity': { emoji: '🌌', color: 'text-purple-600', rarity: 'mythical' },
+            'Mammoth': { emoji: '🦣', color: 'text-orange-800', rarity: 'mythical' },
+            'T-Rex': { emoji: '🦖', color: 'text-green-800', rarity: 'mythical' },
+            'Dough': { emoji: '🍩', color: 'text-yellow-100', rarity: 'mythical' },
+            'Shadow': { emoji: '👥', color: 'text-black', rarity: 'mythical' },
+            'Venom': { emoji: '☠️', color: 'text-purple-500', rarity: 'mythical' },
+            'Control': { emoji: '🎮', color: 'text-blue-500', rarity: 'mythical' },
+            'Spirit': { emoji: '👻', color: 'text-blue-200', rarity: 'mythical' },
+            'Dragon': { emoji: '🐉', color: 'text-orange-600', rarity: 'mythical' },
+            'Leopard': { emoji: '🐆', color: 'text-yellow-600', rarity: 'mythical' },
+            'Kitsune': { emoji: '🦊', color: 'text-blue-400', rarity: 'mythical' }
+        };
+
+        const formatMoney = (amount) => {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount);
+        };
+
+        async function fetchStock() {
+            const container = document.getElementById('stock-container');
+            const errorBox = document.getElementById('error-box');
+            const statusIndicator = document.getElementById('status-indicator');
+            
+            try {
+                statusIndicator.classList.remove('bg-green-500');
+                statusIndicator.classList.add('bg-yellow-500');
+
+                // 1. Llamar al Proxy
+                const response = await fetch(PROXY_URL);
+                if (!response.ok) throw new Error('Error en la red');
+                
+                // 2. Obtener respuesta del proxy
+                const proxyData = await response.json();
+                
+                // 3. El contenido real viene dentro de .contents como string
+                const realData = JSON.parse(proxyData.contents);
+
+                errorBox.classList.add('hidden');
+                statusIndicator.classList.remove('bg-yellow-500');
+                statusIndicator.classList.add('bg-green-500');
+
+                renderData(realData);
+                countdown = REFRESH_RATE;
+
+            } catch (error) {
+                console.error("Error fetching stock:", error);
+                statusIndicator.classList.remove('bg-yellow-500');
+                statusIndicator.classList.add('bg-red-500');
+                errorBox.classList.remove('hidden');
+                errorBox.innerHTML = `<i class="fa-solid fa-wifi mr-2"></i> Error conectando. El servidor proxy podría estar ocupado.`;
+            }
+        }
+
+        function renderData(data) {
+            const container = document.getElementById('stock-container');
+            container.innerHTML = ''; 
+            
+            let stockList = [];
+            if (Array.isArray(data)) {
+                stockList = data;
+            } else if (data.stock && Array.isArray(data.stock)) {
+                stockList = data.stock;
+            } else if (data.data && Array.isArray(data.data)) {
+                stockList = data.data;
+            } else {
+                stockList = Object.values(data).flat();
+            }
+
+            if (stockList.length === 0) {
+                container.innerHTML = '<div class="col-span-full text-center">No hay stock disponible ahora mismo.</div>';
+                return;
+            }
+
+            stockList.forEach(item => {
+                const name = item.Name || item.name || "Unknown";
+                const price = item.Price || item.price || item.Value || 0;
+                const meta = fruitDb[name] || { emoji: '🍎', color: 'text-gray-400', rarity: 'common' };
+                
+                const card = document.createElement('div');
+                card.className = `fruit-card p-4 rounded-xl relative overflow-hidden group rarity-${meta.rarity}`;
+                
+                card.innerHTML = `
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-gradient-to-br from-bf-orange to-transparent opacity-10 rounded-full blur-xl group-hover:opacity-20 transition"></div>
+                    <div class="flex items-start justify-between relative z-10">
+                        <div>
+                            <h3 class="font-display font-bold text-lg text-white group-hover:text-bf-orange transition">${name}</h3>
+                            <span class="text-xs uppercase tracking-wide text-gray-500 font-bold">${meta.rarity}</span>
+                        </div>
+                        <div class="text-4xl ${meta.color} drop-shadow-md transform group-hover:scale-110 transition duration-300 animate-float">
+                            ${meta.emoji}
+                        </div>
+                    </div>
+                    <div class="mt-6 flex items-end justify-between">
+                        <div>
+                            <p class="text-gray-400 text-xs mb-1">PRECIO</p>
+                            <p class="font-mono text-green-400 font-bold text-lg">
+                                ${typeof price === 'number' ? formatMoney(price) : price}
+                            </p>
+                        </div>
+                        <button class="bg-bf-orange/10 hover:bg-bf-orange/20 text-bf-orange border border-bf-orange/50 rounded-lg px-3 py-1 text-xs transition">
+                            <i class="fa-solid fa-cart-shopping mr-1"></i> STOCK
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        setInterval(() => {
+            const timerEl = document.getElementById('timer');
+            countdown--;
+            if (countdown <= 0) {
+                fetchStock();
+                timerEl.textContent = "Actualizando...";
+            } else {
+                timerEl.textContent = `Actualiza en ${countdown}s`;
+            }
+        }, 1000);
+
+        document.addEventListener('DOMContentLoaded', fetchStock);
+    </script>
+</body>
+</html>
+
+
