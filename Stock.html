@@ -20,11 +20,13 @@
                 extend: {
                     colors: {
                         'bf-orange': '#FF8C00',
-                        'bf-dark': '#0a0a0a',
+                        'bf-dark': '#050505',
                         'bf-card': '#141414',
-                        'bf-accent': '#ff4500',
-                        'bf-green': '#00FF7F',
-                        'bf-red': '#FF4444'
+                        'rarity-common': '#a0a0a0',
+                        'rarity-uncommon': '#4CAF50',
+                        'rarity-rare': '#2196F3',
+                        'rarity-legendary': '#9C27B0',
+                        'rarity-mythical': '#FF3D00'
                     },
                     fontFamily: {
                         'display': ['Orbitron', 'sans-serif'],
@@ -33,16 +35,11 @@
                     animation: {
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'float': 'float 6s ease-in-out infinite',
-                        'glow': 'glow 2s ease-in-out infinite alternate',
                     },
                     keyframes: {
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
                             '50%': { transform: 'translateY(-10px)' },
-                        },
-                        glow: {
-                            '0%': { boxShadow: '0 0 5px rgba(255, 140, 0, 0.3)' },
-                            '100%': { boxShadow: '0 0 20px rgba(255, 140, 0, 0.6)' },
                         }
                     }
                 }
@@ -53,7 +50,9 @@
     <style>
         body {
             background-color: #050505;
-            background-image: radial-gradient(circle at 50% 50%, #1a1000 0%, #000000 100%);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 140, 0, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 61, 0, 0.05) 0%, transparent 20%);
             color: white;
         }
         
@@ -62,579 +61,318 @@
         ::-webkit-scrollbar-thumb { background: #FF8C00; border-radius: 4px; }
 
         .fruit-card {
-            background: rgba(20, 20, 20, 0.9);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 140, 0, 0.15);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .fruit-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: #FF8C00;
-            box-shadow: 0 10px 30px rgba(255, 140, 0, 0.3);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
         }
 
-        /* Rareza con gradiente animado */
-        .rarity-common { border-bottom: 3px solid #a0a0a0; }
-        .rarity-uncommon { border-bottom: 3px solid #4CAF50; }
-        .rarity-rare { border-bottom: 3px solid #2196F3; }
-        .rarity-legendary { border-bottom: 3px solid #9C27B0; }
-        .rarity-mythical { 
-            border-bottom: 3px solid #FF3D00; 
-            background: linear-gradient(135deg, rgba(255, 61, 0, 0.1) 0%, transparent 100%);
-        }
+        /* Bordes brillantes según rareza */
+        .border-mythical { border-color: #FF3D00; box-shadow: 0 0 15px rgba(255, 61, 0, 0.15); }
+        .border-legendary { border-color: #9C27B0; }
+        .border-rare { border-color: #2196F3; }
+        .border-uncommon { border-color: #4CAF50; }
+        .border-common { border-color: #a0a0a0; }
 
-        /* Badges de rareza */
-        .rarity-badge {
-            font-size: 0.7rem;
-            padding: 0.15rem 0.5rem;
-            border-radius: 9999px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            margin-top: 2rem;
         }
-        .badge-common { background: rgba(160, 160, 160, 0.2); color: #a0a0a0; }
-        .badge-uncommon { background: rgba(76, 175, 80, 0.2); color: #4CAF50; }
-        .badge-rare { background: rgba(33, 150, 243, 0.2); color: #2196F3; }
-        .badge-legendary { background: rgba(156, 39, 176, 0.2); color: #9C27B0; }
-        .badge-mythical { 
-            background: linear-gradient(135deg, rgba(255, 61, 0, 0.3) 0%, rgba(255, 140, 0, 0.3) 100%);
-            color: #FF8C00;
-            animation: glow 2s ease-in-out infinite alternate;
+        .section-line {
+            flex-grow: 1;
+            height: 1px;
+            background: linear-gradient(to right, currentColor, transparent);
         }
 
         .loader {
-            border: 4px solid #1a1a1a;
-            border-top: 4px solid #FF8C00;
+            border: 3px solid rgba(255, 140, 0, 0.1);
+            border-top: 3px solid #FF8C00;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* Grid de secciones */
-        .section-grid {
-            display: grid;
-            gap: 1.5rem;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        }
-
-        @media (min-width: 1024px) {
-            .section-grid {
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            }
-        }
     </style>
 </head>
 <body class="font-body min-h-screen flex flex-col">
 
-    <header class="w-full p-4 border-b border-bf-orange/30 bg-bf-dark/90 sticky top-0 z-50 shadow-[0_4px_20px_rgba(255,140,0,0.2)] backdrop-blur">
+    <!-- HEADER -->
+    <header class="w-full p-4 border-b border-bf-orange/20 bg-bf-dark/95 sticky top-0 z-50 backdrop-blur-md">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-3">
-                <i class="fa-solid fa-skull-crossbones text-bf-orange text-3xl animate-pulse-slow"></i>
+            <div class="flex items-center gap-4">
+                <div class="relative">
+                    <i class="fa-solid fa-skull text-bf-orange text-3xl animate-pulse-slow relative z-10"></i>
+                    <div class="absolute inset-0 bg-bf-orange blur-lg opacity-30 animate-pulse"></div>
+                </div>
                 <div>
-                    <h1 class="font-display text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-bf-orange to-yellow-500 tracking-wider">
-                        BLOX FRUITS STOCK
+                    <h1 class="font-display text-2xl font-bold text-white tracking-wider">
+                        BLOX <span class="text-bf-orange">STOCK</span>
                     </h1>
-                    <p class="text-xs text-gray-400 tracking-[0.2em]">LIVE MARKET TRACKER</p>
+                    <div class="flex items-center gap-2 text-[10px] text-gray-400 tracking-[0.3em] uppercase">
+                        <span>By The Notorius B.H.R</span>
+                    </div>
                 </div>
             </div>
             
-            <div class="flex items-center gap-4 bg-black/50 px-4 py-2 rounded-full border border-bf-orange/20">
-                <div id="status-indicator" class="w-3 h-3 rounded-full bg-green-500 animate-pulse" title="Estado de conexión"></div>
-                <div class="flex flex-col items-end">
-                    <span id="timer" class="font-mono text-bf-orange text-sm">Actualizando...</span>
-                    <span id="last-update" class="text-xs text-gray-500">--:--:--</span>
+            <div class="flex items-center gap-4 bg-white/5 px-5 py-2 rounded-full border border-white/10">
+                <div class="flex flex-col items-end leading-tight">
+                    <span class="text-[10px] text-gray-400 uppercase">Siguiente Actualización</span>
+                    <span id="timer" class="font-mono text-bf-orange font-bold">--:--</span>
                 </div>
-                <button onclick="forceRefresh()" id="refresh-btn" class="text-white hover:text-bf-orange transition-colors disabled:opacity-50 disabled:cursor-not-allowed" title="Forzar actualización">
+                <button onclick="fetchStock()" class="w-8 h-8 flex items-center justify-center rounded-full bg-bf-orange/10 text-bf-orange hover:bg-bf-orange hover:text-white transition-all">
                     <i class="fa-solid fa-rotate"></i>
                 </button>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow container mx-auto p-6 max-w-7xl">
+    <!-- MAIN -->
+    <main class="flex-grow container mx-auto p-4 md:p-8">
         
-        <!-- Resumen de stock -->
-        <div id="stock-summary" class="hidden mb-6 grid grid-cols-2 md:grid-cols-5 gap-4">
-            <div class="bg-bf-card/80 rounded-lg p-3 text-center border border-bf-orange/10">
-                <div class="text-2xl font-bold text-bf-orange" id="count-total">0</div>
-                <div class="text-xs text-gray-400">Total</div>
-            </div>
-            <div class="bg-bf-card/80 rounded-lg p-3 text-center border border-gray-500/10">
-                <div class="text-2xl font-bold text-gray-400" id="count-common">0</div>
-                <div class="text-xs text-gray-400">Common</div>
-            </div>
-            <div class="bg-bf-card/80 rounded-lg p-3 text-center border border-green-500/10">
-                <div class="text-2xl font-bold text-green-400" id="count-uncommon">0</div>
-                <div class="text-xs text-gray-400">Uncommon</div>
-            </div>
-            <div class="bg-bf-card/80 rounded-lg p-3 text-center border border-blue-500/10">
-                <div class="text-2xl font-bold text-blue-400" id="count-rare">0</div>
-                <div class="text-xs text-gray-400">Rare</div>
-            </div>
-            <div class="bg-bf-card/80 rounded-lg p-3 text-center border border-purple-500/10">
-                <div class="text-2xl font-bold text-purple-400" id="count-legendary">0</div>
-                <div class="text-xs text-gray-400">Legendary</div>
-            </div>
+        <!-- Mensaje Error -->
+        <div id="error-box" class="hidden bg-red-500/10 border border-red-500/50 text-red-400 p-4 rounded-lg mb-8 text-center backdrop-blur-sm">
+            <i class="fa-solid fa-wifi mr-2"></i>
+            <span id="error-msg">Error conectando al servidor.</span>
         </div>
 
-        <div id="error-box" class="hidden bg-red-900/20 border border-red-500 text-red-200 p-4 rounded-lg mb-6 text-center backdrop-blur">
-            <i class="fa-solid fa-triangle-exclamation mr-2"></i>
-            <span id="error-msg">Error.</span>
-            <button onclick="retryConnection()" class="ml-4 text-xs bg-red-500/20 hover:bg-red-500/30 px-3 py-1 rounded transition">
-                Reintentar
-            </button>
+        <!-- Loader Inicial -->
+        <div id="initial-loader" class="flex flex-col items-center justify-center py-32">
+            <div class="loader mb-4"></div>
+            <p class="text-bf-orange text-sm tracking-widest animate-pulse">OBTENIENDO DATOS DEL MERCADO...</p>
         </div>
 
-        <!-- Contenedor principal con secciones por rareza -->
-        <div id="main-container">
-            <div class="hidden col-span-full text-center py-20" id="loading-state">
-                <div class="loader mb-4 mx-auto"></div>
-                <p class="text-bf-orange animate-pulse">Conectando al servidor de THE NOTORIUS B.H.R...</p>
-            </div>
-            
-            <!-- Secciones de rarezas -->
-            <div id="sections-container"></div>
-            
-            <!-- Estado vacío -->
-            <div id="empty-state" class="hidden col-span-full text-center py-20">
-                <i class="fa-solid fa-box-open text-6xl text-gray-600 mb-4"></i>
-                <h3 class="text-xl font-display text-gray-400">No hay stock disponible</h3>
-                <p class="text-gray-500 text-sm mt-2">Las frutas aparecerán aquí cuando estén disponibles</p>
-            </div>
+        <!-- Contenedores por Categoría -->
+        <div id="content-area" class="hidden space-y-8">
+            <!-- Se llenarán dinámicamente -->
+            <div id="mythical-section"></div>
+            <div id="legendary-section"></div>
+            <div id="rare-section"></div>
+            <div id="uncommon-section"></div>
+            <div id="common-section"></div>
         </div>
 
     </main>
 
-    <footer class="bg-bf-dark border-t border-gray-800 mt-10 py-8">
-        <div class="container mx-auto text-center px-4">
-            <div class="flex flex-col items-center justify-center gap-4">
-                <div class="w-16 h-1 bg-gradient-to-r from-transparent via-bf-orange to-transparent mb-2"></div>
-                <p class="text-gray-400 text-sm uppercase tracking-widest mb-1">API & Web Development</p>
-                <h2 class="font-display text-xl md:text-2xl text-white relative group cursor-default">
-                    <span class="absolute -inset-1 bg-bf-orange blur opacity-20 group-hover:opacity-50 transition duration-500"></span>
-                    <span class="relative">⛧⃝𓄃 THE NOTORIUS B.H.R ♡♱</span>
-                </h2>
-                <p class="text-gray-600 text-xs mt-6">
-                    Blox Fruits Asset Tracker © 2024. All rights reserved by B.H.R.
-                </p>
-            </div>
+    <!-- FOOTER -->
+    <footer class="border-t border-white/5 bg-black/50 mt-12 py-8">
+        <div class="container mx-auto text-center">
+            <h2 class="font-display text-xl text-white mb-2">
+                ⛧⃝𓄃 THE NOTORIUS B.H.R ♡♱
+            </h2>
+            <p class="text-gray-500 text-xs">Blox Fruits Realtime Stock Tracker API</p>
         </div>
     </footer>
 
     <script>
-        // Configuración
-        const API_URL = 'http://104.234.236.61:30200/api/stock?name=bf&mode=free';
-        const PROXY_URL = `https://api.allorigins.win/get?url=${encodeURIComponent(API_URL)}`;
-        const REFRESH_RATE = 30; // segundos
-        const RETRY_ATTEMPTS = 3;
-        const RETRY_DELAY = 2000; // ms
-
+        // === CONFIGURACIÓN ===
+        const ORIGINAL_API_URL = 'http://104.234.236.61:30200/api/stock?name=bf&mode=free';
+        const PROXY_URL = `https://api.allorigins.win/get?url=${encodeURIComponent(ORIGINAL_API_URL)}`;
+        const REFRESH_RATE = 30; // Segundos
         let countdown = REFRESH_RATE;
-        let refreshInterval;
-        let isFetching = false;
-        let lastFetchTime = null;
-        let retryCount = 0;
 
-        // Base de datos de frutas (actualizada)
+        // === BASE DE DATOS DE METADATOS (Colores, Emojis, Rareza) ===
         const fruitDb = {
-            'Rocket': { emoji: '🚀', color: 'text-gray-400', rarity: 'common' },
-            'Spin': { emoji: '🌪️', color: 'text-yellow-200', rarity: 'common' },
-            'Chop': { emoji: '🔪', color: 'text-blue-300', rarity: 'common' },
-            'Spring': { emoji: '🌀', color: 'text-pink-300', rarity: 'common' },
-            'Bomb': { emoji: '💣', color: 'text-gray-600', rarity: 'common' },
-            'Smoke': { emoji: '☁️', color: 'text-gray-200', rarity: 'common' },
-            'Spike': { emoji: '🌵', color: 'text-green-400', rarity: 'common' },
-            'Flame': { emoji: '🔥', color: 'text-orange-500', rarity: 'uncommon' },
-            'Falcon': { emoji: '🦅', color: 'text-amber-700', rarity: 'uncommon' },
-            'Ice': { emoji: '🧊', color: 'text-cyan-300', rarity: 'uncommon' },
-            'Sand': { emoji: '🏜️', color: 'text-yellow-600', rarity: 'uncommon' },
-            'Dark': { emoji: '⚫', color: 'text-purple-900', rarity: 'uncommon' },
-            'Ghost': { emoji: '👻', color: 'text-green-200', rarity: 'rare' },
-            'Revive': { emoji: '💀', color: 'text-green-200', rarity: 'rare' },
-            'Diamond': { emoji: '💎', color: 'text-cyan-100', rarity: 'rare' },
-            'Light': { emoji: '💡', color: 'text-yellow-300', rarity: 'rare' },
-            'Love': { emoji: '💗', color: 'text-pink-500', rarity: 'rare' },
-            'Rubber': { emoji: '👒', color: 'text-purple-400', rarity: 'rare' },
-            'Barrier': { emoji: '🚧', color: 'text-green-600', rarity: 'rare' },
-            'Magma': { emoji: '🌋', color: 'text-red-600', rarity: 'rare' },
-            'Quake': { emoji: '🌏', color: 'text-blue-800', rarity: 'legendary' },
-            'Buddha': { emoji: '🧘', color: 'text-yellow-500', rarity: 'legendary' },
-            'Spider': { emoji: '🕷️', color: 'text-gray-300', rarity: 'legendary' },
-            'Sound': { emoji: '🎵', color: 'text-red-400', rarity: 'legendary' },
-            'Phoenix': { emoji: '🐦', color: 'text-blue-400', rarity: 'legendary' },
-            'Portal': { emoji: '🚪', color: 'text-indigo-400', rarity: 'legendary' },
-            'Rumble': { emoji: '⚡', color: 'text-blue-200', rarity: 'legendary' },
-            'Pain': { emoji: '🐾', color: 'text-pink-800', rarity: 'legendary' },
-            'Blizzard': { emoji: '❄️', color: 'text-white', rarity: 'legendary' },
-            'Gravity': { emoji: '🌌', color: 'text-purple-600', rarity: 'mythical' },
-            'Mammoth': { emoji: '🦣', color: 'text-orange-800', rarity: 'mythical' },
-            'T-Rex': { emoji: '🦖', color: 'text-green-800', rarity: 'mythical' },
-            'Dough': { emoji: '🍩', color: 'text-yellow-100', rarity: 'mythical' },
-            'Shadow': { emoji: '👥', color: 'text-gray-300', rarity: 'mythical' },
-            'Venom': { emoji: '☠️', color: 'text-purple-500', rarity: 'mythical' },
-            'Control': { emoji: '🎮', color: 'text-blue-500', rarity: 'mythical' },
-            'Spirit': { emoji: '👻', color: 'text-blue-200', rarity: 'mythical' },
-            'Dragon': { emoji: '🐉', color: 'text-orange-600', rarity: 'mythical' },
-            'Leopard': { emoji: '🐆', color: 'text-yellow-600', rarity: 'mythical' },
-            'Kitsune': { emoji: '🦊', color: 'text-blue-400', rarity: 'mythical' }
-        };
-
-        const rarityOrder = ['mythical', 'legendary', 'rare', 'uncommon', 'common'];
-        const rarityNames = {
-            'common': 'Común',
-            'uncommon': 'Poco Común',
-            'rare': 'Raro',
-            'legendary': 'Legendario',
-            'mythical': 'Mítico'
-        };
-
-        // Función principal para obtener stock
-        async function fetchStock(isRetry = false) {
-            if (isFetching && !isRetry) return;
+            // MYTHICAL
+            'Kitsune': { emoji: '🦊', rarity: 'mythical' },
+            'Leopard': { emoji: '🐆', rarity: 'mythical' },
+            'Dragon': { emoji: '🐉', rarity: 'mythical' },
+            'Spirit': { emoji: '👻', rarity: 'mythical' },
+            'Control': { emoji: '🎮', rarity: 'mythical' },
+            'Venom': { emoji: '☠️', rarity: 'mythical' },
+            'Shadow': { emoji: '👥', rarity: 'mythical' },
+            'Dough': { emoji: '🍩', rarity: 'mythical' },
+            'T-Rex': { emoji: '🦖', rarity: 'mythical' },
+            'Mammoth': { emoji: '🦣', rarity: 'mythical' },
+            'Gravity': { emoji: '🌌', rarity: 'mythical' },
             
-            const statusIndicator = document.getElementById('status-indicator');
-            const loadingState = document.getElementById('loading-state');
-            const emptyState = document.getElementById('empty-state');
+            // LEGENDARY
+            'Blizzard': { emoji: '❄️', rarity: 'legendary' },
+            'Pain': { emoji: '🐾', rarity: 'legendary' },
+            'Rumble': { emoji: '⚡', rarity: 'legendary' },
+            'Portal': { emoji: '🚪', rarity: 'legendary' },
+            'Phoenix': { emoji: '🐦', rarity: 'legendary' },
+            'Sound': { emoji: '🎵', rarity: 'legendary' },
+            'Spider': { emoji: '🕷️', rarity: 'legendary' },
+            'Love': { emoji: '💗', rarity: 'legendary' },
+            'Buddha': { emoji: '🧘', rarity: 'legendary' },
+            'Quake': { emoji: '🌏', rarity: 'legendary' },
+
+            // RARE
+            'Magma': { emoji: '🌋', rarity: 'rare' },
+            'Barrier': { emoji: '🚧', rarity: 'rare' },
+            'Rubber': { emoji: '👒', rarity: 'rare' },
+            'Light': { emoji: '💡', rarity: 'rare' },
+            'Diamond': { emoji: '💎', rarity: 'rare' },
+            'Revive': { emoji: '💀', rarity: 'rare' },
+            'Ghost': { emoji: '👻', rarity: 'rare' },
+
+            // UNCOMMON
+            'Dark': { emoji: '⚫', rarity: 'uncommon' },
+            'Sand': { emoji: '🏜️', rarity: 'uncommon' },
+            'Ice': { emoji: '🧊', rarity: 'uncommon' },
+            'Falcon': { emoji: '🦅', rarity: 'uncommon' },
+            'Flame': { emoji: '🔥', rarity: 'uncommon' },
+
+            // COMMON
+            'Spike': { emoji: '🌵', rarity: 'common' },
+            'Smoke': { emoji: '☁️', rarity: 'common' },
+            'Bomb': { emoji: '💣', rarity: 'common' },
+            'Spring': { emoji: '🌀', rarity: 'common' },
+            'Chop': { emoji: '🔪', rarity: 'common' },
+            'Spin': { emoji: '🌪️', rarity: 'common' },
+            'Rocket': { emoji: '🚀', rarity: 'common' }
+        };
+
+        const rarityConfig = {
+            'mythical': { color: 'text-rarity-mythical', border: 'border-mythical', label: 'MYTHICAL' },
+            'legendary': { color: 'text-rarity-legendary', border: 'border-legendary', label: 'LEGENDARY' },
+            'rare': { color: 'text-rarity-rare', border: 'border-rare', label: 'RARE' },
+            'uncommon': { color: 'text-rarity-uncommon', border: 'border-uncommon', label: 'UNCOMMON' },
+            'common': { color: 'text-rarity-common', border: 'border-common', label: 'COMMON' }
+        };
+
+        const formatMoney = (amount) => {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount);
+        };
+
+        // === LOGICA PRINCIPAL ===
+        async function fetchStock() {
+            const loader = document.getElementById('initial-loader');
+            const contentArea = document.getElementById('content-area');
             const errorBox = document.getElementById('error-box');
             
             try {
-                isFetching = true;
-                statusIndicator.className = 'w-3 h-3 rounded-full bg-yellow-500 animate-pulse';
-                
-                if (!isRetry) {
-                    document.getElementById('sections-container').innerHTML = '';
-                    loadingState.classList.remove('hidden');
-                    emptyState.classList.add('hidden');
-                    errorBox.classList.add('hidden');
-                }
-
-                const response = await fetch(PROXY_URL, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                const response = await fetch(PROXY_URL);
+                if (!response.ok) throw new Error('Network response was not ok');
                 
                 const proxyData = await response.json();
-                
-                if (!proxyData.contents) {
-                    throw new Error('Respuesta inválida del proxy');
-                }
-                
                 const realData = JSON.parse(proxyData.contents);
-                
-                // Procesar y validar datos
-                const stockList = processApiData(realData);
-                
-                if (stockList.length === 0) {
-                    throw new Error('No se encontraron frutas en stock');
-                }
 
-                // Renderizar datos
-                renderStock(stockList);
-                updateSummary(stockList);
-                
-                // Actualizar UI de éxito
-                statusIndicator.className = 'w-3 h-3 rounded-full bg-bf-green';
+                loader.classList.add('hidden');
+                contentArea.classList.remove('hidden');
                 errorBox.classList.add('hidden');
-                loadingState.classList.add('hidden');
-                document.getElementById('stock-summary').classList.remove('hidden');
-                
-                // Resetear contador de reintentos
-                retryCount = 0;
-                lastFetchTime = new Date();
-                updateLastUpdateTime();
-                
+
+                processAndRender(realData);
+                countdown = REFRESH_RATE;
+
             } catch (error) {
-                console.error("Error fetching stock:", error);
-                handleFetchError(error, isRetry);
-            } finally {
-                isFetching = false;
+                console.error(error);
+                loader.classList.add('hidden');
+                errorBox.classList.remove('hidden');
+                errorBox.querySelector('span').innerText = "Error conectando a la API. Reintentando...";
             }
         }
 
-        // Procesar datos de la API
-        function processApiData(data) {
+        function processAndRender(data) {
+            // Normalizar datos: Asegurarnos que sea un array
             let stockList = [];
-            
-            if (Array.isArray(data)) {
-                stockList = data;
-            } else if (data.stock && Array.isArray(data.stock)) {
-                stockList = data.stock;
-            } else if (data.data && Array.isArray(data.data)) {
-                stockList = data.data;
-            } else if (data.fruits && Array.isArray(data.fruits)) {
-                stockList = data.fruits;
-            } else {
-                // Intentar extraer de cualquier array en el objeto
-                Object.values(data).forEach(value => {
-                    if (Array.isArray(value)) {
-                        stockList = stockList.concat(value);
-                    }
-                });
+            if (Array.isArray(data)) stockList = data;
+            else if (data.stock) stockList = data.stock;
+            else if (data.data) stockList = data.data;
+            else stockList = Object.values(data).flat();
+
+            // Limpiar secciones
+            ['mythical', 'legendary', 'rare', 'uncommon', 'common'].forEach(r => {
+                document.getElementById(`${r}-section`).innerHTML = '';
+            });
+
+            if (stockList.length === 0) {
+                document.getElementById('common-section').innerHTML = '<div class="text-center text-gray-500">No hay stock disponible.</div>';
+                return;
             }
 
-            // Filtrar solo frutas válidas con stock
-            return stockList.filter(item => {
-                const name = (item.Name || item.name || '').trim();
-                const price = item.Price || item.price || 0;
-                return name && fruitDb[name] && price > 0;
-            }).map(item => ({
-                name: (item.Name || item.name).trim(),
-                price: item.Price || item.price,
-                quantity: item.Quantity || item.quantity || 1
-            }));
-        }
-
-        // Renderizar stock organizado por rareza
-        function renderStock(stockList) {
-            const container = document.getElementById('sections-container');
-            container.innerHTML = '';
-            
             // Agrupar por rareza
-            const groupedByRarity = {};
-            rarityOrder.forEach(rarity => groupedByRarity[rarity] = []);
-            
-            stockList.forEach(item => {
-                const meta = fruitDb[item.name];
-                if (meta && groupedByRarity[meta.rarity]) {
-                    groupedByRarity[meta.rarity].push(item);
-                }
-            });
-
-            // Renderizar cada sección
-            rarityOrder.forEach(rarity => {
-                const fruits = groupedByRarity[rarity];
-                if (fruits.length === 0) return;
-
-                const section = createRaritySection(rarity, fruits);
-                container.appendChild(section);
-            });
-        }
-
-        // Crear sección para cada rareza
-        function createRaritySection(rarity, fruits) {
-            const section = document.createElement('div');
-            section.className = 'mb-8';
-            
-            // Header de la sección
-            const header = document.createElement('div');
-            header.className = 'flex items-center justify-between mb-4 border-b border-gray-700 pb-2';
-            
-            const titleContainer = document.createElement('div');
-            titleContainer.className = 'flex items-center gap-3';
-            
-            const icon = document.createElement('i');
-            icon.className = 'fa-solid fa-star text-bf-orange';
-            
-            const title = document.createElement('h2');
-            title.className = 'font-display text-xl font-bold';
-            title.textContent = rarityNames[rarity];
-            
-            const badge = document.createElement('span');
-            badge.className = `rarity-badge badge-${rarity}`;
-            badge.textContent = `${fruits.length} disponible${fruits.length > 1 ? 's' : ''}`;
-            
-            titleContainer.appendChild(icon);
-            titleContainer.appendChild(title);
-            titleContainer.appendChild(badge);
-            header.appendChild(titleContainer);
-            
-            // Grid de frutas
-            const grid = document.createElement('div');
-            grid.className = 'section-grid';
-            
-            fruits.forEach(item => {
-                const meta = fruitDb[item.name];
-                const card = createFruitCard(item, meta);
-                grid.appendChild(card);
-            });
-            
-            section.appendChild(header);
-            section.appendChild(grid);
-            
-            return section;
-        }
-
-        // Crear card individual de fruta
-        function createFruitCard(item, meta) {
-            const card = document.createElement('div');
-            card.className = `fruit-card p-4 rounded-xl relative overflow-hidden group rarity-${meta.rarity} cursor-pointer`;
-            
-            card.innerHTML = `
-                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-gradient-to-br from-bf-orange to-transparent opacity-10 rounded-full blur-xl group-hover:opacity-20 transition"></div>
-                <div class="flex items-start justify-between relative z-10">
-                    <div class="flex-1 min-w-0">
-                        <h3 class="font-display font-bold text-lg text-white group-hover:text-bf-orange transition truncate">
-                            ${item.name}
-                        </h3>
-                        <div class="flex items-center gap-2 mt-1">
-                            <span class="rarity-badge badge-${meta.rarity}">${rarityNames[meta.rarity]}</span>
-                            ${item.quantity > 1 ? `<span class="text-xs bg-bf-orange/20 text-bf-orange px-2 py-0.5 rounded">x${item.quantity}</span>` : ''}
-                        </div>
-                    </div>
-                    <div class="text-4xl ${meta.color} drop-shadow-md transform group-hover:scale-110 transition duration-300 animate-float ml-3">
-                        ${meta.emoji}
-                    </div>
-                </div>
-                <div class="mt-6 flex items-end justify-between">
-                    <div>
-                        <p class="text-gray-400 text-xs mb-1 tracking-wider">PRECIO</p>
-                        <p class="font-mono text-green-400 font-bold text-lg">
-                            ${formatMoney(item.price)}
-                        </p>
-                    </div>
-                    <button class="bg-bf-orange/10 hover:bg-bf-orange/20 text-bf-orange border border-bf-orange/50 rounded-lg px-3 py-1 text-xs transition group/item">
-                        <i class="fa-solid fa-cart-shopping mr-1 group-hover/item:animate-bounce"></i> STOCK
-                    </button>
-                </div>
-            `;
-            
-            // Añadir evento de clic
-            card.addEventListener('click', () => {
-                showFruitDetails(item, meta);
-            });
-            
-            return card;
-        }
-
-        // Mostrar detalles de la fruta (puedes expandir esta función)
-        function showFruitDetails(item, meta) {
-            alert(`🍇 ${item.name}\n💰 Precio: ${formatMoney(item.price)}\n🎯 Rareza: ${rarityNames[meta.rarity]}\n📦 Stock: ${item.quantity}\n\nFunción de detalles disponible para implementar.`);
-        }
-
-        // Actualizar resumen de contadores
-        function updateSummary(stockList) {
-            const counts = {
-                total: stockList.length,
-                common: 0,
-                uncommon: 0,
-                rare: 0,
-                legendary: 0,
-                mythical: 0
-            };
+            const grouped = { mythical: [], legendary: [], rare: [], uncommon: [], common: [] };
 
             stockList.forEach(item => {
-                const meta = fruitDb[item.name];
-                if (meta && counts[meta.rarity] !== undefined) {
-                    counts[meta.rarity]++;
-                }
-            });
+                const name = item.Name || item.name || "Unknown";
+                // Si la API tiene campo "InStock" y es false, lo saltamos. Si no tiene el campo, asumimos true.
+                if (item.hasOwnProperty('InStock') && item.InStock === false) return;
 
-            Object.keys(counts).forEach(key => {
-                const element = document.getElementById(`count-${key}`);
-                if (element) {
-                    element.textContent = counts[key];
-                }
-            });
-        }
-
-        // Manejar errores de fetch con reintentos
-        function handleFetchError(error, isRetry) {
-            const errorBox = document.getElementById('error-box');
-            const statusIndicator = document.getElementById('status-indicator');
-            const loadingState = document.getElementById('loading-state');
-            
-            statusIndicator.className = 'w-3 h-3 rounded-full bg-bf-red';
-            loadingState.classList.add('hidden');
-            
-            if (retryCount < RETRY_ATTEMPTS && !isRetry) {
-                retryCount++;
-                errorBox.classList.remove('hidden');
-                errorBox.innerHTML = `
-                    <i class="fa-solid fa-wifi mr-2"></i>
-                    <span>Conexión fallida. Reintentando (${retryCount}/${RETRY_ATTEMPTS})...</span>
-                    <button onclick="retryConnection()" class="ml-4 text-xs bg-red-500/20 hover:bg-red-500/30 px-3 py-1 rounded transition">
-                        Reintentar ahora
-                    </button>
-                `;
+                // Buscar metadatos, si no existe, asignar Common por defecto
+                const meta = fruitDb[name] || { emoji: '❓', rarity: 'common' };
                 
-                setTimeout(() => fetchStock(true), RETRY_DELAY);
+                // Guardar el objeto completo + metadatos
+                grouped[meta.rarity].push({ ...item, meta });
+            });
+
+            // Renderizar cada grupo
+            Object.keys(grouped).forEach(rarity => {
+                const items = grouped[rarity];
+                const container = document.getElementById(`${rarity}-section`);
+                
+                if (items.length > 0) {
+                    const config = rarityConfig[rarity];
+                    
+                    // Crear Titulo de Sección
+                    const header = document.createElement('div');
+                    header.className = `section-title ${config.color}`;
+                    header.innerHTML = `
+                        <h3 class="font-display font-bold text-xl tracking-widest">${config.label}</h3>
+                        <div class="section-line bg-current opacity-30"></div>
+                        <span class="text-xs font-mono bg-white/5 px-2 py-1 rounded">${items.length}</span>
+                    `;
+                    container.appendChild(header);
+
+                    // Crear Grid para las cartas
+                    const grid = document.createElement('div');
+                    grid.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4";
+
+                    items.forEach(fruit => {
+                        const price = fruit.Price || fruit.price || fruit.Value || 0;
+                        const name = fruit.Name || fruit.name;
+                        
+                        const card = document.createElement('div');
+                        card.className = `fruit-card p-4 rounded-lg relative overflow-hidden group ${config.border} border-l-4`;
+                        
+                        card.innerHTML = `
+                            <div class="flex justify-between items-start z-10 relative">
+                                <div>
+                                    <h4 class="font-bold text-white text-lg leading-none mb-1">${name}</h4>
+                                    <p class="font-mono text-green-400 text-sm">${formatMoney(price)}</p>
+                                </div>
+                                <div class="text-3xl animate-float filter drop-shadow-lg grayscale group-hover:grayscale-0 transition duration-500">
+                                    ${fruit.meta.emoji}
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <button class="w-full py-2 bg-white/5 hover:bg-bf-orange hover:text-black text-xs font-bold tracking-wider uppercase transition-colors rounded">
+                                    COMPRAR
+                                </button>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+                    
+                    container.appendChild(grid);
+                }
+            });
+        }
+
+        // Temporizador
+        setInterval(() => {
+            const timerEl = document.getElementById('timer');
+            countdown--;
+            if (countdown <= 0) {
+                fetchStock();
+                timerEl.textContent = "ACTUALIZANDO...";
             } else {
-                errorBox.classList.remove('hidden');
-                errorBox.innerHTML = `
-                    <i class="fa-solid fa-triangle-exclamation mr-2"></i>
-                    <span id="error-msg">Error: ${error.message}. Verifica la API o el proxy.</span>
-                    <button onclick="retryConnection()" class="ml-4 text-xs bg-red-500/20 hover:bg-red-500/30 px-3 py-1 rounded transition">
-                        Reintentar
-                    </button>
-                `;
-                document.getElementById('empty-state').classList.remove('hidden');
+                timerEl.textContent = `00:${countdown.toString().padStart(2, '0')}`;
             }
-        }
+        }, 1000);
 
-        // Reintentar conexión manual
-        function retryConnection() {
-            retryCount = 0;
-            fetchStock();
-        }
-
-        // Forzar actualización con cooldown
-        function forceRefresh() {
-            const btn = document.getElementById('refresh-btn');
-            if (btn.disabled) return;
-            
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-            
-            fetchStock().finally(() => {
-                setTimeout(() => {
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fa-solid fa-rotate"></i>';
-                }, 2000);
-            });
-        }
-
-        // Actualizar tiempo de última actualización
-        function updateLastUpdateTime() {
-            const lastUpdateEl = document.getElementById('last-update');
-            if (lastFetchTime) {
-                lastUpdateEl.textContent = `Última: ${lastFetchTime.toLocaleTimeString('es-ES')}`;
-            }
-        }
-
-        // Formatear dinero
-        function formatMoney(amount) {
-            if (typeof amount !== 'number') amount = Number(amount) || 0;
-            return new Intl.NumberFormat('en-US', { 
-                style: 'currency', 
-                currency: 'USD', 
-                maximumFractionDigits: 0 
-            }).format(amount);
-        }
-
-        // Iniciar contador automático
-        function startCountdown() {
-            refreshInterval = setInterval(() => {
-                const timerEl = document.getElementById('timer');
-                countdown--;
-                
-                if (countdown <= 0) {
-                    fetchStock();
-                    countdown = REFRESH_RATE;
-                    timerEl.textContent = "Actualizando...";
-                } else {
-                    timerEl.textContent = `Actualiza en ${countdown}s`;
-                }
-            }, 1000);
-        }
-
-        // Limpiar intervalos al cerrar la página
-        window.addEventListener('beforeunload', () => {
-            if (refreshInterval) clearInterval(refreshInterval);
-        });
-
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchStock();
-            startCountdown();
-        });
+        // Iniciar
+        document.addEventListener('DOMContentLoaded', fetchStock);
     </script>
 </body>
 </html>
+
+
