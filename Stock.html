@@ -221,6 +221,7 @@
             'Rocket': { emoji: '🚀', color: 'text-gray-400', rarity: 'common' },
             'Spin': { emoji: '🌪️', color: 'text-yellow-200', rarity: 'common' },
             'Chop': { emoji: '🔪', color: 'text-blue-300', rarity: 'common' },
+            'Blade': { emoji: '⚔️', color: 'text-gray-300', rarity: 'common' },
             'Spring': { emoji: '🌀', color: 'text-pink-300', rarity: 'common' },
             'Bomb': { emoji: '💣', color: 'text-gray-900', rarity: 'common' },
             'Smoke': { emoji: '☁️', color: 'text-gray-200', rarity: 'common' },
@@ -264,6 +265,11 @@
             return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount);
         };
 
+        function parseFruitName(fullName) {
+            const parts = fullName.split('-');
+            return parts[0];
+        }
+
         async function fetchStock() {
             const errorBox = document.getElementById('error-box');
             const statusIndicator = document.getElementById('status-indicator');
@@ -298,9 +304,10 @@
         }
 
         function createFruitCard(item, isMirage = false) {
-            const name = item.Name || item.name || "Unknown";
-            const price = item.Price || item.price || item.Value || 0;
-            const meta = fruitDb[name] || { emoji: '🍎', color: 'text-gray-400', rarity: 'common' };
+            const fullName = item.name || item.Name || "Unknown";
+            const fruitName = parseFruitName(fullName);
+            const price = item.price || item.Price || item.Value || 0;
+            const meta = fruitDb[fruitName] || { emoji: '🍎', color: 'text-gray-400', rarity: 'common' };
             
             const card = document.createElement('div');
             card.className = `fruit-card ${isMirage ? 'mirage' : ''} p-4 rounded-xl relative overflow-hidden group rarity-${meta.rarity}`;
@@ -310,7 +317,7 @@
                 ${isMirage ? '<div class="absolute top-2 right-2"><span class="mirage-badge text-white px-2 py-1 rounded text-xs font-bold">MIRAGE</span></div>' : ''}
                 <div class="flex items-start justify-between relative z-10">
                     <div>
-                        <h3 class="font-display font-bold text-lg text-white group-hover:${isMirage ? 'text-mirage-purple' : 'text-bf-orange'} transition">${name}</h3>
+                        <h3 class="font-display font-bold text-lg text-white group-hover:${isMirage ? 'text-mirage-purple' : 'text-bf-orange'} transition">${fruitName}</h3>
                         <span class="text-xs uppercase tracking-wide text-gray-500 font-bold">${meta.rarity}</span>
                     </div>
                     <div class="text-4xl ${meta.color} drop-shadow-md transform group-hover:scale-110 transition duration-300 animate-float">
@@ -342,28 +349,8 @@
             normalContainer.innerHTML = '';
             mirageContainer.innerHTML = '';
             
-            let stockList = [];
-            if (Array.isArray(data)) {
-                stockList = data;
-            } else if (data.stock && Array.isArray(data.stock)) {
-                stockList = data.stock;
-            } else if (data.data && Array.isArray(data.data)) {
-                stockList = data.data;
-            } else {
-                stockList = Object.values(data).flat();
-            }
-
-            const normalFruits = [];
-            const mirageFruits = [];
-
-            stockList.forEach(item => {
-                const isMirage = item.isMirage || item.Mirage || item.mirage || false;
-                if (isMirage) {
-                    mirageFruits.push(item);
-                } else {
-                    normalFruits.push(item);
-                }
-            });
+            const normalFruits = data.normal || [];
+            const mirageFruits = data.mirage || [];
 
             if (normalFruits.length === 0 && mirageFruits.length === 0) {
                 noStock.classList.remove('hidden');
@@ -409,4 +396,4 @@
         document.addEventListener('DOMContentLoaded', fetchStock);
     </script>
 </body>
-                        </html>
+</html> 
