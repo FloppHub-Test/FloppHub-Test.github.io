@@ -118,6 +118,10 @@
             background: linear-gradient(135deg, #9333ea 0%, #a855f7 100%);
             animation: glow 2s ease-in-out infinite;
         }
+
+        .notification {
+            max-width: 400px;
+        }
     </style>
 </head>
 <body class="font-body min-h-screen flex flex-col">
@@ -145,6 +149,9 @@
     </header>
 
     <main class="flex-grow container mx-auto p-6 max-w-7xl">
+        
+        <!-- Notification Container -->
+        <div id="notification-container" class="fixed top-20 right-4 z-50 flex flex-col gap-3"></div>
         
         <div id="error-box" class="hidden bg-red-900/20 border border-red-500 text-red-200 p-4 rounded-lg mb-6 text-center">
             <i class="fa-solid fa-triangle-exclamation mr-2"></i>
@@ -216,6 +223,7 @@
 
         const REFRESH_RATE = 30;
         let countdown = REFRESH_RATE;
+        let previousStock = null;
 
         const fruitDb = {
             'Rocket': { emoji: '🚀', color: 'text-gray-400', rarity: 'common' },
@@ -271,6 +279,139 @@
             return parts[0];
         }
 
+        function showNotification(title, message, type = 'success') {
+            const notifContainer = document.getElementById('notification-container');
+            
+            const notif = document.createElement('div');
+            notif.className = `notification ${type} transform translate-x-full transition-all duration-500 ease-out`;
+            
+            const icon = type === 'new' ? '🆕' : type === 'removed' ? '📦' : '🔄';
+            const bgColor = type === 'new' ? 'bg-green-900/90' : type === 'removed' ? 'bg-red-900/90' : 'bg-blue-900/90';
+            const borderColor = type === 'new' ? 'border-green-500' : type === 'removed' ? 'border-red-500' : 'border-blue-500';
+            
+            notif.innerHTML = `
+                <div class="${bgColor} ${borderColor} border-l-4 p-4 rounded-lg shadow-2xl backdrop-blur-sm flex items-start gap-3 min-w-[300px] max-w-[400px]">
+                    <span class="text-3xl">${icon}</span>
+                    <div class="flex-1">
+                        <h4 class="font-display font-bold text-white text-sm mb-1">${title}</h4>
+                        <p class="text-gray-300 text-xs">${message}</p>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-gray-400 hover:text-white transition">
+                        <i class="fa-solid fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            notifContainer.appendChild(notif);
+            
+            setTimeout(() => {
+                notif.classList.remove('translate-x-full');
+            }, 100);
+            
+            setTimeout(() => {
+                notif.classList.add('translate-x-full');
+                setTimeout(() => notif.remove(), 500);
+            }, 5000);
+            
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(title, {
+                    body: message,
+                    icon: '🍎',
+                    badge: '🍎'
+                });
+            }
+        }
+
+        function requestNotificationPermission() {
+            if ('Notification' in window) {
+                if (Notification.permission === 'default') {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            new Notification('🎉 ¡Bienvenido a FloppHub Team!', {
+                                body: 'Te has suscrito a la API Stock de FloppHub Team | ¡Disfruta!',
+                                icon: '🍎',
+                                badge: '🍎',
+                                tag: 'welcome-notification'
+                            });
+                            
+                            showNotification(
+                                '🔔 Notificaciones activadas',
+                                'Recibirás alertas cuando el stock cambie',
+                                'new'
+                            );
+                        }
+                    });
+                } else if (Notification.permission === 'granted') {
+                    new Notification('🎉 ¡Bienvenido de vuelta!', {
+                        body: 'Te has suscrito a la API Stock de FloppHub Team | ¡Disfruta!',
+                        icon: '🍎',
+                        badge: '🍎',
+                        tag: 'welcome-notification'
+                    });
+                }
+            }
+        }
+
+        function compareStock(newData) {
+            if (!previousStock) {
+                previousStock = newData;
+                return;
+            }
+
+            const oldNormal = previousStock.normal || [];
+            const oldMirage = previousStock.mirage || [];
+            const newNormal = newData.normal || [];
+            const newMirage = newData.mirage || [];
+
+            const oldNormalNames = oldNormal.map(f => f.name);
+            const oldMirageNames = oldMirage.map(f => f.name);
+            const newNormalNames = newNormal.map(f => f.name);
+            const newMirageNames = newMirage.map(f => f.name);
+
+            const addedNormal = newNormal.filter(f => !oldNormalNames.includes(f.name));
+            const removedNormal = oldNormal.filter(f => !newNormalNames.includes(f.name));
+            const addedMirage = newMirage.filter(f => !oldMirageNames.includes(f.name));
+            const removedMirage = oldMirage.filter(f => !newMirageNames.includes(f.name));
+
+            addedNormal.forEach(fruit => {
+                const fruitName = parseFruitName(fruit.name);
+                showNotification(
+                    '🆕 Nueva fruta en stock!',
+                    `${fruitName} (Normal) - ${formatMoney(fruit.price)}`,
+                    'new'
+                );
+            });
+
+            addedMirage.forEach(fruit => {
+                const fruitName = parseFruitName(fruit.name);
+                showNotification(
+                    '✨ Nueva fruta MIRAGE!',
+                    `${fruitName} (Mirage) - ${formatMoney(fruit.price)}`,
+                    'new'
+                );
+            });
+
+            removedNormal.forEach(fruit => {
+                const fruitName = parseFruitName(fruit.name);
+                showNotification(
+                    '📦 Fruta agotada',
+                    `${fruitName} (Normal) ya no está disponible`,
+                    'removed'
+                );
+            });
+
+            removedMirage.forEach(fruit => {
+                const fruitName = parseFruitName(fruit.name);
+                showNotification(
+                    '📦 Fruta MIRAGE agotada',
+                    `${fruitName} (Mirage) ya no está disponible`,
+                    'removed'
+                );
+            });
+
+            previousStock = newData;
+        }
+
         async function fetchStock() {
             const errorBox = document.getElementById('error-box');
             const statusIndicator = document.getElementById('status-indicator');
@@ -291,6 +432,7 @@
                 statusIndicator.classList.remove('bg-yellow-500');
                 statusIndicator.classList.add('bg-green-500');
 
+                compareStock(realData);
                 renderData(realData);
                 countdown = REFRESH_RATE;
 
@@ -394,7 +536,10 @@
             }
         }, 1000);
 
-        document.addEventListener('DOMContentLoaded', fetchStock);
+        document.addEventListener('DOMContentLoaded', () => {
+            requestNotificationPermission();
+            fetchStock();
+        });
     </script>
 </body>
-</html>
+    </html> 
