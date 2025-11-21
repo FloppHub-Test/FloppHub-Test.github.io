@@ -327,12 +327,14 @@
                 if (Notification.permission === 'default') {
                     Notification.requestPermission().then(permission => {
                         if (permission === 'granted') {
-                            new Notification('🎉 ¡Bienvenido a FloppHub Team!', {
-                                body: 'Te has suscrito a la API Stock de FloppHub Team | ¡Disfruta!',
-                                icon: '🍎',
-                                badge: '🍎',
-                                tag: 'welcome-notification'
-                            });
+                            setTimeout(() => {
+                                new Notification('🎉 ¡Bienvenido a FloppHub Team!', {
+                                    body: 'Te has suscrito a la API Stock de FloppHub Team | ¡Disfruta!',
+                                    icon: 'https://cdn-icons-png.flaticon.com/512/2965/2965358.png',
+                                    requireInteraction: false,
+                                    silent: false
+                                });
+                            }, 1000);
                             
                             showNotification(
                                 '🔔 Notificaciones activadas',
@@ -342,13 +344,21 @@
                         }
                     });
                 } else if (Notification.permission === 'granted') {
-                    new Notification('🎉 ¡Bienvenido de vuelta!', {
-                        body: 'Te has suscrito a la API Stock de FloppHub Team | ¡Disfruta!',
-                        icon: '🍎',
-                        badge: '🍎',
-                        tag: 'welcome-notification'
-                    });
+                    setTimeout(() => {
+                        new Notification('🎉 ¡Bienvenido de vuelta!', {
+                            body: 'Te has suscrito a la API Stock de FloppHub Team | ¡Disfruta!',
+                            icon: 'https://cdn-icons-png.flaticon.com/512/2965/2965358.png',
+                            requireInteraction: false,
+                            silent: false
+                        });
+                    }, 1000);
                 }
+            } else {
+                showNotification(
+                    '⚠️ Notificaciones no disponibles',
+                    'Tu navegador no soporta notificaciones push',
+                    'removed'
+                );
             }
         }
 
@@ -542,4 +552,4 @@
         });
     </script>
 </body>
-    </html> 
+</html> 
