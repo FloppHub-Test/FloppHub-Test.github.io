@@ -314,8 +314,8 @@
             
             card.innerHTML = `
                 <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-gradient-to-br ${isMirage ? 'from-mirage-purple' : 'from-bf-orange'} to-transparent opacity-10 rounded-full blur-xl group-hover:opacity-20 transition"></div>
-                ${isMirage ? '<div class="absolute top-2 right-2"><span class="mirage-badge text-white px-2 py-1 rounded text-xs font-bold">MIRAGE</span></div>' : ''}
-                <div class="flex items-start justify-between relative z-10">
+                ${isMirage ? '<div class="absolute top-2 right-2 z-20"><span class="mirage-badge text-white px-2 py-1 rounded text-xs font-bold">MIRAGE</span></div>' : ''}
+                <div class="flex items-start justify-between relative z-10 ${isMirage ? 'mt-8' : ''}">
                     <div>
                         <h3 class="font-display font-bold text-lg text-white group-hover:${isMirage ? 'text-mirage-purple' : 'text-bf-orange'} transition">${fruitName}</h3>
                         <span class="text-xs uppercase tracking-wide text-gray-500 font-bold">${meta.rarity}</span>
@@ -396,4 +396,4 @@
         document.addEventListener('DOMContentLoaded', fetchStock);
     </script>
 </body>
-</html> 
+</html>
