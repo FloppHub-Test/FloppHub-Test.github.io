@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investigación sobre PSeInt - Eduardo Antonio Kinil Estrada</title>
+    <title>Investigación sobre PSeInt</title>
     <style>
-        @media print {
+        /* Estilos para impresión y pantalla */
+        @media print, screen {
             body {
                 font-family: "Arial", sans-serif;
                 font-size: 12pt;
@@ -17,7 +18,7 @@
             h1 {
                 font-size: 18pt;
                 text-align: center;
-                margin-bottom: 15px;
+                margin-bottom: 10px;
             }
             h2 {
                 font-size: 14pt;
@@ -34,12 +35,17 @@
                 margin-bottom: 10px;
                 text-align: justify;
             }
+            ul, ol {
+                margin-bottom: 12px;
+                margin-left: 18px;
+            }
             pre {
                 font-size: 11pt;
                 background-color: #f9f9f9;
                 border: 1px solid #ccc;
                 padding: 10px;
                 overflow-x: auto;
+                margin: 10px 0;
                 page-break-inside: avoid;
             }
             table {
@@ -70,10 +76,6 @@
                 font-size: 10pt;
                 color: #555;
                 margin-top: 40px;
-                page-break-before: avoid;
-            }
-            .no-break {
-                page-break-inside: avoid;
             }
             a {
                 color: #000;
@@ -81,59 +83,18 @@
             }
         }
 
-        @media screen {
-            body {
-                font-family: "Arial", sans-serif;
-                font-size: 14px;
-                line-height: 1.6;
-                margin: 20px;
-                color: #333;
-            }
-            h1 {
-                font-size: 22px;
-                text-align: center;
-            }
+        /* Evitar saltos de página forzados */
+        @media print {
             h2 {
-                font-size: 18px;
-                border-bottom: 2px solid #000;
-                padding-bottom: 5px;
+                page-break-after: avoid;
             }
-            h3 {
-                font-size: 16px;
+            h3, pre, table, ul, ol {
+                page-break-inside: avoid;
             }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin: 15px 0;
-            }
-            th, td {
-                border: 1px solid #000;
-                padding: 8px;
-                vertical-align: top;
-            }
-            th {
-                background-color: #f2f2f2;
-            }
-            pre {
-                font-size: 13px;
-                background-color: #f9f9f9;
-                border: 1px solid #ccc;
-                padding: 10px;
-                overflow-x: auto;
-            }
-            img {
-                display: block;
-                margin: 20px auto;
-                max-width: 200px;
-            }
-            .center {
-                text-align: center;
-            }
-            .footer {
-                text-align: center;
-                font-size: 12px;
-                color: #666;
-                margin-top: 40px;
+            /* Permitir que las páginas se llenen naturalmente */
+            body, html {
+                page-break-before: avoid;
+                page-break-after: avoid;
             }
         }
     </style>
@@ -141,7 +102,7 @@
 <body>
 
     <!-- PORTADA -->
-    <div class="center no-break">
+    <div class="center">
         <h1>INVESTIGACIÓN SOBRE PSEINT<br>ENTORNO DE APRENDIZAJE PARA ALGORITMOS Y PSEUDOCÓDIGO</h1>
         <img src="https://i.postimg.cc/TwFpcH2F/BACHO.png" alt="Logo Colegio de Bachilleres Plantel Cancún 4" width="180" style="border-radius: 10px;">
         <p><strong>Asignatura:</strong> Cultura Digital</p>
@@ -152,7 +113,6 @@
     </div>
 
     <!-- ÍNDICE -->
-    <div style="page-break-after: always;"></div>
     <h2>ÍNDICE</h2>
     <ol>
         <li><a href="#sec1">¿Qué es PSeInt?</a></li>
@@ -170,8 +130,7 @@
         <li><a href="#sec13">Fuentes de información</a></li>
     </ol>
 
-    <!-- CONTENIDO -->
-    <div style="page-break-after: always;"></div>
+    <!-- CONTENIDO FLUIDO -->
     <h2 id="sec1">1. ¿Qué es PSeInt?</h2>
     <p><strong>PSeInt</strong> (Pseudocódigo INTerprete) es una herramienta educativa gratuita diseñada para facilitar el aprendizaje de la lógica de programación mediante el uso de pseudocódigo escrito en español. Es especialmente útil para estudiantes que inician en el mundo de la programación, ya que elimina la complejidad de la sintaxis de lenguajes reales como C++, Python o Java.</p>
     <p>Su principal objetivo es enseñar a estructurar soluciones a problemas mediante algoritmos claros, usando palabras en español como <code>Escribir</code>, <code>Leer</code>, <code>Si</code>, <code>Mientras</code>, entre otras. Esto permite enfocarse en el razonamiento lógico sin preocuparse por errores de sintaxis avanzados.</p>
@@ -195,7 +154,6 @@
     </ul>
     <p>Gracias a su enfoque pedagógico y su disponibilidad gratuita, PSeInt se ha convertido en una de las herramientas más populares en países de habla hispana para la enseñanza de algoritmos computacionales.</p>
 
-    <div style="page-break-after: always;"></div>
     <h2 id="sec3">3. Instalación paso a paso</h2>
     <p>Sigue estos pasos para instalar PSeInt en tu computadora con sistema Windows (también disponible para Linux y macOS):</p>
     <ol>
@@ -224,7 +182,6 @@
         <li><strong>Exportación:</strong> Convierte tu pseudocódigo a código real en Python, C, Java, entre otros.</li>
     </ul>
 
-    <div style="page-break-after: always;"></div>
     <h2 id="sec5">5. Primer pseudocódigo: Suma de dos números</h2>
     <p>Vamos a crear un algoritmo simple que solicite dos números y muestre su suma.</p>
     <h3>Paso 1: Escribe el código</h3>
@@ -300,7 +257,6 @@ FinAlgoritmo</code></pre>
         </tr>
     </table>
 
-    <div style="page-break-after: always;"></div>
     <h2 id="sec8">8. Tipos de algoritmos</h2>
     <ol>
         <li><strong>Secuencial:</strong> Las instrucciones se ejecutan en orden, una tras otra. Ej: Calcular el área de un rectángulo.</li>
@@ -367,7 +323,6 @@ FinAlgoritmo</code></pre>
         <li>Ampliamente adoptado en escuelas técnicas y bachilleratos.</li>
     </ul>
 
-    <div style="page-break-after: always;"></div>
     <h2 id="sec11">11. Paradigmas de programación</h2>
     <p>Existen varios estilos o enfoques para programar. PSeInt utiliza el paradigma <strong>imperativo estructurado</strong>, pero es importante conocer los principales:</p>
     <ol>
@@ -427,7 +382,6 @@ FinAlgoritmo</code></pre>
     FinSi
 FinAlgoritmo</code></pre>
 
-    <div style="page-break-after: always;"></div>
     <h2 id="sec13">13. Fuentes de información</h2>
     <ol>
         <li><strong>Sitio oficial de PSeInt:</strong> <a href="https://pseint.sourceforge.net">https://pseint.sourceforge.net</a></li>
@@ -437,6 +391,12 @@ FinAlgoritmo</code></pre>
         <li><strong>Apuntes del Colegio de Bachilleres:</strong> Módulo de Cultura Digital, 1er semestre.</li>
         <li><strong>Libro:</strong> "Introducción a la Programación" – Carlos Pes (edición en español).</li>
     </ol>
+
+    <!-- PIE DE PÁGINA -->
+    <div class="footer">
+        <em>Investigación realizada por Eduardo Antonio Kinil Estrada como parte de la asignatura de Cultura Digital.<br>
+        Colegio de Bachilleres Plantel Cancún 4 – Noviembre de 2025.</em>
+    </div>
 
 </body>
 </html>
