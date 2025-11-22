@@ -23,14 +23,23 @@
             --off-white: #f0f0f0;
         }
 
-        body {
-            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, var(--primary-black) 0%, var(--secondary-black) 50%, var(--dark-gray) 100%);
-            color: var(--primary-white);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
+        html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: var(--dark-gray);
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, var(--primary-black) 0%, var(--secondary-black) 50%, var(--dark-gray) 100%);
+    background-attachment: fixed;
+    background-size: 100% 100vh;
+    color: var(--primary-white);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
 
         /* Animated Background */
         .bg-animation {
