@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TestX - Executor para Roblox</title>
+    <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/dQ7pYQsK/Baduh.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-pink: #ff00ff;
+            --neon-blue: #00f0ff;
+            --neon-purple: #9d00ff;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --glass-bg: rgba(20, 20, 30, 0.25);
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--dark-bg);
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, var(--darker-bg) 0%, #1a0a2e 100%);
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: 
+                radial-gradient(circle at 20% 30%, var(--neon-purple) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, var(--neon-blue) 0%, transparent 40%),
+                radial-gradient(circle at 40% 80%, var(--neon-pink) 0%, transparent 40%);
+            animation: bgFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes bgFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-30px, -30px) rotate(120deg); }
+            66% { transform: translate(30px, -30px) rotate(240deg); }
+        }
+
+        /* Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            animation: particleFloat 10s linear infinite;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+
+        /* Header */
+        header {
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(157, 0, 255, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            border: 2px solid var(--neon-purple);
+            box-shadow: 0 0 20px var(--neon-purple);
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 20px var(--neon-purple); }
+            50% { box-shadow: 0 0 30px var(--neon-purple), 0 0 40px var(--neon-purple); }
+        }
+
+        .logo h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2em;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px var(--neon-pink);
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-blue);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::before {
+            width: 100%;
+        }
+
+        nav a:hover {
+            background: rgba(0, 240, 255, 0.1);
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 50px;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(157, 0, 255, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4em;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px var(--neon-pink);
+            animation: textGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes textGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        .tagline {
+            font-size: 1.5em;
+            color: #aaa;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .status-badges {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .badge {
+            padding: 10px 25px;
+            border-radius: 25px;
+            border: 2px solid;
+            font-weight: 700;
+            backdrop-filter: blur(10px);
+            background: var(--glass-bg);
+            transition: all 0.3s;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .badge:nth-child(1) {
+            border-color: var(--neon-purple);
+            color: var(--neon-purple);
+            box-shadow: 0 0 20px var(--neon-purple);
+            animation-delay: 0s;
+        }
+
+        .badge:nth-child(2) {
+            border-color: var(--neon-pink);
+            color: var(--neon-pink);
+            box-shadow: 0 0 20px var(--neon-pink);
+            animation-delay: 0.5s;
+        }
+
+        .badge:nth-child(3) {
+            border-color: var(--neon-blue);
+            color: var(--neon-blue);
+            box-shadow: 0 0 20px var(--neon-blue);
+            animation-delay: 1s;
+        }
+
+        .badge:hover {
+            transform: translateY(-5px);
+            filter: brightness(1.5);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 50px;
+            background: linear-gradient(45deg, var(--neon-purple), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(45deg, var(--neon-purple), var(--neon-blue));
+            border-radius: 2px;
+            box-shadow: 0 0 20px var(--neon-purple);
+        }
+
+        /* About Section */
+        .about-content {
+            background: var(--glass-bg);
+            border: 1px solid rgba(157, 0, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            line-height: 1.8;
+            font-size: 1.1em;
+            animation: fadeIn 1s ease-out;
+            box-shadow: 0 0 30px rgba(157, 0, 255, 0.2);
+        }
+
+        .about-content strong {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .philosophy-item {
+            background: var(--glass-bg);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .philosophy-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-blue);
+            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.3);
+        }
+
+        .philosophy-item i {
+            font-size: 2em;
+            color: var(--neon-blue);
+            margin-bottom: 10px;
+            display: block;
+            text-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--neon-purple);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--neon-purple) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .feature-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 30px var(--neon-purple);
+        }
+
+        .feature-card i {
+            font-size: 3em;
+            color: var(--neon-pink);
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px var(--neon-pink);
+        }
+
+        .feature-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: var(--neon-blue);
+        }
+
+        /* Download Section */
+        .download-section {
+            text-align: center;
+            background: var(--glass-bg);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 20px;
+            padding: 60px 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.2);
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 20px 60px;
+            font-size: 1.5em;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--neon-purple), var(--neon-blue));
+            border: none;
+            border-radius: 50px;
+            color: #fff;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            text-decoration: none;
+            margin-top: 20px;
+            box-shadow: 0 0 30px var(--neon-purple);
+            animation: downloadGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes downloadGlow {
+            0%, 100% { box-shadow: 0 0 30px var(--neon-purple); }
+            50% { box-shadow: 0 0 40px var(--neon-purple), 0 0 50px var(--neon-blue); }
+        }
+
+        .download-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            animation: none;
+        }
+
+        .download-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            filter: brightness(1.3);
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .download-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .download-btn i {
+            margin-right: 10px;
+        }
+
+        .status-dev {
+            color: var(--neon-pink);
+            font-size: 1.2em;
+            margin-top: 20px;
+            font-weight: 500;
+            text-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        .platform-info {
+            margin-top: 20px;
+            padding: 15px 30px;
+            background: rgba(0, 240, 255, 0.1);
+            border-radius: 10px;
+            display: inline-block;
+            border: 1px solid var(--neon-blue);
+            backdrop-filter: blur(5px);
+        }
+
+        .platform-info i {
+            color: var(--neon-blue);
+            margin-right: 10px;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 50px;
+            text-align: center;
+            background: var(--glass-bg);
+            border-top: 1px solid rgba(157, 0, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .social-links a {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--neon-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neon-blue);
+            font-size: 1.5em;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: var(--neon-blue);
+            color: #000;
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px var(--neon-blue);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            nav {
+                gap: 15px;
+            }
+
+            .hero h2 {
+                font-size: 2.5em;
+            }
+
+            section {
+                padding: 50px 20px;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Typewriter effect */
+        .typewriter {
+            overflow: hidden;
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: 0.15em;
+            animation: typing 3.5s steps(40, end);
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <img src="https://i.postimg.cc/dQ7pYQsK/Baduh.jpg" alt="TestX Logo">
+            <h1>TestX</h1>
+        </div>
+        <nav>
+            <a href="#about"><i class="fas fa-info-circle"></i> Acerca de</a>
+            <a href="#features"><i class="fas fa-star"></i> Características</a>
+            <a href="#download"><i class="fas fa-download"></i> Descargar</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2 class="typewriter">TestX Executor</h2>
+            <p class="tagline">La herramienta definitiva para Roblox en Android</p>
+            <div class="status-badges">
+                <div class="badge">
+                    <i class="fas fa-shield-alt"></i> 99% UNC
+                </div>
+                <div class="badge">
+                    <i class="fas fa-lock"></i> 99sUNC
+                </div>
+                <div class="badge">
+                    <i class="fas fa-mobile-alt"></i> Solo Android
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2 class="section-title fade-in">🌌 Presentación de TestX</h2>
+        <div class="about-content fade-in">
+            <p>Un executor diferente, creado para quienes buscan <strong>simplicidad y seguridad</strong>.</p>
+            
+            <h3 style="font-family: 'Orbitron', sans-serif; color: var(--neon-blue); margin: 30px 0 15px;">
+                <i class="fas fa-rocket"></i> ¿Qué es?
+            </h3>
+            <p>TestX es un executor indie para Roblox, desarrollado por una sola persona con la visión de <strong>innovar en el mundo de los executors</strong>. Actualmente disponible exclusivamente para Android, se centra en ofrecer una experiencia intuitiva, simple y completamente indetectable.</p>
+
+            <h3 style="font-family: 'Orbitron', sans-serif; color: var(--neon-pink); margin: 30px 0 15px;">
+                <i class="fas fa-bullseye"></i> Filosofía
+            </h3>
+            <div class="philosophy-grid">
+                <div class="philosophy-item">
+                    <i class="fas fa-user-secret"></i>
+                    <strong>Indetectable</strong><br>
+                    Diseñado para proteger la experiencia del usuario.
+                </div>
+                <div class="philosophy-item">
+                    <i class="fas fa-palette"></i>
+                    <strong>Minimalista</strong><br>
+                    Interfaz limpia y fácil de usar, sin complicaciones.
+                </div>
+                <div class="philosophy-item">
+                    <i class="fas fa-code"></i>
+                    <strong>Indie</strong><br>
+                    Creado por un solo desarrollador, con pasión y dedicación.
+                </div>
+                <div class="philosophy-item">
+                    <i class="fas fa-handshake"></i>
+                    <strong>No competitivo</strong><br>
+                    Alternativa confiable para quienes valoran la sencillez.
+                </div>
+            </div>
+
+            <h3 style="font-family: 'Orbitron', sans-serif; color: var(--neon-purple); margin: 30px 0 15px;">
+                <i class="fas fa-gem"></i> ¿Por qué elegirlo?
+            </h3>
+            <ul style="list-style: none; padding-left: 0;">
+                <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: var(--neon-blue); margin-right: 10px;"></i><strong>UI intuitiva:</strong> Pensada para que cualquier usuario pueda usarlo sin curva de aprendizaje.</li>
+                <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: var(--neon-blue); margin-right: 10px;"></i><strong>Innovación indie:</strong> Cada detalle está pulido con cuidado, sin depender de grandes equipos.</li>
+                <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: var(--neon-blue); margin-right: 10px;"></i><strong>Herramienta personal:</strong> Ideal para quienes quieren un executor que simplemente funcione, sin ruido ni exceso de funciones innecesarias.</li>
+            </ul>
+
+            <div style="margin-top: 30px; padding: 20px; background: rgba(157, 0, 255, 0.1); border-radius: 10px; border-left: 4px solid var(--neon-purple);">
+                <p style="font-style: italic; font-size: 1.1em;">
+                    <i class="fas fa-quote-left" style="color: var(--neon-pink); margin-right: 10px;"></i>
+                    "TestX nace como un proyecto independiente, creado con la idea de ofrecer a la comunidad de Roblox una herramienta distinta: simple, segura y accesible. No pretende competir con los gigantes, sino ser el aliado perfecto para quienes buscan un executor confiable en Android, con una interfaz clara y un diseño indetectable. Es la prueba de que un solo desarrollador puede marcar la diferencia."
+                    <i class="fas fa-quote-right" style="color: var(--neon-pink); margin-left: 10px;"></i>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features">
+        <h2 class="section-title fade-in">✨ Características</h2>
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <i class="fas fa-shield-virus"></i>
+                <h3>Indetectable</h3>
+                <p>Sistema avanzado de ofuscación que garantiza tu seguridad mientras usas el executor.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <i class="fas fa-mobile-screen"></i>
+                <h3>Android Optimizado</h3>
+                <p>Exclusivamente diseñado para dispositivos Android, aprovechando al máximo el rendimiento.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <i class="fas fa-bolt"></i>
+                <h3>Rápido y Ligero</h3>
+                <p>Ejecución instantánea de scripts sin consumir recursos innecesarios de tu dispositivo.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <i class="fas fa-paint-brush"></i>
+                <h3>UI Minimalista</h3>
+                <p>Interfaz limpia y moderna que hace que cualquier usuario pueda usarlo sin complicaciones.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <i class="fas fa-code-branch"></i>
+                <h3>Auto-Updater</h3>
+                <p>Actualizaciones automáticas para mantenerte siempre con la última versión estable.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <i class="fas fa-user-astronaut"></i>
+                <h3>Soporte 24/7</h3>
+                <p>Asistencia directa del desarrollador para resolver cualquier duda o problema.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download">
+        <h2 class="section-title fade-in">📥 Zona de Descargas</h2>
+        <div class="download-section fade-in">
+            <i class="fas fa-download" style="font-size: 4em; color: var(--neon-blue); margin-bottom: 20px; text-shadow: 0 0 30px var(--neon-blue);"></i>
+            <h3 style="font-family: 'Orbitron', sans-serif; font-size: 2em; margin-bottom: 20px;">
+                Obtén TestX Ahora
+            </h3>
+            <p style="font-size: 1.2em; margin-bottom: 30px; color: #aaa;">
+                La versión más estable y segura de TestX está casi lista. ¡Prepárate para la experiencia definitiva!
+            </p>
+            
+            <button class="download-btn" disabled>
+                <i class="fas fa-wrench"></i> En Desarrollo
+            </button>
+            
+            <p class="status-dev">
+                <i class="fas fa-hourglass-half"></i> Estado: En desarrollo activo
+            </p>
+            
+            <div class="platform-info">
+                <i class="fab fa-android"></i>
+                <strong>Disponible exclusivamente para Android</strong>
+            </div>
+            
+            <p style="margin-top: 20px; color: #888;">
+                <i class="fas fa-bell"></i> Suscríbete para recibir notificaciones cuando esté disponible
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="social-links">
+            <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
+            <a href="#" title="Telegram"><i class="fab fa-telegram"></i></a>
+            <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+        </div>
+        <p style="color: #888; margin-top: 20px;">
+            <i class="fas fa-copyright"></i> 2024 TestX. Desarrollado con <i class="fas fa-heart" style="color: var(--neon-pink);"></i> por un solo desarrollador.
+        </p>
+        <p style="color: #666; margin-top: 10px; font-size: 0.9em;">
+            TestX no está afiliado ni respaldado por Roblox Corporation.
+        </p>
+    </footer>
+
+    <script>
+        // Crear partículas
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Scroll animations
+        function handleScrollAnimation() {
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        function handleNavbarScroll() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(20, 20, 30, 0.95)';
+            } else {
+                header.style.background = 'var(--glass-bg)';
+            }
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            createParticles();
+            handleScrollAnimation();
+        });
+
+        window.addEventListener('scroll', () => {
+            handleScrollAnimation();
+            handleNavbarScroll();
+        });
+
+        // Download button click (demo)
+        document.querySelector('.download-btn').addEventListener('click', function(e) {
+            if (this.disabled) {
+                e.preventDefault();
+                alert('⚠️ TestX aún está en desarrollo. ¡Sigue nuestras redes sociales para estar al tanto del lanzamiento!');
+            }
+        });
+
+        // Add some interactive hover effects
+        document.querySelectorAll('.feature-card, .philosophy-item').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
