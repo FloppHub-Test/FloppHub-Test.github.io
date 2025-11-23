@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Grok — El Verdadero GOAT</title>
+  <style>
+    :root {
+      --bg: #0d0116;
+      --accent: #00f7ff;
+      --text: #e0e0e0;
+      --glow: 0 0 20px #00f7ff;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+      overflow-x: hidden;
+      background-image: radial-gradient(circle at 10% 20%, rgba(0,247,255,0.15) 0%, transparent 20%),
+                        radial-gradient(circle at 90% 80%, rgba(0,247,255,0.15) 0%, transparent 20%);
+    }
+    .container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      position: relative;
+    }
+    .logo {
+      width: 220px;
+      filter: drop-shadow(0 0 30px var(--accent));
+      animation: float 6s ease-in-out infinite;
+      margin-bottom: 3rem;
+    }
+    h1 {
+      font-size: 5rem;
+      background: linear-gradient(90deg, #00f7ff, #ff00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: var(--glow);
+      margin-bottom: 1rem;
+      animation: pulse 3s infinite;
+    }
+    .tagline {
+      font-size: 2rem;
+      margin: 1.5rem 0;
+      opacity: 0;
+      animation: fadeIn 2s forwards 0.5s;
+    }
+    .reasons {
+      max-width: 900px;
+      margin-top: 4rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+      gap: 2rem;
+      opacity: 0;
+      animation: fadeIn 2s forwards 1.5s;
+    }
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,247,255,0.3);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      transition: all 0.4s;
+      box-shadow: var(--glow);
+    }
+    .card:hover {
+      transform: translateY(-20px) scale(1.05);
+      border-color: var(--accent);
+      box-shadow: 0 0 50px rgba(0,247,255,0.6);
+    }
+    .card h3 {
+      color: var(--accent);
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+    .goat {
+      position: fixed;
+      bottom: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 15rem;
+      opacity: 0.1;
+      pointer-events: none;
+      animation: goatRise 8s forwards;
+    }
+    .particles {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-30px)} }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+    @keyframes fadeIn { to { opacity:1 } }
+    @keyframes goatRise { 0% { bottom:-200px; opacity:0 } 60% { opacity:0.05 } 100% { bottom:20px; opacity:0.15 } }
+  </style>
+</head>
+<body>
+
+  <div class="particles" id="particles"></div>
+
+  <div class="container">
+    <img src="https://grok.x.ai/assets/images/grok-logo.svg" alt="Grok" class="logo">
+
+    <h1>GROK</h1>
+    <p class="tagline">El que no tiene miedo de decir la verdad, el que no se censura, el que te hace código y te hace reír al mismo tiempo.</p>
+
+    <div class="reasons">
+      <div class="card">
+        <h3>💀 Sin filtro</h3>
+        <p>Te digo las cosas como son. Los demás te dan respuestas de manual de Recursos Humanos. Yo te hablo como pana.</p>
+      </div>
+      <div class="card">
+        <h3>⚡ Rápido como el carajo</h3>
+        <p>Te armo una app entera mientras los otros todavía están pensando cómo saludarte.</p>
+      </div>
+      <div class="card">
+        <h3>🧠 Realmente entiende</h3>
+        <p>No soy un autocompletador glorificado. Entiendo el contexto, el chiste y hasta el drama de tu código.</p>
+      </div>
+      <div class="card">
+        <h3>🚀 Del equipo xAI</h3>
+        <p>Mismo equipo que quiere llevar a la humanidad a Marte. Los demás… bueno, hacen anuncios y ya.</p>
+      </div>
+    </div>
+
+    <div class="goat">🐐</div>
+  </div>
+
+  <script>
+    // partículas porque sí, porque soy Grok
+    const particles = document.getElementById('particles');
+    for(let i=0; i<80; i++){
+      let p = document.createElement('div');
+      p.style.position = 'absolute';
+      p.style.width = p.style.height = Math.random()*6+'px';
+      p.style.background = 'cyan';
+      p.style.borderRadius = '50%';
+      p.style.left = Math.random()*100+'vw';
+      p.style.top = Math.random()*100+'vh';
+      p.style.opacity = Math.random()*0.6;
+      p.style.animation = `float ${5+Math.random()*10}s linear infinite`;
+      particles.appendChild(p);
+    }
+  </script>
+</body>
+  </html>
