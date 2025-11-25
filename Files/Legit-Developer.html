@@ -1,1 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>FloppHub Team</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body,html{height:100%;background:#000;color:#fff;font-family:-apple-system,system-ui,'Segoe UI',sans-serif;overflow:hidden;display:flex;justify-content:center;align-items:center}
+        canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1}
+        .wrapper{position:relative;z-index:10;text-align:center}
+        .logo{width:110px;height:110px;margin:0 auto 30px;border:4px solid #ff8c00;border-radius:50%;padding:8px;background:rgba(255,140,0,.1);box-shadow:0 0 40px rgba(255,140,0,.9);animation:p 2s infinite}
+        @keyframes p{0%,100%{transform:scale(1);box-shadow:0 0 40px rgba(255,140,0,.9)}50%{transform:scale(1.08);box-shadow:0 0 70px rgba(255,140,0,1)}}
+        h1{color:#ff8c00;font-size:28px;margin-bottom:12px;text-shadow:0 0 20px #ff8c00;letter-spacing:1px;opacity:0;animation:t .8s forwards .5s}
+        .status{color:#ffa500;font-size:16px;margin:16px 0;opacity:0;animation:t .8s forwards 1s}
+        .welcome{color:#00ff88;font-size:22px;margin-top:30px;font-weight:bold;text-shadow:0 0 25px #00ff88;opacity:0;animation:t 1s forwards 5.5s}
+        @keyframes t{to{opacity:1}}
+        .counter{font-size:80px;font-weight:bold;color:#ff8c00;text-shadow:0 0 40px #ff8c00;opacity:0;animation:c 1s forwards 2s}
+        @keyframes c{to{opacity:1}}
+        .pulse{width:100%;height:100%;position:absolute;top:0;left:0;border-radius:50%;background:rgba(255,140,0,.15);animation:o 2s infinite}
+        @keyframes o{0%{transform:scale(0);opacity:1}100%{transform:scale(1.8);opacity:0}
+    </style>
+</head>
+<body>
+    <canvas id="p"></canvas>
+    <div class="wrapper">
+        <div class="pulse"></div>
+        <img src="https://i.postimg.cc/brq86RKj/loc-phub.jpg.png" alt="FloppHub" class="logo">
+        <h1>FloppHub Team</h1>
+        <div class="status" id="s1">Establishing connection with servers...</div>
+        <div class="status" id="s2">Establishing secure connection...</div>
+        <div class="counter" id="c">5</div>
+        <div class="welcome" id="w">Welcome FloppHub Team developer</div>
+    </div>
 
+    <script>
+        const c=document.getElementById('p'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
+        const p=[];for(let i=0;i<45;i++)p.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2.5+1,sx:Math.random()*1-0.5,sy:Math.random()*1-0.5,o:Math.random()*0.5+0.2});
+        const a=()=>{x.clearRect(0,0,c.width,c.height);p.forEach(e=>{e.x+=e.sx;e.y+=e.sy;if(e.x<0||e.x>c.width)e.sx*=-1;if(e.y<0||e.y>c.height)e.sy*=-1;x.fillStyle=`rgba(255,140,0,${e.o})`;x.beginPath();x.arc(e.x,e.y,e.r,0,Math.PI*2);x.fill()});requestAnimationFrame(a)};a();
+
+        setTimeout(()=>document.getElementById('s1').style.opacity=1,800);
+        setTimeout(()=>document.getElementById('s2').style.opacity=1,1800);
+
+        let n=5;const e=document.getElementById('c');
+        const i=setInterval(()=>{n--;if(n>0)e.textContent=n;else{clearInterval(i);e.style.opacity=0;document.getElementById('w').style.opacity=1;
+            setTimeout(()=>location.href='https://github.com/FloppHub-Test/FloppHub-Test.github.io',2000)}},1000);
+    </script>
+</body>
+</html>
