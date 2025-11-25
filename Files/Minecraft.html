@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Acceso Protegido - FloppHub Team</title>
+    <title>Protected Access - FloppHub Team</title>
     <style>
         * {
             margin: 0;
@@ -26,7 +26,6 @@
             position: relative;
         }
 
-        /* Fondo animado de partículas naranjas */
         #particles {
             position: absolute;
             top: 0;
@@ -217,7 +216,6 @@
             animation: fadeIn 1s ease-out 1s both;
         }
 
-        /* Pantalla de acceso concedido */
         .success-screen {
             position: fixed;
             top: 0;
@@ -306,40 +304,33 @@
     <div class="container" id="mainContainer">
         <img src="https://i.postimg.cc/brq86RKj/loc-phub.jpg.png" alt="FloppHub Team" class="logo">
         <h1>FloppHub Team</h1>
-        <p class="subtitle">Acceso Protegido</p>
+        <p class="subtitle">Protected Access</p>
         
         <div class="password-container">
-            <input type="password" id="passwordInput" placeholder="Ingrese la contraseña" autofocus>
+            <input type="password" id="passwordInput" placeholder="Enter password" autofocus>
         </div>
         
-        <button onclick="checkPassword()">ACCEDER</button>
+        <button onclick="checkPassword()">ACCESS</button>
         
-        <div class="error" id="errorMessage">Contraseña incorrecta. Intente nuevamente.</div>
-        <div class="loading" id="loadingMessage">Verificando contraseña</div>
+        <div class="error" id="errorMessage">Incorrect password. Try again.</div>
+        <div class="loading" id="loadingMessage">Verifying password</div>
         
-        <p class="protected-file">Este archivo está protegido por FloppHub Team</p>
+        <p class="protected-file">This file is protected by FloppHub Team</p>
     </div>
 
-    <!-- Pantalla de éxito -->
     <div class="success-screen" id="successScreen">
         <div class="success-content">
             <div class="success-icon"></div>
-            <h2 class="success-title">¡ACCESO CONCEDIDO!</h2>
-            <p class="success-message">Bienvenido desarrollador de FloppHub</p>
+            <h2 class="success-title">ACCESS GRANTED!</h2>
+            <p class="success-message">Welcome FloppHub developer</p>
             <div class="countdown" id="countdown">3</div>
         </div>
     </div>
 
     <script>
-        // CONTRASEÑAS VÁLIDAS - PUEDES EDITAR ESTAS CONTRASEÑAS
-        const validPasswords = [
-            'ZiolesEsGay',
-        ];
-
-        // URL de redirección
+        const validPasswords = ['ZiolesEsGay'];
         const redirectUrl = 'https://statics.liteapks.co/old-data/Minecraft/minecraft-v1.20.81.01-final-paid.apk';
 
-        // Animación de partículas
         const canvas = document.getElementById('particles');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
@@ -361,7 +352,6 @@
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
-
                 if (this.x > canvas.width) this.x = 0;
                 if (this.x < 0) this.x = canvas.width;
                 if (this.y > canvas.height) this.y = 0;
@@ -383,11 +373,11 @@
         }
 
         function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.canvas.height);
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-            }
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
             requestAnimationFrame(animate);
         }
 
@@ -395,15 +385,14 @@
         animate();
 
         function checkPassword() {
-            const passwordInput = document.getElementById('passwordInput');
+            const password = document.getElementById('passwordInput').value.trim();
             const errorMessage = document.getElementById('errorMessage');
             const loadingMessage = document.getElementById('loadingMessage');
-            const password = passwordInput.value.trim();
 
             errorMessage.style.display = 'none';
-            
+
             if (password === '') {
-                errorMessage.textContent = 'Por favor ingrese una contraseña';
+                errorMessage.textContent = 'Please enter a password';
                 errorMessage.style.display = 'block';
                 return;
             }
@@ -412,37 +401,34 @@
 
             setTimeout(() => {
                 loadingMessage.style.display = 'none';
-                
+
                 if (validPasswords.includes(password)) {
                     showSuccessScreen();
                 } else {
+                    errorMessage.textContent = 'Incorrect password. Try again.';
                     errorMessage.style.display = 'block';
-                    passwordInput.value = '';
-                    passwordInput.focus();
+                    document.getElementById('passwordInput').value = '';
+                    document.getElementById('passwordInput').focus();
                 }
             }, 1000);
         }
 
         function showSuccessScreen() {
-            const mainContainer = document.getElementById('mainContainer');
-            const successScreen = document.getElementById('successScreen');
-            
-            mainContainer.style.display = 'none';
-            successScreen.style.display = 'flex';
-            
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('successScreen').style.display = 'flex';
             startCountdown();
         }
 
         function startCountdown() {
             let count = 3;
             const countdownElement = document.getElementById('countdown');
-            
+
             const interval = setInterval(() => {
                 count--;
                 if (count > 0) {
                     countdownElement.textContent = count;
                 } else {
-                    countdownElement.textContent = 'Redirigiendo...';
+                    countdownElement.textContent = 'Redirecting...';
                     clearInterval(interval);
                     setTimeout(() => {
                         window.location.href = redirectUrl;
@@ -451,10 +437,8 @@
             }, 1000);
         }
 
-        document.getElementById('passwordInput').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                checkPassword();
-            }
+        document.getElementById('passwordInput').addEventListener('keypress', e => {
+            if (e.key === 'Enter') checkPassword();
         });
 
         window.addEventListener('resize', () => {
@@ -463,5 +447,4 @@
         });
     </script>
 </body>
-  </html>
-  
+                </html>
