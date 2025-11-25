@@ -5,29 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>FloppHub Developer Verification</title>
     <style>
-        * {margin:0;padding:0;box-sizing:border-box;}
-        body,html{height:100%;background:#000;color:#fff;font-family:'Courier New',monospace;overflow:hidden;display:flex;justify-content:center;align-items:center;}
-        canvas#particles{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;}
-        .container{position:relative;z-index:10;width:90%;max-width:500px;background:rgba(15,15,25,.95);border:2px solid #ff8c00;border-radius:16px;padding:30px;box-shadow:0 0 40px rgba(255,140,0,.6);backdrop-filter:blur(12px);animation:glow 3s infinite alternate;}
-        @keyframes glow{from{box-shadow:0 0 40px rgba(255,140,0,.6)}to{box-shadow:0 0 60px rgba(255,140,0,.9)}}
-        .logo{width:120px;height:120px;margin:0 auto 20px;border:4px solid #ff8c00;border-radius:50%;padding:8px;background:rgba(255,140,0,.1);box-shadow:0 0 30px rgba(255,140,0,.8);animation:pulse 2s infinite;}
-        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-        h1{text-align:center;color:#ff8c00;font-size:28px;margin-bottom:10px;text-shadow:0 0 20px rgba(255,140,0,.8);}
-        .subtitle{text-align:center;color:#ffa500;margin-bottom:30px;font-size:16px;opacity:.9;}
-        .scan-line{position:absolute;top:0;left:0;width:100%;height:4px;background:linear-gradient(90deg,transparent,#ff8c00,transparent);animation:scan 4s linear infinite;box-shadow:0 0 20px #ff8c00;}
-        @keyframes scan{0%{top:0}100%{top:100%}}
-        .verification-list{list-style:none;margin-top:20px;}
-        .verification-item{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px dashed rgba(255,140,0,.3);opacity:0;transform:translateX(-50px);animation:slideIn .6s forwards;}
-        .verification-item:last-child{border-bottom:none;}
-        .label{color:#ffa500;font-weight:bold;font-size:16px;}
-        .status{font-size:28px;font-weight:bold;}
-        .check{color:#00ff88;text-shadow:0 0 15px #00ff88;}
-        .cross{color:#ff4d4d;text-shadow:0 0 15px #ff4d4d;animation:blink 1s infinite;}
-        @keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
-        @keyframes slideIn{to{opacity:1;transform:translateX(0)}}
-        .final-message{text-align:center;margin-top:30px;font-size:22px;color:#00ff88;text-shadow:0 0 20px #00ff88;opacity:0;animation:fadeInUp 1s forwards 1s;}
-        .success-box{margin-top:20px;padding:20px;background:rgba(0,255,136,.15);border:2px solid #00ff88;border-radius:12px;text-align:center;opacity:0;animation:fadeInUp 1s forwards 2s;}
-        @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body,html{height:100%;background:#000;color:#fff;font-family:'Courier New',monospace;overflow:hidden;display:flex;justify-content:center;align-items:center}
+        canvas#particles{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1}
+        .container{position:relative;z-index:10;width:92%;max-width:420px;background:rgba(15,15,25,.95);border:2px solid #ff8c00;border-radius:16px;padding:20px 18px;box-shadow:0 0 30px rgba(255,140,0,.6);backdrop-filter:blur(12px);animation:g .3s infinite alternate}
+        @keyframes g{from{box-shadow:0 0 30px rgba(255,140,0,.6)}to{box-shadow:0 0 45px rgba(255,140,0,.9)}}
+        .logo{width:88px;height:88px;margin:0 auto 16px;border:3px solid #ff8c00;border-radius:50%;padding:6px;background:rgba(255,140,0,.1);box-shadow:0 0 25px rgba(255,140,0,.8);animation:p 2s infinite}
+        @keyframes p{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+        h1{text-align:center;color:#ff8c00;font-size:22px;margin-bottom:6px;text-shadow:0 0 15px rgba(255,140,0,.8);letter-spacing:1px}
+        .subtitle{text-align:center;color:#ffa500;font-size:14px;margin-bottom:20px;opacity:.9}
+        .scan-line{position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,transparent,#ff8c00,transparent);animation:s 3.5s linear infinite;box-shadow:0 0 15px #ff8c00}
+        @keyframes s{0%{top:0}100%{top:100%}}
+        .verification-list{list-style:none}
+        .verification-item{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px dashed rgba(255,140,0,.25);opacity:0;transform:translateX(-30px);animation:i .5s forwards}
+        .verification-item:last-child{border:none}
+        .label{color:#ffa500;font-size:14px;font-weight:bold}
+        .status{font-size:24px}
+        .check{color:#00ff88;text-shadow:0 0 12px #00ff88}
+        .cross{color:#ff4d4d;text-shadow:0 0 12px #ff4d4d;animation:b .9s infinite}
+        @keyframes b{0%,100%{opacity:1}50%{opacity:.5}}
+        @keyframes i{to{opacity:1;transform:translateX(0)}}
+        .final-message{text-align:center;margin:22px 0 0;font-size:18px;color:#00ff88;text-shadow:0 0 18px #00ff88;opacity:0;animation:f 1s forwards 1s}
+        .success-box{margin-top:18px;padding:16px;background:rgba(0,255,136,.15);border:2px solid #00ff88;border-radius:10px;text-align:center;font-size:15px;opacity:0;animation:f 1s forwards 2s}
+        @keyframes f{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
     </style>
 </head>
 <body>
@@ -37,7 +37,7 @@
         <img src="https://i.postimg.cc/brq86RKj/loc-phub.jpg.png" alt="FloppHub" class="logo">
         <h1>FloppHub Security Scan</h1>
         <p class="subtitle">Verifying developer identity...</p>
-        <ul class="verification-list" id="verificationList">
+        <ul class="verification-list">
             <li class="verification-item"><span class="label">HWID Match</span><span class="status" id="hwid">Pending</span></li>
             <li class="verification-item"><span class="label">IP Whitelisted</span><span class="status" id="ip">Pending</span></li>
             <li class="verification-item"><span class="label">Browser Fingerprint</span><span class="status" id="browser">Pending</span></li>
@@ -50,41 +50,36 @@
             <li class="verification-item"><span class="label">FloppHub Elite Member</span><span class="status" id="elite">Pending</span></li>
         </ul>
         <div class="final-message" id="finalMessage">VERIFIED: LEGITIMATE FLOPPHUB DEVELOPER</div>
-        <div class="success-box" id="successBox">Access granted. Redirecting to private repository...</div>
+        <div class="success-box" id="successBox">Access granted. Redirecting...</div>
     </div>
 
     <script>
-        const canvas=document.getElementById('particles'),ctx=canvas.getContext('2d');
-        canvas.width=innerWidth;canvas.height=innerHeight;
-        const particles=[];
-        for(let i=0;i<60;i++)particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,size:Math.random()*3+1,speedX:Math.random()*1-0.5,speedY:Math.random()*1-0.5,opacity:Math.random()*0.5+0.3});
-        function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);particles.forEach(p=>{p.x+=p.speedX;p.y+=p.speedY;if(p.x<0||p.x>canvas.width)p.speedX*=-1;if(p.y<0||p.y>canvas.height)p.speedY*=-1;ctx.fillStyle=`rgba(255,140,0,${p.opacity})`;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill()});requestAnimationFrame(animate)}animate();
-
+        const c=document.getElementById('particles'),x=c.getContext('2d');
+        c.width=innerWidth;c.height=innerHeight;
+        const p=[];for(let i=0;i<50;i++)p.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2.5+1,sx:Math.random()*1-0.5,sy:Math.random()*1-0.5,o:Math.random()*0.5+0.2});
+        const a=()=>{x.clearRect(0,0,c.width,c.height);p.forEach(e=>{e.x+=e.sx;e.y+=e.sy;if(e.x<0||e.x>c.width)e.sx*=-1;if(e.y<0||e.y>c.height)e.sy*=-1;x.fillStyle=`rgba(255,140,0,${e.o})`;x.beginPath();x.arc(e.x,e.y,e.r,0,Math.PI*2);x.fill()});requestAnimationFrame(a)};a();
         const checks=[
-            {id:'hwid',result:'Check',delay:800},
-            {id:'ip',result:'Check',delay:1200},
-            {id:'browser',result:'Check',delay:1600},
-            {id:'token',result:'Check',delay:2000},
-            {id:'key',result:'Check',delay:2400},
-            {id:'owner',result:'Check',delay:2800},
-            {id:'compromised',result:'Cross',delay:3200},
-            {id:'ssl',result:'Check',delay:3600},
-            {id:'vpn',result:'Check',delay:4000},
-            {id:'elite',result:'Check',delay:4400}
+            {id:'hwid',r:'Check',d:700},
+            {id:'ip',r:'Check',d:1100},
+            {id:'browser',r:'Check',d:1500},
+            {id:'token',r:'Check',d:1900},
+            {id:'key',r:'Check',d:2300},
+            {id:'owner',r:'Check',d:2700},
+            {id:'compromised',r:'Cross',d:3100},
+            {id:'ssl',r:'Check',d:3500},
+            {id:'vpn',r:'Check',d:3900},
+            {id:'elite',r:'Check',d:4300}
         ];
-        checks.forEach((c,i)=>setTimeout(()=>{
-            document.getElementById(c.id).textContent=c.result;
-            document.getElementById(c.id).className=c.result==='Check'?'status check':'status cross';
+        checks.forEach((k,i)=>setTimeout(()=>{
+            const e=document.getElementById(k.id);
+            e.textContent=k.r;e.className=k.r==='Check'?'status check':'status cross';
             if(i===checks.length-1){
-                setTimeout(()=>{
-                    document.getElementById('finalMessage').style.opacity=1;
-                    document.getElementById('successBox').style.opacity=1;
-                    setTimeout(()=>location.href='https://github.com/FloppHub-Test/FloppHub-Test.github.io',3000);
-                },1000);
+                setTimeout(()=>{document.getElementById('finalMessage').style.opacity=1;document.getElementById('successBox').style.opacity=1;
+                    setTimeout(()=>location.href='https://github.com/FloppHub-Test/FloppHub-Test.github.io',2800);
+                },800)
             }
-        },c.delay));
-
-        window.addEventListener('resize',()=>{canvas.width=innerWidth;canvas.height=innerHeight});
+        },k.d));
+        addEventListener('resize',()=>{c.width=innerWidth;c.height=innerHeight});
     </script>
 </body>
 </html>
