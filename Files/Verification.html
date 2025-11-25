@@ -26,7 +26,8 @@
         @keyframes b{0%,100%{opacity:1}50%{opacity:.5}}
         @keyframes i{to{opacity:1;transform:translateX(0)}}
         .final-message{text-align:center;margin:22px 0 0;font-size:18px;color:#00ff88;text-shadow:0 0 18px #00ff88;opacity:0;animation:f 1s forwards 1s}
-        .success-box{margin-top:18px;padding:16px;background:rgba(0,255,136,.15);border:2px solid #00ff88;border-radius:10px;text-align:center;font-size:15px;opacity:0;animation:f 1s forwards 2s}
+        .success-box{margin-top:18px;padding:16px;background:rgba(0,255,136,.15);border:2px solid #00ff88;border-radius:10px;text-align:center;font-size:15px;opacity:0;transform:translateY(15px);transition:opacity .6s,transform .6s}
+        .success-box.show{opacity:1;transform:translateY(0)}
         @keyframes f{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
     </style>
 </head>
@@ -58,28 +59,43 @@
         c.width=innerWidth;c.height=innerHeight;
         const p=[];for(let i=0;i<50;i++)p.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2.5+1,sx:Math.random()*1-0.5,sy:Math.random()*1-0.5,o:Math.random()*0.5+0.2});
         const a=()=>{x.clearRect(0,0,c.width,c.height);p.forEach(e=>{e.x+=e.sx;e.y+=e.sy;if(e.x<0||e.x>c.width)e.sx*=-1;if(e.y<0||e.y>c.height)e.sy*=-1;x.fillStyle=`rgba(255,140,0,${e.o})`;x.beginPath();x.arc(e.x,e.y,e.r,0,Math.PI*2);x.fill()});requestAnimationFrame(a)};a();
-        const checks=[
-            {id:'hwid',r:'Check',d:11000},
-            {id:'ip',r:'Check',d:10100},
-            {id:'browser',r:'Check',d:9500},
-            {id:'token',r:'Check',d:8900},
-            {id:'key',r:'Check',d:7300},
-            {id:'owner',r:'Check',d:6700},
-            {id:'compromised',r:'Cross',d:5100},
-            {id:'ssl',r:'Check',d:4500},
-            {id:'vpn',r:'Check',d:3900},
-            {id:'elite',r:'Check',d:2300}
-        ];
-        checks.forEach((k,i)=>setTimeout(()=>{
-            const e=document.getElementById(k.id);
-            e.textContent=k.r;e.className=k.r==='Check'?'status check':'status cross';
-            if(i===checks.length-1){
-                setTimeout(()=>{document.getElementById('finalMessage').style.opacity=1;document.getElementById('successBox').style.opacity=1;
-                    setTimeout(()=>location.href='https://flopphub-test.github.io/Files/Legit-Developer',2800);
-                },8000)
+
+        const requiredIds=['hwid','ip','browser','token','key','owner','compromised','ssl','vpn','elite'];
+        function allVerified(){
+            return requiredIds.every(id=>{
+                const el=document.getElementById(id);
+                return el && el.textContent==='✓';
+            });
+        }
+        function tryShowSuccess(){
+            if(allVerified()){
+                const box=document.getElementById('successBox');
+                box.classList.add('show');
+                setTimeout(()=>location.href='https://flopphub-test.github.io/Files/Legit-Developer',2800);
             }
-        },k.d));
+        }
+
+        const checks=[
+            {id:'hwid',d:1100},{id:'ip',d:2100},{id:'browser',d:3100},{id:'token',d:4100},
+            {id:'key',d:5100},{id:'owner',d:6100},{id:'compromised',d:7100},{id:'ssl',d:8100},
+            {id:'vpn',d:9100},{id:'elite',d:10100}
+        ];
+
+        checks.forEach((k,i)=>{
+            setTimeout(()=>{
+                const e=document.getElementById(k.id);
+                e.textContent='✓';e.className='status check';
+                if(i===checks.length-1){
+                    setTimeout(()=>{
+                        document.getElementById('finalMessage').style.opacity=1;
+                        tryShowSuccess();
+                    },800);
+                }
+            },k.d);
+        });
+
         addEventListener('resize',()=>{c.width=innerWidth;c.height=innerHeight});
     </script>
 </body>
-</html>
+                                                                                     </html>
+                                                                                          
