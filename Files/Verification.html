@@ -59,16 +59,16 @@
         const p=[];for(let i=0;i<50;i++)p.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2.5+1,sx:Math.random()*1-0.5,sy:Math.random()*1-0.5,o:Math.random()*0.5+0.2});
         const a=()=>{x.clearRect(0,0,c.width,c.height);p.forEach(e=>{e.x+=e.sx;e.y+=e.sy;if(e.x<0||e.x>c.width)e.sx*=-1;if(e.y<0||e.y>c.height)e.sy*=-1;x.fillStyle=`rgba(255,140,0,${e.o})`;x.beginPath();x.arc(e.x,e.y,e.r,0,Math.PI*2);x.fill()});requestAnimationFrame(a)};a();
         const checks=[
-            {id:'hwid',r:'Check',d:7000},
-            {id:'ip',r:'Check',d:2100},
-            {id:'browser',r:'Check',d:2500},
-            {id:'token',r:'Check',d:2900},
-            {id:'key',r:'Check',d:3300},
-            {id:'owner',r:'Check',d:3700},
-            {id:'compromised',r:'Cross',d:6100},
-            {id:'ssl',r:'Check',d:6500},
-            {id:'vpn',r:'Check',d:4900},
-            {id:'elite',r:'Check',d:5300}
+            {id:'hwid',r:'Check',d:11000},
+            {id:'ip',r:'Check',d:10100},
+            {id:'browser',r:'Check',d:9500},
+            {id:'token',r:'Check',d:8900},
+            {id:'key',r:'Check',d:7300},
+            {id:'owner',r:'Check',d:6700},
+            {id:'compromised',r:'Cross',d:5100},
+            {id:'ssl',r:'Check',d:4500},
+            {id:'vpn',r:'Check',d:3900},
+            {id:'elite',r:'Check',d:2300}
         ];
         checks.forEach((k,i)=>setTimeout(()=>{
             const e=document.getElementById(k.id);
