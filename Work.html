@@ -61,10 +61,11 @@
         }
 
         .chart-img {
-            width: 100%;
-            max-width: 18cm;
+            width: 80%; /* <-- Reducido al 80% del ancho original */
+            max-width: 14.4cm; /* 80% de 18cm */
             height: auto;
             border: 1px solid #ccc;
+            margin: 0 auto; /* Centrado horizontalmente */
         }
 
         .data-table {
@@ -140,7 +141,7 @@
 
         @media print {
             img {
-                max-width: 100% !important;
+                max-width: 80% !important;
                 height: auto !important;
             }
         }
