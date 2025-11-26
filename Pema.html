@@ -6,10 +6,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @media screen {
-            body { max-width: 21cm; margin: 0 auto; padding: 0.5cm; }
+            body { max-width: 21cm; margin: 0 auto; padding: 0.2cm; }
         }
         @media print {
-            @page { size: letter; margin: 0.3cm; }
+            @page { size: letter; margin: 0.2cm; }
             body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         }
 
@@ -23,87 +23,87 @@
         body {
             background: linear-gradient(135deg, #E0F7FF 0%, #F0F9FF 100%);
             color: #003366;
-            font-size: 9pt;
-            line-height: 1.3;
+            font-size: 7.5pt; /* Más pequeño */
+            line-height: 1.2; /* Menor espaciado */
             min-height: 100vh;
         }
 
         .header {
             text-align: center;
-            padding: 12px 0;
-            margin-bottom: 12px;
+            padding: 6px 0; /* Reducido */
+            margin-bottom: 6px; /* Reducido */
             background: rgba(255, 255, 255, 0.7);
-            border-radius: 12px;
+            border-radius: 8px; /* Más pequeño */
             border: 1px solid rgba(0, 191, 255, 0.3);
-            box-shadow: 0 0 15px rgba(0, 191, 255, 0.2),
-                        inset 0 0 10px rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 10px rgba(0, 191, 255, 0.2),
+                        inset 0 0 8px rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(5px);
         }
 
         .header h1 {
-            font-size: 14pt;
+            font-size: 11pt; /* Más pequeño */
             font-weight: bold;
-            margin-bottom: 4px;
+            margin-bottom: 2px; /* Reducido */
             color: #0066CC;
-            text-shadow: 0 0 8px rgba(0, 191, 255, 0.4),
+            text-shadow: 0 0 6px rgba(0, 191, 255, 0.4),
                          0 0 2px rgba(0, 102, 204, 0.8);
         }
 
         .header p {
-            font-size: 9pt;
+            font-size: 7.5pt; /* Más pequeño */
             color: #006699;
             font-weight: 500;
         }
 
         .chart-section {
             text-align: center;
-            margin-bottom: 12px;
+            margin-bottom: 6px; /* Reducido */
             background: rgba(255, 255, 255, 0.6);
-            padding: 10px;
-            border-radius: 10px;
+            padding: 6px; /* Reducido */
+            border-radius: 8px;
             border: 1px solid rgba(135, 206, 235, 0.4);
-            box-shadow: 0 0 12px rgba(135, 206, 235, 0.25);
+            box-shadow: 0 0 8px rgba(135, 206, 235, 0.25);
         }
 
         .chart-title {
-            font-size: 11pt;
+            font-size: 9pt; /* Más pequeño */
             font-weight: bold;
-            margin-bottom: 8px;
+            margin-bottom: 4px; /* Reducido */
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 4px; /* Reducido */
             color: #0099CC;
-            text-shadow: 0 0 6px rgba(0, 191, 255, 0.3);
+            text-shadow: 0 0 4px rgba(0, 191, 255, 0.3);
         }
 
         .chart-img {
-            width: 70%;
-            max-width: 12.6cm;
+            width: 55%; /* MUCHO más pequeño */
+            max-width: 9cm; /* Reducido */
             height: auto;
             border: 1px solid #87CEEB;
             margin: 0 auto;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(135, 206, 235, 0.4);
+            border-radius: 6px;
+            box-shadow: 0 0 8px rgba(135, 206, 235, 0.4);
             background: rgba(255, 255, 255, 0.8);
-            padding: 5px;
+            padding: 3px; /* Reducido */
         }
 
         .data-table {
             width: 100%;
-            margin-bottom: 12px;
+            margin-bottom: 6px; /* Reducido */
             border-collapse: separate;
             border-spacing: 0;
-            font-size: 8.5pt;
-            border-radius: 10px;
+            font-size: 7pt; /* Más pequeño */
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 0 12px rgba(30, 144, 255, 0.2);
+            box-shadow: 0 0 8px rgba(30, 144, 255, 0.2);
             border: 1px solid #87CEEB;
         }
 
         .data-table th,
         .data-table td {
-            padding: 5px;
+            padding: 3px; /* Reducido */
             text-align: center;
             border-bottom: 1px solid rgba(135, 206, 235, 0.5);
         }
@@ -111,9 +111,9 @@
         .data-table th {
             background: linear-gradient(to bottom, #87CEEB, #00BFFF);
             font-weight: bold;
-            font-size: 9pt;
+            font-size: 7.5pt; /* Más pequeño */
             color: #003366;
-            text-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.6);
         }
 
         .data-table tr:nth-child(even) {
@@ -127,108 +127,108 @@
 
         .analysis-section {
             width: 100%;
-            margin-bottom: 12px;
+            margin-bottom: 6px; /* Reducido */
         }
 
         .analysis-title {
-            font-size: 12pt;
+            font-size: 10pt; /* Más pequeño */
             font-weight: bold;
-            margin-bottom: 8px;
+            margin-bottom: 4px; /* Reducido */
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px; /* Reducido */
             color: #0099CC;
-            text-shadow: 0 0 6px rgba(0, 191, 255, 0.3);
+            text-shadow: 0 0 4px rgba(0, 191, 255, 0.3);
         }
 
         .insights {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-bottom: 12px;
+            gap: 4px; /* Reducido */
+            margin-bottom: 6px; /* Reducido */
         }
 
         .insight-card {
             background: rgba(255, 255, 255, 0.7);
             border: 1px solid rgba(135, 206, 235, 0.5);
-            padding: 8px;
-            font-size: 8.5pt;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(135, 206, 235, 0.25);
+            padding: 5px; /* Reducido */
+            font-size: 7.5pt; /* Más pequeño */
+            border-radius: 6px;
+            box-shadow: 0 0 8px rgba(135, 206, 235, 0.25);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .insight-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 15px rgba(30, 144, 255, 0.4);
+            transform: translateY(-1px); /* Menor movimiento */
+            box-shadow: 0 0 10px rgba(30, 144, 255, 0.4);
         }
 
         .insight-card .icon {
-            font-size: 14pt;
-            margin-bottom: 4px;
+            font-size: 11pt; /* Más pequeño */
+            margin-bottom: 2px; /* Reducido */
             display: block;
             text-align: center;
             color: #0099CC;
-            filter: drop-shadow(0 0 3px rgba(0, 191, 255, 0.5));
+            filter: drop-shadow(0 0 2px rgba(0, 191, 255, 0.5));
         }
 
         .insight-card h3 {
-            font-size: 9pt;
+            font-size: 8pt; /* Más pequeño */
             font-weight: bold;
-            margin-bottom: 4px;
+            margin-bottom: 2px; /* Reducido */
             text-align: center;
             color: #0066CC;
-            text-shadow: 0 0 4px rgba(0, 191, 255, 0.2);
+            text-shadow: 0 0 3px rgba(0, 191, 255, 0.2);
         }
 
         .conclusion-section {
             background: rgba(255, 255, 255, 0.7);
             border: 1px solid rgba(0, 191, 255, 0.5);
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 12px;
-            box-shadow: 0 0 15px rgba(30, 144, 255, 0.3);
+            border-radius: 8px; /* Reducido */
+            padding: 8px; /* Reducido */
+            margin-bottom: 6px; /* Reducido */
+            box-shadow: 0 0 10px rgba(30, 144, 255, 0.3);
         }
 
         .conclusion-title {
-            font-size: 13pt;
+            font-size: 11pt; /* Más pequeño */
             font-weight: bold;
             color: #0066CC;
-            margin-bottom: 8px;
+            margin-bottom: 4px; /* Reducido */
             display: flex;
             align-items: center;
-            gap: 8px;
-            text-shadow: 0 0 6px rgba(0, 191, 255, 0.4);
+            gap: 6px;
+            text-shadow: 0 0 4px rgba(0, 191, 255, 0.4);
         }
 
         .conclusion-content {
-            font-size: 9pt;
-            line-height: 1.4;
+            font-size: 7.5pt; /* Más pequeño */
+            line-height: 1.25; /* Menor espaciado */
             color: #003366;
             text-align: justify;
         }
 
         .conclusion-content p {
-            margin-bottom: 6px;
+            margin-bottom: 4px; /* Reducido */
         }
 
         .highlight {
             font-weight: bold;
             color: #0066CC;
             background: rgba(135, 206, 235, 0.2);
-            padding: 1px 4px;
-            border-radius: 4px;
+            padding: 1px 3px; /* Reducido */
+            border-radius: 3px;
             border: 1px solid rgba(0, 191, 255, 0.3);
-            box-shadow: 0 0 4px rgba(0, 191, 255, 0.2);
+            box-shadow: 0 0 3px rgba(0, 191, 255, 0.2);
         }
 
         .footer {
             text-align: center;
-            font-size: 8pt;
+            font-size: 7pt; /* Más pequeño */
             color: #006699;
-            margin-top: 8px;
+            margin-top: 4px; /* Reducido */
             border-top: 1px solid rgba(135, 206, 235, 0.5);
-            padding-top: 6px;
+            padding-top: 4px; /* Reducido */
             font-weight: 500;
         }
 
@@ -323,5 +323,4 @@
         <p></p>
     </div>
 </body>
-                </html>
-                
+</html>
