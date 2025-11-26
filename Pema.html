@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Infografía "El Clima": Respuestas Correctas (Versión Imprimible)</title>
+    <title>Infografía: "El Clima"</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @media screen {
@@ -127,6 +127,7 @@
 
         .analysis-section {
             width: 100%;
+            margin-bottom: 12px;
         }
 
         .analysis-title {
@@ -144,6 +145,7 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 8px;
+            margin-bottom: 12px;
         }
 
         .insight-card {
@@ -179,6 +181,37 @@
             text-shadow: 0 0 4px rgba(0, 191, 255, 0.2);
         }
 
+        .conclusion-section {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 191, 255, 0.5);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 0 15px rgba(30, 144, 255, 0.3);
+        }
+
+        .conclusion-title {
+            font-size: 13pt;
+            font-weight: bold;
+            color: #0066CC;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-shadow: 0 0 6px rgba(0, 191, 255, 0.4);
+        }
+
+        .conclusion-content {
+            font-size: 9pt;
+            line-height: 1.4;
+            color: #003366;
+            text-align: justify;
+        }
+
+        .conclusion-content p {
+            margin-bottom: 6px;
+        }
+
         .highlight {
             font-weight: bold;
             color: #0066CC;
@@ -203,12 +236,12 @@
             body {
                 background: white !important;
             }
-            .header, .chart-section, .insight-card {
+            .header, .chart-section, .insight-card, .conclusion-section {
                 background: white !important;
                 box-shadow: none !important;
                 border: 1px solid #87CEEB !important;
             }
-            .header h1, .chart-title, .analysis-title {
+            .header h1, .chart-title, .analysis-title, .conclusion-title {
                 text-shadow: none !important;
                 color: #0066CC !important;
             }
@@ -221,8 +254,8 @@
 </head>
 <body>
     <div class="header">
-        <h1><i class="fas fa-chart-pie"></i> Infografía: Análisis de Respuestas Correctas</h1>
-        <p>Desempeño por pregunta en la evaluación</p>
+        <h1><i class="fas fa-chart-pie"></i> Infografía: "El Clima"</h1>
+        <p>Aplicamos esta encuesta para saber el conocimiento que tienen los alumnos de este plantel sobre el tema.</p>
     </div>
 
     <div class="chart-section">
@@ -276,9 +309,19 @@
         </div>
     </div>
 
+    <div class="conclusion-section">
+        <h2 class="conclusion-title"><i class="fas fa-flag-checkered"></i> Conclusión</h2>
+        <div class="conclusion-content">
+            <p>Los resultados revelan un <span class="highlight">desempeño heterogéneo</span> entre los estudiantes, con un rango de <span class="highlight">8.7% a 14.0%</span> de respuestas correctas.</p>
+            <p>La <span class="highlight">Pregunta 4</span> sobresale como el tema mejor comprendido, mientras que la <span class="highlight">Pregunta 7</span> identifica una área crítica que requiere <span class="highlight">refuerzo pedagógico urgente</span>.</p>
+            <p>La concentración de <span class="highlight">6 de 9 preguntas por encima del 11%</span> sugiere una comprensión moderada de la mayoría de los contenidos, aunque el bajo porcentaje general (<15%) indica que <span class="highlight">se necesita revisar estrategias de enseñanza</span> y posiblemente la complejidad de las evaluaciones.</p>
+            <p><strong>Recomendación:</strong> Implementar talleres de refuerzo enfocados en las preguntas 2, 5 y 7, y analizar los factores que hicieron exitosa la pregunta 4 para replicar esa metodología.</p>
+        </div>
+    </div>
+
     <div class="footer">
         <p></p>
     </div>
 </body>
-                                                                               </html>
-                                                                               
+                                  </html>
+                                  
