@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anti-Hambreado Script Team</title>
+    <link rel="icon" href="https://i.postimg.cc/wTpYKGqV/Anti-Hambreado.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --dark-black: #000000;
+            --red: #ff0000;
+            --dark-red: #cc0000;
+            --light-red: #ff3333;
+            --shadow-red: rgba(255, 0, 0, 0.1);
+            --purple: #7289da;
+            --dark-purple: #5865f2;
+            --white: #ffffff;
+            --gray: #f0f0f0;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--shadow-red);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--red), var(--light-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--red);
+            box-shadow: 0 0 10px var(--shadow-red);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .menu-toggle span {
+            width: 24px;
+            height: 2px;
+            background: var(--red);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+            max-width: 400px;
+            margin: 0 2rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--shadow-red);
+            border-radius: 25px;
+            color: var(--white);
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--red);
+            box-shadow: 0 0 15px var(--shadow-red);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding-top: 80px;
+            background: radial-gradient(ellipse at center, rgba(255, 0, 0, 0.05) 0%, transparent 70%);
+        }
+
+        .hero-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--red);
+            box-shadow: 0 0 30px var(--shadow-red);
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--red), var(--white));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            border: 2px solid var(--red);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--red), var(--dark-red));
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px var(--shadow-red);
+        }
+
+        .btn-discord {
+            background: linear-gradient(135deg, var(--purple), var(--dark-purple));
+            border-color: var(--purple);
+            color: var(--white);
+        }
+
+        .btn-discord:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(114, 137, 218, 0.3);
+        }
+
+        .discord-icon {
+            width: 20px;
+            height: 20px;
+            filter: brightness(0) invert(1);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 0;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--shadow-red);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.05), transparent);
+            transition: left 0.5s;
+        }
+
+        .game-card:hover::before {
+            left: 100%;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--red);
+            box-shadow: 0 15px 40px var(--shadow-red);
+        }
+
+        .game-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .game-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--white);
+        }
+
+        .game-card p {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        .scripts-section {
+            display: none;
+            padding: 4rem 0;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .scripts-section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, var(--red), var(--light-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .script-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .script-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--shadow-red);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            transition: var(--transition);
+        }
+
+        .script-item:hover {
+            border-color: var(--red);
+            box-shadow: 0 5px 20px var(--shadow-red);
+        }
+
+        .script-info h4 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .script-info small {
+            opacity: 0.6;
+            font-size: 0.8rem;
+        }
+
+        .copy-btn {
+            background: var(--dark-black);
+            color: var(--white);
+            border: 1px solid var(--shadow-red);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .copy-btn:hover {
+            background: var(--red);
+            border-color: var(--red);
+        }
+
+        .code-block {
+            background: var(--dark-black);
+            border: 1px solid var(--shadow-red);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            color: var(--gray);
+            display: none;
+        }
+
+        .script-item.active .code-block {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { height: 0; opacity: 0; }
+            to { height: auto; opacity: 1; }
+        }
+
+        .search-results {
+            padding: 4rem 0;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            opacity: 0.7;
+        }
+
+        footer {
+            background: var(--dark-black);
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid var(--shadow-red);
+            margin-top: 4rem;
+        }
+
+        .menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .menu li a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+        }
+
+        .menu li a:hover {
+            color: var(--red);
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            .menu {
+                display: none;
+            }
+
+            .search-bar {
+                margin: 0;
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                margin-top: 1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 250px;
+                justify-content: center;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .script-item {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .copy-btn {
+                align-self: flex-end;
+            }
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: var(--black);
+            border-left: 1px solid var(--shadow-red);
+            transition: right 0.3s ease;
+            z-index: 999;
+            padding: 5rem 1rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu a {
+            color: var(--white);
+            text-decoration: none;
+            padding: 1rem;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .mobile-menu a:hover {
+            background: rgba(255, 0, 0, 0.1);
+            color: var(--red);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <img src="https://i.postimg.cc/wTpYKGqV/Anti-Hambreado.jpg" alt="Logo">
+                Anti-Hambreado
+            </div>
+            <ul class="menu">
+                <li><a href="#home">Inicio</a></li>
+                <li><a href="#games">Juegos</a></li>
+                <li><a href="#universal">Universales</a></li>
+            </ul>
+            <div class="search-bar">
+                <input type="text" class="search-input" id="searchInput" placeholder="Buscar scripts..." onkeydown="handleSearch(event)">
+            </div>
+            <div class="menu-toggle" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <div class="overlay" onclick="closeMobileMenu()"></div>
+    <ul class="mobile-menu" id="mobileMenu">
+        <li><a href="#home">Inicio</a></li>
+        <li><a href="#games">Explorar Juegos</a></li>
+        <li><a href="https://discord.gg/rTGF5xhe3h" target="_blank">Discord</a></li>
+        <li><a href="#universal">Script Hub Universales</a></li>
+    </ul>
+
+    <section id="home" class="hero">
+        <img src="https://i.postimg.cc/wTpYKGqV/Anti-Hambreado.jpg" alt="Team Logo" class="hero-logo">
+        <h1>Explora Scripts Premium</h1>
+        <p>Únete a la comunidad Anti-Hambreado y descubre scripts optimizados para tus juegos favoritos en Roblox. Todo listo para ejecutar.</p>
+        <div class="cta-buttons">
+            <button class="btn btn-primary" onclick="scrollToGames()">Explorar Juegos</button>
+            <a href="https://discord.gg/rTGF5xhe3h" target="_blank" class="btn btn-discord">
+                <svg class="discord-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.074.074 0 00-.078-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.085-.027 13.94 13.94 0 008.184 0 .077.077 0 00.084.027 19.839 19.839 0 006.002-3.03.077.077 0 00.031-.056c.416-4.478-.835-9.01-2.613-13.687a.07.07 0 00-.032-.028zm-8.319 7.194c-1.918 0-3.418-1.554-3.418-3.48s1.5-3.481 3.418-3.481c1.92 0 3.417 1.554 3.417 3.481s-1.497 3.48-3.417 3.48zm6.739 0c-1.92 0-3.42-1.554-3.42-3.48s1.5-3.481 3.42-3.481c1.918 0 3.417 1.554 3.417 3.481s-1.498 3.48-3.417 3.48zm-13.458 0c-1.918 0-3.418-1.554-3.418-3.48s1.5-3.481 3.418-3.481c1.92 0 3.417 1.554 3.417 3.481s-1.5 3.48-3.417 3.48z"/></svg>
+                Únete al Servidor
+            </a>
+        </div>
+    </section>
+
+    <section id="games" class="container">
+        <div class="games-grid" id="gamesGrid">
+            <div class="game-card" data-game="99-noches-en-el-bosque">
+                <span class="game-icon">🌲</span>
+                <h3>99 Noches en el Bosque</h3>
+                <p>Scripts para supervivencia nocturna</p>
+            </div>
+            <div class="game-card" data-game="arise-crossover">
+                <span class="game-icon">⚔️</span>
+                <h3>Arise Crossover</h3>
+                <p>Aventuras épicas cruzadas</p>
+            </div>
+            <div class="game-card" data-game="attack-on-titan-revolution">
+                <span class="game-icon">🛡️</span>
+                <h3>Attack on Titan Revolution</h3>
+                <p>Batallas contra titanes</p>
+            </div>
+            <div class="game-card" data-game="anime-weapons">
+                <span class="game-icon">🗡️</span>
+                <h3>Anime Weapons</h3>
+                <p>Armas inspiradas en anime</p>
+            </div>
+            <div class="game-card" data-game="basically-fnf-remix">
+                <span class="game-icon">🎵</span>
+                <h3>Basically FNF: Remix</h3>
+                <p>Ritmos y remixes divertidos</p>
+            </div>
+            <div class="game-card" data-game="block-spin">
+                <span class="game-icon">🎲</span>
+                <h3>Block Spin</h3>
+                <p>Giros y bloques infinitos</p>
+            </div>
+            <div class="game-card" data-game="bloodmoney">
+                <span class="game-icon">🩸</span>
+                <h3>Bloodmoney</h3>
+                <p>Acción sangrienta y dinero</p>
+            </div>
+            <div class="game-card" data-game="blox-fruits">
+                <span class="game-icon">🍎</span>
+                <h3>Blox Fruits</h3>
+                <p>Aventuras piratas frutales</p>
+            </div>
+            <div class="game-card" data-game="blue-lock-rivals">
+                <span class="game-icon">⚽</span>
+                <h3>Blue Lock Rivals</h3>
+                <p>Rivalidades futbolísticas</p>
+            </div>
+            <div class="game-card" data-game="bob-esponja-tower-defense">
+                <span class="game-icon">🧽</span>
+                <h3>Bob Esponja Tower Defense</h3>
+                <p>Defensa con amigos marinos</p>
+            </div>
+            <div class="game-card" data-game="build-a-boat">
+                <span class="game-icon">⛵</span>
+                <h3>Build a Boat</h3>
+                <p>Construye y navega</p>
+            </div>
+            <div class="game-card" data-game="dandy-world">
+                <span class="game-icon">🌼</span>
+                <h3>Dandy's World</h3>
+                <p>Mundo colorido y dandy</p>
+            </div>
+            <div class="game-card" data-game="dead-defense">
+                <span class="game-icon">🛡️</span>
+                <h3>Dead Defense</h3>
+                <p>Defensa contra lo undead</p>
+            </div>
+            <div class="game-card" data-game="dead-rails">
+                <span class="game-icon">🚂</span>
+                <h3>Dead Rails</h3>
+                <p>Rieles mortales</p>
+            </div>
+            <div class="game-card" data-game="demon-blade">
+                <span class="game-icon">🗡️</span>
+                <h3>Demon Blade</h3>
+                <p>Espadas demoníacas</p>
+            </div>
+            <div class="game-card" data-game="demon-fall">
+                <span class="game-icon">👹</span>
+                <h3>Demon Fall</h3>
+                <p>Caída demoníaca</p>
+            </div>
+            <div class="game-card" data-game="dig">
+                <span class="game-icon">⛏️</span>
+                <h3>Dig</h3>
+                <p>Excavaciones profundas</p>
+            </div>
+            <div class="game-card" data-game="doors">
+                <span class="game-icon">🚪</span>
+                <h3>Doors</h3>
+                <p>Puertas misteriosas</p>
+            </div>
+            <div class="game-card" data-game="dragon-ball-rage">
+                <span class="game-icon">🐉</span>
+                <h3>Dragon Ball Rage</h3>
+                <p>Furia dragon ball</p>
+            </div>
+            <div class="game-card" data-game="dragon-blox">
+                <span class="game-icon">🐉</span>
+                <h3>Dragon Blox</h3>
+                <p>Dragones en bloques</p>
+            </div>
+            <div class="game-card" data-game="evade">
+                <span class="game-icon">🏃</span>
+                <h3>Evade</h3>
+                <p>Esquiva y sobrevive</p>
+            </div>
+            <div class="game-card" data-game="fisch">
+                <span class="game-icon">🎣</span>
+                <h3>Fisch</h3>
+                <p>Pesca legendaria</p>
+            </div>
+            <div class="game-card" data-game="fish-it">
+                <span class="game-icon">🎣</span>
+                <h3>Fish It</h3>
+                <p>Pesca todo lo que veas</p>
+            </div>
+            <div class="game-card" data-game="forsaken">
+                <span class="game-icon">🔪</span>
+                <h3>Forsaken</h3>
+                <p>Abandonado en terror</p>
+            </div>
+            <div class="game-card" data-game="fruit-battlegrounds">
+                <span class="game-icon">🍇</span>
+                <h3>Fruit Battlegrounds</h3>
+                <p>Batallas frutales</p>
+            </div>
+            <div class="game-card" data-game="grand-piece-online">
+                <span class="game-icon">🏴‍☠️</span>
+                <h3>Grand Piece Online</h3>
+                <p>Gran aventura pirata</p>
+            </div>
+            <div class="game-card" data-game="grow-a-garden">
+                <span class="game-icon">🌱</span>
+                <h3>Grow a Garden</h3>
+                <p>Cultiva tu paraíso</p>
+            </div>
+            <div class="game-card" data-game="garden-tower-defense">
+                <span class="game-icon">🌿</span>
+                <h3>Garden Tower Defense</h3>
+                <p>Defensa floral</p>
+            </div>
+            <div class="game-card" data-game="hunty-zombie">
+                <span class="game-icon">🧟</span>
+                <h3>Hunty Zombie</h3>
+                <p>Caza zombies</p>
+            </div>
+            <div class="game-card" data-game="ink-game">
+                <span class="game-icon">🖋️</span>
+                <h3>Ink Game</h3>
+                <p>Juego de tintas</p>
+            </div>
+            <div class="game-card" data-game="jailbreak">
+                <span class="game-icon">🚔</span>
+                <h3>Jailbreak</h3>
+                <p>Escapa de la cárcel</p>
+            </div>
+            <div class="game-card" data-game="jujutsu-infinite">
+                <span class="game-icon">🌀</span>
+                <h3>Jujutsu Infinite</h3>
+                <p>Magia infinita</p>
+            </div>
+            <div class="game-card" data-game="king-legacy">
+                <span class="game-icon">👑</span>
+                <h3>King Legacy</h3>
+                <p>Legado real</p>
+            </div>
+            <div class="game-card" data-game="muscle-legends">
+                <span class="game-icon">💪</span>
+                <h3>Muscle Legends</h3>
+                <p>Leyendas musculares</p>
+            </div>
+            <div class="game-card" data-game="ninja-times">
+                <span class="game-icon">🥷</span>
+                <h3>Ninja Times</h3>
+                <p>Era de ninjas</p>
+            </div>
+            <div class="game-card" data-game="piggy">
+                <span class="game-icon">🐷</span>
+                <h3>Piggy</h3>
+                <p>Atrápame si puedes</p>
+            </div>
+            <div class="game-card" data-game="plantas-vs-brainrot">
+                <span class="game-icon">🌿</span>
+                <h3>Plantas vs Brainrot</h3>
+                <p>Batalla vegetal</p>
+            </div>
+            <div class="game-card" data-game="prospecting">
+                <span class="game-icon">⛏️</span>
+                <h3>Prospecting</h3>
+                <p>Busca tesoros</p>
+            </div>
+            <div class="game-card" data-game="raise-a-floppa">
+                <span class="game-icon">🐱</span>
+                <h3>Raise a Floppa</h3>
+                <p>Cria tu floppa</p>
+            </div>
+            <div class="game-card" data-game="raise-animals">
+                <span class="game-icon">🐾</span>
+                <h3>Raise Animals</h3>
+                <p>Cria animales</p>
+            </div>
+            <div class="game-card" data-game="smash-project">
+                <span class="game-icon">💥</span>
+                <h3>Smash Project</h3>
+                <p>Proyecto smash</p>
+            </div>
+            <div class="game-card" data-game="steal-a-brainrot">
+                <span class="game-icon">🧠</span>
+                <h3>Steal a Brainrot</h3>
+                <p>Roba cerebros</p>
+            </div>
+            <div class="game-card" data-game="strongest-battlegrounds">
+                <span class="game-icon">🥊</span>
+                <h3>The Strongest Battlegrounds</h3>
+                <p>Batallas fuertes</p>
+            </div>
+            <div class="game-card" data-game="the-forge">
+                <span class="game-icon">🔥</span>
+                <h3>The Forge</h3>
+                <p>Forja tu destino</p>
+            </div>
+            <div class="game-card" data-game="vox-seas">
+                <span class="game-icon">🌊</span>
+                <h3>Vox Seas</h3>
+                <p>Mares vocales</p>
+            </div>
+            <div class="game-card" data-game="weak-legacy">
+                <span class="game-icon">⚔️</span>
+                <h3>Weak Legacy</h3>
+                <p>Legado débil</p>
+            </div>
+        </div>
+    </section>
+
+    <div id="searchResults" class="search-results container"></div>
+
+    <section id="universal" class="scripts-section container">
+        <h2 class="section-title">Script Hub Universales</h2>
+        <div class="script-list">
+            <div class="script-item">
+                <div class="script-info">
+                    <h4>FloppHub</h4>
+                    <small>Hub universal para múltiples juegos</small>
+                </div>
+                <button class="copy-btn" onclick="toggleCode(this)">Ver Código</button>
+                <div class="code-block">loadstring(game:HttpGet("https://is.gd/JwNMnE"))()</div>
+            </div>
+            <div class="script-item">
+                <div class="script-info">
+                    <h4>Anti-Hambreado Script Hub</h4>
+                    <small>Próximamente en desarrollo</small>
+                </div>
+                <button class="copy-btn" onclick="toggleCode(this)">Ver Código</button>
+                <div class="code-block">🚀 ¡PRÓXIMAMENTE! 🚀
+¡Gracias por ayudarnos a llegar a la meta! 🔥</div>
+            </div>
+        </div>
+    </section>
+
+    <div id="scriptsContainer"></div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Anti-Hambreado Script Team. Todos los derechos reservados.</p>
+            <p>Diseñado con ❤️ para la comunidad</p>
+        </div>
+    </footer>
+
+    <script>
+        const gameData = {
+            '99-noches-en-el-bosque': [
+                { title: 'BONK HUB', code: 'https://www.mediafire.com/file/87bvqmx9qtq9ynq/KAITAN+99NOCHES.txt/file' },
+                { title: 'BONK HUB NORMAL', code: 'https://www.mediafire.com/file/8snedlegw42wys7/SCRIPT+BONK+HUB+NORMAL.txt/file' },
+                { title: 'FOXNAME', code: 'https://www.mediafire.com/file/pb8chz4qx3e14ok/SCRIPT+FOXNAME+DIAMOND99.txt/file' },
+                { title: 'FOXNAME V2', code: 'https://www.mediafire.com/file/962kvzgws7fdtl3/SCRIPT+FARM+DAY+++GEMAS.txt/file' },
+                { title: 'H4X HUB', code: 'https://www.mediafire.com/file/2florr3w9dw0ydf/SCRIPT+H4X.txt/file' },
+                { title: 'NUEVO SCRIPT', code: 'https://www.mediafire.com/file/1t99xa9wv0tgytz/SCRIPT+99+NOCHES+EN+EL+BOSQUE+ALINS.txt/file' },
+                { title: 'SERIOUSLY', code: 'https://www.mediafire.com/file/2lg692qhlvht152/SCRIPT+SERIOUSLY+99NOCHES.txt/file' },
+                { title: 'VOID WARE', code: 'https://www.mediafire.com/file/nm491e4nvwnbr2j/SCRIPT+VOIDWARE.txt/file' },
+                { title: 'VORTEX HUB', code: 'https://www.mediafire.com/file/svhh5vhscr8ogmi/SCRIPT+99NIGHT+VORTEX+HUB.txt/file' },
+                { title: 'INF CANDY', code: 'https://www.mediafire.com/file/8b4tsnhoh1ofctw/SCRIPT+INF+CANDY+99NOCHES.txt/file' }
+            ],
+            'arise-crossover': [
+                { title: 'GOOMBA HUB', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/JustLevel/goombahub/main/AriseCrossover.lua"))()' }
+            ],
+            'attack-on-titan-revolution': [
+                { title: 'LUNARZ', code: 'https://www.mediafire.com/file/5g5cet0ha9da467/SCRIPT+LUNARZ.txt/file' },
+                { title: 'TEKKIT HUB', code: 'https://www.mediafire.com/file/qb71f2am4v5b7u9/SCRIPT+TEKKIT+HUB+AOTR.txt/file' }
+            ],
+            'anime-weapons': [
+                { title: 'NEW OMG HUB', code: 'https://www.mediafire.com/file/yqty2pkjbqmlfut/SCRIPT+NEW+OMG+HUB+2025.txt/file' }
+            ],
+            'basically-fnf-remix': [
+                { title: 'AUTO PLAYER', code: 'loadstring(game:HttpGet("https://rawscripts.net/raw/Basically-FNF:-Remix-AutoPlayer-Lite-9989"))()' }
+            ],
+            'block-spin': [
+                { title: 'HERMANOS-DEV', code: '[[\nCredit: Hermanos-Dev, Dont Delete This.\n]]\nlocal loader = loadstring\nlocal url = "https://raw.githubusercontent.com/hermanos-dev/hermanos-hub/refs/heads/main/BlockSpin/blockspin-pvp.lua"\nlocal response = game:HttpGet(url)\nloader(response)()' },
+                { title: 'QUARTY', code: 'https://www.mediafire.com/file/qg500i15aeucrbv/SCRIPT+QUARTY.txt/file' }
+            ],
+            'bloodmoney': [
+                { title: 'ANTI-HAMBREADO TEAM SCRIPT | BLOODMONEY', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/FloppHub-Team/Scripts-idk/refs/heads/main/BloodMoney%20Script.txt"))()' }
+            ],
+            'blox-fruits': [
+                { title: 'ANDEPZAIHUB', code: 'https://www.mediafire.com/file/xpnq8upphf1enys/SCRIPT+ANDEPZAIHUB.TXT/file' },
+                { title: 'ASTRAL HUB', code: "loadstring(game:HttpGet('https://cdn.robloxscripts.gg/public/furky/furky-astral-source.lua'))()" },
+                { title: 'BLUE X HUB', code: 'https://www.mediafire.com/file/mizwgtlc6gdwkl1/SCRIPT+BLUEX+HUB.txt/file' },
+                { title: 'DAT THG', code: 'https://www.mediafire.com/file/j6d2fva815bpfpp/SCRIPT+DAT+THG.txt/file' },
+                { title: 'GRAVITY HUB', code: 'https://www.mediafire.com/file/nkbcvf5y1ijevcb/GRAVITY+HUB.txt/file' },
+                { title: 'HOHO HUB', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_UI"))()' },
+                { title: 'NEW OMG HUB', code: 'https://www.mediafire.com/file/yqty2pkjbqmlfut/SCRIPT+NEW+OMG+HUB+2025.txt/file' },
+                { title: 'REDZ HUB', code: 'local Settings = {\n  JoinTeam = "Pirates"; -- Pirates/Marines\n  Translator = true; -- true/false\n}\ngetgenv().BETA_VERSION = true\nloadstring(game:HttpGet("https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"))(Settings)' },
+                { title: 'SCRIPT SERVER HOP', code: 'https://www.mediafire.com/file/2sz4aephhdiu0l0/SCRIPT+HOP+SERVER.txt/file' },
+                { title: 'TEDDY HUB', code: 'https://www.mediafire.com/file/uweo7ms5gvl1c3h/SCRIPT+TEDDY+HUB.txt/file' },
+                { title: 'TSUO HUB', code: 'https://www.mediafire.com/file/giyq8l80fpqk2jb/SCRIPT+TSUO+HUB.txt/file' },
+                { title: 'W-AZURE', code: 'https://www.mediafire.com/file/lvehh3dle23ej5a/NUEVO+W-AZURE+TRUE.txt/file' },
+                { title: 'ARYA KAITUN', code: 'https://www.mediafire.com/file/h0a2tetp4ryx2y5/SCRIPT+ARYA+KAITUN.txt/file' }
+            ],
+            'blue-lock-rivals': [
+                { title: 'OMG HUB', code: 'https://www.mediafire.com/file/yqty2pkjbqmlfut/SCRIPT+NEW+OMG+HUB+2025.txt/file' }
+            ],
+            'bob-esponja-tower-defense': [
+                { title: 'IMP HUB', code: 'https://www.mediafire.com/file/l0gzkkmv5vlfedh/SCRIPT+IMP+HUB.txt/file' }
+            ],
+            'build-a-boat': [
+                { title: 'BABFT', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/example-prog/Build-A-Boat-For-Treasure/refs/heads/main/BABFT"))()' }
+            ],
+            'dandy-world': [
+                { title: "DANDY'S WORLD HUB", code: 'loadstring(game:HttpGet("https://pastebin.com/raw/H3u62n7D"))()' }
+            ],
+            'dead-defense': [
+                { title: 'GUMANBA', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DeadDefense"))()' }
+            ],
+            'dead-rails': [
+                { title: 'NAT HUB', code: 'https://www.mediafire.com/file/d89mbxqwkzjwt3o/SCRIPT_NAT_HUB.txt/file' },
+                { title: 'SKULL HUB', code: 'https://www.mediafire.com/file/fhtm57gmk7gzuk4/SCRIPT+SKULL+HUB+AUTO+BONOS.txt/file' }
+            ],
+            'demon-blade': [
+                { title: 'DEMON BLADE SCRIPT', code: "loadstring(game:HttpGet('https://raw.githubusercontent.com/shakaUnlocked/IiI/refs/heads/main/dbrw.lua'))()" }
+            ],
+            'demon-fall': [
+                { title: 'NOOB HUB', code: 'https://www.mediafire.com/file/gkn6mmk0jgv2gui/Script_Demon_FALL.txt/file' }
+            ],
+            'dig': [
+                { title: 'FROSTBYTE', code: 'https://www.mediafire.com/file/j0ua34pwf4lnv94/SCRIPT+FROSTBYTE+DIG.txt/file' }
+            ],
+            'doors': [
+                { title: 'DOORS SCRIPT', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/TheHunterSolo1/Scripts/refs/heads/main/Protected_2809220311826785.lua.txt"))()' }
+            ],
+            'dragon-ball-rage': [
+                { title: 'IMP HUB', code: 'https://www.mediafire.com/file/l0gzkkmv5vlfedh/SCRIPT+IMP+HUB.txt/file' }
+            ],
+            'dragon-blox': [
+                { title: 'DEMONIC HUB', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/Prosexy/Demonic-HUB-V2/main/DemonicHub_V2.lua", true))()' }
+            ],
+            'evade': [
+                { title: 'SPEEDHAX', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/thesigmacorex/RobloxScripts/main/speedhax"))()' },
+                { title: 'TORAISME', code: 'https://www.mediafire.com/file/aacsiih11xsn166/SCRIPT+EVADE+HALLOWEEN+TORAISME.txt/file' }
+            ],
+            'fisch': [
+                { title: 'ALCHEMY HUB', code: 'loadstring(game:HttpGet("https://scripts.alchemyhub.xyz"))()' },
+                { title: 'NATIVE HUB', code: 'https://www.mediafire.com/file/7b8apdysqo369ne/SCRIPT_NATIVE_NEW.txt/file' },
+                { title: 'NATIVE HUB NEW', code: 'https://www.mediafire.com/file/7b8apdysqo369ne/SCRIPT_NATIVE_NEW.txt/file' },
+                { title: 'RIFT HUB', code: 'https://www.mediafire.com/file/1kforlypif7dbdu/SCRIPT+RIFT+HUB.txt/file' },
+                { title: 'ZENITH HUB', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/rxito/ZenithHub/refs/heads/main/Loader"))()' },
+                { title: 'LUNOR HUB', code: "script_key = 'Insert Lunor Key Here';\nloadstring(game:HttpGet('https://raw.githubusercontent.com/Catto-YFCN/Lunor_Dependencies/refs/heads/main/Loader'))()\n-- Para obtener la key: https://ads.luarmor.net/get_key?for=LinkvertiseAD12_Hours-HhMMjfiZOeFt" }
+            ],
+            'fish-it': [
+                { title: 'BLESSED HUB', code: 'https://www.mediafire.com/file/hggzozdcfltiade/SCRIPT+BLESSED+HUB+FISH+IT.txt/file' },
+                { title: 'NAT HUB', code: 'https://www.mediafire.com/file/d89mbxqwkzjwt3o/SCRIPT_NAT_HUB.txt/file' }
+            ],
+            'forsaken': [
+                { title: 'LOLNOTAKID', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/LolnotaKid/project/refs/heads/main/obfuscated_script-1758536932336.lua.txt"))()\nprint("V1")' },
+                { title: 'TSUO HUB', code: 'https://www.mediafire.com/file/giyq8l80fpqk2jb/SCRIPT+TSUO+HUB.txt/file' }
+            ],
+            'fruit-battlegrounds': [
+                { title: 'DEVSEHUB', code: 'script_key="replacekey";\nloadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/d92ae761864b636f15e5214d8b9e1b57.lua"))()\n -- Link de la key : https://ads.luarmor.net/get_key?for=DevseHUB_KEY-LpxFTiZSpAVU' }
+            ],
+            'grand-piece-online': [
+                { title: 'SWITCH HUB', code: 'https://www.mediafire.com/file/ze8c788cair9stx/SCRIPT+SWITCH+HUB.txt/file' }
+            ],
+            'grow-a-garden': [
+                { title: 'BONK HUB', code: 'https://www.mediafire.com/file/8snedlegw42wys7/SCRIPT+BONK+HUB+NORMAL.txt/file' },
+                { title: 'DUPLICAR DINERO', code: 'https://www.mediafire.com/file/t3uuf2f10p0xww1/SCRIPT+LUNOR.txt/file' },
+                { title: 'GUMANBA', code: 'https://www.mediafire.com/file/t3uuf2f10p0xww1/SCRIPT+LUNOR.txt/file' },
+                { title: 'KICIAHOOK', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/kiciahook/kiciahook/refs/heads/main/loader.luau"))()' },
+                { title: 'LUNOR HUB', code: "script_key = 'Insert Lunor Key Here';\nloadstring(game:HttpGet('https://raw.githubusercontent.com/Catto-YFCN/Lunor_Dependencies/refs/heads/main/Loader'))()\n-- Para obtener la key: https://ads.luarmor.net/get_key?for=LinkvertiseAD12_Hours-HhMMjfiZOeFt" },
+                { title: 'NAT HUB', code: 'https://www.mediafire.com/file/d89mbxqwkzjwt3o/SCRIPT_NAT_HUB.txt/file' },
+                { title: 'NO LAG HUB', code: 'https://www.mediafire.com/file/6t5t3pb7e8jtjvs/SCRIPT+NO+LAG+GROW+GARDEN.txt/file' },
+                { title: 'SPEED HUB', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()' },
+                { title: 'THUNDAR Z', code: 'https://www.mediafire.com/file/ny412eci4oz8sml/SCRIPT+THUNDAR+Z.txt/file' }
+            ],
+            'garden-tower-defense': [
+                { title: 'THUNDER HUB', code: 'https://www.mediafire.com/file/xl2s4gxv6yvmzq4/SCRIPT+THUNDER+HUB.txt/file' }
+            ],
+            'hunty-zombie': [
+                { title: 'ALCHEMY HUB', code: 'loadstring(game:HttpGet("https://scripts.alchemyhub.xyz"))()' },
+                { title: 'CHIYO HUB', code: 'https://www.mediafire.com/file/l6p95il7t8sa9yc/SCRIPT+CHIYO+HUB.txt/file' },
+                { title: 'HUNTY ZOMBIE SCRIPT', code: 'https://www.mediafire.com/file/nlr7pib279xkfxv/SCRIPT+HUNTY+ZOMBIE+TORA+ISME.txt/file' },
+                { title: 'MIRAGE HUB', code: 'https://www.mediafire.com/file/cbor7shfei6xi5y/SCRIPT+MIRAGE+HUB.txt/file' },
+                { title: 'SOLIX HUB', code: 'https://www.mediafire.com/file/d66j12ef9ynbuv0/SCRIPT_SOLIX_HUB.txt/file' },
+                { title: 'TYPE HUB', code: 'https://www.mediafire.com/file/xjcmcidto7rsjl3/SCRIPT+TYPE+HUB+HUNTY+ZOMBIE.txt/file' },
+                { title: 'ZEE HUB', code: 'https://www.mediafire.com/file/1tzpo49zjgij7gv/SCRIPT+ZEE+HUB+HUNTY+ZOMBIE.txt/file' }
+            ],
+            'ink-game': [
+                { title: 'VOID WARE', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/VapeVoidware/VW-Add/main/inkgame.lua", true))()' }
+            ],
+            'jailbreak': [
+                { title: 'SOLIX', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/debunked69/solixloader/refs/heads/main/solix%20v2%20new%20loader.lua"))()' }
+            ],
+            'jujutsu-infinite': [
+                { title: 'SOLIX HUB', code: 'https://www.mediafire.com/file/d66j12ef9ynbuv0/SCRIPT+SOLIX+HUB.txt/file' }
+            ],
+            'king-legacy': [
+                { title: 'ARC HUB', code: "getgenv().RaidUI = false -- For Hidden Raid Mode true = show and false = hidden\ngengen().CustomDistance = 10 -- For Bug Can't Swipe Distance\ngetgenv().ResetFirstLoad = true -- For Reset First Time Load true = yes and false = no\nloadstring(game:HttpGet(\"https://raw.githubusercontent.com/ChopLoris/ArcHub/main/main.lua\"))()" },
+                { title: 'OMG HUB', code: 'https://www.mediafire.com/file/yqty2pkjbqmlfut/SCRIPT+NEW+OMG+HUB+2025.txt/file' }
+            ],
+            'muscle-legends': [
+                { title: 'ECLIPSE HUB', code: 'loadstring(game:HttpGet("https://protected-roblox-scripts.onrender.com/ef14c49aab8ad4e9ab69171b40989cd2"))()' },
+                { title: 'SPEED HUB', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()' }
+            ],
+            'ninja-times': [
+                { title: 'SCYLLA', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/acezqqq/Scylla/refs/heads/main/Loader.lua"))()' }
+            ],
+            'piggy': [
+                { title: 'STARHACK HUB', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/StarHackScripts/StarHack-Hub-Deepstar-Hub/refs/heads/main/StarHack%20Hub%20-%20Piggy%20Pro%20Hub.txt"))()' }
+            ],
+            'plantas-vs-brainrot': [
+                { title: 'BLESSED HUB', code: 'https://www.mediafire.com/file/oh1bmjdn3p2k5mq/SCRIPT+BLESSED+HUB+X.txt/file' },
+                { title: 'CHIYO HUB', code: 'https://www.mediafire.com/file/l6p95il7t8sa9yc/SCRIPT+CHIYO+HUB.txt/file' },
+                { title: 'RIFT HUB', code: 'https://www.mediafire.com/file/1kforlypif7dbdu/SCRIPT+RIFT+HUB.txt/file' },
+                { title: 'SPEED HUB', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()' }
+            ],
+            'prospecting': [
+                { title: 'NUEVO SCRIPT', code: 'https://www.mediafire.com/file/gmu353izjgrg33c/SCRIPT+PROSPECTING.txt/file' }
+            ],
+            'raise-a-floppa': [
+                { title: 'RAISE A FLOPPA SCRIPT', code: 'loadstring(game:HttpGet("https://pastebin.com/raw/Fif1YVVR"))()' }
+            ],
+            'raise-animals': [
+                { title: 'TBAO HUB', code: 'https://www.mediafire.com/file/loiduq3q1ujcgjm/SCRIPT+TBAO+HUB+RAISE+ANIMALS.txt/file' },
+                { title: 'JINKX HUB', code: 'https://www.mediafire.com/file/hohjhaxp4j5bvjw/SCRIPT+JINKX+HUB.txt/file' }
+            ],
+            'smash-project': [
+                { title: 'NEXOR HUB', code: "loadstring(game:HttpGet('https://raw.githubusercontent.com/NexorHub/Games/refs/heads/main/Universal/Scripts.lua'))();" }
+            ],
+            'steal-a-brainrot': [
+                { title: 'AJJAN', code: 'https://www.mediafire.com/file/b8gzxd0hu3dmydc/SCRIPT+AJJAN+STEAL+A+BRAINROT.txt/file' },
+                { title: 'ARBIX TP NUEVO', code: 'https://www.mediafire.com/file/3jvwf5xpoa2ocar/SCRIPT+ARBIX+TP+VC+SERVER.txt/file' },
+                { title: 'CHILLI HUB', code: 'https://www.mediafire.com/file/edydn45v754qxm3/SCRIPT+CHILLI+HUB+BRAINROT.txt/file' },
+                { title: 'HOHO HUB', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_UI"))()' },
+                { title: 'KENGER HUB', code: 'https://www.mediafire.com/file/s4ocwl0p4h0xvhf/SCRIPT+KENGER+HUB.txt/file' },
+                { title: 'LEGENDS BRAINROT', code: 'https://www.mediafire.com/file/vj0in6milhaui15/SCRIPT+LEGENDS+BRAINROT.txt/file\n-- Key = ayam' },
+                { title: 'LEMON HUB', code: 'https://www.mediafire.com/file/loxj38lxrqr31a4/SCRIPT+LEMON+HUB.txt/file' },
+                { title: 'LENNON V3', code: 'https://www.mediafire.com/file/6phdz9th76ddq6v/SCRIPT+LENNON+V3.txt/file' },
+                { title: 'LURK HACK V4', code: 'https://www.mediafire.com/file/karv5yskubk0aqa/SCRIPT+LURK+HACKV4.txt/file' },
+                { title: 'MAKAL HUB', code: 'https://www.mediafire.com/file/k29my232199w3k8/SCRIPT+MAKAL+HUB.txt/file' },
+                { title: 'MIRANDAN HUB', code: 'https://www.mediafire.com/file/nwwtnvdhzfo070h/SCRIPT+MIRANDAN+STEAL+A+BRAINROT.txt/file' },
+                { title: 'PUSARX', code: 'https://www.mediafire.com/file/9taswgj9izhjd3w/SCRIPT+PUSARX+BRAINROT.txt/file' },
+                { title: 'TELEGUIADOS HUB', code: 'https://www.mediafire.com/file/8hhki6yha35hnxg/SCRIPT+TELEGUIADOS+STEAL+A+BRAINROT.txt/file' },
+                { title: 'TP ARBIX', code: 'https://www.mediafire.com/file/3hj8kgeynzmnx4g/NEW+TP+ARBIX+HUB.txt/file' },
+                { title: 'AUTO BUY DEALER', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/AutoBuyBrainrotDealer/Auto-Buy/refs/heads/main/AutoBuyDealer"))()' },
+                { title: 'UGLYS FISHING', code: 'https://www.mediafire.com/file/crn8ugyhoiu2ywz/SCRIPT+UGLYS+FISHING.txt/file' }
+            ],
+            'strongest-battlegrounds': [
+                { title: 'MINHNHAT HUB', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/minhnhatdepzai8-cloud/MinhNhat-HUB-V5/refs/heads/main/MinhNhatDZ.lua.txt"))()' },
+                { title: 'SANS MOVESET', code: 'loadstring(game:HttpGet("https://paste.ee/r/rF9d3"))()' }
+            ],
+            'the-forge': [
+                { title: 'CHIYO HUB', code: 'https://www.mediafire.com/file/q4mhx7sy1owtwdx/SCRIPT+CHIYO+THE+FORGE.txt/file' }
+            ],
+            'vox-seas': [
+                { title: 'FARM DINERO', code: "loadstring(game:HttpGet('https://raw.githubusercontent.com/shakaUnlocked/IiI/refs/heads/main/AutoVoxSeas.lua'))()" },
+                { title: 'LEGEND HUB', code: 'loadstring(game:HttpGet("https://pastefy.app/ULaWpxKm/raw"))()' },
+                { title: 'NEXUS HUB', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/CrazyHub123/NexusHubRevival/refs/heads/main/NewLoader.lua"))()' },
+                { title: 'OMG HUB', code: 'https://www.mediafire.com/file/yqty2pkjbqmlfut/SCRIPT+NEW+OMG+HUB+2025.txt/file' },
+                { title: 'SPARKX SCRIPT', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/FloppHub-Team/Scripts-idk/refs/heads/main/Main/Vox%20Seas%20Open%20Source%20Cracked"))()' },
+                { title: 'TYPE HUB', code: 'https://www.mediafire.com/file/nzh2hrfjrt59e3i/SCRIPT+TYPE+HUB.txt/file' }
+            ],
+            'weak-legacy': [
+                { title: 'L4BIB HUB', code: 'https://www.mediafire.com/file/o1ddp0bcc008i4o/SCRIPT+L4BIB+HUB+WEAK+LEGACY2.txt/file' },
+                { title: 'NEW OMG HUB', code: 'https://www.mediafire.com/file/yqty2pkjbqmlfut/SCRIPT+NEW+OMG+HUB+2025.txt/file' },
+                { title: 'WEAK LEGACY SCRIPT', code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/OhhMyGehlee/sh/refs/heads/main/a"))()' }
+            ]
+        };
+
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+            document.querySelector('.overlay').classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.remove('active');
+            document.querySelector('.overlay').classList.remove('active');
+        }
+
+        function scrollToGames() {
+            document.getElementById('games').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function handleSearch(event) {
+            if (event.key === 'Enter') {
+                const query = event.target.value.toLowerCase().trim();
+                showSearchResults(query);
+            }
+        }
+
+        function showSearchResults(query) {
+            const results = document.getElementById('searchResults');
+            results.innerHTML = '<h2 class="section-title">Resultados de Búsqueda</h2><div class="script-list"></div>';
+            let found = false;
+            Object.keys(gameData).forEach(game => {
+                gameData[game].forEach(script => {
+                    if (script.title.toLowerCase().includes(query) || game.toLowerCase().includes(query)) {
+                        const list = results.querySelector('.script-list');
+                        const item = document.createElement('div');
+                        item.className = 'script-item';
+                        item.innerHTML = `
+                            <div class="script-info">
+                                <h4>\( {script.title} <small>( \){game})</small></h4>
+                            </div>
+                            <button class="copy-btn" onclick="copyToClipboard('${script.code}')">Copiar</button>
+                            <div class="code-block">${script.code}</div>
+                        `;
+                        list.appendChild(item);
+                        found = true;
+                    }
+                });
+            });
+            if (!found) {
+                results.innerHTML += '<div class="no-results">No se encontraron resultados.</div>';
+            }
+            results.scrollIntoView({ behavior: 'smooth' });
+            hideAllSections();
+        }
+
+        function hideAllSections() {
+            document.querySelectorAll('.scripts-section').forEach(s => s.classList.remove('active'));
+            document.getElementById('gamesGrid').style.display = 'none';
+        }
+
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const game = card.dataset.game;
+                showGameScripts(game);
+            });
+        });
+
+        function showGameScripts(gameId) {
+            const container = document.getElementById('scriptsContainer');
+            container.innerHTML = `
+                <section class="scripts-section active container">
+                    <h2 class="section-title">${gameId.replace(/-/g, ' ').toUpperCase()}</h2>
+                    <div class="script-list">
+                        ${gameData[gameId].map(script => `
+                            <div class="script-item">
+                                <div class="script-info">
+                                    <h4>${script.title}</h4>
+                                </div>
+                                <button class="copy-btn" onclick="toggleCode(this)">Ver Código</button>
+                                <div class="code-block">${script.code}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="btn btn-primary" onclick="backToGames()" style="margin: 2rem auto; display: block;">Volver a Juegos</button>
+                </section>
+            `;
+            container.scrollIntoView({ behavior: 'smooth' });
+            hideAllSections();
+        }
+
+        function backToGames() {
+            document.getElementById('games').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('gamesGrid').style.display = 'grid';
+            document.getElementById('scriptsContainer').innerHTML = '';
+        }
+
+        function toggleCode(btn) {
+            const item = btn.closest('.script-item');
+            item.classList.toggle('active');
+            btn.textContent = item.classList.contains('active') ? 'Ocultar' : 'Ver Código';
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target;
+                const original = btn.textContent;
+                btn.textContent = '¡Copiado!';
+                btn.style.background = 'var(--red)';
+                setTimeout(() => {
+                    btn.textContent = original;
+                    btn.style.background = '';
+                }, 1500);
+            });
+        }
+
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('copy-btn') && !e.target.onclick) {
+                copyToClipboard(e.target.nextElementSibling.textContent);
+            }
+        });
+    </script>
+</body>
+  </html>
