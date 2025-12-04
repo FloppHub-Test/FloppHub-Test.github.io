@@ -354,7 +354,7 @@
                 setTimeout(() => {
                     const item = document.querySelector(`[data-check="${check.id}"]`);
                     const status = item.querySelector('.item-status');
-                    item.classList.add('verified'); status.textContent = 'Check'; status.classList.add('status-check');
+                    item.classList.add('verified'); status.textContent = '✓'; status.classList.add('status-check');
                     const progress = ((index + 1) / checks.length) * 100;
                     document.getElementById('progress-bar').style.width = progress + '%';
                     if (index === checks.length - 1) {
