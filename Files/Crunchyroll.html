@@ -47,97 +47,165 @@
         .screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: none; justify-content: center; align-items: center;
-            z-index: 10; padding: var(--spacing-md) var(--spacing-sm); overflow: hidden;
+            z-index: 10; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            padding: var(--spacing-md) var(--spacing-sm); overflow: hidden;
         }
         .screen.active { display: flex; }
 
-        /* ====================== PANTALLA DE BANEO PERMANENTE ====================== */
-        #banned-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10, 10, 10, 0.98);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 9999; opacity: 0; visibility: hidden;
-            transition: opacity 1s ease, visibility 1s ease;
-        }
-        #banned-overlay.show { opacity: 1; visibility: visible; }
-
-        .banned-box {
-            width: min(92%, 480px);
-            background: var(--bg-card);
-            border: 4px solid var(--error-red);
-            border-radius: max(20px, 4.5vw);
+        .login-wrapper {
+            width: min(92%, 420px); background: var(--bg-card);
+            border: 2px solid var(--primary-orange); border-radius: max(16px, 3vw);
             padding: var(--spacing-lg) var(--spacing-md);
-            text-align: center;
-            box-shadow: 0 0 clamp(50px, 15vw, 90px) rgba(255, 77, 77, 0.9);
-            animation: bannedPulse 2.2s infinite ease-in-out;
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 0 clamp(30px, 10vw, 50px) rgba(255, 140, 0, 0.7);
+            animation: containerFloat 3s infinite ease-in-out; position: relative; overflow: hidden;
         }
-
-        .banned-box::before {
-            content: '';
-            position: absolute;
-            top: -12px; left: -12px; right: -12px; bottom: -12px;
-            background: conic-gradient(from 0deg, transparent, var(--error-red), #ff0044, var(--error-red), transparent);
-            border-radius: inherit;
-            animation: ringRotate 3.5s linear infinite;
-            opacity: 0.7;
-            z-index: -1;
-        }
-
-        @keyframes bannedPulse {
-            0%, 100% { box-shadow: 0 0 clamp(50px, 15vw, 90px) rgba(255, 77, 77, 0.9); }
-            50% { box-shadow: 0 0 clamp(80px, 22vw, 130px) #ff4d4d; }
-        }
-
-        .banned-title {
-            font-size: var(--font-3xl);
-            font-weight: 900;
-            color: var(--error-red);
-            text-shadow: 0 0 30px #ff4d4d;
-            letter-spacing: 0.15em;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .banned-message {
-            font-size: var(--font-xl);
-            color: #ff8c8c;
-            line-height: 1.6;
-            text-shadow: 0 0 20px rgba(255, 77, 77, 0.7);
-        }
-
-        @keyframes ringRotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* ====================== RESTO DEL CSS ORIGINAL (SIN TOCAR) ====================== */
-        .login-wrapper { width: min(92%, 420px); background: var(--bg-card); border: 2px solid var(--primary-orange); border-radius: max(16px, 3vw); padding: var(--spacing-lg) var(--spacing-md); box-shadow: 0 0 clamp(30px, 10vw, 50px) rgba(255, 140, 0, 0.7); animation: containerFloat 3s infinite ease-in-out; position: relative; overflow: hidden; }
         @keyframes containerFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-5px) scale(1.01); } }
+
         .logo-wrapper { position: relative; width: min(120px, 30vw); height: min(120px, 30vw); margin: 0 auto var(--spacing-md); }
-        .logo { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--primary-orange); padding: max(4px, 1vw); background: rgba(0, 0, 0, 0.4); box-shadow: 0 0 clamp(20px, 8vw, 30px) rgba(255, 140, 0, 0.8); animation: logoPulse 2s infinite; }
-        @keyframes logoPulse { 0%, 100% { box-shadow: 0 0 clamp(15px, 5vw, 20px) rgba(255, 140, 0, 0.6); transform: scale(1); } 50% { box-shadow: 0 0 clamp(25px, 8vw, 35px) rgba(255, 140, 0, 1); transform: scale(1.03); } }
-        .glow-ring { position: absolute; top: -6px; left: -6px; width: calc(100% + 12px); height: calc(100% + 12px); border-radius: 50%; border: 2px solid transparent; background: conic-gradient(from 0deg, transparent, var(--primary-orange), transparent); animation: ringRotate 3s linear infinite; opacity: 0.6; }
-        .login-title { color: var(--primary-orange); font-size: var(--font-2xl); margin-bottom: var(--spacing-xs); text-shadow: 0 0 clamp(10px, 3vw, 20px) rgba(255, 140, 0, 0.9); letter-spacing: 0.1em; font-weight: 700; text-align: center; line-height: 1.2; }
-        .login-subtitle { color: var(--bright-orange); font-size: var(--font-md); margin-bottom: var(--spacing-lg); text-align: center; opacity: 0.8; line-height: 1.4; }
-        .password-input { width: 100%; padding: clamp(14px, 4vw, 16px) clamp(16px, 3vw, 20px); font-size: var(--font-lg); border: 2px solid var(--primary-orange); border-radius: max(10px, 2vw); background: rgba(30, 30, 40, 0.8); color: var(--text-white); text-align: center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 clamp(10px, 3vw, 15px) rgba(255, 140, 0, 0.3); font-family: 'Courier New', monospace; letter-spacing: 0.1em; margin-bottom: var(--spacing-md); min-height: 56px; }
-        .password-input:focus { outline: none; border-color: var(--bright-orange); box-shadow: 0 0 clamp(20px, 6vw, 30px) rgba(255, 140, 0, 0.8); background: rgba(40, 40, 50, 0.9); transform: scale(1.01); }
+        .logo { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--primary-orange); padding: max(4px, 1vw);
+            background: rgba(0, 0, 0, 0.4); box-shadow: 0 0 clamp(20px, 8vw, 30px) rgba(255, 140, 0, 0.8); animation: logoPulse 2s infinite; }
+        @keyframes logoPulse { 0%, 100% { box-shadow: 0 0 clamp(15px, 5vw, 20px) rgba(255, 140, 0, 0.6); transform: scale(1); }
+            50% { box-shadow: 0 0 clamp(25px, 8vw, 35px) rgba(255, 140, 0, 1); transform: scale(1.03); } }
+        .glow-ring { position: absolute; top: -6px; left: -6px; width: calc(100% + 12px); height: calc(100% + 12px);
+            border-radius: 50%; border: 2px solid transparent;
+            background: conic-gradient(from 0deg, transparent, var(--primary-orange), transparent);
+            animation: ringRotate 3s linear infinite; opacity: 0.6; }
+        @keyframes ringRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .login-title { color: var(--primary-orange); font-size: var(--font-2xl); margin-bottom: var(--spacing-xs);
+            text-shadow: 0 0 clamp(10px, 3vw, 20px) rgba(255, 140, 0, 0.9); letter-spacing: 0.1em; font-weight: 700;
+            text-align: center; line-height: 1.2; }
+        .login-subtitle { color: var(--bright-orange); font-size: var(--font-md); margin-bottom: var(--spacing-lg);
+            text-align: center; opacity: 0.8; line-height: 1.4; }
+
+        .password-input { width: 100%; padding: clamp(14px, 4vw, 16px) clamp(16px, 3vw, 20px); font-size: var(--font-lg);
+            border: 2px solid var(--primary-orange); border-radius: max(10px, 2vw);
+            background: rgba(30, 30, 40, 0.8); color: var(--text-white); text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 clamp(10px, 3vw, 15px) rgba(255, 140, 0, 0.3);
+            font-family: 'Courier New', monospace; letter-spacing: 0.1em; margin-bottom: var(--spacing-md); min-height: 56px; }
+        .password-input:focus { outline: none; border-color: var(--bright-orange);
+            box-shadow: 0 0 clamp(20px, 6vw, 30px) rgba(255, 140, 0, 0.8); background: rgba(40, 40, 50, 0.9); transform: scale(1.01); }
         .password-input.error { border-color: var(--error-red); box-shadow: 0 0 clamp(15px, 4vw, 20px) rgba(255, 77, 77, 0.6); animation: shake 0.5s; }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
-        .access-btn { width: 100%; padding: clamp(16px, 4vw, 18px); font-size: var(--font-lg); font-weight: bold; background: linear-gradient(135deg, var(--primary-orange) 0%, #ff6a00 100%); color: #000; border: none; border-radius: max(10px, 2vw); cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-transform: uppercase; letter-spacing: 0.15em; box-shadow: 0 0 clamp(15px, 5vw, 20px) rgba(255, 140, 0, 0.6); min-height: 56px; touch-action: manipulation; }
+        @keyframes shake { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-5px); } 40%,80% { transform: translateX(5px); } }
+
+        .access-btn { width: 100%; padding: clamp(16px, 4vw, 18px); font-size: var(--font-lg); font-weight: bold;
+            background: linear-gradient(135deg, var(--primary-orange) 0%, #ff6a00 100%); color: #000; border: none;
+            border-radius: max(10px, 2vw); cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase; letter-spacing: 0.15em; box-shadow: 0 0 clamp(15px, 5vw, 20px) rgba(255, 140, 0, 0.6);
+            min-height: 56px; touch-action: manipulation; }
         .access-btn:hover { transform: translateY(-2px); box-shadow: 0 0 clamp(25px, 8vw, 35px) rgba(255, 140, 0, 0.9); }
         .access-btn:active { transform: translateY(0); }
-        .error-message { color: var(--error-red); margin-top: var(--spacing-md); font-size: var(--font-sm); text-align: center; opacity: 0; transition: opacity 0.3s; text-shadow: 0 0 clamp(5px, 2vw, 8px) rgba(255, 77, 77, 0.5); min-height: 20px; }
-        .error-message.show { opacity: 1; }
-        .loading-spinner { display: none; margin: var(--spacing-md) auto 0; width: clamp(30px, 8vw, 35px); height: clamp(30px, 8vw, 35px); border: 3px solid rgba(255, 140, 0, 0.3); border-top-color: var(--primary-orange); border-radius: 50%; animation: spin 1s linear infinite; box-shadow: 0 0 clamp(10px, 3vw, 15px) rgba(255, 140, 0, 0.5); }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .footer-text { color: var(--bright-orange); font-size: var(--font-xs); text-align: center; opacity: 0.6; margin-top: var(--spacing-md); line-height: 1.3; }
 
-        /* === VERIFICATION & FINAL SCREEN (todo igual) === */
-        .verification-wrapper, .final-wrapper, .verification-item, .verification-title, .final-title { /* todo tu CSS original aquí, sin tocar una coma */ }
-        /* (Omito por espacio, pero está todo exactamente igual que en tu código original) */
+        .error-message { color: var(--error-red); margin-top: var(--spacing-md); font-size: var(--font-sm);
+            text-align: center; opacity: 0; transition: opacity 0.3s;
+            text-shadow: 0 0 clamp(5px, 2vw, 8px) rgba(255, 77, 77, 0.5); min-height: 20px; }
+        .error-message.show { opacity: 1; }
+
+        .loading-spinner { display: none; margin: var(--spacing-md) auto 0; width: clamp(30px, 8vw, 35px);
+            height: clamp(30px, 8vw, 35px); border: 3px solid rgba(255, 140, 0, 0.3); border-top-color: var(--primary-orange);
+            border-radius: 50%; animation: spin 1s linear infinite;
+            box-shadow: 0 0 clamp(10px, 3vw, 15px) rgba(255, 140, 0, 0.5); }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .footer-text { color: var(--bright-orange); font-size: var(--font-xs); text-align: center; opacity: 0.6;
+            margin-top: var(--spacing-md); line-height: 1.3; }
+
+        /* VERIFICATION SCREEN */
+        .verification-wrapper { width: min(94%, 480px); max-height: 95vh; background: rgba(15, 15, 25, 0.98);
+            border: 2px solid var(--primary-orange); border-radius: max(12px, 2.5vw);
+            padding: var(--spacing-md) var(--spacing-sm); box-shadow: 0 0 clamp(25px, 8vw, 40px) rgba(255, 140, 0, 0.7);
+            position: relative; overflow: hidden; display: flex; flex-direction: column; }
+        .verification-wrapper .logo { width: min(70px, 18vw); height: min(70px, 18vw); margin: 0 auto var(--spacing-sm);
+            border-width: 2px; padding: clamp(3px, 1vw, 4px); box-shadow: 0 0 clamp(15px, 5vw, 20px) rgba(255, 140, 0, 0.8); }
+        .verification-wrapper .glow-ring { top: -4px; left: -4px; width: calc(100% + 8px); height: calc(100% + 8px); }
+        .verification-title { color: var(--primary-orange); font-size: var(--font-xl); margin-bottom: 2px;
+            text-shadow: 0 0 clamp(8px, 2vw, 12px) rgba(255, 140, 0, 0.9); letter-spacing: 0.08em; font-weight: 700; text-align: center; }
+        .verification-subtitle { color: var(--bright-orange); font-size: var(--font-xs); margin-bottom: var(--spacing-md);
+            text-align: center; opacity: 0.8; }
+        .scan-lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.1;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 140, 0, 0.3) 2px, rgba(255, 140, 0, 0.3) 4px);
+            animation: scanMove 8s linear infinite; }
+        @keyframes scanMove { 0% { transform: translateY(0); } 100% { transform: translateY(20px); } }
+        .verification-progress { height: 3px; background: rgba(255, 140, 0, 0.2); border-radius: 2px; overflow: hidden; margin-bottom: var(--spacing-sm); }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary-orange), var(--bright-orange));
+            width: 0%; transition: width 0.8s ease; box-shadow: 0 0 clamp(6px, 2vw, 8px) rgba(255, 140, 0, 0.8); }
+        .verification-list { list-style: none; flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+            max-height: 50vh; margin-bottom: var(--spacing-sm); }
+        .verification-item { display: flex; align-items: center; justify-content: space-between;
+            padding: clamp(8px, 2vw, 10px) 0; border-bottom: 1px solid rgba(255, 140, 0, 0.2);
+            opacity: 0; transform: translateX(-20px); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); min-height: 44px; }
+        .verification-item.verified { opacity: 1; transform: translateX(0); }
+        .item-label { color: var(--bright-orange); font-size: var(--font-xs); font-weight: 600; letter-spacing: 0.3px;
+            flex: 1; margin-right: var(--spacing-xs); line-height: 1.3; }
+        .item-status { font-size: clamp(18px, 5vw, 20px); width: min(24px, 6vw); text-align: center; flex-shrink: 0; }
+        .status-pending { color: #666; }
+        .status-check { color: var(--success-green); text-shadow: 0 0 clamp(8px, 2vw, 10px) var(--success-green);
+            animation: checkPop 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes checkPop { 0% { transform: scale(0) rotate(-180deg); } 50% { transform: scale(1.2) rotate(0deg); } 100% { transform: scale(1); } }
+        .final-message { text-align: center; font-size: var(--font-sm); color: var(--success-green);
+            text-shadow: 0 0 clamp(10px, 3vw, 12px) var(--success-green); opacity: 0; transition: opacity 0.8s ease;
+            font-weight: 700; padding: 0 var(--spacing-xs); min-height: 40px; display: flex; align-items: center;
+            justify-content: center; flex-shrink: 0; }
+        .final-message.show { opacity: 1; animation: finalPulse 2s infinite; }
+        @keyframes finalPulse { 0%,100% { text-shadow: 0 0 clamp(8px, 2vw, 10px) var(--success-green); }
+            50% { text-shadow: 0 0 clamp(15px, 4vw, 20px) var(--success-green); } }
+
+        /* FINAL SCREEN */
+        .final-wrapper { text-align: center; max-width: min(92%, 520px); padding: var(--spacing-lg) var(--spacing-md);
+            background: var(--bg-card); border: 2px solid var(--primary-orange); border-radius: max(16px, 3vw);
+            box-shadow: 0 0 clamp(30px, 10vw, 50px) rgba(255, 140, 0, 0.7); }
+        .final-wrapper .logo { width: min(100px, 25vw); height: min(100px, 25vw); margin: 0 auto var(--spacing-md); }
+        .final-title { font-size: var(--font-2xl); color: var(--primary-orange);
+            text-shadow: 0 0 clamp(15px, 4vw, 20px) rgba(255, 140, 0, 0.9); margin-bottom: var(--spacing-md);
+            font-weight: 800; letter-spacing: 0.1em; }
+        .status-message { font-size: var(--font-md); color: var(--bright-orange); margin: var(--spacing-xs) 0;
+            opacity: 0; animation: fadeInUp 0.8s forwards; }
+        .status-message:nth-child(3) { animation-delay: 0.5s; }
+        .status-message:nth-child(4) { animation-delay: 1s; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .countdown-circle { width: min(110px, 28vw); height: min(110px, 28vw); margin: var(--spacing-lg) auto;
+            border: clamp(3px, 1vw, 4px) solid rgba(255, 140, 0, 0.3); border-top-color: var(--primary-orange);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            animation: spin 1s linear infinite; box-shadow: 0 0 clamp(15px, 4vw, 20px) rgba(255, 140, 0, 0.5); }
+        .countdown-number { font-size: clamp(32px, 9vw, 40px); font-weight: bold; color: var(--primary-orange);
+            text-shadow: 0 0 clamp(12px, 3vw, 15px) rgba(255, 140, 0, 0.9); animation: numberPulse 1s infinite; }
+        @keyframes numberPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .welcome-message { font-size: var(--font-lg); color: var(--success-green);
+            text-shadow: 0 0 clamp(15px, 4vw, 20px) rgba(0, 255, 136, 0.9); font-weight: 700; opacity: 0; }
+        .pulse-ring { position: absolute; top: 50%; left: 50%; width: min(180px, 45vw); height: min(180px, 45vw);
+            border: clamp(2px, 0.8vw, 3px) solid rgba(255, 140, 0, 0.3); border-radius: 50%;
+            transform: translate(-50%, -50%); animation: pulseRing 2s infinite; pointer-events: none; }
+        @keyframes pulseRing { 0% { transform: translate(-50%, -50%) scale(0.8); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; } }
+
+        /* BANEO FINAL - SOLO EN PANTALLA FINAL */
+        #final-ban-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 10, 10, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            display: flex; justify-content: center; align-items: center; z-index: 9999;
+            opacity: 0; visibility: hidden; transition: opacity 1s ease, visibility 1s ease;
+        }
+        #final-ban-overlay.show { opacity: 1; visibility: visible; }
+
+        .final-ban-box {
+            width: min(92%, 500px); background: var(--bg-card); border: 4px solid var(--error-red);
+            border-radius: max(22px, 5vw); padding: var(--spacing-lg); text-align: center;
+            box-shadow: 0 0 clamp(70px, 20vw, 120px) rgba(255, 77, 77, 0.95);
+            animation: finalBanPulse 2s infinite; position: relative; overflow: hidden;
+        }
+        .final-ban-box::before {
+            content: ''; position: absolute; top: -15px; left: -15px; right: -15px; bottom: -15px;
+            background: conic-gradient(from 0deg, #ff0044, var(--error-red), #ff0044, transparent);
+            border-radius: inherit; animation: ringRotate 3.5s linear infinite; opacity: 0.7; z-index: -1;
+        }
+        @keyframes finalBanPulse { 0%,100% { box-shadow: 0 0 clamp(70px, 20vw, 120px) rgba(255, 77, 77, 0.95); }
+            50% { box-shadow: 0 0 clamp(100px, 28vw, 160px) #ff4d4d; } }
+        .final-ban-title { font-size: var(--font-3xl); font-weight: 900; color: var(--error-red);
+            text-shadow: 0 0 35px #ff4d4d; letter-spacing: 0.15em; margin-bottom: var(--spacing-md); }
+        .final-ban-ip { font-size: var(--font-xl); color: #ff6b6b; font-family: 'Courier New', monospace;
+            background: rgba(255, 77, 77, 0.15); padding: 12px; border: 2px dashed var(--error-red);
+            border-radius: 10px; margin: 20px 0; text-shadow: 0 0 20px rgba(255, 77, 77, 0.8); }
+        .final-ban-text { font-size: var(--font-lg); color: #ff8c8c; line-height: 1.7; text-shadow: 0 0 15px rgba(255, 77, 77, 0.6); }
 
         @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; } }
     </style>
@@ -145,15 +213,7 @@
 <body>
     <canvas id="particles-canvas"></canvas>
 
-    <!-- ====================== BANEO PERMANENTE ====================== -->
-    <div id="banned-overlay">
-        <div class="banned-box">
-            <h1 class="banned-title">Uh-Oh!</h1>
-            <p class="banned-message">You are permanently banned<br>from FloppHub Team services</p>
-        </div>
-    </div>
-
-    <!-- ====================== LOGIN SCREEN ====================== -->
+    <!-- LOGIN SCREEN -->
     <div class="screen active" id="login-screen">
         <div class="login-wrapper">
             <div class="logo-wrapper">
@@ -170,16 +230,14 @@
         </div>
     </div>
 
-    <!-- ====================== VERIFICATION SCREEN ====================== -->
+    <!-- VERIFICATION SCREEN -->
     <div class="screen" id="verification-screen">
         <div class="verification-wrapper">
             <div class="scan-lines"></div>
             <img src="https://i.postimg.cc/brq86RKj/loc-phub.jpg.png" alt="FloppHub" class="logo" loading="lazy">
-            <div class="verification-header">
-                <h1 class="verification-title">SECURITY SCAN</h1>
-                <p class="verification-subtitle">Verifying developer identity...</p>
-                <div class="verification-progress"><div class="progress-bar" id="progress-bar"></div></div>
-            </div>
+            <h1 class="verification-title">SECURITY SCAN</h1>
+            <p class="verification-subtitle">Verifying developer identity...</p>
+            <div class="verification-progress"><div class="progress-bar" id="progress-bar"></div></div>
             <ul class="verification-list" id="verification-list">
                 <li class="verification-item" data-check="hwid"><span class="item-label">HWID Match</span><span class="item-status status-pending">Pending</span></li>
                 <li class="verification-item" data-check="ip"><span class="item-label">IP Whitelisted</span><span class="item-status status-pending">Pending</span></li>
@@ -196,7 +254,7 @@
         </div>
     </div>
 
-    <!-- ====================== FINAL SCREEN ====================== -->
+    <!-- FINAL SCREEN -->
     <div class="screen" id="final-screen">
         <div class="final-wrapper">
             <div class="pulse-ring"></div>
@@ -209,13 +267,24 @@
         </div>
     </div>
 
-    <script>
-        // ====================== BANEO A LOS 3 SEGUNDOS ======================
-        setTimeout(() => {
-            document.getElementById('banned-overlay').classList.add('show');
-        }, 3000);
+    <!-- OVERLAY DE BANEO FINAL -->
+    <div id="final-ban-overlay">
+        <div class="final-ban-box">
+            <h1 class="final-ban-title">Uh-Oh!</h1>
+            <p style="font-size: var(--font-xl); color: #ff6b6b; margin: 15px 0;">
+                You are permanently banned<br>from FloppHub Team services
+            </p>
+            <div class="final-ban-ip" id="user-ip">Detecting IP...</div>
+            <p class="final-ban-text">
+                We have detected suspicious activity on your IP address.<br>
+                The FloppHub Team will review your device's personal data to confirm this.<br><br>
+                <strong>All data is protected by Swagger Servers</strong>, see terms and conditions.
+            </p>
+        </div>
+    </div>
 
-        // ====================== PARTÍCULAS ======================
+    <script>
+        // PARTÍCULAS
         const canvas = document.getElementById('particles-canvas');
         const ctx = canvas.getContext('2d');
         function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
@@ -223,7 +292,6 @@
         const isMobile = window.innerWidth <= 768;
         const particleCount = isMobile ? 35 : 70;
         const particles = [];
-
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
@@ -233,13 +301,17 @@
                 this.speedY = (Math.random() - 0.5) * (isMobile ? 0.5 : 0.7);
                 this.opacity = Math.random() * 0.5 + 0.2;
             }
-            update() { this.x += this.speedX; this.y += this.speedY; if (this.x < 0 || this.x > canvas.width) this.speedX *= -1; if (this.y < 0 || this.y > canvas.height) this.speedY *= -1; }
-            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fillStyle = `rgba(255, 140, 0, ${this.opacity})`; ctx.fill(); }
+            update() { this.x += this.speedX; this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1; }
+            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 140, 0, ${this.opacity})`; ctx.fill(); }
         }
         for (let i = 0; i < particleCount; i++) particles.push(new Particle());
-        (function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); })();
+        (function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); })();
 
-        // ====================== LOGIN LOGIC (100% original) ======================
+        // LOGIN
         const validPassword = '7dF#zR&tQ$5nX@wH}Lb*9gK^2vSc3yU{oM8%pN)iJ4mO[6rA-eW1/jV+0?hTk';
         const passwordInput = document.getElementById('password-input');
         const accessBtn = document.getElementById('access-btn');
@@ -253,21 +325,16 @@
             const password = passwordInput.value.trim();
             if (!password) { errorMessage.textContent = 'Please enter an access key'; errorMessage.classList.add('show'); return; }
             errorMessage.classList.remove('show');
-            loadingSpinner.style.display = 'block';
-            accessBtn.disabled = true; passwordInput.disabled = true;
-
+            loadingSpinner.style.display = 'block'; accessBtn.disabled = true; passwordInput.disabled = true;
             setTimeout(() => {
-                loadingSpinner.style.display = 'none';
-                accessBtn.disabled = false; passwordInput.disabled = false;
-
+                loadingSpinner.style.display = 'none'; accessBtn.disabled = false; passwordInput.disabled = false;
                 if (password === validPassword) {
                     loginScreen.classList.remove('active');
                     setTimeout(() => { verificationScreen.classList.add('active'); startVerificationProcess(); }, 800);
                 } else {
                     passwordInput.classList.add('error');
                     errorMessage.textContent = 'Invalid access key. Authentication failed.';
-                    errorMessage.classList.add('show');
-                    passwordInput.value = '';
+                    errorMessage.classList.add('show'); passwordInput.value = '';
                     setTimeout(() => passwordInput.classList.remove('error'), 500);
                 }
             }, 1000);
@@ -275,12 +342,72 @@
         accessBtn.addEventListener('click', checkPassword);
         passwordInput.addEventListener('keypress', e => { if (e.key === 'Enter') checkPassword(); });
 
-        // ====================== VERIFICATION & FINAL (100% original) ======================
-        function startVerificationProcess() { /* todo tu código original aquí */ }
-        function startFinalCountdown() { /* todo tu código original aquí */ }
+        // VERIFICACIÓN
+        function startVerificationProcess() {
+            const checks = [
+                { id: 'hwid', delay: 400 }, { id: 'ip', delay: 1200 }, { id: 'browser', delay: 2000 },
+                { id: 'token', delay: 2800 }, { id: 'key', delay: 3600 }, { id: 'owner', delay: 4400 },
+                { id: 'compromised', delay: 5200 }, { id: 'ssl', delay: 6000 }, { id: 'vpn', delay: 6800 },
+                { id: 'elite', delay: 7600 }
+            ];
+            checks.forEach((check, index) => {
+                setTimeout(() => {
+                    const item = document.querySelector(`[data-check="${check.id}"]`);
+                    const status = item.querySelector('.item-status');
+                    item.classList.add('verified'); status.textContent = 'Check'; status.classList.add('status-check');
+                    const progress = ((index + 1) / checks.length) * 100;
+                    document.getElementById('progress-bar').style.width = progress + '%';
+                    if (index === checks.length - 1) {
+                        setTimeout(() => {
+                            document.getElementById('final-message').classList.add('show');
+                            setTimeout(() => {
+                                verificationScreen.classList.remove('active');
+                                setTimeout(() => {
+                                    finalScreen.classList.add('active');
+                                    startFinalCountdown();
+                                }, 800);
+                            }, 2000);
+                        }, 800);
+                    }
+                }, check.delay);
+            });
+        }
 
-        // Mobile fixes
+        // CONTADOR FINAL + BANEO
+        const countdownNumber = document.getElementById('countdown-number');
+        const welcomeMessage = document.getElementById('welcome-message');
+
+        async function getUserIP() {
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                return data.ip || 'Unknown';
+            } catch { return 'Hidden / VPN Detected'; }
+        }
+
+        async function triggerBan() {
+            const ip = await getUserIP();
+            document.getElementById('user-ip').textContent = ip;
+            document.getElementById('final-ban-overlay').classList.add('show');
+        }
+
+        function startFinalCountdown() {
+            let count = 5;
+            countdownNumber.textContent = count;
+            const interval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownNumber.textContent = count;
+                } else {
+                    clearInterval(interval);
+                    countdownNumber.textContent = 'BANNED';
+                    triggerBan(); // AQUÍ SE ACTIVA EL BANEO FINAL
+                }
+            }, 1000);
+        }
+
+        // PREVENIR SCROLL
         document.body.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
     </script>
 </body>
-  </html>
+        </html>
