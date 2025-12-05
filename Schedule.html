@@ -25,7 +25,6 @@
             --hover-glow: 0 0 20px rgba(41, 182, 246, 0.4);
         }
 
-        /* Modo oscuro variables - Fondo AMOLED puro */
         body.dark-mode {
             --primary: #1e40af;
             --secondary: #3b82f6;
@@ -33,8 +32,8 @@
             --accent-light: #93c5fd;
             --text: #e0f0ff;
             --text-light: #cbd5e1;
-            --bg: #000000;  /* Negro puro AMOLED */
-            --card-bg: #0a0f1c;  /* Fondo de tarjetas muy oscuro */
+            --bg: #000000;
+            --card-bg: #0a0f1c;
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
             --hover-glow: 0 0 20px rgba(96, 165, 250, 0.4);
         }
@@ -111,19 +110,18 @@
             backdrop-filter: blur(10px);
             position: relative;
             overflow: hidden;
-            color: var(--text); /* Asegurar color de texto */
+            color: var(--text);
         }
 
-        /* Ajustes específicos para modo oscuro en contenedores activos */
         body.dark-mode .current-class-container.active {
             background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
-            color: #0a0f1c; /* Texto oscuro para mejor contraste */
+            color: #0a0f1c;
             border-color: var(--accent);
         }
 
         body.dark-mode .current-class-container.recess {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: #0a0f1c; /* Texto oscuro para mejor contraste */
+            color: #0a0f1c;
             border-color: #f5576c;
         }
 
@@ -152,12 +150,12 @@
             border-color: var(--accent);
             transform: scale(1.02);
             background: var(--accent);
-            color: white; /* Texto blanco en modo claro */
+            color: white;
         }
 
         .current-class-container.recess {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white; /* Texto blanco en modo claro */
+            color: white;
             border-color: #f5576c;
         }
 
@@ -265,11 +263,11 @@
             position: relative;
             font-weight: 500;
             transform-origin: center;
-            background: white; /* Fondo blanco sólido para todas las casillas */
+            background: white;
         }
 
         body.dark-mode td {
-            background: var(--card-bg); /* Fondo oscuro sólido para todas las casillas */
+            background: var(--card-bg);
             border-color: rgba(255,255,255,0.1);
         }
 
@@ -309,7 +307,6 @@
             color: #64748b;
         }
 
-        /* Estilo para tutoría - mismo fondo que las casillas normales */
         .tutor-cell {
             background: white;
             color: var(--text);
@@ -411,7 +408,6 @@
             margin: 10px 0;
         }
 
-        /* Botón de toggle modo oscuro */
         .theme-toggle {
             position: fixed;
             bottom: 25px;
@@ -572,7 +568,6 @@
         </div>
     </div>
 
-    <!-- Botón de toggle modo oscuro -->
     <button class="theme-toggle" id="themeToggle" title="Cambiar tema">
         <span id="themeIcon">🌙</span>
     </button>
@@ -589,7 +584,6 @@
     </div>
 
     <script>
-        // Datos del horario del grupo 1C
         const scheduleData = {
             'Lunes': [
                 { time: '07:00-07:50', code: 'HUMA A15', name: 'HUMANIDADES I', teacher: 'BRENDA YAZMIN CORONA SÁNCHEZ' },
@@ -645,21 +639,18 @@
 
         const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
 
-        // Función para convertir formato 24h a 12h con AM/PM
         function convertTo12HourFormat(time24) {
             const [hours, minutes] = time24.split(':').map(Number);
             const period = hours >= 12 ? 'PM' : 'AM';
             const hours12 = hours % 12 || 12;
-            return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+            return `\( {hours12}: \){minutes.toString().padStart(2, '0')} ${period}`;
         }
 
-        // Función para convertir rangos de tiempo
         function convertTimeRangeTo12Hour(range) {
             const [start, end] = range.split('-');
-            return `${convertTo12HourFormat(start.trim())} - ${convertTo12HourFormat(end.trim())}`;
+            return `\( {convertTo12HourFormat(start.trim())} - \){convertTo12HourFormat(end.trim())}`;
         }
 
-        // Función para extraer el número de aula del código
         function extractAula(code) {
             if (!code || code === 'RECESO' || code === 'CUDI LAB INFO') {
                 return code === 'CUDI LAB INFO' ? 'LAB INFO' : 'N/A';
@@ -668,7 +659,6 @@
             return match ? match[0] : 'N/A';
         }
 
-        // Funciones de utilidad
         function getCurrentDateTime() {
             const options = {
                 timeZone: 'America/Cancun',
@@ -802,7 +792,7 @@
             }
 
             subjectEl.textContent = currentClass.name;
-            detailsEl.textContent = `${currentClass.day} | ${convertTimeRangeTo12Hour(currentClass.time)}`;
+            detailsEl.textContent = `\( {currentClass.day} | \){convertTimeRangeTo12Hour(currentClass.time)}`;
             
             if (currentClass.code === 'RECESO') {
                 container.className = 'current-class-container recess';
@@ -830,7 +820,7 @@
             subjectEl.textContent = nextClass.name;
             
             if (nextClass.day && nextClass.time) {
-                detailsEl.textContent = `${nextClass.day} | ${convertTimeRangeTo12Hour(nextClass.time)}`;
+                detailsEl.textContent = `\( {nextClass.day} | \){convertTimeRangeTo12Hour(nextClass.time)}`;
                 iconEl.textContent = '⏭️';
             } else {
                 detailsEl.textContent = nextClass.details;
@@ -876,7 +866,7 @@
                         td.className = 'free-cell';
                     } else {
                         td.textContent = slot.name;
-                        td.className = ''; // Sin clase especial, fondo normal
+                        td.className = '';
                         td.title = `Haz clic para ver más información`;
                     }
                     
@@ -920,7 +910,6 @@
             document.getElementById('datetime').textContent = getCurrentDateTime();
         }
 
-        // Función para alternar tema
         function toggleTheme() {
             const body = document.body;
             const themeIcon = document.getElementById('themeIcon');
@@ -936,7 +925,6 @@
             }
         }
 
-        // Función para aplicar tema guardado
         function applySavedTheme() {
             const savedTheme = localStorage.getItem('darkMode');
             const themeIcon = document.getElementById('themeIcon');
@@ -951,7 +939,6 @@
         }
 
         function init() {
-            // Aplicar tema guardado al cargar
             applySavedTheme();
             
             updateDateTime();
@@ -959,13 +946,11 @@
             updateNextClass();
             createScheduleTable();
             
-            // Event listeners
             document.getElementById('closeModal').addEventListener('click', hideTeacherModal);
             document.getElementById('teacherModal').addEventListener('click', (e) => {
                 if (e.target.id === 'teacherModal') hideTeacherModal();
             });
             
-            // Botón de toggle
             document.getElementById('themeToggle').addEventListener('click', toggleTheme);
             
             setInterval(() => {
@@ -981,4 +966,4 @@
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
-</html>
+    </html>
