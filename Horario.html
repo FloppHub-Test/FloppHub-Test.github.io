@@ -690,8 +690,9 @@
 
         .ampm {
             font-size: 0.75em;
-            opacity: 0.7;
-            margin-left: 1px;
+            opacity: 0.8;
+            font-weight: 600;
+            margin-left: 2px;
         }
     </style>
 </head>
@@ -836,7 +837,8 @@
             ]
         };
 
-        // Horario oficial 2°C - Periodo 2026-A (Sistema 24h interno, se convierte a 12h para visualización)
+        // Horario oficial 2°C - Periodo 2026-A
+        // CORREGIDO: Tutor es Jesús Israel Puc Magaña
         const schedule = {
             'Lunes': [
                 { time: '07:00-07:50', subject: 'Inglés II', teacher: 'Graciela Rosalia May Polanco', room: 'A3' },
@@ -849,7 +851,7 @@
                 { time: '13:00-13:50', subject: 'Humanidades II', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4' }
             ],
             'Martes': [
-                { time: '07:00-07:50', subject: 'Tutoría', teacher: 'Responsable de Grupo', room: 'A6', type: 'tutoria' },
+                { time: '07:00-07:50', subject: 'Tutoría', teacher: 'Jesús Israel Puc Magaña', room: 'A6', type: 'tutoria' },
                 { time: '08:00-08:50', subject: 'Ciencias Sociales II', teacher: 'Jesús Israel Puc Magaña', room: 'A6' },
                 { time: '09:00-09:45', subject: 'Taller de Ciencias I', teacher: 'Teresa Beatriz Un Cen', room: 'A11' },
                 { time: '09:45-10:15', subject: 'Receso', type: 'break' },
@@ -942,7 +944,7 @@
             if (currentClass) {
                 card.className = 'status-card active';
                 nameEl.textContent = currentClass.subject;
-                // Usar formato 12 horas
+                // Usar innerHTML para renderizar el formato AM/PM correctamente
                 timeEl.innerHTML = `${dayName} • ${formatTimeRange(currentClass.time)} • Aula ${currentClass.room}`;
                 teacherEl.style.display = 'flex';
                 document.getElementById('teacherName').textContent = currentClass.teacher;
@@ -1150,7 +1152,6 @@
                         `;
                     } else {
                         const isVacante = cls.type === 'vacante';
-                        // Mostrar solo hora de inicio en la lista, o el rango completo según prefieras
                         const startTime = getSimpleTime(cls.time.split('-')[0]);
                         row.innerHTML = `
                             <div class="class-time">${startTime}</div>
@@ -1218,8 +1219,8 @@
 
         function showClassDetail(cls, day) {
             document.getElementById('modalTitle').textContent = cls.subject;
-            // Usar formato 12 horas en el modal
-            document.getElementById('modalSubtitle').textContent = `${day} • ${formatTimeRange(cls.time)}`;
+            // CORREGIDO: Usar innerHTML en lugar de textContent para que renderice el HTML del formato AM/PM
+            document.getElementById('modalSubtitle').innerHTML = `${day} • ${formatTimeRange(cls.time)}`;
             document.getElementById('modalBody').innerHTML = `
                 <div class="detail-row">
                     <div class="detail-icon">👤</div>
@@ -1279,4 +1280,4 @@
     </script>
 </body>
 </html>
-
+ 
