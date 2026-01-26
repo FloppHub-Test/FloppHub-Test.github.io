@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#0ea5e9">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>COBAQROO Calendario</title>
+    <title>2°C COBAQROO 2026-A</title>
     <style>
         * {
             margin: 0;
@@ -52,7 +52,6 @@
             overflow-x: hidden;
         }
 
-        /* Header Compacto */
         .app-header {
             background: linear-gradient(135deg, var(--sky-600), var(--sky-500));
             color: white;
@@ -76,13 +75,21 @@
             letter-spacing: -0.5px;
         }
 
+        .group-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            backdrop-filter: blur(10px);
+        }
+
         .header-date {
             font-size: 0.875rem;
             opacity: 0.95;
             font-weight: 500;
         }
 
-        /* Dashboard Cards */
         .dashboard {
             padding: 1rem;
             display: grid;
@@ -145,7 +152,6 @@
             width: fit-content;
         }
 
-        /* Quick Stats */
         .quick-stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -175,7 +181,6 @@
             font-weight: 700;
         }
 
-        /* Secciones */
         .section {
             padding: 0 1rem;
             margin-bottom: 1.5rem;
@@ -201,9 +206,11 @@
             color: var(--sky-600);
             font-weight: 700;
             text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
         }
 
-        /* Lista de Eventos */
         .event-list {
             display: flex;
             flex-direction: column;
@@ -267,7 +274,6 @@
             font-weight: 600;
         }
 
-        /* Calendario Mobile */
         .calendar-container {
             background: var(--card);
             border-radius: 24px;
@@ -384,7 +390,6 @@
             color: #991b1b;
         }
 
-        /* Horario Mobile - Vista Lista */
         .schedule-list {
             display: flex;
             flex-direction: column;
@@ -497,7 +502,6 @@
             );
         }
 
-        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -550,7 +554,6 @@
             transform: scale(0.8);
         }
 
-        /* Modal Mobile */
         .modal {
             position: fixed;
             inset: 0;
@@ -592,10 +595,28 @@
             margin: 0 auto 1.5rem;
         }
 
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: var(--sky-100);
+            color: var(--sky-600);
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
         .modal-title {
             font-size: 1.25rem;
             font-weight: 800;
             margin-bottom: 0.5rem;
+            padding-right: 2rem;
         }
 
         .modal-subtitle {
@@ -640,24 +661,6 @@
             font-size: 1rem;
         }
 
-        .close-modal {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: none;
-            background: var(--sky-100);
-            color: var(--sky-600);
-            font-size: 1.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        /* Utilidades */
         .hidden {
             display: none !important;
         }
@@ -671,16 +674,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        /* Vista actual */
         .view {
             display: none;
         }
@@ -690,28 +683,18 @@
             animation: fadeIn 0.3s ease;
         }
 
-        /* Pull to refresh indicator */
-        .ptr-indicator {
-            text-align: center;
-            padding: 1rem;
-            color: var(--text-light);
-            font-size: 0.875rem;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .ptr-indicator.show {
-            opacity: 1;
+        .vacante {
+            color: #ef4444;
+            font-weight: 700;
         }
     </style>
 </head>
 <body>
 
-    <!-- Header -->
     <header class="app-header">
         <div class="header-top">
             <div class="logo-text">🏫 COBAQROO</div>
-            <div style="font-size: 1.25rem;">📅 2026-A</div>
+            <div class="group-badge">2°C MATUTINO</div>
         </div>
         <div class="header-date" id="headerDate">Cargando...</div>
     </header>
@@ -719,9 +702,8 @@
     <!-- Vista: Inicio -->
     <div id="view-home" class="view active">
         <div class="dashboard">
-            <!-- Status Principal -->
             <div class="status-card" id="mainStatus">
-                <div class="card-badge">AHORA</div>
+                <div class="card-badge">CLASE ACTUAL</div>
                 <div class="card-title" id="currentClassName">Sin clase activa</div>
                 <div class="card-subtitle" id="currentClassTime">--</div>
                 <div class="card-meta" id="currentClassTeacher" style="display: none;">
@@ -730,7 +712,6 @@
                 </div>
             </div>
 
-            <!-- Stats -->
             <div class="quick-stats">
                 <div class="stat-pill">
                     <span class="stat-value" id="statDay">--</span>
@@ -741,27 +722,23 @@
                     <span class="stat-label">Días Rest</span>
                 </div>
                 <div class="stat-pill">
-                    <span class="stat-value" id="statNext">--</span>
-                    <span class="stat-label">Próx</span>
+                    <span class="stat-value" id="statProgress">--</span>
+                    <span class="stat-label">Avance</span>
                 </div>
             </div>
         </div>
 
-        <!-- Próximos Eventos -->
         <div class="section">
             <div class="section-header">
                 <h2 class="section-title">📌 Próximos Eventos</h2>
                 <button class="see-all" onclick="switchView('calendar')">Ver todo</button>
             </div>
-            <div class="event-list" id="upcomingEvents">
-                <!-- Generado por JS -->
-            </div>
+            <div class="event-list" id="upcomingEvents"></div>
         </div>
     </div>
 
     <!-- Vista: Calendario -->
     <div id="view-calendar" class="view">
-        <div class="ptr-indicator" id="ptrCal">↓ Suelta para actualizar</div>
         <div class="calendar-container">
             <div class="calendar-header">
                 <div class="calendar-month" id="calMonth">Febrero 2026</div>
@@ -770,23 +747,17 @@
                     <button class="cal-btn" onclick="changeMonth(1)">›</button>
                 </div>
             </div>
-            <div class="calendar-grid" id="calGrid">
-                <!-- Generado por JS -->
-            </div>
+            <div class="calendar-grid" id="calGrid"></div>
         </div>
         
         <div class="section" style="margin-top: 1.5rem;">
-            <div class="event-list" id="monthEvents">
-                <!-- Eventos del mes -->
-            </div>
+            <div class="event-list" id="monthEvents"></div>
         </div>
     </div>
 
     <!-- Vista: Horario -->
     <div id="view-schedule" class="view">
-        <div class="schedule-list" id="scheduleList">
-            <!-- Generado por JS -->
-        </div>
+        <div class="schedule-list" id="scheduleList"></div>
     </div>
 
     <!-- Bottom Navigation -->
@@ -805,21 +776,19 @@
         </button>
     </nav>
 
-    <!-- Modal Bottom Sheet -->
+    <!-- Modal -->
     <div class="modal" id="modal" onclick="closeModal(event)">
         <div class="modal-sheet" onclick="event.stopPropagation()">
             <div class="modal-handle"></div>
             <button class="close-modal" onclick="closeModal()">×</button>
             <div class="modal-title" id="modalTitle">Detalle</div>
             <div class="modal-subtitle" id="modalSubtitle">--</div>
-            <div id="modalBody">
-                <!-- Contenido dinámico -->
-            </div>
+            <div id="modalBody"></div>
         </div>
     </div>
 
     <script>
-        // Datos del calendario COBAQROO 2026-A
+        // Datos actualizados del Grupo 2°C, Semestre II, 2026-A
         const academicData = {
             start: '2026-02-03',
             end: '2026-07-03',
@@ -842,50 +811,57 @@
             ]
         };
 
-        // Horario (ejemplo grupo 1C)
+        // Horario oficial 2°C - Periodo 2026-A
         const schedule = {
             'Lunes': [
-                { time: '07:00-07:50', subject: 'Humanidades I', teacher: 'Brenda Yazmin Corona', room: 'A15' },
-                { time: '08:00-08:50', subject: 'Act. Físicas y Culturales', teacher: 'Luis Concha', room: 'A11' },
-                { time: '09:00-09:45', subject: 'Cultura Digital', teacher: 'Yeni Aguilar', room: 'Lab' },
+                { time: '07:00-07:50', subject: 'Inglés II', teacher: 'Graciela Rosalia May Polanco', room: 'A3' },
+                { time: '08:00-08:50', subject: 'Pensamiento Matemático II', teacher: 'Nancy Sánchez Puc', room: 'A10' },
+                { time: '09:00-09:45', subject: 'Educación Integral en Sexualidad y Género II', teacher: 'Yolanda Piña Flores', room: 'A12' },
                 { time: '09:45-10:15', subject: 'Receso', type: 'break' },
-                { time: '10:15-11:50', subject: 'Inglés I', teacher: 'Graciela May', room: 'A3', double: true },
-                { time: '12:00-12:50', subject: 'Pensamiento Matemático', teacher: 'Nancy Sánchez', room: 'A10' },
-                { time: '13:00-13:50', subject: 'Ciencias Sociales', teacher: 'Jesús Puc', room: 'A6' }
+                { time: '10:15-11:00', subject: 'Lengua y Comunicación II', teacher: 'Jaime Hernández Solís', room: 'A8' },
+                { time: '11:05-11:50', subject: 'Taller de Ciencias I', teacher: 'Teresa Beatriz Un Cen', room: 'A11/LM 1' },
+                { time: '12:00-12:50', subject: 'Taller de Ciencias I', teacher: 'Teresa Beatriz Un Cen', room: 'A11/LM 1' },
+                { time: '13:00-13:50', subject: 'Humanidades II', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4' }
             ],
             'Martes': [
-                { time: '07:00-07:50', subject: 'Libre', type: 'free' },
-                { time: '08:00-08:50', subject: 'La Materia', teacher: 'Teresa Un', room: 'A8' },
-                { time: '09:00-09:45', subject: 'Ciencias Sociales', teacher: 'Jesús Puc', room: 'A6' },
+                { time: '07:00-07:50', subject: 'Tutoría', teacher: 'Responsable de Grupo', room: 'A6', type: 'tutoria' },
+                { time: '08:00-08:50', subject: 'Ciencias Sociales II', teacher: 'Jesús Israel Puc Magaña', room: 'A6' },
+                { time: '09:00-09:45', subject: 'Taller de Ciencias I', teacher: 'Teresa Beatriz Un Cen', room: 'A11' },
                 { time: '09:45-10:15', subject: 'Receso', type: 'break' },
-                { time: '10:15-11:00', subject: 'Pensamiento Matemático', teacher: 'Nancy Sánchez', room: 'A10' },
-                { time: '11:05-11:50', subject: 'Lengua y Com.', teacher: 'Graciela May', room: 'A3' },
-                { time: '12:00-12:50', subject: 'Humanidades I', teacher: 'Brenda Corona', room: 'A15' },
+                { time: '10:15-11:00', subject: 'Lengua y Comunicación II', teacher: 'Jaime Hernández Solís', room: 'A8' },
+                { time: '11:05-11:50', subject: 'Actividades Físicas Deportivas y Culturales II', teacher: 'Luis Humberto Concha Caballero', room: 'A15' },
+                { time: '12:00-12:50', subject: 'Humanidades II', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4' },
                 { time: '13:00-13:50', subject: 'Libre', type: 'free' }
             ],
             'Miércoles': [
                 { time: '07:00-07:50', subject: 'Libre', type: 'free' },
-                { time: '08:00-09:45', subject: 'Lab. Investigación', teacher: 'Jesús Puc', room: 'A6', double: true },
+                { time: '08:00-08:50', subject: 'Conservación de la Energía e Interacciones con la Materia', teacher: 'Teresa Beatriz Un Cen', room: 'A11/LM 1' },
+                { time: '09:00-09:45', subject: 'Conservación de la Energía e Interacciones con la Materia', teacher: 'Teresa Beatriz Un Cen', room: 'A11/LM 1' },
                 { time: '09:45-10:15', subject: 'Receso', type: 'break' },
-                { time: '10:15-11:00', subject: 'La Materia', teacher: 'Teresa Un', room: 'A8' },
-                { time: '11:05-12:50', subject: 'Lengua y Com.', teacher: 'Graciela May', room: 'A3', double: true },
-                { time: '13:00-13:50', subject: 'Educ. Sexualidad', teacher: 'Zafiro Ángel', room: 'A5' }
+                { time: '10:15-11:00', subject: 'Educación Integral en Sexualidad y Género II', teacher: 'Yolanda Piña Flores', room: 'A12' },
+                { time: '11:05-11:50', subject: 'Humanidades II', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4' },
+                { time: '12:00-12:50', subject: 'Humanidades II', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4' },
+                { time: '13:00-13:50', subject: 'Cultura Digital II', teacher: 'Vacante', room: 'Lab Inf', type: 'vacante' }
             ],
             'Jueves': [
-                { time: '07:00-07:50', subject: 'Tutoría', teacher: 'Jesús Puc', room: 'A6' },
-                { time: '08:00-09:45', subject: 'Humanidades I', teacher: 'Brenda Corona', room: 'A15', double: true },
+                { time: '07:00-07:50', subject: 'Libre', type: 'free' },
+                { time: '08:00-08:50', subject: 'Pensamiento Matemático II', teacher: 'Nancy Sánchez Puc', room: 'A10' },
+                { time: '09:00-09:45', subject: 'Pensamiento Matemático II', teacher: 'Nancy Sánchez Puc', room: 'A10' },
                 { time: '09:45-10:15', subject: 'Receso', type: 'break' },
-                { time: '10:15-11:00', subject: 'Inglés I', teacher: 'Graciela May', room: 'A3' },
-                { time: '11:05-12:50', subject: 'Cultura Digital', teacher: 'Yeni Aguilar', room: 'Lab', double: true },
-                { time: '13:00-13:50', subject: 'Act. Físicas', teacher: 'Luis Concha', room: 'A11' }
+                { time: '10:15-11:00', subject: 'Conservación de la Energía...', teacher: 'Teresa Beatriz Un Cen', room: 'A11' },
+                { time: '11:05-11:50', subject: 'Conservación de la Energía...', teacher: 'Teresa Beatriz Un Cen', room: 'A11' },
+                { time: '12:00-12:50', subject: 'Cultura Digital II', teacher: 'Vacante', room: 'Lab Inf', type: 'vacante' },
+                { time: '13:00-13:50', subject: 'Inglés II', teacher: 'Graciela Rosalia May Polanco', room: 'A3' }
             ],
             'Viernes': [
                 { time: '07:00-07:50', subject: 'Libre', type: 'free' },
-                { time: '08:00-09:45', subject: 'Matemáticas', teacher: 'Nancy Sánchez', room: 'A10', double: true },
+                { time: '08:00-08:50', subject: 'Pensamiento Matemático II', teacher: 'Nancy Sánchez Puc', room: 'A10' },
+                { time: '09:00-09:45', subject: 'Taller de Ciencias I', teacher: 'Teresa Beatriz Un Cen', room: 'A11' },
                 { time: '09:45-10:15', subject: 'Receso', type: 'break' },
-                { time: '10:15-11:50', subject: 'La Materia', teacher: 'Teresa Un', room: 'A8', double: true },
-                { time: '12:00-12:50', subject: 'Educ. Sexualidad', teacher: 'Zafiro Ángel', room: 'A5' },
-                { time: '13:00-13:50', subject: 'Lab. Investigación', teacher: 'Jesús Puc', room: 'A6' }
+                { time: '10:15-11:00', subject: 'Inglés II', teacher: 'Graciela Rosalia May Polanco', room: 'A3' },
+                { time: '11:05-11:50', subject: 'Lengua y Comunicación II', teacher: 'Jaime Hernández Solís', room: 'A8' },
+                { time: '12:00-12:50', subject: 'Actividades Físicas Deportivas y Culturales II', teacher: 'Luis Humberto Concha Caballero', room: 'A15' },
+                { time: '13:00-13:50', subject: 'Ciencias Sociales II', teacher: 'Jesús Israel Puc Magaña', room: 'A6' }
             ]
         };
 
@@ -906,33 +882,26 @@
         function updateDashboard() {
             const now = getToday();
             const dayName = fullDays[now.getDay()];
-            const timeStr = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
             
-            // Buscar clase actual
             let currentClass = null;
-            let nextClass = null;
             
             if (schedule[dayName]) {
-                for (let i = 0; i < schedule[dayName].length; i++) {
-                    const cls = schedule[dayName][i];
+                for (let cls of schedule[dayName]) {
                     if (cls.type === 'break' || cls.type === 'free') continue;
-                    
                     const [start, end] = cls.time.split('-');
-                    const [startH, startM] = start.split(':').map(Number);
-                    const [endH, endM] = end.split(':').map(Number);
-                    const startMin = startH * 60 + startM;
-                    const endMin = endH * 60 + endM;
+                    const [sh, sm] = start.split(':').map(Number);
+                    const [eh, em] = end.split(':').map(Number);
+                    const startMin = sh * 60 + sm;
+                    const endMin = eh * 60 + em;
                     
                     if (currentMinutes >= startMin && currentMinutes < endMin) {
                         currentClass = cls;
-                    } else if (!nextClass && currentMinutes < startMin && !cls.type) {
-                        nextClass = cls;
+                        break;
                     }
                 }
             }
 
-            // Actualizar card principal
             const card = document.getElementById('mainStatus');
             const nameEl = document.getElementById('currentClassName');
             const timeEl = document.getElementById('currentClassTime');
@@ -950,10 +919,10 @@
                     card.classList.add('holiday');
                     nameEl.textContent = 'Fin de Semana';
                     timeEl.textContent = 'Descansa, recarga energías';
-                } else if (currentMinutes < 420) { // Antes de 7am
+                } else if (currentMinutes < 420) {
                     nameEl.textContent = 'Buenos días';
                     timeEl.textContent = 'Las clases comienzan a las 7:00';
-                } else if (currentMinutes > 830) { // Después de 1:50pm
+                } else if (currentMinutes > 830) {
                     nameEl.textContent = 'Jornada Finalizada';
                     timeEl.textContent = 'Nos vemos mañana';
                 } else {
@@ -969,14 +938,11 @@
             const totalDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
             const elapsed = Math.max(0, Math.ceil((now - start) / (1000 * 60 * 60 * 24)));
             const remaining = Math.max(0, totalDays - elapsed);
+            const progress = Math.min(100, Math.round((elapsed / totalDays) * 100));
             
             document.getElementById('statDay').textContent = Math.min(elapsed, totalDays);
             document.getElementById('statRemaining').textContent = remaining;
-            
-            // Próximo evento
-            const upcoming = academicData.events.find(e => new Date(e.date) >= now);
-            document.getElementById('statNext').textContent = upcoming ? 
-                Math.ceil((new Date(upcoming.date) - now) / (1000 * 60 * 60 * 24)) + 'd' : '--';
+            document.getElementById('statProgress').textContent = progress + '%';
         }
 
         function renderUpcomingEvents() {
@@ -1012,7 +978,6 @@
             return labels[type] || 'General';
         }
 
-        // Calendario
         function renderCalendar() {
             const year = currentMonth.getFullYear();
             const month = currentMonth.getMonth();
@@ -1024,7 +989,6 @@
             const grid = document.getElementById('calGrid');
             grid.innerHTML = '';
             
-            // Headers
             days.forEach(day => {
                 const div = document.createElement('div');
                 div.className = 'cal-day-header';
@@ -1032,14 +996,12 @@
                 grid.appendChild(div);
             });
             
-            // Empty cells
             for (let i = 0; i < firstDay; i++) {
                 const div = document.createElement('div');
                 div.className = 'cal-day other-month';
                 grid.appendChild(div);
             }
             
-            // Days
             const today = getToday();
             
             for (let d = 1; d <= daysInMonth; d++) {
@@ -1068,7 +1030,6 @@
                 grid.appendChild(div);
             }
             
-            // Eventos del mes
             renderMonthEvents(year, month);
         }
 
@@ -1110,14 +1071,13 @@
             renderCalendar();
         }
 
-        // Horario Lista
         function renderSchedule() {
             const container = document.getElementById('scheduleList');
             container.innerHTML = '';
             const today = getToday();
             const todayName = fullDays[today.getDay()];
             
-            Object.keys(schedule).forEach((day, index) => {
+            Object.keys(schedule).forEach((day) => {
                 const section = document.createElement('div');
                 section.className = 'day-section';
                 
@@ -1133,7 +1093,7 @@
                 const classesDiv = document.createElement('div');
                 classesDiv.className = 'day-classes';
                 
-                schedule[day].forEach((cls, idx) => {
+                schedule[day].forEach((cls) => {
                     const row = document.createElement('div');
                     const isCurrent = isToday && isCurrentClass(cls);
                     
@@ -1156,6 +1116,7 @@
                             </div>
                         `;
                     } else {
+                        const isVacante = cls.type === 'vacante';
                         row.innerHTML = `
                             <div class="class-time">${cls.time.split('-')[0]}</div>
                             <div class="class-info">
@@ -1163,11 +1124,15 @@
                                     ${cls.subject}
                                     ${isCurrent ? '<span style="font-size: 0.625rem; background: rgba(34,197,94,0.2); color: #166534; padding: 2px 6px; border-radius: 10px;">AHORA</span>' : ''}
                                 </div>
-                                <div class="class-teacher">👤 ${cls.teacher} • Aula ${cls.room}</div>
+                                <div class="class-teacher ${isVacante ? 'vacante' : ''}">
+                                    ${isVacante ? '⚠️ ' : '👤 '}${cls.teacher} • Aula ${cls.room}
+                                </div>
                             </div>
                             <div class="class-status"></div>
                         `;
-                        row.onclick = () => showClassDetail(cls, day);
+                        if (!isVacante) {
+                            row.onclick = () => showClassDetail(cls, day);
+                        }
                     }
                     
                     classesDiv.appendChild(row);
@@ -1183,14 +1148,13 @@
             const now = getToday();
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
             const [start, end] = cls.time.split('-');
-            const [startH, startM] = start.split(':').map(Number);
-            const [endH, endM] = end.split(':').map(Number);
-            const startMin = startH * 60 + startM;
-            const endMin = endH * 60 + endM;
+            const [sh, sm] = start.split(':').map(Number);
+            const [eh, em] = end.split(':').map(Number);
+            const startMin = sh * 60 + sm;
+            const endMin = eh * 60 + em;
             return currentMinutes >= startMin && currentMinutes < endMin;
         }
 
-        // Modal
         function showEventDetail(event) {
             document.getElementById('modalTitle').textContent = event.name;
             document.getElementById('modalSubtitle').textContent = new Date(event.date).toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
@@ -1252,7 +1216,6 @@
             }
         }
 
-        // Navegación
         function switchView(viewName) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1264,26 +1227,6 @@
             if (viewName === 'calendar') renderCalendar();
         }
 
-        // Pull to refresh simulado
-        let touchStartY = 0;
-        let touchEndY = 0;
-        
-        document.addEventListener('touchstart', e => {
-            touchStartY = e.changedTouches[0].screenY;
-        });
-        
-        document.addEventListener('touchend', e => {
-            touchEndY = e.changedTouches[0].screenY;
-            if (touchEndY > touchStartY + 100 && window.scrollY === 0) {
-                // Pull down detectado
-                document.getElementById('ptrCal').classList.add('show');
-                setTimeout(() => {
-                    location.reload();
-                }, 500);
-            }
-        });
-
-        // Inicialización
         function init() {
             updateHeader();
             updateDashboard();
@@ -1300,4 +1243,4 @@
     </script>
 </body>
 </html>
-
+ 
