@@ -1,5 +1,3 @@
--- Keep going, don't just change the name. 😼👍🔥
-
 local Settings = {
     WeaponType = "Melee"
 }
@@ -6480,4 +6478,5 @@ Window:Notify({
     Body = "Cat Hub loaded successfully!",
     Icon = {"rbxassetid://92677765459164"},
     Duration = 5
+
 })
