@@ -1,1 +1,1802 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="theme-color" content="#0ea5e9">
+    <title>Horario 2°C | COBAQROO Plantel Cancún Cuatro</title>
 
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        :root {
+            --sky-50: #f0f9ff;
+            --sky-100: #e0f2fe;
+            --sky-200: #bae6fd;
+            --sky-300: #7dd3fc;
+            --sky-400: #38bdf8;
+            --sky-500: #0ea5e9;
+            --sky-600: #0284c7;
+            --sky-700: #0369a1;
+            --sky-800: #075985;
+            --sky-900: #0c4a6e;
+
+            --violet-500: #8b5cf6;
+            --pink-500: #ec4899;
+            --emerald-500: #10b981;
+            --amber-500: #f59e0b;
+
+            --radius-xl: 24px;
+            --radius-lg: 18px;
+            --radius-md: 14px;
+
+            --shadow-soft: 0 12px 40px rgba(14, 165, 233, 0.10);
+            --shadow-card: 0 16px 50px rgba(2, 132, 199, 0.14);
+            --shadow-hard: 0 30px 80px rgba(0, 0, 0, 0.20);
+
+            --glow: 0 0 18px rgba(56, 189, 248, 0.35);
+            --glow-strong: 0 0 30px rgba(56, 189, 248, 0.55);
+
+            --blur: blur(16px);
+            --blur-strong: blur(22px);
+
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* 🔥 FIX GLOBAL MODO OSCURO MOVIL */
+        body.dark-mode, 
+        body.dark-mode html {
+            background-color: #020617 !important;
+        }
+
+        body.dark-mode {
+            --bg-primary: #020617;
+            --bg-secondary: rgba(15, 23, 42, 0.75);
+            --bg-card: rgba(15, 23, 42, 0.6);
+            --text-primary: #f0f9ff;
+            --text-secondary: rgba(186, 230, 253, 0.82);
+            --border-color: rgba(56, 189, 248, 0.16);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100dvh;
+            overflow-x: hidden;
+            overscroll-behavior: none;
+            transition: all 0.35s var(--ease);
+
+            color: var(--sky-900);
+
+            background:
+                radial-gradient(circle at 20% 10%, rgba(14,165,233,0.18), transparent 40%),
+                radial-gradient(circle at 80% 15%, rgba(236,72,153,0.12), transparent 45%),
+                radial-gradient(circle at 30% 90%, rgba(139,92,246,0.14), transparent 50%),
+                radial-gradient(circle at 85% 85%, rgba(16,185,129,0.12), transparent 50%),
+                linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 45%, #bae6fd 100%);
+        }
+
+        body.dark-mode {
+            background:
+                radial-gradient(circle at 20% 10%, rgba(14,165,233,0.25), transparent 40%),
+                radial-gradient(circle at 80% 15%, rgba(236,72,153,0.15), transparent 45%),
+                radial-gradient(circle at 30% 90%, rgba(139,92,246,0.16), transparent 50%),
+                radial-gradient(circle at 85% 85%, rgba(16,185,129,0.12), transparent 50%),
+                linear-gradient(135deg, #020617 0%, #0b1228 45%, #020617 100%);
+            color: var(--text-primary);
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            opacity: 0.55;
+            background-image:
+                linear-gradient(to right, rgba(14,165,233,0.08) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(14,165,233,0.08) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(circle at 50% 30%, black 0%, transparent 70%);
+        }
+
+        body.dark-mode::before {
+            opacity: 0.25;
+            background-image:
+                linear-gradient(to right, rgba(56,189,248,0.12) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(56,189,248,0.12) 1px, transparent 1px);
+        }
+
+        .bg-blobs {
+            position: fixed;
+            inset: 0;
+            z-index: -3;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .blob {
+            position: absolute;
+            width: 520px;
+            height: 520px;
+            border-radius: 999px;
+            filter: blur(90px);
+            opacity: 0.45;
+            animation: blobFloat 10s ease-in-out infinite;
+        }
+
+        .blob.one {
+            background: rgba(14, 165, 233, 0.55);
+            top: -120px;
+            left: -120px;
+        }
+
+        .blob.two {
+            background: rgba(236, 72, 153, 0.40);
+            top: 10%;
+            right: -180px;
+            animation-delay: -3s;
+        }
+
+        .blob.three {
+            background: rgba(139, 92, 246, 0.45);
+            bottom: -200px;
+            left: 15%;
+            animation-delay: -5s;
+        }
+
+        @keyframes blobFloat {
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(40px, -35px) scale(1.08); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(56,189,248,0.30); }
+            50% { box-shadow: 0 0 28px rgba(56,189,248,0.55), 0 0 60px rgba(56,189,248,0.20); }
+        }
+
+        /* HEADER */
+        .header {
+            background: rgba(255, 255, 255, 0.60);
+            backdrop-filter: var(--blur-strong);
+            border-bottom: 1px solid rgba(14, 165, 233, 0.14);
+            padding: 1.5rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.7s var(--ease);
+        }
+
+        body.dark-mode .header {
+            background: rgba(7, 11, 23, 0.65);
+            border-bottom-color: rgba(56, 189, 248, 0.16);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.9rem;
+            background: linear-gradient(135deg, rgba(14,165,233,1), rgba(139,92,246,1));
+            box-shadow: var(--shadow-card);
+        }
+
+        .brand-text h1 {
+            font-size: 1.2rem;
+            font-weight: 900;
+            line-height: 1.15;
+            letter-spacing: -0.6px;
+            background: linear-gradient(135deg, var(--sky-900), var(--sky-600), var(--violet-500));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        body.dark-mode .brand-text h1 {
+            background: linear-gradient(135deg, var(--sky-200), var(--sky-400), rgba(236,72,153,0.9));
+            -webkit-background-clip: text;
+        }
+
+        .brand-text p {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: rgba(2, 132, 199, 0.85);
+            margin-top: 0.2rem;
+        }
+
+        body.dark-mode .brand-text p {
+            color: rgba(186, 230, 253, 0.75);
+        }
+
+        .datetime-display {
+            text-align: right;
+        }
+
+        .time-display {
+            font-size: 1.55rem;
+            font-weight: 900;
+            letter-spacing: -0.8px;
+            font-variant-numeric: tabular-nums;
+            color: var(--sky-900);
+        }
+
+        body.dark-mode .time-display {
+            color: rgba(240,249,255,0.95);
+            text-shadow: 0 0 14px rgba(56,189,248,0.25);
+        }
+
+        .date-display {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.2rem;
+            color: rgba(2, 132, 199, 0.85);
+        }
+
+        body.dark-mode .date-display {
+            color: rgba(186,230,253,0.75);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2.2rem 1rem;
+        }
+
+        .holiday-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            justify-content: center;
+            font-size: 1rem;
+            padding: 1rem;
+            border-radius: 999px;
+            font-weight: 800;
+            border: 1px solid rgba(236,72,153,0.25);
+            background: rgba(255, 255, 255, 0.60);
+            backdrop-filter: var(--blur);
+            box-shadow: 0 0 18px rgba(236,72,153,0.15);
+            margin-bottom: 1.5rem;
+            animation: slideUp 0.6s var(--ease);
+        }
+
+        body.dark-mode .holiday-badge {
+            background: rgba(15,23,42,0.55);
+            border-color: rgba(236,72,153,0.25);
+            color: rgba(255,255,255,0.92);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* QUICK STATS */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .stat-item {
+            padding: 1.15rem;
+            border-radius: var(--radius-lg);
+            background: rgba(255,255,255,0.55);
+            backdrop-filter: var(--blur);
+            border: 1px solid rgba(14,165,233,0.14);
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+            animation: slideUp 0.65s var(--ease);
+        }
+
+        body.dark-mode .stat-item {
+            background: rgba(15,23,42,0.55);
+            border-color: rgba(56,189,248,0.16);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--glow), var(--shadow-card);
+        }
+
+        .stat-value {
+            font-size: 1.6rem;
+            font-weight: 950;
+            letter-spacing: -0.6px;
+            background: linear-gradient(135deg, var(--sky-600), var(--violet-500));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 0.35rem;
+            color: rgba(2,132,199,0.75);
+        }
+
+        body.dark-mode .stat-label {
+            color: rgba(186,230,253,0.72);
+        }
+
+        /* NUEVO: PANEL DE FILTROS */
+        .filters-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+
+            padding: 1.2rem;
+            border-radius: var(--radius-xl);
+
+            background: rgba(255,255,255,0.55);
+            border: 1px solid rgba(14,165,233,0.14);
+            backdrop-filter: var(--blur);
+            box-shadow: var(--shadow-soft);
+
+            animation: slideUp 0.7s var(--ease);
+        }
+
+        body.dark-mode .filters-panel {
+            background: rgba(15,23,42,0.55);
+            border-color: rgba(56,189,248,0.14);
+        }
+
+        .filters-left {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+            flex: 1;
+        }
+
+        .filters-right {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.85rem 1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(14,165,233,0.18);
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(10px);
+
+            font-size: 0.95rem;
+            font-weight: 700;
+            outline: none;
+
+            transition: box-shadow 0.25s var(--ease), transform 0.25s var(--ease);
+        }
+
+        body.dark-mode .search-input {
+            background: rgba(7,11,23,0.55);
+            border-color: rgba(56,189,248,0.18);
+            color: rgba(240,249,255,0.95);
+        }
+
+        .search-input:focus {
+            box-shadow: var(--glow);
+            transform: translateY(-1px);
+        }
+
+        .day-select {
+            padding: 0.85rem 1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(14,165,233,0.18);
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(10px);
+
+            font-size: 0.95rem;
+            font-weight: 800;
+            outline: none;
+            cursor: pointer;
+        }
+
+        body.dark-mode .day-select {
+            background: rgba(7,11,23,0.55);
+            border-color: rgba(56,189,248,0.18);
+            color: rgba(240,249,255,0.95);
+        }
+
+        .btn {
+            padding: 0.85rem 1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(14,165,233,0.18);
+            background: linear-gradient(135deg, rgba(14,165,233,1), rgba(139,92,246,1));
+            color: white;
+            font-weight: 900;
+            cursor: pointer;
+            transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow-strong);
+        }
+
+        .btn.secondary {
+            background: rgba(255,255,255,0.6);
+            color: rgba(2,132,199,0.95);
+        }
+
+        body.dark-mode .btn.secondary {
+            background: rgba(7,11,23,0.55);
+            color: rgba(240,249,255,0.9);
+        }
+
+        /* STATUS GRID */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .status-card {
+            border-radius: var(--radius-xl);
+            padding: 1.6rem;
+            position: relative;
+            overflow: hidden;
+
+            background: rgba(255,255,255,0.62);
+            backdrop-filter: var(--blur-strong);
+            border: 1px solid rgba(14,165,233,0.16);
+            box-shadow: var(--shadow-card);
+
+            transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+            animation: slideUp 0.7s var(--ease);
+        }
+
+        body.dark-mode .status-card {
+            background: rgba(15,23,42,0.60);
+            border-color: rgba(56,189,248,0.18);
+        }
+
+        .status-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--glow), var(--shadow-hard);
+        }
+
+        .status-card.active-class {
+            border: 1px solid rgba(56,189,248,0.45);
+            animation: slideUp 0.7s var(--ease), pulse-glow 2.2s infinite;
+        }
+
+        .status-card.recess {
+            border: 1px solid rgba(236,72,153,0.35);
+            background: linear-gradient(135deg, rgba(236,72,153,0.18), rgba(255,255,255,0.55));
+        }
+
+        body.dark-mode .status-card.recess {
+            background: linear-gradient(135deg, rgba(236,72,153,0.15), rgba(15,23,42,0.55));
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .card-label {
+            font-size: 0.75rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(2,132,199,0.85);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        body.dark-mode .card-label {
+            color: rgba(186,230,253,0.8);
+        }
+
+        .card-badge {
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            background: rgba(14,165,233,0.10);
+            border: 1px solid rgba(14,165,233,0.18);
+            color: rgba(2,132,199,0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        body.dark-mode .card-badge {
+            background: rgba(56,189,248,0.10);
+            border-color: rgba(56,189,248,0.18);
+            color: rgba(240,249,255,0.9);
+        }
+
+        .subject-name {
+            font-size: 1.55rem;
+            font-weight: 950;
+            letter-spacing: -0.7px;
+            margin-bottom: 0.6rem;
+        }
+
+        .subject-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: rgba(2,132,199,0.85);
+        }
+
+        body.dark-mode .subject-details {
+            color: rgba(186,230,253,0.78);
+        }
+
+        .teacher-info {
+            margin-top: 1.2rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid rgba(14,165,233,0.14);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        body.dark-mode .teacher-info {
+            border-top-color: rgba(56,189,248,0.12);
+        }
+
+        .teacher-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 950;
+            font-size: 0.9rem;
+            color: white;
+            background: linear-gradient(135deg, var(--sky-500), var(--violet-500));
+            box-shadow: var(--glow);
+        }
+
+        .teacher-name {
+            font-weight: 900;
+            font-size: 0.95rem;
+        }
+
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            border-radius: 0 4px 4px 0;
+            background: linear-gradient(90deg, var(--sky-400), var(--violet-500), var(--pink-500));
+            transition: width 1s linear;
+        }
+
+        /* NUEVO: AGENDA */
+        .agenda {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .agenda-item {
+            padding: 1rem;
+            border-radius: var(--radius-lg);
+            background: rgba(255,255,255,0.55);
+            border: 1px solid rgba(14,165,233,0.14);
+            backdrop-filter: var(--blur);
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+            cursor: pointer;
+        }
+
+        body.dark-mode .agenda-item {
+            background: rgba(15,23,42,0.55);
+            border-color: rgba(56,189,248,0.14);
+        }
+
+        .agenda-item:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow), var(--shadow-card);
+        }
+
+        .agenda-left h4 {
+            font-weight: 950;
+            margin-bottom: 0.25rem;
+        }
+
+        .agenda-left p {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: rgba(2,132,199,0.75);
+        }
+
+        body.dark-mode .agenda-left p {
+            color: rgba(186,230,253,0.7);
+        }
+
+        .agenda-time {
+            font-weight: 950;
+            font-size: 0.9rem;
+            padding: 0.55rem 0.8rem;
+            border-radius: 999px;
+            background: rgba(14,165,233,0.12);
+            border: 1px solid rgba(14,165,233,0.18);
+            color: rgba(2,132,199,0.95);
+        }
+
+        body.dark-mode .agenda-time {
+            background: rgba(56,189,248,0.12);
+            border-color: rgba(56,189,248,0.18);
+            color: rgba(240,249,255,0.9);
+        }
+
+        /* SECCIONES */
+        .section {
+            background: rgba(255,255,255,0.58);
+            backdrop-filter: var(--blur-strong);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(14,165,233,0.14);
+            box-shadow: var(--shadow-card);
+            animation: slideUp 0.85s var(--ease);
+        }
+
+        body.dark-mode .section {
+            background: rgba(15,23,42,0.58);
+            border-color: rgba(56,189,248,0.16);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.55rem;
+            font-weight: 950;
+            letter-spacing: -0.7px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .hint-text {
+            font-size: 0.9rem;
+            font-weight: 750;
+            color: rgba(2,132,199,0.80);
+        }
+
+        body.dark-mode .hint-text {
+            color: rgba(186,230,253,0.72);
+        }
+
+        /* TABLA */
+        .table-container {
+            overflow-x: auto;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(14,165,233,0.14);
+            background: rgba(255,255,255,0.40);
+            backdrop-filter: blur(12px);
+        }
+
+        body.dark-mode .table-container {
+            background: rgba(7,11,23,0.35);
+            border-color: rgba(56,189,248,0.14);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 860px;
+        }
+
+        th {
+            background: linear-gradient(135deg, rgba(2,132,199,0.95), rgba(139,92,246,0.90));
+            color: white;
+            padding: 1rem;
+            font-weight: 900;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        td {
+            padding: 1rem 0.75rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(14,165,233,0.12);
+            cursor: pointer;
+            font-weight: 750;
+        }
+
+        .time-cell {
+            background: rgba(14,165,233,0.06);
+            font-weight: 950;
+            font-size: 0.85rem;
+            white-space: pre-line;
+        }
+
+        body.dark-mode .time-cell {
+            background: rgba(56,189,248,0.08);
+            color: rgba(186,230,253,0.90);
+        }
+
+        .class-cell {
+            background: rgba(255,255,255,0.65);
+            border-radius: 14px;
+            margin: 6px;
+            border: 1px solid rgba(14,165,233,0.08);
+            box-shadow: 0 8px 25px rgba(14,165,233,0.06);
+            font-size: 0.85rem;
+            transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease);
+        }
+
+        body.dark-mode .class-cell {
+            background: rgba(15,23,42,0.60);
+            border-color: rgba(56,189,248,0.12);
+        }
+
+        .class-cell:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: var(--glow), 0 18px 40px rgba(0,0,0,0.12);
+        }
+
+        .class-cell.active {
+            background: linear-gradient(135deg, rgba(14,165,233,0.95), rgba(139,92,246,0.95));
+            color: white;
+            font-weight: 950;
+            animation: pulse-glow 2.2s infinite;
+        }
+
+        .class-cell.recess {
+            background: linear-gradient(135deg, rgba(236,72,153,0.9), rgba(139,92,246,0.9));
+            color: white;
+            font-weight: 950;
+        }
+
+        .class-cell.empty {
+            background: transparent;
+            border: 1px dashed rgba(14,165,233,0.22);
+            box-shadow: none;
+            color: rgba(2,132,199,0.6);
+            font-style: italic;
+        }
+
+        .cell-code {
+            font-size: 0.7rem;
+            opacity: 0.85;
+            margin-top: 0.3rem;
+            font-weight: 900;
+            letter-spacing: 0.03em;
+        }
+
+        /* EVENTOS */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .event-card {
+            background: rgba(255,255,255,0.55);
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            border: 1px solid rgba(14,165,233,0.14);
+            border-left: 4px solid rgba(14,165,233,0.9);
+            backdrop-filter: var(--blur);
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+            cursor: pointer;
+        }
+
+        body.dark-mode .event-card {
+            background: rgba(15,23,42,0.55);
+            border-color: rgba(56,189,248,0.14);
+        }
+
+        .event-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--glow), var(--shadow-card);
+        }
+
+        .event-date {
+            padding: 0.65rem 0.8rem;
+            border-radius: 16px;
+            text-align: center;
+            min-width: 74px;
+            font-weight: 950;
+            background: rgba(14,165,233,0.12);
+            border: 1px solid rgba(14,165,233,0.18);
+        }
+
+        /* MAESTROS */
+        .teachers-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .teacher-card {
+            background: rgba(255,255,255,0.55);
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid rgba(14,165,233,0.14);
+            backdrop-filter: var(--blur);
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+            cursor: pointer;
+        }
+
+        body.dark-mode .teacher-card {
+            background: rgba(15,23,42,0.55);
+            border-color: rgba(56,189,248,0.14);
+        }
+
+        .teacher-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--glow), var(--shadow-card);
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.25s var(--ease);
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            width: 100%;
+            max-width: 420px;
+            border-radius: 26px;
+            padding: 2rem;
+            position: relative;
+            border: 1px solid rgba(14,165,233,0.18);
+            background: rgba(255,255,255,0.72);
+            backdrop-filter: var(--blur-strong);
+            box-shadow: var(--shadow-hard);
+            transform: translateY(12px) scale(0.95);
+            transition: transform 0.28s var(--ease);
+        }
+
+        body.dark-mode .modal-content {
+            background: rgba(15,23,42,0.70);
+            border-color: rgba(56,189,248,0.18);
+            color: rgba(240,249,255,0.92);
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0px) scale(1);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            border: 1px solid rgba(14,165,233,0.18);
+            background: rgba(255,255,255,0.7);
+            color: rgba(2,132,199,0.9);
+            cursor: pointer;
+            font-size: 1.3rem;
+            font-weight: 950;
+            transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+        }
+
+        body.dark-mode .close-btn {
+            background: rgba(7,11,23,0.55);
+            color: rgba(240,249,255,0.9);
+            border-color: rgba(56,189,248,0.18);
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg) scale(1.08);
+            box-shadow: var(--glow);
+        }
+
+        /* BOTÓN TEMA */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: linear-gradient(135deg, rgba(14,165,233,1), rgba(139,92,246,1));
+            color: white;
+            font-size: 1.55rem;
+            cursor: pointer;
+            box-shadow: var(--glow-strong);
+            transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-4px) scale(1.1) rotate(10deg);
+            box-shadow: var(--glow-strong), var(--shadow-hard);
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .datetime-display {
+                text-align: center;
+            }
+
+            .theme-toggle {
+                bottom: 1.25rem;
+                right: 1.25rem;
+            }
+
+            .filters-panel {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filters-left, .filters-right {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-blobs">
+        <div class="blob one"></div>
+        <div class="blob two"></div>
+        <div class="blob three"></div>
+    </div>
+
+    <header class="header">
+        <div class="header-content">
+            <div class="brand">
+                <div class="logo-icon">📚</div>
+                <div class="brand-text">
+                    <h1>2° Semestre Grupo C</h1>
+                    <p>COBAQROO • Plantel Cancún Cuatro • Turno Matutino</p>
+                </div>
+            </div>
+
+            <div class="datetime-display">
+                <div class="time-display" id="clock">--:-- --</div>
+                <div class="date-display" id="date">Cargando...</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="holidayAlert" class="holiday-badge hidden">
+            🎉 Hoy no hay clases: <span id="holidayName"></span>
+        </div>
+
+        <div class="quick-stats">
+            <div class="stat-item">
+                <div class="stat-value" id="weekProgress">0%</div>
+                <div class="stat-label">Progreso Semana</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="totalClasses">0</div>
+                <div class="stat-label">Clases Hoy</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="timeLeft">--</div>
+                <div class="stat-label">Para Salir</div>
+            </div>
+        </div>
+
+        <!-- NUEVO PANEL -->
+        <div class="filters-panel">
+            <div class="filters-left">
+                <input class="search-input" id="searchInput" placeholder="🔍 Buscar materia o maestro..." />
+                
+                <select class="day-select" id="dayFilter">
+                    <option value="all">📅 Todos los días</option>
+                    <option value="Lunes">Lunes</option>
+                    <option value="Martes">Martes</option>
+                    <option value="Miércoles">Miércoles</option>
+                    <option value="Jueves">Jueves</option>
+                    <option value="Viernes">Viernes</option>
+                </select>
+            </div>
+
+            <div class="filters-right">
+                <button class="btn secondary" onclick="scrollToSchedule()">📋 Ver horario</button>
+                <button class="btn" onclick="scrollToToday()">⚡ Hoy</button>
+            </div>
+        </div>
+
+        <div class="status-grid">
+            <div class="status-card" id="currentCard">
+                <div class="card-header">
+                    <span class="card-label">
+                        <span style="color: rgba(56,189,248,0.9)">●</span> Clase Actual
+                    </span>
+                    <span class="card-badge" id="currentTimeBadge">--:-- - --:--</span>
+                </div>
+                <div class="subject-name" id="currentSubject">Cargando...</div>
+                <div class="subject-details">
+                    <span id="currentRoom">Aula --</span>
+                    <span id="currentDay">--</span>
+                </div>
+                <div class="teacher-info" id="currentTeacherInfo">
+                    <div class="teacher-avatar" id="currentInitials">--</div>
+                    <div class="teacher-name" id="currentTeacher">--</div>
+                </div>
+                <div class="progress-bar" id="classProgress" style="width: 0%"></div>
+            </div>
+
+            <div class="status-card" id="nextCard">
+                <div class="card-header">
+                    <span class="card-label">
+                        <span style="color: rgba(139,92,246,0.9)">●</span> Siguiente Clase
+                    </span>
+                    <span class="card-badge" id="nextTimeBadge">--:-- - --:--</span>
+                </div>
+                <div class="subject-name" id="nextSubject">--</div>
+                <div class="subject-details">
+                    <span id="nextRoom">Aula --</span>
+                    <span id="nextCountdown">En -- min</span>
+                </div>
+                <div class="teacher-info" id="nextTeacherInfo" style="display: none;">
+                    <div class="teacher-avatar" id="nextInitials">--</div>
+                    <div class="teacher-name" id="nextTeacher">--</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NUEVA AGENDA -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">🗓️ Agenda de Hoy</h2>
+                <span class="hint-text">Tus próximas clases en orden</span>
+            </div>
+            <div class="agenda" id="agendaList">
+                <div class="hint-text">Cargando agenda...</div>
+            </div>
+        </section>
+
+        <section class="section" id="scheduleSection">
+            <div class="section-header">
+                <h2 class="section-title">📋 Horario Semanal</h2>
+                <span class="hint-text">Toca una clase para ver detalles • Horario actualizado 2026-A</span>
+            </div>
+            <div class="table-container">
+                <table id="scheduleTable">
+                    <thead>
+                        <tr>
+                            <th>Hora</th>
+                            <th>Lunes</th>
+                            <th>Martes</th>
+                            <th>Miércoles</th>
+                            <th>Jueves</th>
+                            <th>Viernes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">📅 Eventos & Días Sin Clase</h2>
+            </div>
+            <div class="events-grid">
+                <div class="event-card" onclick="showEventDetail('Inicio de Semestre', '3 de Febrero de 2026', 'Inicio de clases del semestre 2026-A')">
+                    <div class="event-date">03<br>Feb</div>
+                    <div class="event-content">
+                        <h4>Inicio de Semestre 2026-A</h4>
+                        <p>Inicio oficial de clases</p>
+                    </div>
+                </div>
+
+                <div class="event-card" onclick="showEventDetail('Carnaval', '16-17 de Febrero', 'Suspensión de labores por usos y costumbres')" style="border-left-color: rgba(245,158,11,0.9);">
+                    <div class="event-date" style="background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.18); color: rgba(180,83,9,0.95);">
+                        16-17<br>Feb
+                    </div>
+                    <div class="event-content">
+                        <h4>Carnaval</h4>
+                        <p>Suspensión por usos y costumbres</p>
+                    </div>
+                </div>
+
+                <div class="event-card" onclick="showEventDetail('Vacaciones de Semana Santa', '6-17 de Abril', 'Período vacacional de primavera')" style="border-left-color: rgba(16,185,129,0.9);">
+                    <div class="event-date" style="background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.18); color: rgba(4,120,87,0.95);">
+                        06-17<br>Abr
+                    </div>
+                    <div class="event-content">
+                        <h4>Semana Santa</h4>
+                        <p>Vacaciones de primavera</p>
+                    </div>
+                </div>
+
+                <div class="event-card" onclick="showEventDetail('Fin de Clases', 'Finales de Junio', 'Término de clases del semestre A')" style="border-left-color: rgba(139,92,246,0.9);">
+                    <div class="event-date" style="background: rgba(139,92,246,0.12); border-color: rgba(139,92,246,0.18); color: rgba(109,40,217,0.95);">
+                        Jun<br>2026
+                    </div>
+                    <div class="event-content">
+                        <h4>Término de Clases</h4>
+                        <p>Fin del semestre 2026-A</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">👨‍🏫 Maestros del Grupo</h2>
+            </div>
+            <div class="teachers-list" id="teachersList"></div>
+        </section>
+    </div>
+
+    <div class="modal" id="infoModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <div class="modal-header" style="text-align:center; margin-bottom: 1.5rem;">
+                <div style="width: 64px; height: 64px; border-radius: 999px; background: linear-gradient(135deg, rgba(14,165,233,1), rgba(139,92,246,1)); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem; font-size: 1.8rem; box-shadow: 0 0 20px rgba(56,189,248,0.25);" id="modalIcon">📖</div>
+                <h3 id="modalTitle" style="font-size: 1.25rem; font-weight: 950;">Detalle</h3>
+            </div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Cambiar tema">🌙</button>
+
+    <script>
+        const scheduleData = {
+            'Lunes': [
+                { time: '07:00-07:50', subject: 'Inglés II', code: 'INGLÉS II A3', teacher: 'Graciela Rosalía May Polanco', room: 'A3', type: 'class' },
+                { time: '08:00-08:50', subject: 'Pensamiento Matemático II', code: 'PEMA A10', teacher: 'Nancy Sánchez Puc', room: 'A10', type: 'class' },
+                { time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
+                { time: '09:10-09:50', subject: 'EDIESYG II', code: 'EDIESYG A12', teacher: 'Yolanda Piña Flores', room: 'A12', type: 'class' },
+                { time: '10:00-10:50', subject: 'Lengua y Comunicación II', code: 'LEYCO II A8', teacher: 'Jaime Hernández Solís', room: 'A8', type: 'class' },
+                { time: '11:00-11:50', subject: 'Taller de Ciencias I', code: 'TC A11/LM 1', teacher: 'Teresa Beatriz Un Cen', room: 'A11/LM 1', type: 'class' },
+                { time: '12:00-12:50', subject: 'Taller de Ciencias I', code: 'TC A11/LM 1', teacher: 'Teresa Beatriz Un Cen', room: 'A11/LM 1', type: 'class' },
+                { time: '13:00-13:50', subject: 'Humanidades II', code: 'HUMA A4', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4', type: 'class' }
+            ],
+            'Martes': [
+                { time: '07:00-07:50', subject: 'Libre', code: null, teacher: null, room: null, type: 'free' },
+                { time: '08:00-08:50', subject: 'Ciencias Sociales II', code: 'CISO A6', teacher: 'Jesús Israel Puc Magaña', room: 'A6', type: 'class' },
+                { time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
+                { time: '09:10-09:50', subject: 'Taller de Ciencias I', code: 'TC A11', teacher: 'Teresa Beatriz Un Cen', room: 'A11', type: 'class' },
+                { time: '10:00-10:50', subject: 'Lengua y Comunicación II', code: 'LEYCO II A8', teacher: 'Jaime Hernández Solís', room: 'A8', type: 'class' },
+                { time: '11:00-11:50', subject: 'Actividades Físicas II', code: 'AFD A15', teacher: 'Luis Humberto Concha Caballero', room: 'A15', type: 'class' },
+                { time: '12:00-12:50', subject: 'Humanidades II', code: 'HUMA A4', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4', type: 'class' },
+                { time: '13:00-13:50', subject: 'Libre', code: null, teacher: null, room: null, type: 'free' }
+            ],
+            'Miércoles': [
+                { time: '07:00-07:50', subject: 'Tutoría', code: 'TUTOR A6', teacher: 'Jesús Israel Puc Magaña', room: 'A6', type: 'tutor' },
+                { time: '08:00-08:50', subject: 'CEIM', code: 'CEIM A11/LM 1', teacher: 'Teresa Beatriz Un Cen', room: 'A11/LM 1', type: 'class' },
+                { time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
+                { time: '09:10-09:50', subject: 'CEIM', code: 'CEIM A11/LM 1', teacher: 'Teresa Beatriz Un Cen', room: 'A11/LM 1', type: 'class' },
+                { time: '10:00-10:50', subject: 'EDIESYG II', code: 'EDIESYG A12', teacher: 'Yolanda Piña Flores', room: 'A12', type: 'class' },
+                { time: '11:00-11:50', subject: 'Humanidades II', code: 'HUMA A4', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4', type: 'class' },
+                { time: '12:00-12:50', subject: 'Humanidades II', code: 'HUMA A4', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4', type: 'class' },
+                { time: '13:00-13:50', subject: 'Cultura Digital II', code: 'CUDI LAB INF', teacher: 'Yeni del Rocío Aguilar Cen', room: 'Lab Informática', type: 'class' }
+            ],
+            'Jueves': [
+                { time: '07:00-07:50', subject: 'Libre', code: null, teacher: null, room: null, type: 'free' },
+                { time: '08:00-08:50', subject: 'Pensamiento Matemático II', code: 'PEMA A10', teacher: 'Nancy Sánchez Puc', room: 'A10', type: 'class' },
+                { time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
+                { time: '09:10-09:50', subject: 'Pensamiento Matemático II', code: 'PEMA A10', teacher: 'Nancy Sánchez Puc', room: 'A10', type: 'class' },
+                { time: '10:00-10:50', subject: 'CEIM', code: 'CEIM A11', teacher: 'Teresa Beatriz Un Cen', room: 'A11', type: 'class' },
+                { time: '11:00-11:50', subject: 'CEIM', code: 'CEIM A11', teacher: 'Teresa Beatriz Un Cen', room: 'A11', type: 'class' },
+                { time: '12:00-12:50', subject: 'Cultura Digital II', code: 'CUDI LAB INF', teacher: 'Yeni del Rocío Aguilar Cen', room: 'Lab Informática', type: 'class' },
+                { time: '13:00-13:50', subject: 'Inglés II', code: 'INGLÉS II A3', teacher: 'Graciela Rosalía May Polanco', room: 'A3', type: 'class' }
+            ],
+            'Viernes': [
+                { time: '07:00-07:50', subject: 'Libre', code: null, teacher: null, room: null, type: 'free' },
+                { time: '08:00-08:50', subject: 'Pensamiento Matemático II', code: 'PEMA A10', teacher: 'Nancy Sánchez Puc', room: 'A10', type: 'class' },
+                { time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
+                { time: '09:10-09:50', subject: 'Taller de Ciencias I', code: 'TC A11', teacher: 'Teresa Beatriz Un Cen', room: 'A11', type: 'class' },
+                { time: '10:00-10:50', subject: 'Inglés II', code: 'INGLÉS II A3', teacher: 'Graciela Rosalía May Polanco', room: 'A3', type: 'class' },
+                { time: '11:00-11:50', subject: 'Lengua y Comunicación II', code: 'LEYCO II A8', teacher: 'Jaime Hernández Solís', room: 'A8', type: 'class' },
+                { time: '12:00-12:50', subject: 'Actividades Físicas II', code: 'AFD A15', teacher: 'Luis Humberto Concha Caballero', room: 'A15', type: 'class' },
+                { time: '13:00-13:50', subject: 'Ciencias Sociales II', code: 'CISO A6', teacher: 'Jesús Israel Puc Magaña', room: 'A6', type: 'class' }
+            ]
+        };
+
+        const teachers = [
+            { name: 'Teresa Beatriz Un Cen', subjects: ['Taller de Ciencias I', 'CEIM'], initials: 'TB' },
+            { name: 'Graciela Rosalía May Polanco', subjects: ['Inglés II', 'Lengua y Comunicación II'], initials: 'GR' },
+            { name: 'Yolanda Piña Flores', subjects: ['EDIESYG II'], initials: 'YP' },
+            { name: 'Yeni del Rocío Aguilar Cen', subjects: ['Cultura Digital II'], initials: 'YA' },
+            { name: 'Nancy Sánchez Puc', subjects: ['Pensamiento Matemático II'], initials: 'NS' },
+            { name: 'Brenda Yazmin Corona Sánchez', subjects: ['Humanidades II'], initials: 'BY' },
+            { name: 'Jesús Israel Puc Magaña', subjects: ['Ciencias Sociales II', 'Tutoría'], initials: 'JI' },
+            { name: 'Jaime Hernández Solís', subjects: ['Lengua y Comunicación II'], initials: 'JH' },
+            { name: 'Luis Humberto Concha Caballero', subjects: ['Actividades Físicas II'], initials: 'LH' }
+        ];
+
+        const holidays = [
+            { date: '2026-02-16', name: 'Carnaval' },
+            { date: '2026-02-17', name: 'Carnaval' },
+            { date: '2026-03-21', name: 'Natalicio de Benito Juárez' },
+            { date: '2026-04-06', name: 'Inicio Vacaciones Semana Santa' },
+            { date: '2026-04-17', name: 'Fin Vacaciones Semana Santa' },
+            { date: '2026-05-01', name: 'Día del Trabajo' },
+            { date: '2026-05-05', name: 'Batalla de Puebla' }
+        ];
+
+        const timeZone = 'America/Cancun';
+        const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+
+        function convertTo12Hour(time24) {
+            const [hours, minutes] = time24.split(':').map(Number);
+            const period = hours >= 12 ? 'PM' : 'AM';
+            const hours12 = hours % 12 || 12;
+            return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+        }
+
+        function parseTime(timeStr) {
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            return hours * 60 + minutes;
+        }
+
+        function getNow() {
+            return new Date(new Date().toLocaleString("en-US", { timeZone }));
+        }
+
+        function getCurrentTime() {
+            const now = getNow();
+            return now.getHours() * 60 + now.getMinutes();
+        }
+
+        function getTodayName() {
+            const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            return dayNames[getNow().getDay()];
+        }
+
+        function isHoliday() {
+            const today = new Date().toISOString().split('T')[0];
+            return holidays.find(h => h.date === today);
+        }
+
+        function getCurrentClass() {
+            const today = getTodayName();
+            if (!scheduleData[today]) return null;
+
+            const now = getCurrentTime();
+            return scheduleData[today].find(slot => {
+                const [start, end] = slot.time.split('-').map(t => parseTime(t.trim()));
+                return now >= start && now < end;
+            });
+        }
+
+        function getNextClass() {
+            const today = getTodayName();
+            const now = getCurrentTime();
+
+            if (!scheduleData[today]) return null;
+
+            for (let slot of scheduleData[today]) {
+                const [start] = slot.time.split('-').map(t => parseTime(t.trim()));
+                if (start > now && slot.type !== 'recess') {
+                    return slot;
+                }
+            }
+
+            return null;
+        }
+
+        function updateClock() {
+            const now = getNow();
+
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone };
+            document.getElementById('date').textContent = now.toLocaleDateString('es-MX', options);
+
+            const holiday = isHoliday();
+            const holidayAlert = document.getElementById('holidayAlert');
+
+            if (holiday) {
+                holidayAlert.classList.remove('hidden');
+                document.getElementById('holidayName').textContent = holiday.name;
+            } else {
+                holidayAlert.classList.add('hidden');
+            }
+
+            updateStatus();
+            renderAgenda();
+        }
+
+        function updateStatus() {
+            const current = getCurrentClass();
+            const next = getNextClass();
+            const today = getTodayName();
+            const now = getCurrentTime();
+
+            const currentCard = document.getElementById('currentCard');
+
+            if (current) {
+                document.getElementById('currentSubject').textContent = current.subject;
+                document.getElementById('currentTimeBadge').textContent = current.time.split('-').map(t => convertTo12Hour(t.trim())).join(' - ');
+                document.getElementById('currentRoom').textContent = current.room ? `Aula ${current.room}` : '';
+                document.getElementById('currentDay').textContent = today;
+
+                if (current.teacher) {
+                    document.getElementById('currentTeacher').textContent = current.teacher;
+                    document.getElementById('currentInitials').textContent = current.teacher.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                    document.getElementById('currentTeacherInfo').style.display = 'flex';
+                } else {
+                    document.getElementById('currentTeacherInfo').style.display = 'none';
+                }
+
+                const [start, end] = current.time.split('-').map(t => parseTime(t.trim()));
+                const total = end - start;
+                const elapsed = now - start;
+                const progress = Math.min(100, Math.max(0, (elapsed / total) * 100));
+                document.getElementById('classProgress').style.width = `${progress}%`;
+
+                currentCard.className = 'status-card ' + (current.type === 'recess' ? 'recess' : 'active-class');
+            } else {
+                document.getElementById('currentSubject').textContent = 'No hay clase en este momento';
+                document.getElementById('currentTimeBadge').textContent = '--:--';
+                document.getElementById('currentRoom').textContent = '';
+                document.getElementById('currentDay').textContent = '';
+                document.getElementById('currentTeacherInfo').style.display = 'none';
+                document.getElementById('classProgress').style.width = '0%';
+                currentCard.className = 'status-card';
+            }
+
+            if (next) {
+                document.getElementById('nextSubject').textContent = next.subject;
+                document.getElementById('nextTimeBadge').textContent = next.time.split('-').map(t => convertTo12Hour(t.trim())).join(' - ');
+                document.getElementById('nextRoom').textContent = next.room ? `Aula ${next.room}` : '';
+
+                const [start] = next.time.split('-').map(t => parseTime(t.trim()));
+                const diff = start - now;
+
+                document.getElementById('nextCountdown').textContent = diff > 0 ? `En ${diff} min` : 'Próxima clase';
+
+                if (next.teacher) {
+                    document.getElementById('nextTeacher').textContent = next.teacher;
+                    document.getElementById('nextInitials').textContent = next.teacher.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                    document.getElementById('nextTeacherInfo').style.display = 'flex';
+                } else {
+                    document.getElementById('nextTeacherInfo').style.display = 'none';
+                }
+            } else {
+                document.getElementById('nextSubject').textContent = 'Fin de la jornada';
+                document.getElementById('nextTimeBadge').textContent = '--:--';
+                document.getElementById('nextRoom').textContent = '';
+                document.getElementById('nextCountdown').textContent = '¡Buen fin de semana!';
+                document.getElementById('nextTeacherInfo').style.display = 'none';
+            }
+
+            if (scheduleData[today]) {
+                const classesToday = scheduleData[today].filter(s => s.type === 'class').length;
+                document.getElementById('totalClasses').textContent = classesToday;
+
+                const lastClass = [...scheduleData[today]].reverse().find(s => s.type === 'class');
+                if (lastClass && now < parseTime(lastClass.time.split('-')[1].trim())) {
+                    const endTime = parseTime(lastClass.time.split('-')[1].trim());
+                    const diff = endTime - now;
+                    const hours = Math.floor(diff / 60);
+                    const mins = diff % 60;
+                    document.getElementById('timeLeft').textContent = `${hours}h ${mins}m`;
+                } else {
+                    document.getElementById('timeLeft').textContent = '--';
+                }
+            } else {
+                document.getElementById('totalClasses').textContent = '0';
+                document.getElementById('timeLeft').textContent = '--';
+            }
+
+            const currentDayIndex = days.indexOf(today);
+            const progress = currentDayIndex >= 0 ? ((currentDayIndex) / 5) * 100 : 0;
+            document.getElementById('weekProgress').textContent = Math.round(progress) + '%';
+        }
+
+        function renderAgenda() {
+            const container = document.getElementById("agendaList");
+            const today = getTodayName();
+
+            if (!scheduleData[today]) {
+                container.innerHTML = `<div class="hint-text">Hoy no hay clases 😎</div>`;
+                return;
+            }
+
+            const now = getCurrentTime();
+            const upcoming = scheduleData[today].filter(slot => {
+                const [start] = slot.time.split("-").map(t => parseTime(t.trim()));
+                return start >= now && slot.type !== "free";
+            });
+
+            if (upcoming.length === 0) {
+                container.innerHTML = `<div class="hint-text">No quedan más clases hoy 🔥</div>`;
+                return;
+            }
+
+            container.innerHTML = "";
+            upcoming.slice(0, 5).forEach(slot => {
+                const div = document.createElement("div");
+                div.className = "agenda-item";
+
+                div.innerHTML = `
+                    <div class="agenda-left">
+                        <h4>${slot.subject}</h4>
+                        <p>${slot.teacher ? slot.teacher : "Sin docente"} • ${slot.room ? slot.room : "Sin aula"}</p>
+                    </div>
+                    <div class="agenda-time">
+                        ${slot.time.split("-")[0].trim()}
+                    </div>
+                `;
+
+                div.onclick = () => showClassDetail(slot, today);
+                container.appendChild(div);
+            });
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            const timeSlots = Object.values(scheduleData)[0].map(s => s.time);
+
+            timeSlots.forEach((time, idx) => {
+                const tr = document.createElement('tr');
+
+                const timeTh = document.createElement('th');
+                timeTh.className = 'time-cell';
+                timeTh.textContent = time.split('-').map(t => convertTo12Hour(t.trim())).join('\n');
+                tr.appendChild(timeTh);
+
+                days.forEach(day => {
+                    const td = document.createElement('td');
+                    const slot = scheduleData[day][idx];
+
+                    td.className = 'class-cell';
+                    if (slot.type === 'recess') td.classList.add('recess');
+                    if (slot.type === 'free') td.classList.add('empty');
+
+                    td.innerHTML = `
+                        <div style="font-weight: 900;">${slot.subject}</div>
+                        ${slot.code && slot.type !== 'recess' ? `<div class="cell-code">${slot.code}</div>` : ''}
+                    `;
+
+                    td.onclick = () => {
+                        if (slot.type === 'class' || slot.type === 'tutor') showClassDetail(slot, day);
+                    };
+
+                    tr.appendChild(td);
+                });
+
+                tbody.appendChild(tr);
+            });
+
+            highlightCurrentClass();
+        }
+
+        function highlightCurrentClass() {
+            const current = getCurrentClass();
+            if (!current) return;
+
+            const today = getTodayName();
+            const dayIndex = days.indexOf(today);
+            if (dayIndex === -1) return;
+
+            const rows = document.querySelectorAll('#tableBody tr');
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                if (cells[dayIndex] && cells[dayIndex].textContent.includes(current.subject)) {
+                    cells[dayIndex].classList.add('active');
+                }
+            });
+        }
+
+        function renderTeachers() {
+            const container = document.getElementById('teachersList');
+            container.innerHTML = "";
+
+            teachers.forEach(teacher => {
+                const div = document.createElement('div');
+                div.className = 'teacher-card';
+                div.innerHTML = `
+                    <div class="teacher-avatar">${teacher.initials}</div>
+                    <div>
+                        <div style="font-weight: 950; margin-bottom: 0.25rem;">${teacher.name}</div>
+                        <div style="font-size: 0.82rem; font-weight: 700; opacity: 0.8;">${teacher.subjects.join(', ')}</div>
+                    </div>
+                `;
+                div.onclick = () => showTeacherDetail(teacher);
+                container.appendChild(div);
+            });
+        }
+
+        function showClassDetail(slot, day) {
+            const modal = document.getElementById('infoModal');
+            document.getElementById('modalTitle').textContent = slot.subject;
+            document.getElementById('modalIcon').textContent = slot.type === 'tutor' ? '👨‍🏫' : '📚';
+
+            document.getElementById('modalBody').innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: 950; margin-bottom: 0.5rem;
+                        background: linear-gradient(135deg, rgba(14,165,233,1), rgba(139,92,246,1));
+                        -webkit-background-clip:text;
+                        -webkit-text-fill-color:transparent;">
+                        ${slot.code || 'N/A'}
+                    </div>
+
+                    <div style="font-weight: 900; opacity: 0.8; margin-bottom: 1rem;">
+                        ${day} • ${slot.time.split('-').map(t => convertTo12Hour(t.trim())).join(' - ')}
+                    </div>
+
+                    ${slot.teacher ? `
+                        <div style="padding: 1rem; border-radius: 16px; margin: 1rem 0;
+                            background: rgba(14,165,233,0.06);
+                            border: 1px solid rgba(14,165,233,0.12);">
+                            <div style="font-size: 0.75rem; font-weight: 900; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.25rem;">
+                                Docente
+                            </div>
+                            <div style="font-weight: 950;">${slot.teacher}</div>
+                        </div>
+                    ` : ''}
+
+                    ${slot.room ? `
+                        <div style="padding: 1rem; border-radius: 16px;
+                            background: rgba(139,92,246,0.06);
+                            border: 1px solid rgba(139,92,246,0.12);">
+                            <div style="font-size: 0.75rem; font-weight: 900; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.25rem;">
+                                Ubicación
+                            </div>
+                            <div style="font-weight: 950;">${slot.room}</div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            modal.classList.add('show');
+        }
+
+        function showTeacherDetail(teacher) {
+            const modal = document.getElementById('infoModal');
+            document.getElementById('modalTitle').textContent = teacher.name;
+            document.getElementById('modalIcon').textContent = '👨‍🏫';
+
+            document.getElementById('modalBody').innerHTML = `
+                <div style="text-align: center;">
+                    <div style="background: linear-gradient(135deg, rgba(14,165,233,1), rgba(139,92,246,1));
+                        color: white;
+                        width: 86px;
+                        height: 86px;
+                        border-radius: 999px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin: 0 auto 1rem;
+                        font-size: 1.8rem;
+                        font-weight: 950;
+                        box-shadow: 0 0 24px rgba(56,189,248,0.25);">
+                        ${teacher.initials}
+                    </div>
+
+                    <div style="font-weight: 900; opacity: 0.8; margin-bottom: 1rem;">
+                        Materias que imparte:
+                    </div>
+
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center;">
+                        ${teacher.subjects.map(s => `
+                            <span style="
+                                background: rgba(14,165,233,0.10);
+                                border: 1px solid rgba(14,165,233,0.14);
+                                padding: 0.55rem 1rem;
+                                border-radius: 999px;
+                                font-size: 0.9rem;
+                                font-weight: 900;">
+                                ${s}
+                            </span>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            modal.classList.add('show');
+        }
+
+        function showEventDetail(title, date, desc) {
+            const modal = document.getElementById('infoModal');
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalIcon').textContent = '📅';
+
+            document.getElementById('modalBody').innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 1.15rem; font-weight: 950; margin-bottom: 0.5rem;">
+                        ${date}
+                    </div>
+                    <p style="font-weight: 700; opacity: 0.8; line-height: 1.6;">
+                        ${desc}
+                    </p>
+                </div>
+            `;
+
+            modal.classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('infoModal').classList.remove('show');
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            document.querySelector('.theme-toggle').textContent = isDark ? '☀️' : '🌙';
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.querySelector('.theme-toggle').textContent = '☀️';
+            }
+        }
+
+        function scrollToSchedule() {
+            document.getElementById("scheduleSection").scrollIntoView({ behavior: "smooth" });
+        }
+
+        function scrollToToday() {
+            const today = getTodayName();
+            if (!days.includes(today)) {
+                scrollToSchedule();
+                return;
+            }
+
+            document.getElementById("dayFilter").value = today;
+            applyFilters();
+            scrollToSchedule();
+        }
+
+        function applyFilters() {
+            const query = document.getElementById("searchInput").value.toLowerCase().trim();
+            const dayFilter = document.getElementById("dayFilter").value;
+
+            const headers = document.querySelectorAll("#scheduleTable thead th");
+            const rows = document.querySelectorAll("#tableBody tr");
+
+            headers.forEach((th, index) => {
+                if (index === 0) return;
+                const dayName = th.textContent.trim();
+
+                if (dayFilter === "all") {
+                    th.style.display = "";
+                } else {
+                    th.style.display = (dayName === dayFilter) ? "" : "none";
+                }
+            });
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll("td");
+                cells.forEach((cell, index) => {
+                    const dayName = days[index];
+                    const text = cell.textContent.toLowerCase();
+
+                    let matchesQuery = query === "" || text.includes(query);
+                    let matchesDay = dayFilter === "all" || dayName === dayFilter;
+
+                    cell.style.display = (matchesQuery && matchesDay) ? "" : "none";
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            renderTable();
+            renderTeachers();
+            updateClock();
+            setInterval(updateClock, 1000);
+
+            document.getElementById('infoModal').addEventListener('click', (e) => {
+                if (e.target.id === 'infoModal') closeModal();
+            });
+
+            document.getElementById("searchInput").addEventListener("input", applyFilters);
+            document.getElementById("dayFilter").addEventListener("change", applyFilters);
+        });
+    </script>
+</body>
+  </html>
