@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Salud Joven - Revista Digital</title>
     <meta name="description" content="Revista digital sobre salud sexual y reproductiva para adolescentes.">
+    <meta name="keywords" content="salud, joven, educación sexual, ITS, métodos anticonceptivos, PrEP, PEP, colegio de bachilleres, cancún">
+    <meta name="author" content="Colegio de Bachilleres Plantel Cancún 4 - 2C">
+    <meta property="og:title" content="Salud Joven - Revista Digital">
+    <meta property="og:description" content="Información clara, precisa y confidencial sobre salud sexual y reproductiva para adolescentes.">
+    <meta property="og:image" content="https://scontent.fcjs3-1.fna.fbcdn.net/v/t39.30808-6/641601260_1539721988162602_3369359441266067872_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=13d280&_nc_ohc=hFJTNdgd9jwQ7kNvwETpejj&_nc_oc=AdqnN8jdgl0ro6fREw7muDuLC6MKcjQSaSPSxkdGey_TDp9lYjuNDELAdNug6ZkFQUZKe8XFPRWnYcZ6MgdjszOX&_nc_zt=23&_nc_ht=scontent.fcjs3-1.fna&_nc_gid=FN61KSA26BeiMVtD4Rw5wA&_nc_ss=7a30f&oh=00_AfwXwQiLr8kgRFItCdWcS475YWU6BOkzj-mFKWl-FcCIcQ&oe=69C38525">
+    <meta property="og:url" content="https://juventudactiva.edu.mx">
+    <meta property="og:type" content="website">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,6 +42,11 @@
                 --glass-bg: rgba(28, 28, 30, 0.65);
                 --glass-border: rgba(255, 255, 255, 0.1);
             }
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px;
         }
 
         * {
@@ -221,7 +233,7 @@
             gap: 32px;
         }
 
-        @media (max-width: 800px) {
+        @media (max-width: 992px) {
             .grid-2 {
                 grid-template-columns: 1fr;
             }
@@ -387,6 +399,7 @@
         <a href="#prep">PrEP & PEP</a>
         <a href="#derechos">Derechos</a>
         <a href="#repaso">Repaso</a>
+        <a href="#quiz">Quiz</a>
     </nav>
 
     <div class="bg-glow glow-1"></div>
@@ -443,14 +456,15 @@
                             <span style="font-size: 18px; display: block; margin-bottom: 12px;">Centro de Salud Urbano
                                 No. 15 | Av. Miguel Hidalgo (Ruta 5),
                                 Supermanzana 103</span>
-                            <a href="https://www.google.com/maps/dir/Colegio+de+Bachilleres+Plantel+Canc%C3%BAn+4,+Av.+Chetumal+SM+260,+Fraccionamiento+Prado+Norte,+77519+Canc%C3%BAn,+Q.R./CENTRO+DE+SALUD+URBANO+NO.+15+CANCUN,+Av.+Miguel+Hidalgo+Supermanzana+103,+Regi%C3%B3n+103,+Benito+Ju%C3%A1rez,+77539+Canc%C3%BAn,+Q.R./@21.1542567,-86.9182889,15z/data=!3m1!4b1!4m13!4m12!1m5!1m1!1s0x8f4dd49fdf0a0655:0x6acdd95e5f7ff2e1!2m2!1d-86.9230878!2d21.1605808!1m5!1m1!1s0x8f4c2b4fe2ab6819:0xa2c0351f60ebdfb!2m2!1d-86.8929019!2d21.1488107?entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D"
-                                target="_blank" rel="noopener noreferrer"
-                                style="display: inline-flex; align-items: center; background: #0072FF; color: #fff; padding: 10px 18px; border-radius: 40px; text-decoration: none; font-size: 14px; font-weight: 600; transition: transform 0.2s; box-shadow: 0 4px 12px rgba(0, 114, 255, 0.3);">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSERw7lDAOisH-4HemKHKjHum8lzL-m1-Mo5A&s"
-                                    alt="Google Maps"
-                                    style="height: 20px; width: 20px; margin-right: 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.5);">
-                                Ver en Google Maps
-                            </a>
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1860.8443586029141!2d-86.89427670731427!3d21.1454530869188!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f4c2b4fe2ab6819%3A0xa2c0351f60ebdfb!2sCENTRO%20DE%20SALUD%20URBANO%20NO.%2015%20CANCUN!5e0!3m2!1sen!2smx!4v1700000000000!5m2!1sen!2smx" 
+                                width="100%" 
+                                height="220" 
+                                style="border:0; border-radius: 16px; margin-top: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
                         </div>
                         <div style="margin-bottom: 20px;">
                             <strong
@@ -660,14 +674,74 @@
 
     <section id="repaso" style="padding: 60px 0;">
         <div class="container text-center reveal">
-            <div class="glass-card" style="max-width: 900px; margin: 0 auto; background: rgba(90, 200, 250, 0.05); border: 1px solid rgba(90, 200, 250, 0.2);">
+            <div class="glass-card"
+                style="max-width: 900px; margin: 0 auto; background: rgba(90, 200, 250, 0.05); border: 1px solid rgba(90, 200, 250, 0.2);">
                 <h2 style="font-size: 2.5rem;">¿Aún tienes <span class="text-gradient-2">dudas?</span></h2>
                 <p style="margin-bottom: 32px; font-size: 1.1rem;">
-                    Si sientes que no has terminado de entender algún tema, no te preocupes. Hemos preparado este material de repaso para ti. Puedes ver el video desde su enlace.
+                    Si sientes que no has terminado de entender algún tema, no te preocupes. Hemos preparado este
+                    material de repaso para ti.
                 </p>
-                <a href="https://drive.google.com/file/d/1T28D56vaGDMx73TzSYBcc6PE_6DfaBul/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="btn" style="background: var(--accent-gradient-2);">
-                    Abrir Video en Google Drive
-                </a>
+                <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 16px; margin-top: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+                    <iframe src="https://drive.google.com/file/d/1T28D56vaGDMx73TzSYBcc6PE_6DfaBul/preview" 
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" 
+                        allow="autoplay">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="creditos" style="padding: 60px 0;">
+        <div class="container text-center reveal">
+            <div class="glass-card"
+                style="max-width: 900px; margin: 0 auto; background: rgba(50, 215, 75, 0.05); border: 1px solid rgba(50, 215, 75, 0.2);">
+                <h2 style="font-size: 2.5rem;">Créditos y <span class="text-gradient">Agradecimientos</span></h2>
+                <p style="margin-bottom: 40px; font-size: 1.1rem; line-height: 1.6;">
+                    ¡Muchas gracias por tomarte el tiempo de leer nuestra revista <strong>"Salud Joven"</strong>!
+                    Esperamos que la información te sea de gran utilidad. Esta revista fue hecha por:
+                </p>
+
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; text-align: center;">
+                    <div style="background: var(--glass-bg); padding: 24px; border-radius: 20px; border: 1px solid var(--glass-border); transition: transform 0.3s;"
+                        onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        <div style="font-size: 32px; margin-bottom: 12px;">👤</div>
+                        <h4 style="margin-bottom: 8px;">EDUARDO ANTONIO KINIL ESTRADA</h4>
+                        <p style="font-size: 0.9rem; margin: 0; color: var(--text-secondary);">Programador de la UI/UX de la página</p>
+                    </div>
+                    <div style="background: var(--glass-bg); padding: 24px; border-radius: 20px; border: 1px solid var(--glass-border); transition: transform 0.3s;"
+                        onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        <div style="font-size: 32px; margin-bottom: 12px;">👤</div>
+                        <h4 style="margin-bottom: 8px;">CRUZ GOMEZ MAURICIO MANUEL</h4>
+                        <p style="font-size: 0.9rem; margin: 0; color: var(--text-secondary);">Investigador</p>
+                    </div>
+                    <div style="background: var(--glass-bg); padding: 24px; border-radius: 20px; border: 1px solid var(--glass-border); transition: transform 0.3s;"
+                        onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        <div style="font-size: 32px; margin-bottom: 12px;">👤</div>
+                        <h4 style="margin-bottom: 8px;">QUINTANAR VARILLAS MAURICIO</h4>
+                        <p style="font-size: 0.9rem; margin: 0; color: var(--text-secondary);">Lider del equipo</p>
+                    </div>
+                    <div style="background: var(--glass-bg); padding: 24px; border-radius: 20px; border: 1px solid var(--glass-border); transition: transform 0.3s;"
+                        onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        <div style="font-size: 32px; margin-bottom: 12px;">👤</div>
+                        <h4 style="margin-bottom: 8px;">MENDOZA DE LA ZETA BRYAN YAIR</h4>
+                        <p style="font-size: 0.9rem; margin: 0; color: var(--text-secondary);">Investigador</p>
+                    </div>
+                    <div style="background: var(--glass-bg); padding: 24px; border-radius: 20px; border: 1px solid var(--glass-border); transition: transform 0.3s;"
+                        onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        <div style="font-size: 32px; margin-bottom: 12px;">👤</div>
+                        <h4 style="margin-bottom: 8px;">Persona 5</h4>
+                        <p style="font-size: 0.9rem; margin: 0; color: var(--text-secondary);">Rol o aportación
+                            principal</p>
+                    </div>
+                    <div style="background: var(--glass-bg); padding: 24px; border-radius: 20px; border: 1px solid var(--glass-border); transition: transform 0.3s;"
+                        onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        <div style="font-size: 32px; margin-bottom: 12px;">👤</div>
+                        <h4 style="margin-bottom: 8px;">Persona 6</h4>
+                        <p style="font-size: 0.9rem; margin: 0; color: var(--text-secondary);">Rol o aportación
+                            principal</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -682,12 +756,37 @@
                     Descubre el proceso detrás de la creación de esta revista digital accediendo a la grabación de
                     programación.
                 </p>
-                <a href="https://drive.google.com/file/d/1V-HYDA4nFVD-xUBVZFu5PxU500xOnlhg/view?usp=drive_link"
-                    target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display: inline-block;">Ver
-                    Video en Google Drive</a>
+                <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 16px; margin-top: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+                    <iframe src="https://drive.google.com/file/d/1V-HYDA4nFVD-xUBVZFu5PxU500xOnlhg/preview" 
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" 
+                        allow="autoplay">
+                    </iframe>
+                </div>
                 <p style="margin-top: 24px; font-size: 0.9rem; opacity: 0.5;">
                     (Nota: el video estará en velocidad súper rápida, ya que ver un video de 1 hora no sería divertido)
                 </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="quiz" style="padding: 60px 0;">
+        <div class="container text-center reveal">
+            <div class="glass-card" style="max-width: 800px; margin: 0 auto;">
+                <h2 style="font-size: 2.5rem;">Pon a prueba tu <span class="text-gradient">Conocimiento</span></h2>
+                <p style="margin-bottom: 32px; font-size: 1.1rem;">Responde este breve cuestionario interactivo para repasar lo aprendido de manera divertida.</p>
+                
+                <div id="quiz-container" style="text-align: left;">
+                    <div id="question-header" style="font-weight: 700; font-size: 1.25rem; margin-bottom: 20px;"></div>
+                    <div id="options-container" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;"></div>
+                    <div id="feedback-text" style="font-weight: 600; min-height: 24px; margin-bottom: 20px; font-size: 1.1rem;"></div>
+                    <button id="next-btn" class="btn btn-primary" style="display: none; width: 100%;">Siguiente Pregunta</button>
+                    
+                    <div id="result-container" style="display: none; text-align: center;">
+                        <h3 style="font-size: 2rem; margin-bottom: 16px;">¡Quiz Completado!</h3>
+                        <p id="score-text" style="font-size: 1.5rem; margin-bottom: 24px;"></p>
+                        <button id="restart-btn" class="btn btn-primary">Volver a Intentar</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -699,7 +798,7 @@
             <p>Revista "Salud Joven" - Colegio de Bachilleres Plantel Cancún 4 - 2C</p>
             <p>Materia: EDIESYG II | Maestra: Yolanda Piña Flores</p>
             <p>Programado por Eduardo Kinil | iWoozy Was Here</p>
-            <p style="margin-top: 24px; font-weight: bold;">18/03/2026</p>
+            <p style="margin-top: 24px; font-weight: bold;">23/03/2026</p>
         </div>
     </footer>
 
@@ -760,6 +859,126 @@
                 navbar.style.padding = '12px 24px';
             }
         });
+
+        const quizData = [
+            {
+                question: "¿Cuál es el tiempo máximo para iniciar el tratamiento de PEP tras una posible exposición?",
+                options: ["24 horas", "48 horas", "72 horas", "1 semana"],
+                correct: 2,
+                feedback: "¡Correcto! La PEP debe iniciarse antes de las 72 horas (3 días) para ser altamente efectiva."
+            },
+            {
+                question: "La PrEP es un tratamiento diseñado para...",
+                options: ["Personas que ya tienen VIH", "Prevenir el VIH en personas sin el virus", "Curar por completo las ITS", "Sustituir al condón garantizado al 100%"],
+                correct: 1,
+                feedback: "¡Así es! Es un método preventivo para personas sin VIH con alto riesgo de contraerlo."
+            },
+            {
+                question: "¿La atención en los Servicios Amigables tiene algún costo?",
+                options: ["Sí, depende del método que solicites", "Solo si eres menor de edad", "No, es totalmente gratuita", "Se paga una cuota anual mínima"],
+                correct: 2,
+                feedback: "¡Excelente! La NOM-047 asegura que los servicios son completamente gratuitos y confidenciales."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        const questionHeader = document.getElementById('question-header');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackText = document.getElementById('feedback-text');
+        const nextBtn = document.getElementById('next-btn');
+        const resultContainer = document.getElementById('result-container');
+        const scoreText = document.getElementById('score-text');
+        const restartBtn = document.getElementById('restart-btn');
+
+        function loadQuestion() {
+            feedbackText.textContent = '';
+            nextBtn.style.display = 'none';
+            optionsContainer.innerHTML = '';
+            
+            const q = quizData[currentQuestion];
+            questionHeader.textContent = `Pregunta ${currentQuestion + 1} de ${quizData.length}: ${q.question}`;
+            
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.textContent = opt;
+                btn.style.padding = '16px';
+                btn.style.borderRadius = '12px';
+                btn.style.border = '1px solid var(--glass-border)';
+                btn.style.background = 'var(--bg-base)';
+                btn.style.color = 'var(--text-primary)';
+                btn.style.cursor = 'pointer';
+                btn.style.fontSize = '1rem';
+                btn.style.textAlign = 'left';
+                btn.style.transition = 'all 0.3s';
+                
+                btn.addEventListener('mouseover', () => btn.style.background = 'rgba(0,122,255,0.1)');
+                btn.addEventListener('mouseout', () => btn.style.background = 'var(--bg-base)');
+                
+                btn.addEventListener('click', () => selectAnswer(index, btn));
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectAnswer(index, btn) {
+            const buttons = optionsContainer.querySelectorAll('button');
+            buttons.forEach(b => {
+                b.disabled = true;
+                b.style.opacity = '0.7';
+                b.style.pointerEvents = 'none';
+            });
+            
+            const q = quizData[currentQuestion];
+            if (index === q.correct) {
+                btn.style.background = 'rgba(50, 215, 75, 0.2)';
+                btn.style.borderColor = '#32D74B';
+                feedbackText.textContent = q.feedback;
+                feedbackText.style.color = '#32D74B';
+                score++;
+            } else {
+                btn.style.background = 'rgba(255, 59, 48, 0.2)';
+                btn.style.borderColor = '#FF3B30';
+                buttons[q.correct].style.background = 'rgba(50, 215, 75, 0.2)';
+                buttons[q.correct].style.borderColor = '#32D74B';
+                feedbackText.textContent = "Incorrecto. " + q.feedback;
+                feedbackText.style.color = '#FF3B30';
+            }
+            
+            nextBtn.style.display = 'block';
+        }
+
+        nextBtn.addEventListener('click', () => {
+            currentQuestion++;
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                questionHeader.style.display = 'none';
+                optionsContainer.style.display = 'none';
+                feedbackText.style.display = 'none';
+                nextBtn.style.display = 'none';
+                
+                resultContainer.style.display = 'block';
+                scoreText.textContent = `Acertaste ${score} de ${quizData.length} preguntas.`;
+                
+                let emoji = score === quizData.length ? '🌟' : (score > 0 ? '👍' : '📚');
+                scoreText.innerHTML += `<br><span style="font-size: 3rem; margin-top: 16px; display: block;">${emoji}</span>`;
+            }
+        });
+
+        restartBtn.addEventListener('click', () => {
+            currentQuestion = 0;
+            score = 0;
+            questionHeader.style.display = 'block';
+            optionsContainer.style.display = 'flex';
+            feedbackText.style.display = 'block';
+            resultContainer.style.display = 'none';
+            loadQuestion();
+        });
+
+        if (document.getElementById('quiz-container')) {
+            loadQuestion();
+        }
     </script>
 </body>
 
