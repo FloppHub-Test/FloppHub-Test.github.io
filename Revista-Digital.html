@@ -176,11 +176,32 @@
             padding: 12px 24px;
             border-radius: var(--island-radius);
             display: flex;
-            gap: 24px;
+            align-items: center;
             z-index: 1000;
             transition: var(--transition-smooth);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 6px;
+        }
+
+        .menu-toggle .bar {
+            width: 25px;
+            height: 3px;
+            background-color: #fff;
+            transition: all 0.3s ease-in-out;
+            border-radius: 3px;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -240,10 +261,61 @@
 
             nav {
                 width: 90%;
-                gap: 12px;
-                justify-content: center;
-                flex-wrap: wrap;
-                padding: 12px;
+                justify-content: space-between;
+                padding: 12px 24px !important;
+                border-radius: 24px;
+            }
+
+            .nav-brand {
+                display: block !important;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(0, 0, 0, 0.9);
+                backdrop-filter: blur(20px);
+                border-radius: 20px;
+                max-height: 0;
+                overflow: hidden;
+                gap: 0;
+                transition: max-height 0.4s ease, padding 0.4s ease;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+                margin-top: 8px;
+            }
+
+            nav.mobile-active .nav-links {
+                max-height: 400px;
+                padding: 16px 0;
+            }
+
+            .nav-links a {
+                padding: 16px 24px;
+                width: 100%;
+                text-align: center;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            }
+
+            .nav-links a:last-child {
+                border-bottom: none;
+            }
+
+            nav.mobile-active .menu-toggle .bar:nth-child(1) {
+                transform: translateY(9px) rotate(45deg);
+            }
+            nav.mobile-active .menu-toggle .bar:nth-child(2) {
+                opacity: 0;
+            }
+            nav.mobile-active .menu-toggle .bar:nth-child(3) {
+                transform: translateY(-9px) rotate(-45deg);
             }
         }
 
@@ -393,13 +465,21 @@
 <body>
 
     <nav id="navbar">
-        <a href="#inicio" class="active">Inicio</a>
-        <a href="#servicios">Servicios</a>
-        <a href="#flujograma">Catálogo</a>
-        <a href="#prep">PrEP & PEP</a>
-        <a href="#derechos">Derechos</a>
-        <a href="#repaso">Repaso</a>
-        <a href="#quiz">Quiz</a>
+        <div class="nav-brand" style="display: none; font-weight: 800; color: #fff; font-size: 1.1rem; letter-spacing: -0.5px;">Revista Digital | 2C</div>
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <div class="nav-links" id="nav-links">
+            <a href="#inicio" class="active">Inicio</a>
+            <a href="#servicios">Servicios</a>
+            <a href="#flujograma">Catálogo</a>
+            <a href="#prep">PrEP & PEP</a>
+            <a href="#derechos">Derechos</a>
+            <a href="#repaso">Repaso</a>
+            <a href="#quiz">Quiz</a>
+        </div>
     </nav>
 
     <div class="bg-glow glow-1"></div>
@@ -833,7 +913,19 @@
         }, 100);
 
         const sections = document.querySelectorAll('section');
-        const navLinks = document.querySelectorAll('nav a');
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navbar = document.getElementById('navbar');
+
+        mobileMenu.addEventListener('click', () => {
+            navbar.classList.toggle('mobile-active');
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navbar.classList.remove('mobile-active');
+            });
+        });
 
         window.addEventListener('scroll', () => {
             let current = '';
