@@ -1,1 +1,1068 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Un árbol para ti</title>
+  <style>
+    :root {
+      --ink: #272118;
+      --paper: rgba(255, 252, 240, 0.68);
+      --glass: rgba(255, 255, 255, 0.26);
+      --gold: #f7c842;
+      --amber: #e89b2c;
+      --leaf: #ffd34d;
+      --leaf-soft: #fff1a6;
+      --bark: #6f462e;
+      --bark-dark: #3c2318;
+      --green: #567b48;
+      --sky-a: #c4e2ff;
+      --sky-b: #ffe2b6;
+      --sky-c: #fff7dc;
+      color-scheme: light;
+    }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      min-height: 100vh;
+      background: linear-gradient(145deg, var(--sky-a), var(--sky-b) 48%, var(--sky-c));
+      overflow: hidden;
+    }
+
+    body {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: "Segoe UI", "SF Pro Display", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 16% 20%, rgba(255, 238, 183, 0.9), transparent 28%),
+        radial-gradient(circle at 84% 24%, rgba(186, 222, 255, 0.86), transparent 24%),
+        linear-gradient(145deg, var(--sky-a), var(--sky-b) 48%, var(--sky-c));
+      color: var(--ink);
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+
+    .page {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(320px, 0.9fr) minmax(420px, 1.25fr);
+      height: 100vh;
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow: hidden;
+      isolation: isolate;
+      transition: background 900ms ease;
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.45), transparent 46%),
+        radial-gradient(circle at 50% 110%, rgba(110, 140, 78, 0.62), transparent 32%);
+      pointer-events: none;
+      opacity: 0.95;
+      z-index: -2;
+    }
+
+    .page::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 29vh;
+      background:
+        radial-gradient(130% 92% at 50% 100%, #557848 0 38%, #6f9459 39% 60%, transparent 61%),
+        linear-gradient(180deg, transparent, rgba(50, 83, 42, 0.32));
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .poem-panel {
+      align-self: center;
+      display: flex;
+      flex-direction: column;
+      width: min(88%, 520px);
+      max-height: calc(100vh - 48px);
+      margin-left: clamp(18px, 5vw, 72px);
+      padding: clamp(22px, 3vw, 38px);
+      border: 1px solid rgba(255, 255, 255, 0.58);
+      border-radius: 30px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.46), rgba(255, 247, 219, 0.28));
+      box-shadow: 0 24px 70px rgba(88, 67, 35, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(24px) saturate(150%);
+      -webkit-backdrop-filter: blur(24px) saturate(150%);
+      transform: translateX(-28px);
+      opacity: 0;
+      overflow: hidden;
+      pointer-events: none;
+      transition: opacity 1200ms ease, transform 1200ms cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 5;
+    }
+
+    .page.complete .poem-panel {
+      transform: translateX(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 18px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #7f5b19;
+    }
+
+    .kicker span {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--gold);
+      box-shadow: 0 0 20px rgba(247, 200, 66, 0.9);
+    }
+
+    .poem-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .poem-top .kicker {
+      margin-bottom: 0;
+    }
+
+    .expand-poem {
+      flex: 0 0 auto;
+      display: inline-grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255, 255, 255, 0.68);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.36);
+      color: #5f441a;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62), 0 12px 26px rgba(92, 62, 20, 0.12);
+      backdrop-filter: blur(16px) saturate(150%);
+      -webkit-backdrop-filter: blur(16px) saturate(150%);
+      cursor: pointer;
+      position: relative;
+      transition: transform 220ms ease, background 220ms ease, box-shadow 220ms ease;
+    }
+
+    .expand-poem:hover {
+      transform: translateY(-2px) scale(1.03);
+      background: rgba(255, 255, 255, 0.5);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 18px 32px rgba(92, 62, 20, 0.18);
+    }
+
+    .expand-poem:focus-visible {
+      outline: 3px solid rgba(247, 200, 66, 0.85);
+      outline-offset: 3px;
+    }
+
+    .expand-poem::before {
+      content: "";
+      width: 24px;
+      height: 24px;
+      background:
+        linear-gradient(currentColor, currentColor) left 3px top 3px / 8px 2px no-repeat,
+        linear-gradient(currentColor, currentColor) left 3px top 3px / 2px 8px no-repeat,
+        linear-gradient(currentColor, currentColor) right 3px top 3px / 8px 2px no-repeat,
+        linear-gradient(currentColor, currentColor) right 3px top 3px / 2px 8px no-repeat,
+        linear-gradient(currentColor, currentColor) left 3px bottom 3px / 8px 2px no-repeat,
+        linear-gradient(currentColor, currentColor) left 3px bottom 3px / 2px 8px no-repeat,
+        linear-gradient(currentColor, currentColor) right 3px bottom 3px / 8px 2px no-repeat,
+        linear-gradient(currentColor, currentColor) right 3px bottom 3px / 2px 8px no-repeat;
+    }
+
+    .expand-poem::after {
+      content: "";
+      position: absolute;
+      inset: 11px;
+      background:
+        linear-gradient(45deg, transparent 0 44%, currentColor 45% 55%, transparent 56%) left top / 9px 9px no-repeat,
+        linear-gradient(-45deg, transparent 0 44%, currentColor 45% 55%, transparent 56%) right top / 9px 9px no-repeat,
+        linear-gradient(-45deg, transparent 0 44%, currentColor 45% 55%, transparent 56%) left bottom / 9px 9px no-repeat,
+        linear-gradient(45deg, transparent 0 44%, currentColor 45% 55%, transparent 56%) right bottom / 9px 9px no-repeat;
+      opacity: 0.95;
+    }
+
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.35rem, 5vw, 5.2rem);
+      line-height: 0.94;
+      font-weight: 500;
+      letter-spacing: 0;
+      max-width: 8ch;
+      color: #332619;
+    }
+
+    .poem {
+      margin-top: 24px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(0.96rem, 1.18vw, 1.12rem);
+      line-height: 1.54;
+      color: rgba(44, 33, 22, 0.88);
+      max-height: min(36vh, 360px);
+      overflow-y: auto;
+      padding-right: 8px;
+      text-wrap: pretty;
+    }
+
+    .counter-card {
+      flex: 0 0 auto;
+      margin-top: 26px;
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.38);
+      border: 1px solid rgba(255, 255, 255, 0.54);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.52);
+    }
+
+    .counter-title {
+      font-size: 0.86rem;
+      color: rgba(63, 48, 31, 0.68);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .counter {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .unit {
+      min-width: 0;
+      border-radius: 16px;
+      padding: 10px 8px 9px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 238, 179, 0.28));
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      text-align: center;
+    }
+
+    .unit strong {
+      display: block;
+      font-size: clamp(1.02rem, 2vw, 1.62rem);
+      font-weight: 850;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      color: #322313;
+    }
+
+    .unit small {
+      display: block;
+      margin-top: 6px;
+      font-size: clamp(0.55rem, 0.78vw, 0.72rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      color: rgba(69, 47, 24, 0.56);
+    }
+
+    .poem-modal {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: clamp(16px, 4vw, 48px);
+      background:
+        radial-gradient(circle at 78% 10%, rgba(255, 213, 75, 0.18), transparent 28%),
+        linear-gradient(145deg, rgba(33, 26, 17, 0.42), rgba(33, 26, 17, 0.2));
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      backdrop-filter: blur(24px) saturate(135%);
+      -webkit-backdrop-filter: blur(24px) saturate(135%);
+      transition: opacity 320ms ease, visibility 320ms ease;
+      z-index: 40;
+    }
+
+    .poem-modal.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .poem-reader {
+      position: relative;
+      width: min(980px, 100%);
+      max-height: min(880px, calc(100vh - 34px));
+      padding: clamp(24px, 4vw, 54px);
+      border-radius: clamp(26px, 4vw, 42px);
+      border: 1px solid rgba(255, 255, 255, 0.62);
+      background:
+        linear-gradient(145deg, rgba(255, 247, 219, 0.92), rgba(255, 202, 78, 0.72)),
+        rgba(255, 255, 255, 0.72);
+      box-shadow: 0 34px 110px rgba(38, 24, 12, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+      overflow: hidden;
+      transform: translateY(20px) scale(0.96);
+      transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .poem-modal.open .poem-reader {
+      transform: translateY(0) scale(1);
+    }
+
+    .poem-reader-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: clamp(18px, 3vw, 30px);
+    }
+
+    .poem-reader-title {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.35rem, 7vw, 5.8rem);
+      line-height: 0.92;
+      font-weight: 500;
+      color: #2e2115;
+      letter-spacing: 0;
+    }
+
+    .close-poem {
+      flex: 0 0 auto;
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(255, 255, 255, 0.68);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.36);
+      color: #513817;
+      font-size: 1.55rem;
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+      transition: transform 220ms ease, background 220ms ease;
+    }
+
+    .close-poem:hover {
+      transform: scale(1.05);
+      background: rgba(255, 255, 255, 0.56);
+    }
+
+    .close-poem:focus-visible {
+      outline: 3px solid rgba(247, 200, 66, 0.85);
+      outline-offset: 3px;
+    }
+
+    .poem-reader-text {
+      max-height: min(58vh, 520px);
+      overflow: auto;
+      padding-right: 10px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.18rem, 2.2vw, 1.72rem);
+      line-height: 1.6;
+      color: rgba(43, 31, 20, 0.94);
+      text-wrap: pretty;
+    }
+
+    .scene {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      perspective: 1200px;
+    }
+
+    .sunflower-stage {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      z-index: 10;
+      transition: opacity 900ms ease, transform 1000ms cubic-bezier(0.16, 1, 0.3, 1), filter 900ms ease;
+    }
+
+    .page.growing .sunflower-stage,
+    .page.complete .sunflower-stage {
+      opacity: 0;
+      transform: scale(0.82) translateY(18px);
+      filter: blur(12px);
+      pointer-events: none;
+    }
+
+    .page.preview-mode .sunflower-stage {
+      display: none;
+    }
+
+    .start-card {
+      display: grid;
+      place-items: center;
+      gap: 24px;
+      padding: clamp(18px, 4vw, 44px);
+      border-radius: 38px;
+      background: rgba(255, 255, 255, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      box-shadow: 0 35px 100px rgba(80, 64, 35, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(22px) saturate(150%);
+      -webkit-backdrop-filter: blur(22px) saturate(150%);
+      animation: cardFloat 4600ms ease-in-out infinite;
+    }
+
+    .intro-copy {
+      text-align: center;
+      max-width: 360px;
+    }
+
+    .intro-copy p:first-child {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.48rem, 4vw, 2.6rem);
+      line-height: 1;
+      color: #3b2a18;
+    }
+
+    .intro-copy p:last-child {
+      margin-top: 10px;
+      font-size: 0.94rem;
+      color: rgba(54, 39, 21, 0.66);
+      font-weight: 700;
+    }
+
+    .sunflower {
+      width: clamp(210px, 28vw, 300px);
+      aspect-ratio: 1;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      cursor: pointer;
+      position: relative;
+      display: grid;
+      place-items: center;
+      transform-style: preserve-3d;
+      animation: sunflowerBreathe 3500ms ease-in-out infinite;
+      filter: drop-shadow(0 28px 28px rgba(83, 57, 24, 0.18));
+    }
+
+    .sunflower:focus-visible {
+      outline: 3px solid rgba(247, 200, 66, 0.9);
+      outline-offset: 12px;
+    }
+
+    .petals {
+      position: absolute;
+      inset: 8%;
+      transform-style: preserve-3d;
+      animation: softRotate 21000ms linear infinite;
+    }
+
+    .petal {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 24%;
+      height: 46%;
+      border-radius: 60% 60% 48% 48%;
+      background: linear-gradient(180deg, #ffe66d, #f6ad24 70%, #de8418);
+      box-shadow: inset 0 11px 20px rgba(255, 255, 255, 0.38), inset 0 -14px 18px rgba(173, 90, 7, 0.12);
+      transform-origin: 50% 90%;
+    }
+
+    .petal:nth-child(1) { transform: translate(-50%, -90%) rotate(0deg) translateY(-38%); }
+    .petal:nth-child(2) { transform: translate(-50%, -90%) rotate(22.5deg) translateY(-38%); }
+    .petal:nth-child(3) { transform: translate(-50%, -90%) rotate(45deg) translateY(-38%); }
+    .petal:nth-child(4) { transform: translate(-50%, -90%) rotate(67.5deg) translateY(-38%); }
+    .petal:nth-child(5) { transform: translate(-50%, -90%) rotate(90deg) translateY(-38%); }
+    .petal:nth-child(6) { transform: translate(-50%, -90%) rotate(112.5deg) translateY(-38%); }
+    .petal:nth-child(7) { transform: translate(-50%, -90%) rotate(135deg) translateY(-38%); }
+    .petal:nth-child(8) { transform: translate(-50%, -90%) rotate(157.5deg) translateY(-38%); }
+    .petal:nth-child(9) { transform: translate(-50%, -90%) rotate(180deg) translateY(-38%); }
+    .petal:nth-child(10) { transform: translate(-50%, -90%) rotate(202.5deg) translateY(-38%); }
+    .petal:nth-child(11) { transform: translate(-50%, -90%) rotate(225deg) translateY(-38%); }
+    .petal:nth-child(12) { transform: translate(-50%, -90%) rotate(247.5deg) translateY(-38%); }
+    .petal:nth-child(13) { transform: translate(-50%, -90%) rotate(270deg) translateY(-38%); }
+    .petal:nth-child(14) { transform: translate(-50%, -90%) rotate(292.5deg) translateY(-38%); }
+    .petal:nth-child(15) { transform: translate(-50%, -90%) rotate(315deg) translateY(-38%); }
+    .petal:nth-child(16) { transform: translate(-50%, -90%) rotate(337.5deg) translateY(-38%); }
+
+    .sun-core {
+      width: 38%;
+      aspect-ratio: 1;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 34% 30%, rgba(255, 216, 112, 0.85), transparent 0 14%, transparent 15%),
+        radial-gradient(circle, #8a5524 0 28%, #5c351d 29% 62%, #3d2518 63%);
+      box-shadow: inset 0 5px 10px rgba(255, 229, 136, 0.28), inset 0 -12px 16px rgba(0, 0, 0, 0.17), 0 10px 24px rgba(65, 39, 19, 0.18);
+      position: relative;
+      z-index: 2;
+    }
+
+    .sun-core::before {
+      content: "";
+      position: absolute;
+      inset: 14%;
+      border-radius: inherit;
+      background-image:
+        radial-gradient(circle, rgba(255, 229, 137, 0.42) 0 2px, transparent 3px),
+        radial-gradient(circle, rgba(32, 20, 12, 0.24) 0 2px, transparent 3px);
+      background-size: 15px 15px, 13px 13px;
+      background-position: 0 0, 6px 7px;
+      opacity: 0.9;
+    }
+
+    .hint {
+      position: absolute;
+      bottom: 8%;
+      left: 50%;
+      transform: translateX(-50%);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 15px;
+      border-radius: 999px;
+      color: rgba(49, 34, 16, 0.78);
+      background: rgba(255, 255, 255, 0.32);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      font-size: 0.86rem;
+      font-weight: 800;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .hint i {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: #f6b73f;
+      animation: pulseDot 1450ms ease-in-out infinite;
+    }
+
+    .tree-wrap {
+      position: absolute;
+      width: min(58vw, 760px);
+      height: min(86vh, 810px);
+      right: clamp(0px, 4vw, 64px);
+      bottom: 0;
+      display: grid;
+      place-items: end center;
+      transform: translateY(4vh);
+      opacity: 0;
+      z-index: 2;
+      pointer-events: none;
+      transition: opacity 800ms ease;
+    }
+
+    .page.growing .tree-wrap,
+    .page.complete .tree-wrap {
+      opacity: 1;
+    }
+
+    .tree-growth {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: end center;
+      clip-path: inset(100% 0 0 0);
+      transform: translateY(10px) scale(0.96);
+      filter: drop-shadow(0 38px 34px rgba(64, 55, 32, 0.24));
+    }
+
+    .tree-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center bottom;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .page.growing .tree-growth {
+      animation: revealTreeImage 3800ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .page.complete .tree-growth,
+    .page.preview-mode .tree-growth {
+      clip-path: inset(0 0 0 0);
+      transform: translateY(0) scale(1);
+    }
+
+    .page.preview-mode .tree-growth {
+      animation: none;
+    }
+
+    .leaf-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 4;
+      opacity: 0;
+      transition: opacity 1200ms ease;
+    }
+
+    .page.complete .leaf-layer {
+      opacity: 1;
+    }
+
+    .falling-leaf {
+      position: absolute;
+      top: -10vh;
+      width: var(--leaf-size);
+      height: calc(var(--leaf-size) * 0.56);
+      border-radius: 90% 10% 85% 16%;
+      background: linear-gradient(135deg, #ffe785, #f8bf36 56%, #c98220);
+      box-shadow: 0 10px 18px rgba(124, 78, 21, 0.14);
+      opacity: 0.94;
+      transform: translate3d(var(--x), -12vh, 0) rotate(var(--r));
+      animation: leafFall var(--duration) linear var(--delay) infinite;
+    }
+
+    .falling-leaf::after {
+      content: "";
+      position: absolute;
+      left: 14%;
+      top: 48%;
+      width: 74%;
+      height: 1px;
+      background: rgba(111, 70, 28, 0.28);
+      transform: rotate(-18deg);
+    }
+
+    .spark {
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(255, 232, 121, 0.86);
+      filter: blur(0.2px);
+      opacity: 0.7;
+      animation: sparkle 4000ms ease-in-out infinite;
+      z-index: 1;
+    }
+
+    .spark:nth-child(1) { left: 16%; top: 21%; animation-delay: -800ms; }
+    .spark:nth-child(2) { left: 42%; top: 12%; animation-delay: -2100ms; }
+    .spark:nth-child(3) { left: 77%; top: 18%; animation-delay: -3400ms; }
+    .spark:nth-child(4) { left: 90%; top: 48%; animation-delay: -1400ms; }
+    .spark:nth-child(5) { left: 53%; top: 70%; animation-delay: -2500ms; }
+
+    @keyframes cardFloat {
+      0%,
+      100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
+      50% { transform: translateY(-10px) rotateX(1.5deg) rotateY(-1deg); }
+    }
+
+    @keyframes sunflowerBreathe {
+      0%,
+      100% { transform: rotateX(0deg) rotateY(0deg) scale(1); }
+      50% { transform: rotateX(5deg) rotateY(-7deg) scale(1.035); }
+    }
+
+    @keyframes softRotate {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes pulseDot {
+      0%,
+      100% { transform: scale(0.7); opacity: 0.5; }
+      50% { transform: scale(1.4); opacity: 1; }
+    }
+
+    @keyframes revealTreeImage {
+      0% { clip-path: inset(100% 0 0 0); transform: translateY(38px) scale(0.88); filter: drop-shadow(0 12px 18px rgba(64, 55, 32, 0.1)); }
+      58% { clip-path: inset(28% 0 0 0); transform: translateY(10px) scale(0.97); }
+      100% { clip-path: inset(0 0 0 0); transform: translateY(0) scale(1); filter: drop-shadow(0 38px 34px rgba(64, 55, 32, 0.24)); }
+    }
+
+    @keyframes leafFall {
+      0% { transform: translate3d(var(--x), -12vh, 0) rotate(var(--r)); opacity: 0; }
+      8% { opacity: 0.95; }
+      48% { transform: translate3d(calc(var(--x) + var(--drift)), 48vh, 0) rotate(calc(var(--r) + 190deg)); }
+      100% { transform: translate3d(calc(var(--x) + var(--drift-end)), 112vh, 0) rotate(calc(var(--r) + 460deg)); opacity: 0; }
+    }
+
+    @keyframes sparkle {
+      0%,
+      100% { transform: translateY(0) scale(0.72); opacity: 0.22; }
+      50% { transform: translateY(-18px) scale(1.25); opacity: 0.82; }
+    }
+
+    @media (max-width: 920px) {
+      html {
+        overflow: hidden;
+      }
+
+      body {
+        overflow: hidden;
+      }
+
+      .page {
+        display: block;
+        min-height: 100svh;
+      }
+
+      .poem-panel {
+        position: fixed;
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+        width: auto;
+        max-width: calc(100vw - 28px);
+        max-height: 55svh;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        margin: 0;
+        padding: 20px;
+        border-radius: 26px;
+        transform: translateY(26px);
+      }
+
+      .page.complete .poem-panel {
+        transform: translateY(0);
+      }
+
+      h1 {
+        max-width: 8ch;
+        font-size: clamp(2rem, 10.5vw, 2.7rem);
+        overflow-wrap: anywhere;
+      }
+
+      .poem {
+        margin-top: 14px;
+        max-width: 100%;
+        font-size: 0.92rem;
+        line-height: 1.45;
+        overflow-wrap: break-word;
+      }
+
+      .counter-card {
+        margin-top: 14px;
+        padding: 11px;
+      }
+
+      .counter-title {
+        margin-bottom: 8px;
+      }
+
+      .counter {
+        gap: 6px;
+        min-width: 0;
+      }
+
+      .unit {
+        border-radius: 14px;
+        padding: 9px 4px 8px;
+      }
+
+      .unit small {
+        font-size: 0.52rem;
+      }
+
+      .scene {
+        min-height: 100svh;
+      }
+
+      .tree-wrap {
+        width: min(114vw, 680px);
+        height: min(76svh, 650px);
+        right: 50%;
+        bottom: 12vh;
+        transform: translate(50%, 0);
+      }
+
+      .start-card {
+        width: calc(100% - 28px);
+        border-radius: 30px;
+      }
+
+      .hint {
+        bottom: 22px;
+        white-space: nowrap;
+      }
+
+    }
+
+    @media (max-width: 520px) {
+      .page::after {
+        height: 36vh;
+      }
+
+      .start-card {
+        gap: 18px;
+        padding: 20px 16px 24px;
+      }
+
+      .sunflower {
+        width: min(72vw, 250px);
+      }
+
+      .intro-copy p:last-child {
+        font-size: 0.84rem;
+      }
+
+      .poem-panel {
+        padding: 18px;
+        right: auto;
+        width: calc(100vw - 28px);
+        max-width: 362px;
+      }
+
+      .counter {
+        grid-template-columns: repeat(5, 1fr);
+      }
+
+      .unit strong {
+        font-size: clamp(0.9rem, 6vw, 1.2rem);
+      }
+
+      .tree-wrap {
+        width: 96vw;
+        height: 82svh;
+        bottom: 31vh;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+
+      .page.growing .sunflower-stage,
+      .page.complete .sunflower-stage,
+      .poem-panel,
+      .tree-wrap,
+      .leaf-layer {
+        transition-duration: 1ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page" id="page">
+    <section class="poem-panel" aria-live="polite">
+      <div class="poem-top">
+        <div class="kicker"><span></span>Poema para ti</div>
+        <button class="expand-poem" id="expandPoem" type="button" aria-label="Ver poema en grande"></button>
+      </div>
+      <h1>Cuando florece el amor</h1>
+      <p class="poem">
+        Para el amor de mi vida,desde que te vi en el primer momento que vi esos ojos hermosos me enamoré demasiado te amo con todo mi corazón de aquí hasta la luna demasiado regreso y de vuelta hasta el infinito,te amo colachon más de lo que las palabras pueden expresar,te amo no lo olvides,si en algún momento te hice sentir mal discúlpame encerio perdóname no medí mis palabras no sé cómo más pedirte perdón amor te amo te amo con todo mi corazón amor ,te extraño cada minuto de cada segundo de cada hora,te extraño siempre te amo tanto que pasaría cada día contigo junto a ti corazon te amaré de aquí hasta la eternidad,eres el amor de mi vida espero y lo recuerdes siempre y si no te lincho a besos amor ya lo repetí como 100 veces y lo voy a seguir diciendo,te amo
+      </p>
+      <div class="counter-card">
+        <p class="counter-title">Mi amor por ti comenzó hace...</p>
+        <div class="counter" aria-label="Contador de amor en tiempo real">
+          <div class="unit"><strong id="days">49</strong><small>días</small></div>
+          <div class="unit"><strong id="hours">00</strong><small>horas</small></div>
+          <div class="unit"><strong id="minutes">00</strong><small>min</small></div>
+          <div class="unit"><strong id="seconds">00</strong><small>seg</small></div>
+          <div class="unit"><strong id="millis">000</strong><small>ms</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene" aria-label="Escena animada de girasol y árbol">
+      <span class="spark"></span>
+      <span class="spark"></span>
+      <span class="spark"></span>
+      <span class="spark"></span>
+      <span class="spark"></span>
+
+      <div class="sunflower-stage">
+        <div class="start-card">
+          <button class="sunflower" id="sunflower" aria-label="Toca el girasol para hacer crecer el árbol">
+            <span class="petals" aria-hidden="true">
+              <span class="petal"></span>
+              <span class="petal"></span>
+              <span class="petal"></span>
+              <span class="petal"></span>
+              <span class="petal"></span>
+              <span class="petal"></span>
+              <span class="petal"></span>
+              <span class="petal"></span>
+              <span class="petal"></span>
+              <span class="petal"></span>
+              <span class="petal"></span>
+              <span class="petal"></span>
+              <span class="petal"></span>
+              <span class="petal"></span>
+              <span class="petal"></span>
+              <span class="petal"></span>
+            </span>
+            <span class="sun-core" aria-hidden="true"></span>
+          </button>
+          <div class="intro-copy">
+            <p>Para ti</p>
+            <p>Toca el girasol</p>
+          </div>
+        </div>
+        <div class="hint"><i></i>Hazlo florecer</div>
+      </div>
+
+      <div class="tree-wrap" aria-hidden="true">
+        <div class="tree-growth">
+          <img class="tree-image" src="https://i.postimg.cc/BbJc9h9S/adad2311-fe3a-4150-aa5d-b4b71807fb39.png" alt="">
+        </div>
+      </div>
+
+      <div class="leaf-layer" id="leafLayer"></div>
+    </section>
+  </main>
+
+  <div class="poem-modal" id="poemModal" aria-hidden="true">
+    <article class="poem-reader" role="dialog" aria-modal="true" aria-labelledby="poemReaderTitle">
+      <div class="poem-reader-top">
+        <h2 class="poem-reader-title" id="poemReaderTitle">Cuando florece el amor</h2>
+        <button class="close-poem" id="closePoem" type="button" aria-label="Cerrar poema">×</button>
+      </div>
+      <p class="poem-reader-text" id="poemReaderText"></p>
+    </article>
+  </div>
+
+  <audio id="backgroundMusic" src="https://flopphub-test.github.io/AUD-20260507-WA0114.mp3" preload="auto" loop></audio>
+
+  <script>
+    const page = document.getElementById("page");
+    const sunflower = document.getElementById("sunflower");
+    const leafLayer = document.getElementById("leafLayer");
+    const backgroundMusic = document.getElementById("backgroundMusic");
+    const expandPoem = document.getElementById("expandPoem");
+    const poemModal = document.getElementById("poemModal");
+    const closePoem = document.getElementById("closePoem");
+    const poemReaderText = document.getElementById("poemReaderText");
+    const poemText = document.querySelector(".poem");
+    const fields = {
+      days: document.getElementById("days"),
+      hours: document.getElementById("hours"),
+      minutes: document.getElementById("minutes"),
+      seconds: document.getElementById("seconds"),
+      millis: document.getElementById("millis")
+    };
+
+    const loveStart = new Date(2026, 2, 19, 0, 0, 0, 0);
+    let hasStarted = false;
+
+    const pad = (value, size = 2) => String(value).padStart(size, "0");
+
+    function updateCounter() {
+      const now = new Date();
+      const elapsed = Math.max(0, now - loveStart);
+      const day = 86400000;
+      const hour = 3600000;
+      const minute = 60000;
+      const days = Math.floor(elapsed / day);
+      const hours = Math.floor((elapsed % day) / hour);
+      const minutes = Math.floor((elapsed % hour) / minute);
+      const seconds = Math.floor((elapsed % minute) / 1000);
+      const millis = Math.floor(elapsed % 1000);
+
+      fields.days.textContent = days;
+      fields.hours.textContent = pad(hours);
+      fields.minutes.textContent = pad(minutes);
+      fields.seconds.textContent = pad(seconds);
+      fields.millis.textContent = pad(millis, 3);
+
+      requestAnimationFrame(updateCounter);
+    }
+
+    function createLeaves() {
+      const amount = window.matchMedia("(max-width: 700px)").matches ? 26 : 42;
+      leafLayer.replaceChildren();
+
+      for (let index = 0; index < amount; index += 1) {
+        const leaf = document.createElement("span");
+        const start = 18 + Math.random() * 76;
+        const drift = (Math.random() * 24 - 12).toFixed(2);
+        const driftEnd = (Number(drift) + Math.random() * 36 - 18).toFixed(2);
+        const size = 10 + Math.random() * 18;
+        const delay = Math.random() * -12;
+        const duration = 8 + Math.random() * 8;
+
+        leaf.className = "falling-leaf";
+        leaf.style.setProperty("--x", `${start}vw`);
+        leaf.style.setProperty("--drift", `${drift}vw`);
+        leaf.style.setProperty("--drift-end", `${driftEnd}vw`);
+        leaf.style.setProperty("--r", `${Math.random() * 220 - 80}deg`);
+        leaf.style.setProperty("--leaf-size", `${size}px`);
+        leaf.style.setProperty("--delay", `${delay}s`);
+        leaf.style.setProperty("--duration", `${duration}s`);
+        leafLayer.appendChild(leaf);
+      }
+    }
+
+    function playBackgroundMusic() {
+      backgroundMusic.volume = 0.72;
+      backgroundMusic.play().catch(() => {});
+    }
+
+    function openPoemReader() {
+      poemReaderText.textContent = poemText.textContent.trim();
+      poemModal.classList.add("open");
+      poemModal.setAttribute("aria-hidden", "false");
+      closePoem.focus();
+      if (poemModal.requestFullscreen) {
+        poemModal.requestFullscreen().catch(() => {});
+      }
+    }
+
+    function closePoemReader() {
+      poemModal.classList.remove("open");
+      poemModal.setAttribute("aria-hidden", "true");
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+      }
+      expandPoem.focus();
+    }
+
+    function startTree() {
+      if (hasStarted) return;
+      hasStarted = true;
+      playBackgroundMusic();
+      page.classList.add("growing");
+      createLeaves();
+      window.setTimeout(() => {
+        page.classList.add("complete");
+      }, 4300);
+    }
+
+    sunflower.addEventListener("click", startTree);
+    expandPoem.addEventListener("click", openPoemReader);
+    closePoem.addEventListener("click", closePoemReader);
+    poemModal.addEventListener("click", (event) => {
+      if (event.target === poemModal) closePoemReader();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && poemModal.classList.contains("open")) closePoemReader();
+    });
+    window.addEventListener("resize", () => {
+      if (hasStarted) createLeaves();
+    });
+
+    updateCounter();
+
+    if (new URLSearchParams(window.location.search).has("preview")) {
+      hasStarted = true;
+      page.classList.add("growing", "complete", "preview-mode");
+      createLeaves();
+    }
+  </script>
+</body>
+</html>
