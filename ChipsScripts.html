@@ -1958,19 +1958,15 @@
       }
     }
 
-    /* ── Teléfonos medianos-grandes (≤ 600px) ───────────────────── */
     @media (max-width: 600px) {
-      /* Ocultar nav-links: el dock inferior ya cumple esa función */
       .nav-links {
         display: none;
       }
 
-      /* Reducir padding de secciones */
       .section {
         padding: 56px 0;
       }
 
-      /* Corregir h1 que la query de 720px fuerza a 4.85rem */
       h1 {
         font-size: clamp(2.6rem, 10vw, 3.8rem);
         line-height: 0.93;
@@ -1980,7 +1976,6 @@
         font-size: clamp(1.8rem, 8vw, 2.6rem);
       }
 
-      /* Desactivar 3D en promo-cards para evitar clipping en móvil */
       .ug-promo,
       .tiktok-promo {
         animation: none;
@@ -2001,7 +1996,6 @@
         transform: none;
       }
 
-      /* Hero visual más compacto */
       .hero-visual {
         min-height: 400px;
       }
@@ -2010,7 +2004,6 @@
         width: min(300px, 85vw);
       }
 
-      /* Script cards */
       .script-card {
         min-height: unset;
       }
@@ -2027,7 +2020,6 @@
       }
     }
 
-    /* ── Teléfonos compactos (≤ 480px) ──────────────────────────── */
     @media (max-width: 480px) {
       .shell {
         width: min(100% - 20px, 1200px);
@@ -2070,7 +2062,6 @@
         width: min(275px, 82vw);
       }
 
-      /* Intro screen */
       .intro-card {
         padding: 20px 16px;
         border-radius: 24px;
@@ -2086,7 +2077,6 @@
         line-height: 1.55;
       }
 
-      /* Nav compacto */
       .nav {
         gap: 10px;
         padding: 8px;
@@ -2102,7 +2092,6 @@
         min-height: 40px;
       }
 
-      /* Script cards */
       .script-card {
         padding: 14px;
         border-radius: 22px;
@@ -2139,7 +2128,6 @@
         font-size: 0.85rem;
       }
 
-      /* Promos */
       .ug-promo,
       .tiktok-promo {
         padding: 14px;
@@ -2159,7 +2147,6 @@
         font-size: 1.5rem;
       }
 
-      /* Panel de control */
       .control-panel {
         padding: 14px;
         border-radius: 20px;
@@ -2188,14 +2175,12 @@
         font-size: 0.9rem;
       }
 
-      /* Botones generales */
       .btn {
         min-height: 46px;
         padding: 0 16px;
         font-size: 0.9rem;
       }
 
-      /* Footer y dock */
       footer {
         padding: 40px 0 92px;
         font-size: 0.88rem;
@@ -2213,14 +2198,12 @@
       }
     }
 
-    /* ── Teléfonos muy pequeños (≤ 360px) ───────────────────────── */
     @media (max-width: 360px) {
       h1 {
         font-size: 2rem;
         line-height: 0.96;
       }
 
-      /* Ocultar visual del hero: libera mucho espacio */
       .hero-visual {
         display: none;
       }
@@ -2229,7 +2212,6 @@
         padding: 36px 0;
       }
 
-      /* Thumbnail del script va a la parte superior */
       .script-card {
         display: flex;
         flex-direction: column;
