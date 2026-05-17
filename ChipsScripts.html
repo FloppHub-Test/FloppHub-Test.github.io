@@ -1809,8 +1809,8 @@
 
       h1 {
         max-width: 100%;
-        font-size: 4.85rem;
-        line-height: 0.9;
+        font-size: clamp(2.6rem, 9vw, 4.85rem);
+        line-height: 0.92;
       }
 
       .hero-visual {
@@ -1958,101 +1958,212 @@
       }
     }
 
-    @media (max-width: 480px) {
+    /* ── Teléfonos medianos-grandes (≤ 600px) ───────────────────── */
+    @media (max-width: 600px) {
+      /* Ocultar nav-links: el dock inferior ya cumple esa función */
+      .nav-links {
+        display: none;
+      }
+
+      /* Reducir padding de secciones */
       .section {
-        padding: 52px 0;
+        padding: 56px 0;
+      }
+
+      /* Corregir h1 que la query de 720px fuerza a 4.85rem */
+      h1 {
+        font-size: clamp(2.6rem, 10vw, 3.8rem);
+        line-height: 0.93;
       }
 
       .section-title {
-        font-size: clamp(1.7rem, 8.5vw, 2.4rem);
+        font-size: clamp(1.8rem, 8vw, 2.6rem);
       }
 
-      h1 {
-        font-size: clamp(2.4rem, 11vw, 3.4rem);
-        line-height: 0.94;
+      /* Desactivar 3D en promo-cards para evitar clipping en móvil */
+      .ug-promo,
+      .tiktok-promo {
+        animation: none;
+        transform: none;
+        will-change: auto;
       }
 
-      .hero {
-        padding-top: 24px;
-        padding-bottom: 28px;
-        gap: 20px;
+      .ug-promo-inner,
+      .tiktok-inner {
+        transform: none;
       }
 
-      .hero-text {
-        font-size: 0.96rem;
+      .ug-code-card {
+        transform: none;
       }
 
+      .tiktok-card {
+        transform: none;
+      }
+
+      /* Hero visual más compacto */
       .hero-visual {
-        min-height: 380px;
+        min-height: 400px;
       }
 
       .phone {
-        width: min(290px, 82vw);
+        width: min(300px, 85vw);
       }
 
-      .intro-card {
-        padding: 22px 18px;
-        border-radius: 26px;
-        gap: 18px;
-      }
-
-      .intro-title {
-        font-size: clamp(1.8rem, 9vw, 2.4rem);
-      }
-
-      .intro-subtitle {
-        font-size: 0.92rem;
-      }
-
-      .eyebrow {
-        font-size: 0.78rem;
-        padding: 6px 10px;
-      }
-
-      .nav-links a {
-        padding: 8px 8px;
-        font-size: 0.74rem;
-      }
-
+      /* Script cards */
       .script-card {
         min-height: unset;
-        padding: 14px;
-        border-radius: 24px;
       }
 
-      .script-card .script-meta {
-        padding-right: 90px;
-      }
-
-      .script-thumb {
-        width: 76px;
-        height: 76px;
-        border-radius: 20px;
-        top: 14px;
-        right: 14px;
-      }
-
-      .code-box pre {
-        font-size: 0.74rem;
-        padding: 12px;
-        white-space: pre;
+      .code-box {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
       }
 
+      .code-box pre {
+        font-size: 0.78rem;
+        white-space: pre;
+        min-width: max-content;
+      }
+    }
+
+    /* ── Teléfonos compactos (≤ 480px) ──────────────────────────── */
+    @media (max-width: 480px) {
+      .shell {
+        width: min(100% - 20px, 1200px);
+      }
+
+      .section {
+        padding: 44px 0;
+      }
+
+      h1 {
+        font-size: clamp(2.2rem, 10.5vw, 3rem);
+        line-height: 0.94;
+      }
+
+      .section-title {
+        font-size: clamp(1.6rem, 8vw, 2.2rem);
+      }
+
+      .hero {
+        padding-top: 20px;
+        padding-bottom: 24px;
+        gap: 16px;
+      }
+
+      .hero-text {
+        font-size: 0.94rem;
+        line-height: 1.7;
+      }
+
+      .eyebrow {
+        font-size: 0.76rem;
+        padding: 6px 10px;
+      }
+
+      .hero-visual {
+        min-height: 360px;
+      }
+
+      .phone {
+        width: min(275px, 82vw);
+      }
+
+      /* Intro screen */
+      .intro-card {
+        padding: 20px 16px;
+        border-radius: 24px;
+        gap: 16px;
+      }
+
+      .intro-title {
+        font-size: clamp(1.6rem, 9vw, 2.2rem);
+      }
+
+      .intro-subtitle {
+        font-size: 0.9rem;
+        line-height: 1.55;
+      }
+
+      /* Nav compacto */
+      .nav {
+        gap: 10px;
+        padding: 8px;
+      }
+
+      .brand-logo {
+        width: 38px;
+        height: 38px;
+      }
+
+      .nav-action {
+        width: 40px;
+        min-height: 40px;
+      }
+
+      /* Script cards */
+      .script-card {
+        padding: 14px;
+        border-radius: 22px;
+        gap: 12px;
+      }
+
+      .script-card .script-meta {
+        padding-right: 86px;
+      }
+
+      .script-thumb {
+        width: 74px;
+        height: 74px;
+        border-radius: 18px;
+        top: 14px;
+        right: 14px;
+      }
+
+      .script-card h3 {
+        font-size: 1.4rem;
+      }
+
+      .script-card p {
+        font-size: 0.9rem;
+      }
+
+      .code-box pre {
+        font-size: 0.73rem;
+        padding: 12px;
+      }
+
+      .copy-btn {
+        min-height: 40px;
+        font-size: 0.85rem;
+      }
+
+      /* Promos */
       .ug-promo,
       .tiktok-promo {
         padding: 14px;
-        border-radius: 22px;
+        border-radius: 20px;
+      }
+
+      .ug-promo h2,
+      .tiktok-promo h2 {
+        font-size: clamp(1.6rem, 8vw, 2.2rem);
       }
 
       .ug-code strong {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
       }
 
+      .tiktok-handle strong {
+        font-size: 1.5rem;
+      }
+
+      /* Panel de control */
       .control-panel {
         padding: 14px;
-        border-radius: 22px;
+        border-radius: 20px;
+        gap: 12px;
       }
 
       .filters {
@@ -2067,90 +2178,98 @@
       }
 
       .panel-feature {
-        min-height: 170px;
+        min-height: 160px;
         padding: 14px;
-        border-radius: 20px;
+        border-radius: 18px;
       }
 
-      .btn {
+      .search input {
         min-height: 46px;
-        padding: 0 16px;
-        font-size: 0.92rem;
-      }
-
-      footer {
-        padding: 44px 0 96px;
         font-size: 0.9rem;
       }
 
-      .dock {
-        gap: 6px;
-        padding: 7px;
+      /* Botones generales */
+      .btn {
+        min-height: 46px;
+        padding: 0 16px;
+        font-size: 0.9rem;
       }
 
-      .tiktok-handle strong {
-        font-size: 1.6rem;
+      /* Footer y dock */
+      footer {
+        padding: 40px 0 92px;
+        font-size: 0.88rem;
+      }
+
+      .dock {
+        gap: 5px;
+        padding: 6px;
+      }
+
+      .dock a,
+      .dock button {
+        width: 42px;
+        height: 42px;
       }
     }
 
+    /* ── Teléfonos muy pequeños (≤ 360px) ───────────────────────── */
     @media (max-width: 360px) {
       h1 {
-        font-size: 2.2rem;
+        font-size: 2rem;
         line-height: 0.96;
       }
 
+      /* Ocultar visual del hero: libera mucho espacio */
       .hero-visual {
         display: none;
       }
 
-      .nav-links a {
-        padding: 7px 6px;
-        font-size: 0.7rem;
-      }
-
-      .nav {
-        gap: 10px;
-      }
-
-      .intro-title {
-        font-size: 1.7rem;
-      }
-
       .section {
-        padding: 40px 0;
+        padding: 36px 0;
+      }
+
+      /* Thumbnail del script va a la parte superior */
+      .script-card {
+        display: flex;
+        flex-direction: column;
+        padding: 12px;
+        border-radius: 20px;
       }
 
       .script-card .script-meta {
         padding-right: 0;
       }
 
+      .script-side {
+        order: -1;
+        display: grid;
+        gap: 8px;
+      }
+
       .script-thumb {
         position: static;
         width: 100%;
-        height: 120px;
-        border-radius: 16px;
+        height: 110px;
+        border-radius: 14px;
         transform: none;
-        order: -1;
       }
 
       .script-thumb img {
         object-position: center top;
       }
 
-      .script-card {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .script-side {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+      .script-actions {
+        justify-content: stretch;
       }
 
       .copy-btn {
-        width: 100%;
+        flex: 1;
         justify-content: center;
+      }
+
+      .intro-title {
+        font-size: 1.6rem;
       }
     }
 
