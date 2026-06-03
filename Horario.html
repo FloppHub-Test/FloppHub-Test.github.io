@@ -1,1414 +1,2469 @@
 <!DOCTYPE html>
 <html lang="es-MX">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#F2F2F7" id="themeColorMeta">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Horario 2°C | COBAQROO</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root {
---bg-color: #F2F2F7;
---text-primary: #000000;
---text-secondary: #8E8E93;
---card-bg: rgba(255, 255, 255, 0.75);
---card-border: rgba(0, 0, 0, 0.05);
---accent-color: #007AFF;
---recess-color: #FF9500;
---active-color: #34C759;
---free-color: #AF52DE;
---radius-lg: 24px;
---radius-md: 16px;
---radius-sm: 10px;
---blur: blur(20px);
---shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
-}
-@media (prefers-color-scheme: dark) {
-body:not(.light-mode) {
---bg-color: #000000;
---text-primary: #FFFFFF;
---text-secondary: #98989D;
---card-bg: rgba(28, 28, 30, 0.75);
---card-border: rgba(255, 255, 255, 0.08);
---accent-color: #0A84FF;
---recess-color: #FF9F0A;
---active-color: #30D158;
---free-color: #BF5AF2;
---shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
-}
-}
-body.dark-mode {
---bg-color: #000000;
---text-primary: #FFFFFF;
---text-secondary: #98989D;
---card-bg: rgba(28, 28, 30, 0.75);
---card-border: rgba(255, 255, 255, 0.08);
---accent-color: #0A84FF;
---recess-color: #FF9F0A;
---active-color: #30D158;
---free-color: #BF5AF2;
---shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
-}
-body.light-mode {
---bg-color: #F2F2F7;
---text-primary: #000000;
---text-secondary: #8E8E93;
---card-bg: rgba(255, 255, 255, 0.75);
---card-border: rgba(0, 0, 0, 0.05);
---accent-color: #007AFF;
---recess-color: #FF9500;
---active-color: #34C759;
---free-color: #AF52DE;
---shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
-}
-* {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
--webkit-tap-highlight-color: transparent;
-}
-body {
-font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-background-color: var(--bg-color);
-color: var(--text-primary);
-line-height: 1.5;
-transition: background-color 0.4s ease, color 0.4s ease;
-padding-bottom: 100px;
-}
-.header {
-padding: 40px 20px 20px;
-display: flex;
-justify-content: space-between;
-align-items: flex-end;
-max-width: 1000px;
-margin: 0 auto;
-}
-.header-titles h1 {
-font-size: 34px;
-font-weight: 700;
-letter-spacing: -0.5px;
-}
-.header-titles p {
-font-size: 13px;
-font-weight: 500;
-color: var(--text-secondary);
-text-transform: uppercase;
-letter-spacing: 0.5px;
-margin-top: 4px;
-}
-.header-time {
-text-align: right;
-}
-#clock {
-font-size: 24px;
-font-weight: 600;
-font-variant-numeric: tabular-nums;
-letter-spacing: -0.5px;
-}
-#date {
-font-size: 13px;
-color: var(--text-secondary);
-font-weight: 500;
-}
-.container {
-max-width: 1000px;
-margin: 0 auto;
-padding: 0 20px;
-}
-.holiday-alert {
-background: var(--card-bg);
-backdrop-filter: var(--blur);
--webkit-backdrop-filter: var(--blur);
-border: 0.5px solid var(--card-border);
-border-radius: var(--radius-md);
-padding: 16px 20px;
-margin-bottom: 24px;
-display: flex;
-align-items: center;
-gap: 12px;
-font-weight: 600;
-color: var(--accent-color);
-box-shadow: var(--shadow);
-display: none;
-}
-.holiday-alert.show {
-display: flex;
-}
-.holiday-alert ion-icon {
-font-size: 24px;
-}
-.grid-2 {
-display: grid;
-grid-template-columns: repeat(2, 1fr);
-gap: 16px;
-margin-bottom: 24px;
-}
-.widget {
-background: var(--card-bg);
-backdrop-filter: var(--blur);
--webkit-backdrop-filter: var(--blur);
-border: 0.5px solid var(--card-border);
-border-radius: var(--radius-lg);
-padding: 20px;
-box-shadow: var(--shadow);
-display: flex;
-flex-direction: column;
-justify-content: space-between;
-}
-.widget-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 16px;
-}
-.widget-title {
-font-size: 13px;
-font-weight: 600;
-color: var(--text-secondary);
-text-transform: uppercase;
-letter-spacing: 0.5px;
-display: flex;
-align-items: center;
-gap: 6px;
-}
-.widget-title ion-icon {
-font-size: 16px;
-}
-.widget-badge {
-font-size: 13px;
-font-weight: 600;
-padding: 4px 10px;
-border-radius: 20px;
-background: rgba(142, 142, 147, 0.12);
-color: var(--text-secondary);
-}
-.widget-content h3 {
-font-size: 22px;
-font-weight: 600;
-line-height: 1.2;
-margin-bottom: 8px;
-letter-spacing: -0.3px;
-}
-.widget-details {
-font-size: 15px;
-color: var(--text-secondary);
-font-weight: 500;
-display: flex;
-flex-direction: column;
-gap: 2px;
-}
-.widget.active {
-border: 1.5px solid var(--active-color);
-}
-.widget.active .widget-title {
-color: var(--active-color);
-}
-.widget.recess {
-border: 1.5px solid var(--recess-color);
-}
-.widget.recess .widget-title {
-color: var(--recess-color);
-}
-.stats-row {
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-gap: 16px;
-margin-bottom: 32px;
-}
-.stat-box {
-background: var(--card-bg);
-backdrop-filter: var(--blur);
--webkit-backdrop-filter: var(--blur);
-border: 0.5px solid var(--card-border);
-border-radius: var(--radius-md);
-padding: 16px;
-box-shadow: var(--shadow);
-display: flex;
-flex-direction: column;
-align-items: center;
-text-align: center;
-}
-.stat-value {
-font-size: 24px;
-font-weight: 700;
-margin-bottom: 4px;
-letter-spacing: -0.5px;
-}
-.stat-label {
-font-size: 12px;
-font-weight: 500;
-color: var(--text-secondary);
-text-transform: uppercase;
-}
-.section-title {
-font-size: 22px;
-font-weight: 700;
-margin-bottom: 16px;
-margin-top: 32px;
-letter-spacing: -0.3px;
-display: flex;
-align-items: center;
-gap: 8px;
-}
-.section-title ion-icon {
-color: var(--accent-color);
-}
-.schedule-container {
-background: var(--card-bg);
-backdrop-filter: var(--blur);
--webkit-backdrop-filter: var(--blur);
-border: 0.5px solid var(--card-border);
-border-radius: var(--radius-lg);
-box-shadow: var(--shadow);
-overflow-x: auto;
--webkit-overflow-scrolling: touch;
-padding: 8px;
-}
-table {
-width: 100%;
-min-width: 800px;
-border-collapse: separate;
-border-spacing: 4px;
-}
-th {
-font-size: 13px;
-font-weight: 600;
-color: var(--text-secondary);
-padding: 12px 8px;
-text-transform: uppercase;
-letter-spacing: 0.5px;
-}
-td {
-background: rgba(142, 142, 147, 0.08);
-border-radius: var(--radius-sm);
-padding: 12px 8px;
-text-align: center;
-font-size: 14px;
-font-weight: 500;
-cursor: pointer;
-transition: transform 0.2s, background 0.2s;
-vertical-align: middle;
-}
-td:hover {
-transform: scale(1.02);
-}
-.time-col {
-font-weight: 600;
-color: var(--text-secondary);
-background: transparent;
-font-size: 13px;
-}
-td.class-cell {
-background: var(--card-bg);
-border: 0.5px solid var(--card-border);
-}
-td.class-cell.active-highlight {
-background: rgba(52, 199, 89, 0.15);
-border: 1px solid var(--active-color);
-color: var(--active-color);
-font-weight: 600;
-}
-td.class-cell.recess {
-background: rgba(255, 149, 0, 0.1);
-color: var(--recess-color);
-font-weight: 600;
-}
-td.class-cell.free {
-background: transparent;
-border: 1px dashed var(--card-border);
-color: var(--text-secondary);
-}
-.cell-subject {
-margin-bottom: 4px;
-line-height: 1.2;
-}
-.cell-code {
-font-size: 11px;
-color: var(--text-secondary);
-opacity: 0.8;
-}
-.list-grid {
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-gap: 16px;
-}
-.list-card {
-background: var(--card-bg);
-backdrop-filter: var(--blur);
--webkit-backdrop-filter: var(--blur);
-border: 0.5px solid var(--card-border);
-border-radius: var(--radius-md);
-padding: 16px;
-box-shadow: var(--shadow);
-display: flex;
-align-items: center;
-gap: 16px;
-cursor: pointer;
-transition: transform 0.2s;
-}
-.list-card:hover {
-transform: scale(1.02);
-}
-.list-icon {
-width: 48px;
-height: 48px;
-border-radius: 50%;
-background: rgba(142, 142, 147, 0.12);
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 24px;
-color: var(--accent-color);
-flex-shrink: 0;
-font-weight: 600;
-}
-.list-content h4 {
-font-size: 16px;
-font-weight: 600;
-margin-bottom: 2px;
-}
-.list-content p {
-font-size: 14px;
-color: var(--text-secondary);
-line-height: 1.3;
-}
-.fab {
-position: fixed;
-bottom: 24px;
-right: 24px;
-width: 56px;
-height: 56px;
-border-radius: 28px;
-background: var(--card-bg);
-backdrop-filter: var(--blur);
--webkit-backdrop-filter: var(--blur);
-border: 0.5px solid var(--card-border);
-box-shadow: 0 4px 24px rgba(0,0,0,0.15);
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 24px;
-color: var(--text-primary);
-cursor: pointer;
-z-index: 100;
-transition: transform 0.2s;
-}
-.fab:active {
-transform: scale(0.9);
-}
-.modal-overlay {
-position: fixed;
-inset: 0;
-background: rgba(0, 0, 0, 0.4);
-backdrop-filter: blur(4px);
--webkit-backdrop-filter: blur(4px);
-z-index: 999;
-display: none;
-align-items: center;
-justify-content: center;
-padding: 20px;
-opacity: 0;
-transition: opacity 0.3s ease;
-}
-.modal-overlay.show {
-display: flex;
-opacity: 1;
-}
-.modal-card {
-background: var(--card-bg);
-backdrop-filter: var(--blur);
--webkit-backdrop-filter: var(--blur);
-border: 0.5px solid var(--card-border);
-border-radius: var(--radius-lg);
-width: 100%;
-max-width: 400px;
-padding: 24px;
-box-shadow: 0 16px 48px rgba(0,0,0,0.2);
-transform: translateY(20px) scale(0.95);
-transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-display: flex;
-flex-direction: column;
-align-items: center;
-text-align: center;
-position: relative;
-}
-.modal-overlay.show .modal-card {
-transform: translateY(0) scale(1);
-}
-.modal-close {
-position: absolute;
-top: 16px;
-right: 16px;
-width: 32px;
-height: 32px;
-border-radius: 16px;
-background: rgba(142, 142, 147, 0.12);
-display: flex;
-align-items: center;
-justify-content: center;
-cursor: pointer;
-font-size: 20px;
-color: var(--text-secondary);
-}
-.modal-icon-large {
-width: 64px;
-height: 64px;
-border-radius: 32px;
-background: rgba(10, 132, 255, 0.1);
-color: var(--accent-color);
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 32px;
-margin-bottom: 16px;
-font-weight: 600;
-}
-.modal-title {
-font-size: 22px;
-font-weight: 700;
-margin-bottom: 4px;
-}
-.modal-subtitle {
-font-size: 15px;
-color: var(--text-secondary);
-margin-bottom: 24px;
-}
-.modal-boxes {
-width: 100%;
-display: flex;
-flex-direction: column;
-gap: 12px;
-}
-.modal-box {
-background: rgba(142, 142, 147, 0.08);
-border-radius: var(--radius-md);
-padding: 12px 16px;
-display: flex;
-align-items: center;
-justify-content: space-between;
-}
-.box-label {
-font-size: 13px;
-font-weight: 500;
-color: var(--text-secondary);
-display: flex;
-align-items: center;
-gap: 6px;
-}
-.box-value {
-font-size: 15px;
-font-weight: 600;
-text-align: right;
-}
-.tag-container {
-display: flex;
-flex-wrap: wrap;
-gap: 8px;
-justify-content: center;
-width: 100%;
-}
-.tag {
-background: rgba(10, 132, 255, 0.1);
-color: var(--accent-color);
-font-size: 14px;
-font-weight: 500;
-padding: 6px 12px;
-border-radius: 16px;
-}
-@media (max-width: 768px) {
-.grid-2 {
-grid-template-columns: 1fr;
-}
-.header {
-padding: 30px 16px 16px;
-flex-direction: column;
-align-items: flex-start;
-gap: 12px;
-}
-.header-time {
-text-align: left;
-}
-.container {
-padding: 0 16px;
-}
-.section-title {
-margin-top: 24px;
-}
-.stats-row {
-gap: 12px;
-}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#F5F5FA" id="themeColorMeta">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Horario 2°C | COBAQROO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #F5F5FA;
+      --bg-container: #FFFFFF;
+      --text-main: #0F121D;
+      --text-muted: #6A6E82;
+      --glass-bg: rgba(255, 255, 255, 0.7);
+      --glass-border: rgba(0, 122, 255, 0.08);
+      --active-card: rgba(0, 122, 255, 0.04);
+      
+      --theme-primary: #007AFF;
+      --theme-dark: #0056B3;
+      --theme-light: #B3D7FF;
+      --theme-glow: rgba(0, 122, 255, 0.25);
+      --theme-gradient: linear-gradient(135deg, #007AFF, #00C7BE, #00F5FF);
+      
+      --color-suspension: #FF3B30;
+      --color-vacacion: #34C759;
+      --color-receso: #FF9500;
+      --color-carnaval: #00C7BE;
+      --color-tramite: #007AFF;
+      --color-academico: #1F52C5;
+      
+      --radius-xl: 30px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      
+      --shadow-premium: 0 10px 40px rgba(0, 122, 255, 0.05);
+      --shadow-inset: inset 0 1.5px 3px rgba(255, 255, 255, 0.4);
+      --blur-glass: blur(25px);
+      --transition-spring: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    body.dark-mode {
+      --bg-base: #000000;
+      --bg-container: #000000;
+      --text-main: #F1F3F9;
+      --text-muted: #82869A;
+      --glass-bg: rgba(0, 0, 0, 0.7);
+      --glass-border: rgba(10, 132, 255, 0.12);
+      --active-card: rgba(10, 132, 255, 0.08);
+      
+      --theme-primary: #0A84FF;
+      --theme-dark: #0056B3;
+      --theme-light: #80BFFF;
+      --theme-glow: rgba(10, 132, 255, 0.35);
+      --theme-gradient: linear-gradient(135deg, #0A84FF, #00C7BE, #00F5FF);
+      
+      --shadow-premium: 0 10px 40px rgba(0, 0, 0, 0.45);
+      --shadow-inset: inset 0 1.5px 3px rgba(255, 255, 255, 0.05);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-base);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      transition: background 0.5s ease, color 0.5s ease;
+      padding-bottom: 90px;
+    }
+
+    .app-background-glow {
+      position: fixed;
+      top: -150px;
+      right: -150px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, var(--theme-glow) 0%, rgba(0,122,255,0) 70%);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding: 10px 4px;
+    }
+
+    .header-logo {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header-logo h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+      background: var(--theme-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-logo p {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .header-info {
+      text-align: right;
+    }
+
+    #clock {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      background: var(--theme-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    #date {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeSlideIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .alert-panel {
+      background: var(--glass-bg);
+      backdrop-filter: var(--blur-glass);
+      -webkit-backdrop-filter: var(--blur-glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: var(--shadow-premium), var(--shadow-inset);
+      transform: scale(1);
+      transition: var(--transition-spring);
+    }
+
+    .alert-panel:hover {
+      transform: scale(1.01);
+    }
+
+    .alert-icon {
+      font-size: 24px;
+      color: var(--color-suspension);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulseAlert 2s infinite;
+    }
+
+    @keyframes pulseAlert {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.15); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .alert-text {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--blur-glass);
+      -webkit-backdrop-filter: var(--blur-glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      text-align: center;
+      box-shadow: var(--shadow-premium), var(--shadow-inset);
+      transition: var(--transition-spring);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--theme-primary);
+    }
+
+    .stat-circle {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 10px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stat-circle svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .stat-circle circle {
+      fill: none;
+      stroke-width: 3.5;
+    }
+
+    .stat-circle .circle-bg {
+      stroke: var(--glass-border);
+    }
+
+    .stat-circle .circle-progress {
+      stroke: var(--theme-primary);
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.6s ease;
+    }
+
+    .stat-circle-val {
+      position: absolute;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .stat-icon-wrapper {
+      width: 44px;
+      height: 44px;
+      background: var(--active-card);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: var(--theme-primary);
+      margin: 0 auto 10px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .stat-value-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 20px;
+    }
+
+    .main-widget {
+      background: var(--glass-bg);
+      backdrop-filter: var(--blur-glass);
+      -webkit-backdrop-filter: var(--blur-glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      box-shadow: var(--shadow-premium), var(--shadow-inset);
+      transition: var(--transition-spring);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    .main-widget::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 6px;
+      background: var(--sub-color, var(--theme-primary));
+      border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+    }
+
+    body.dark-mode .main-widget::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-xl);
+      box-shadow: 0 0 25px var(--sub-glow, rgba(99, 102, 241, 0.15));
+      pointer-events: none;
+      opacity: 0.8;
+      z-index: -1;
+    }
+
+    .main-widget-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+
+    .widget-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--active-card);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--sub-color, var(--theme-primary));
+    }
+
+    .widget-time {
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .main-widget-body h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+      line-height: 1.2;
+      color: var(--sub-color);
+    }
+
+    .widget-location {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .widget-teacher-bar {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar-circle {
+      width: 38px;
+      height: 38px;
+      background: var(--sub-color, var(--theme-primary));
+      color: #FFFFFF;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 4px 10px var(--sub-glow, rgba(0, 180, 216, 0.2));
+    }
+
+    .teacher-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .countdown-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--sub-color, var(--theme-primary));
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-header-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      margin: 28px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-header-title ion-icon {
+      color: var(--theme-primary);
+      font-size: 24px;
+    }
+
+    .view-switcher-bar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 16px;
+    }
+
+    .switcher-pill {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 3px;
+      display: flex;
+      gap: 2px;
+    }
+
+    .switcher-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: var(--transition-spring);
+    }
+
+    .switcher-btn.active {
+      background: var(--theme-primary);
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px var(--theme-glow);
+    }
+
+    .schedule-wrapper {
+      background: var(--glass-bg);
+      backdrop-filter: var(--blur-glass);
+      -webkit-backdrop-filter: var(--blur-glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 10px;
+      box-shadow: var(--shadow-premium), var(--shadow-inset);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+      width: 100%;
+      min-width: 800px;
+      border-collapse: separate;
+      border-spacing: 6px;
+    }
+
+    th {
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 12px 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      background: rgba(142, 142, 147, 0.05);
+      border: 1px solid transparent;
+      border-radius: var(--radius-md);
+      padding: 14px 10px;
+      text-align: center;
+      transition: var(--transition-spring);
+      cursor: pointer;
+      vertical-align: middle;
+    }
+
+    td:hover:not(.time-col) {
+      transform: scale(1.02) translateY(-2px);
+      box-shadow: var(--shadow-premium);
+    }
+
+    .time-col {
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: transparent;
+      width: 120px;
+      cursor: default;
+    }
+
+    td.class-cell {
+      background: var(--sub-bg);
+      border: 1.5px solid var(--sub-border);
+      color: var(--text-main);
+      position: relative;
+    }
+
+    td.class-cell::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--sub-color);
+      border-radius: var(--radius-md) 0 0 var(--radius-md);
+    }
+
+    td.cell-active {
+      border: 1.5px solid var(--sub-color);
+      box-shadow: 0 0 15px var(--sub-glow);
+    }
+
+    td.cell-free {
+      background: transparent;
+      border: 1px dashed var(--glass-border);
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+
+    td.cell-free::before {
+      display: none;
+    }
+
+    .cell-subject-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 3px;
+      text-shadow: none;
+      filter: none;
+      position: relative;
+      z-index: 1;
+      color: var(--sub-color);
+    }
+
+    .cell-room-code {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .mobile-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .timeline-item {
+      background: var(--sub-bg);
+      border: 1.5px solid var(--sub-border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-premium), var(--shadow-inset);
+      transition: var(--transition-spring);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 5px;
+      background: var(--sub-color);
+      border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    }
+
+    .timeline-item:hover {
+      transform: translateY(-2px);
+      border-color: var(--sub-color);
+    }
+
+    .timeline-item.active {
+      border-color: var(--sub-color);
+      box-shadow: 0 0 15px var(--sub-glow);
+    }
+
+    .timeline-time {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 80px;
+      padding-right: 12px;
+      border-right: 1.5px solid var(--glass-border);
+      text-align: center;
+    }
+
+    .timeline-time span {
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .timeline-time span.time-end {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .timeline-details {
+      flex-grow: 1;
+    }
+
+    .timeline-details h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--sub-color);
+    }
+
+    .timeline-subdetails {
+      display: flex;
+      gap: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .search-filter-container {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-input-wrapper ion-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+      color: var(--text-muted);
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--glass-bg);
+      backdrop-filter: var(--blur-glass);
+      -webkit-backdrop-filter: var(--blur-glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 14px 16px 14px 48px;
+      font-family: inherit;
+      font-size: 14px;
+      color: inherit;
+      box-shadow: var(--shadow-premium), var(--shadow-inset);
+      transition: var(--transition-spring);
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--theme-primary);
+      box-shadow: 0 0 15px var(--theme-glow);
+    }
+
+    .filter-pills-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 2px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .filter-pills-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-pill {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: var(--transition-spring);
+      color: var(--text-muted);
+    }
+
+    .filter-pill.active {
+      background: var(--theme-primary);
+      color: #FFFFFF;
+      border-color: var(--theme-primary);
+      box-shadow: 0 4px 12px var(--theme-glow);
+    }
+
+    .event-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .event-card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--blur-glass);
+      -webkit-backdrop-filter: var(--blur-glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-premium), var(--shadow-inset);
+      transition: var(--transition-spring);
+      cursor: pointer;
+    }
+
+    .event-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--theme-primary);
+    }
+
+    .event-badge-indicator {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .event-card.cat-suspension .event-badge-indicator { background: var(--color-suspension); box-shadow: 0 0 8px var(--color-suspension); }
+    .event-card.cat-vacacion .event-badge-indicator { background: var(--color-vacacion); box-shadow: 0 0 8px var(--color-vacacion); }
+    .event-card.cat-receso .event-badge-indicator { background: var(--color-receso); box-shadow: 0 0 8px var(--color-receso); }
+    .event-card.cat-carnaval .event-badge-indicator { background: var(--color-carnaval); box-shadow: 0 0 8px var(--color-carnaval); }
+    .event-card.cat-tramite .event-badge-indicator { background: var(--color-tramite); box-shadow: 0 0 8px var(--color-tramite); }
+    .event-card.cat-academico .event-badge-indicator { background: var(--color-academico); box-shadow: 0 0 8px var(--color-academico); }
+
+    .event-date-box {
+      min-width: 90px;
+      text-align: left;
+    }
+
+    .event-date-box h5 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .event-info-box {
+      flex-grow: 1;
+    }
+
+    .event-info-box h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .event-info-box p {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .teachers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .teacher-card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--blur-glass);
+      -webkit-backdrop-filter: var(--blur-glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-premium), var(--shadow-inset);
+      transition: var(--transition-spring);
+      cursor: pointer;
+    }
+
+    .teacher-card:hover {
+      transform: translateY(-2px) scale(1.01);
+      border-color: var(--theme-primary);
+    }
+
+    .teacher-initials-badge {
+      width: 48px;
+      height: 48px;
+      background: var(--active-card);
+      border: 1px solid var(--glass-border);
+      color: var(--theme-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      box-shadow: var(--shadow-inset);
+    }
+
+    .teacher-card-info h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .teacher-card-info p {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 3px;
+    }
+
+    .bottom-nav-dock {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 40px);
+      max-width: 460px;
+      height: 68px;
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(30px) saturate(190%);
+      -webkit-backdrop-filter: blur(30px) saturate(190%);
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      border-radius: 35px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), inset 0 2px 4px rgba(255,255,255,0.4);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
+      padding: 0 10px;
+      transition: background 0.4s, border-color 0.4s, transform 0.3s;
+    }
+
+    body.dark-mode .bottom-nav-dock {
+      background: rgba(16, 16, 24, 0.4);
+      border: 1.5px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255,255,255,0.05);
+    }
+
+    .bottom-nav-dock:hover {
+      transform: translateX(-50%) scale(1.02);
+    }
+
+    .nav-tab-btn {
+      background: transparent;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      width: 60px;
+      height: 54px;
+      border-radius: 20px;
+      transition: var(--transition-spring);
+      position: relative;
+    }
+
+    .nav-tab-btn.active {
+      color: var(--theme-primary);
+    }
+
+    .nav-tab-btn ion-icon {
+      font-size: 22px;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .nav-tab-btn.active ion-icon {
+      transform: scale(1.15) translateY(-2px);
+    }
+
+    .nav-tab-btn span {
+      font-size: 10px;
+      font-weight: 700;
+      margin-top: 3px;
+      opacity: 0.8;
+    }
+
+    .nav-tab-indicator-dot {
+      position: absolute;
+      bottom: 2px;
+      width: 4px;
+      height: 4px;
+      background: var(--theme-primary);
+      border-radius: 50%;
+      box-shadow: 0 0 6px var(--theme-primary);
+      opacity: 0;
+      transform: scale(0);
+      transition: var(--transition-spring);
+    }
+
+    .nav-tab-btn.active .nav-tab-indicator-dot {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .theme-toggle-floating-btn {
+      position: fixed;
+      top: 24px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      background: var(--glass-bg);
+      backdrop-filter: var(--blur-glass);
+      -webkit-backdrop-filter: var(--blur-glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-premium), var(--shadow-inset);
+      cursor: pointer;
+      z-index: 100;
+      transition: var(--transition-spring);
+    }
+
+    .theme-toggle-floating-btn:hover {
+      transform: scale(1.08) rotate(15deg);
+      border-color: var(--theme-primary);
+    }
+
+    .theme-toggle-floating-btn ion-icon {
+      font-size: 20px;
+      color: var(--text-main);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 15, 25, 0.4);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.4s;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .bottom-sheet {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: var(--bg-container);
+      border-top: 1.5px solid var(--glass-border);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease, visibility 0.4s ease;
+      padding: 16px 24px 34px;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .bottom-sheet.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .sheet-handle-bar {
+      width: 40px;
+      height: 5px;
+      background: var(--glass-border);
+      border-radius: 3px;
+      margin: 0 auto 20px;
+      cursor: grab;
+    }
+
+    .sheet-close-btn {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      width: 32px;
+      height: 32px;
+      background: var(--active-card);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+      color: var(--text-muted);
+      border: 1px solid var(--glass-border);
+    }
+
+    .sheet-header-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--active-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: var(--theme-primary);
+      margin: 10px auto 16px;
+    }
+
+    .sheet-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .sheet-subtitle {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sheet-content-info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .sheet-info-row {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sheet-row-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sheet-row-value {
+      font-size: 14px;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .sheet-description-box {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 500;
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .tags-flex-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .sheet-info-tag {
+      background: var(--active-card);
+      border: 1.5px solid var(--glass-border);
+      color: var(--theme-primary);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+      box-shadow: var(--shadow-inset);
+    }
+
+    .sub-math {
+      --sub-color: #32ADE6;
+      --sub-border: rgba(50, 173, 230, 0.6);
+      --sub-bg: rgba(50, 173, 230, 0.38);
+      --sub-glow: rgba(50, 173, 230, 0.25);
+    }
+    body.dark-mode .sub-math {
+      --sub-color: #64D2FF;
+      --sub-border: rgba(100, 210, 255, 0.65);
+      --sub-bg: rgba(100, 210, 255, 0.38);
+      --sub-glow: rgba(100, 210, 255, 0.4);
+    }
+    
+    .sub-english {
+      --sub-color: #FF2D55;
+      --sub-border: rgba(255, 45, 85, 0.6);
+      --sub-bg: rgba(255, 45, 85, 0.38);
+      --sub-glow: rgba(255, 45, 85, 0.25);
+    }
+    body.dark-mode .sub-english {
+      --sub-color: #FF85A2;
+      --sub-border: rgba(255, 133, 162, 0.65);
+      --sub-bg: rgba(255, 133, 162, 0.38);
+      --sub-glow: rgba(255, 133, 162, 0.4);
+    }
+    
+    .sub-humanities {
+      --sub-color: #FF9500;
+      --sub-border: rgba(255, 149, 0, 0.6);
+      --sub-bg: rgba(255, 149, 0, 0.38);
+      --sub-glow: rgba(255, 149, 0, 0.25);
+    }
+    body.dark-mode .sub-humanities {
+      --sub-color: #FFB74D;
+      --sub-border: rgba(255, 183, 77, 0.65);
+      --sub-bg: rgba(255, 183, 77, 0.38);
+      --sub-glow: rgba(255, 183, 77, 0.4);
+    }
+    
+    .sub-language {
+      --sub-color: #007AFF;
+      --sub-border: rgba(0, 122, 255, 0.6);
+      --sub-bg: rgba(0, 122, 255, 0.38);
+      --sub-glow: rgba(0, 122, 255, 0.25);
+    }
+    body.dark-mode .sub-language {
+      --sub-color: #7EC2FF;
+      --sub-border: rgba(126, 194, 255, 0.65);
+      --sub-bg: rgba(126, 194, 255, 0.38);
+      --sub-glow: rgba(126, 194, 255, 0.4);
+    }
+    
+    .sub-science {
+      --sub-color: #34C759;
+      --sub-border: rgba(52, 199, 89, 0.6);
+      --sub-bg: rgba(52, 199, 89, 0.38);
+      --sub-glow: rgba(52, 199, 89, 0.25);
+    }
+    body.dark-mode .sub-science {
+      --sub-color: #8CEF9C;
+      --sub-border: rgba(140, 239, 156, 0.65);
+      --sub-bg: rgba(140, 239, 156, 0.38);
+      --sub-glow: rgba(140, 239, 156, 0.4);
+    }
+    
+    .sub-social {
+      --sub-color: #1F52C5;
+      --sub-border: rgba(31, 82, 197, 0.6);
+      --sub-bg: rgba(31, 82, 197, 0.38);
+      --sub-glow: rgba(31, 82, 197, 0.25);
+    }
+    body.dark-mode .sub-social {
+      --sub-color: #5E9BFF;
+      --sub-border: rgba(94, 155, 255, 0.65);
+      --sub-bg: rgba(94, 155, 255, 0.38);
+      --sub-glow: rgba(94, 155, 255, 0.4);
+    }
+    
+    .sub-ediesyg {
+      --sub-color: #FF3B30;
+      --sub-border: rgba(255, 59, 48, 0.6);
+      --sub-bg: rgba(255, 59, 48, 0.38);
+      --sub-glow: rgba(255, 59, 48, 0.25);
+    }
+    body.dark-mode .sub-ediesyg {
+      --sub-color: #FF8A80;
+      --sub-border: rgba(255, 138, 128, 0.65);
+      --sub-bg: rgba(255, 138, 128, 0.38);
+      --sub-glow: rgba(255, 138, 128, 0.4);
+    }
+    
+    .sub-sports {
+      --sub-color: #FFCC00;
+      --sub-border: rgba(255, 204, 0, 0.6);
+      --sub-bg: rgba(255, 204, 0, 0.38);
+      --sub-glow: rgba(255, 204, 0, 0.25);
+    }
+    body.dark-mode .sub-sports {
+      --sub-color: #FFE082;
+      --sub-border: rgba(255, 224, 130, 0.65);
+      --sub-bg: rgba(255, 224, 130, 0.38);
+      --sub-glow: rgba(255, 224, 130, 0.4);
+    }
+    
+    .sub-digital {
+      --sub-color: #00C7BE;
+      --sub-border: rgba(0, 199, 190, 0.6);
+      --sub-bg: rgba(0, 199, 190, 0.38);
+      --sub-glow: rgba(0, 199, 190, 0.25);
+    }
+    body.dark-mode .sub-digital {
+      --sub-color: #64FFDA;
+      --sub-border: rgba(100, 255, 218, 0.65);
+      --sub-bg: rgba(100, 255, 218, 0.38);
+      --sub-glow: rgba(100, 255, 218, 0.4);
+    }
+    
+    .sub-tutor {
+      --sub-color: #8E8E93;
+      --sub-border: rgba(142, 142, 147, 0.6);
+      --sub-bg: rgba(142, 142, 147, 0.38);
+      --sub-glow: rgba(142, 142, 147, 0.25);
+    }
+    body.dark-mode .sub-tutor {
+      --sub-color: #B0B0B5;
+      --sub-border: rgba(176, 176, 181, 0.65);
+      --sub-bg: rgba(176, 176, 181, 0.38);
+      --sub-glow: rgba(176, 176, 181, 0.4);
+    }
+    
+    .sub-recess {
+      --sub-color: #FF9500;
+      --sub-border: rgba(255, 149, 0, 0.6);
+      --sub-bg: rgba(255, 149, 0, 0.38);
+      --sub-glow: rgba(255, 149, 0, 0.25);
+    }
+    body.dark-mode .sub-recess {
+      --sub-color: #FFB74D;
+      --sub-border: rgba(255, 183, 77, 0.65);
+      --sub-bg: rgba(255, 183, 77, 0.38);
+      --sub-glow: rgba(255, 183, 77, 0.4);
+    }
+    
+    .sub-free {
+      --sub-color: #AEAEB2;
+      --sub-border: rgba(174, 174, 178, 0.3);
+      --sub-bg: transparent;
+      --sub-glow: transparent;
+    }
+    body.dark-mode .sub-free {
+      --sub-color: #3A3A3C;
+      --sub-border: rgba(58, 58, 60, 0.3);
+      --sub-bg: transparent;
+      --sub-glow: transparent;
+    }
+    
+    .sub-default {
+      --sub-color: #8E8E93;
+      --sub-border: rgba(142, 142, 147, 0.6);
+      --sub-bg: rgba(142, 142, 147, 0.38);
+      --sub-glow: rgba(142, 142, 147, 0.25);
+    }
+    body.dark-mode .sub-default {
+      --sub-color: #B0B0B5;
+      --sub-border: rgba(176, 176, 181, 0.65);
+      --sub-bg: rgba(176, 176, 181, 0.38);
+      --sub-glow: rgba(176, 176, 181, 0.4);
+    }
+
+    @media (max-width: 860px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      .app-background-glow {
+        width: 300px;
+        height: 300px;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .bottom-sheet {
+        max-width: 480px;
+        left: 50%;
+        top: 50%;
+        bottom: auto;
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--glass-border);
+        transform: translate(-50%, -40%) scale(0.95);
+      }
+      
+      .bottom-sheet.active {
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    @media (max-width: 580px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .header-info {
+        text-align: left;
+      }
+      .theme-toggle-floating-btn {
+        top: auto;
+        bottom: 100px;
+        right: 20px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      }
+    }
+  </style>
 </head>
-<body>
+<body class="light-mode">
+  <div class="app-background-glow"></div>
 
-<header class="header">
-<div class="header-titles">
-<h1>2° Semestre Grupo C</h1>
-<p>COBAQROO • Plantel Cancún Cuatro</p>
-</div>
-<div class="header-time">
-<div id="clock">--:-- --</div>
-<div id="date">Cargando...</div>
-</div>
-</header>
+  <div class="container">
+    <header>
+      <div class="header-logo">
+        <h1>2° Semestre Grupo C</h1>
+        <p>COBAQROO • Plantel Cancún Cuatro</p>
+      </div>
+      <div class="header-info">
+        <div id="clock">--:--:-- --</div>
+        <div id="date">Cargando...</div>
+      </div>
+    </header>
 
-<div class="container">
-<div id="holidayAlert" class="holiday-alert">
-<ion-icon name="alert-circle"></ion-icon>
-<span>Hoy no hay clases: <span id="holidayName"></span></span>
-</div>
+    <div id="holidayAlertPanel" class="alert-panel" style="display: none;">
+      <div class="alert-icon">
+        <ion-icon name="alert-circle"></ion-icon>
+      </div>
+      <div class="alert-text">
+        Hoy no hay clases: <span id="holidayAlertName" style="color: var(--color-suspension);"></span>
+      </div>
+    </div>
 
-<div class="stats-row">
-<div class="stat-box">
-<div class="stat-value" id="weekProgress">0%</div>
-<div class="stat-label">Progreso</div>
-</div>
-<div class="stat-box">
-<div class="stat-value" id="totalClasses">0</div>
-<div class="stat-label">Clases Hoy</div>
-</div>
-<div class="stat-box">
-<div class="stat-value" id="timeLeft">--</div>
-<div class="stat-label">Salida en</div>
-</div>
-</div>
+    <div id="tabHoy" class="tab-content active">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-circle">
+            <svg>
+              <circle class="circle-bg" cx="25" cy="25" r="21"></circle>
+              <circle class="circle-progress" cx="25" cy="25" r="21" stroke-dasharray="131.95" stroke-dashoffset="131.95" id="progressCircleVal"></circle>
+            </svg>
+            <span class="stat-circle-val" id="progressValText">0%</span>
+          </div>
+          <div class="stat-label">Progreso</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon-wrapper">
+            <ion-icon name="book"></ion-icon>
+          </div>
+          <div class="stat-value-text" id="classesCountText">0</div>
+          <div class="stat-label">Clases Hoy</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon-wrapper">
+            <ion-icon name="time"></ion-icon>
+          </div>
+          <div class="stat-value-text" id="timeLeftText">--</div>
+          <div class="stat-label">Salida en</div>
+        </div>
+      </div>
 
-<div class="grid-2">
-<div class="widget" id="currentCard">
-<div>
-<div class="widget-header">
-<div class="widget-title">
-<ion-icon name="play-circle"></ion-icon>
-Clase Actual
-</div>
-<div class="widget-badge" id="currentTimeBadge">--:-- - --:--</div>
-</div>
-<div class="widget-content">
-<h3 id="currentSubject">Cargando...</h3>
-<div class="widget-details">
-<span id="currentRoom">Aula --</span>
-</div>
-</div>
-</div>
-<div class="widget-details" style="margin-top: 16px; flex-direction: row; align-items: center; gap: 8px;" id="currentTeacherInfo">
-<div class="list-icon" style="width: 32px; height: 32px; font-size: 14px;" id="currentInitials">--</div>
-<span id="currentTeacher" style="font-size: 14px;">--</span>
-</div>
-</div>
+      <div class="dashboard-grid">
+        <div class="main-widget" id="activeClassCard">
+          <div class="main-widget-header">
+            <div class="widget-badge">
+              <ion-icon name="play-circle"></ion-icon>
+              <span>Clase Actual</span>
+            </div>
+            <div class="widget-time" id="activeClassTime">--:-- - --:--</div>
+          </div>
+          <div class="main-widget-body">
+            <h3 id="activeClassSubject">Cargando...</h3>
+            <div class="widget-location">
+              <ion-icon name="location"></ion-icon>
+              <span id="activeClassRoom">Aula --</span>
+            </div>
+          </div>
+          <div class="widget-teacher-bar" id="activeTeacherBar">
+            <div class="avatar-circle" id="activeTeacherInitials">--</div>
+            <div class="teacher-name" id="activeTeacherName">--</div>
+          </div>
+        </div>
 
-<div class="widget" id="nextCard">
-<div>
-<div class="widget-header">
-<div class="widget-title">
-<ion-icon name="play-forward-circle"></ion-icon>
-Siguiente
-</div>
-<div class="widget-badge" id="nextTimeBadge">--:-- - --:--</div>
-</div>
-<div class="widget-content">
-<h3 id="nextSubject">--</h3>
-<div class="widget-details">
-<span id="nextRoom">Aula --</span>
-<span id="nextCountdown" style="color: var(--accent-color); margin-top: 4px;">En -- min</span>
-</div>
-</div>
-</div>
-<div class="widget-details" style="margin-top: 16px; flex-direction: row; align-items: center; gap: 8px; display: none;" id="nextTeacherInfo">
-<div class="list-icon" style="width: 32px; height: 32px; font-size: 14px;" id="nextInitials">--</div>
-<span id="nextTeacher" style="font-size: 14px;">--</span>
-</div>
-</div>
-</div>
+        <div class="main-widget" id="nextClassCard">
+          <div class="main-widget-header">
+            <div class="widget-badge" style="color: var(--text-muted); background: var(--glass-border);">
+              <ion-icon name="play-forward"></ion-icon>
+              <span>Siguiente</span>
+            </div>
+            <div class="widget-time" id="nextClassTime">--:-- - --:--</div>
+          </div>
+          <div class="main-widget-body">
+            <h3 id="nextClassSubject">--</h3>
+            <div class="widget-location">
+              <ion-icon name="location"></ion-icon>
+              <span id="nextClassRoom">Aula --</span>
+            </div>
+            <div class="countdown-text">
+              <ion-icon name="hourglass-outline"></ion-icon>
+              <span id="nextClassCountdown">En -- min</span>
+            </div>
+          </div>
+          <div class="widget-teacher-bar" id="nextTeacherBar" style="display: none;">
+            <div class="avatar-circle" id="nextTeacherInitials">--</div>
+            <div class="teacher-name" id="nextTeacherName">--</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<h2 class="section-title"><ion-icon name="calendar"></ion-icon> Horario Semanal</h2>
-<div class="schedule-container">
-<table id="scheduleTable">
-<thead>
-<tr>
-<th>Hora</th>
-<th>Lunes</th>
-<th>Martes</th>
-<th>Miércoles</th>
-<th>Jueves</th>
-<th>Viernes</th>
-</tr>
-</thead>
-<tbody id="tableBody"></tbody>
-</table>
-</div>
+    <div id="tabHorario" class="tab-content">
+      <div class="view-switcher-bar">
+        <div class="switcher-pill">
+          <button id="btnSwitchTimeline" class="switcher-btn active" onclick="setTimetableView('timeline')">Día</button>
+          <button id="btnSwitchGrid" class="switcher-btn" onclick="setTimetableView('grid')">Semana</button>
+        </div>
+      </div>
 
-<h2 class="section-title"><ion-icon name="calendar-clear"></ion-icon> Eventos</h2>
-<div class="list-grid">
+      <div id="gridScheduleView" style="display: none;">
+        <div class="schedule-wrapper">
+          <table id="scheduleTable">
+            <thead>
+              <tr>
+                <th>Hora</th>
+                <th>Lunes</th>
+                <th>Martes</th>
+                <th>Miércoles</th>
+                <th>Jueves</th>
+                <th>Viernes</th>
+              </tr>
+            </thead>
+            <tbody id="scheduleTableBody"></tbody>
+          </table>
+        </div>
+      </div>
 
-<div class="list-card" onclick="showEventDetail('Inicio del Semestre y Clases A y B', '23 de Febrero - 6 de Marzo de 2026', 'Inicio de clases del semestre 2026-A. Periodo de inicio del semestre y clases para los grupos A y B')">
-<div class="list-icon" style="color: var(--accent-color); background: rgba(10, 132, 255, 0.1);">
-<ion-icon name="flag"></ion-icon>
-</div>
-<div class="list-content">
-<h4>23 Feb - 6 Mar</h4>
-<p>Inicio del Semestre y Clases A y B</p>
-</div>
-</div>
+      <div id="timelineScheduleView">
+        <div class="search-filter-container">
+          <div class="filter-pills-scroll" id="daySelectPills"></div>
+        </div>
+        <div class="mobile-timeline" id="timelineItemsContainer"></div>
+      </div>
+    </div>
 
-<div class="list-card" onclick="showEventDetail('Término de Clases A', '19-23 de Enero y 19-20 de Marzo de 2026', 'Término de clases del semestre A')">
-<div class="list-icon" style="color: #34C759; background: rgba(52, 199, 89, 0.1);">
-<ion-icon name="school"></ion-icon>
-</div>
-<div class="list-content">
-<h4>19-23 Ene / 19-20 Mar</h4>
-<p>Término de Clases A</p>
-</div>
-</div>
+    <div id="tabEventos" class="tab-content">
+      <div class="search-filter-container">
+        <div class="search-input-wrapper">
+          <ion-icon name="search-outline"></ion-icon>
+          <input type="text" id="eventSearchInput" class="search-input" placeholder="Buscar eventos por nombre..." oninput="filterEvents()">
+        </div>
+        <div class="filter-pills-scroll">
+          <button class="filter-pill active" onclick="setEventCategoryFilter('all', this)">Todos</button>
+          <button class="filter-pill" onclick="setEventCategoryFilter('suspension', this)">Suspensiones</button>
+          <button class="filter-pill" onclick="setEventCategoryFilter('vacacion', this)">Vacaciones / Recesos</button>
+          <button class="filter-pill" onclick="setEventCategoryFilter('tramite', this)">Trámites / Calificaciones</button>
+        </div>
+      </div>
+      <div class="event-timeline" id="eventsListContainer"></div>
+    </div>
 
-<div class="list-card" onclick="showEventDetail('Término de Semestre B y A', '26 de Enero - 3 de Febrero y 23-24 de Marzo de 2026', 'Término de semestre para los grupos B y A')">
-<div class="list-icon" style="color: #5856D6; background: rgba(88, 86, 214, 0.1);">
-<ion-icon name="checkmark-circle"></ion-icon>
-</div>
-<div class="list-content">
-<h4>26 Ene - 3 Feb / 23-24 Mar</h4>
-<p>Término de Semestre B y A</p>
-</div>
-</div>
+    <div id="tabProfesores" class="tab-content">
+      <div class="search-filter-container">
+        <div class="search-input-wrapper">
+          <ion-icon name="search-outline"></ion-icon>
+          <input type="text" id="teacherSearchInput" class="search-input" placeholder="Buscar docentes por nombre o materia..." oninput="filterTeachers()">
+        </div>
+      </div>
+      <div class="teachers-grid" id="teachersListContainer"></div>
+    </div>
+  </div>
 
-<div class="list-card" onclick="showEventDetail('Inscripciones y Reinscripciones Semestre A', '9-13 de Febrero de 2026', 'Periodo de inscripciones y reinscripciones para el semestre A')">
-<div class="list-icon" style="color: #8E8E93; background: rgba(142, 142, 147, 0.12);">
-<ion-icon name="create"></ion-icon>
-</div>
-<div class="list-content">
-<h4>09-13 Feb</h4>
-<p>Inscripciones y Reinscripciones Semestre A</p>
-</div>
-</div>
+  <nav class="bottom-nav-dock">
+    <button class="nav-tab-btn active" onclick="switchTab('Hoy', this)">
+      <ion-icon name="today"></ion-icon>
+      <span>Hoy</span>
+      <div class="nav-tab-indicator-dot"></div>
+    </button>
+    <button class="nav-tab-btn" onclick="switchTab('Horario', this)">
+      <ion-icon name="calendar"></ion-icon>
+      <span>Horario</span>
+      <div class="nav-tab-indicator-dot"></div>
+    </button>
+    <button class="nav-tab-btn" onclick="switchTab('Eventos', this)">
+      <ion-icon name="list-circle"></ion-icon>
+      <span>Eventos</span>
+      <div class="nav-tab-indicator-dot"></div>
+    </button>
+    <button class="nav-tab-btn" onclick="switchTab('Profesores', this)">
+      <ion-icon name="people"></ion-icon>
+      <span>Docentes</span>
+      <div class="nav-tab-indicator-dot"></div>
+    </button>
+  </nav>
 
-<div class="list-card" onclick="showEventDetail('Carnaval', '12-16 de Enero, 16-17 de Febrero y 17-18 de Marzo de 2026', 'Suspensión de labores por usos y costumbres (Carnaval)')">
-<div class="list-icon" style="color: #FF9500; background: rgba(255, 149, 0, 0.1);">
-<ion-icon name="color-wand"></ion-icon>
-</div>
-<div class="list-content">
-<h4>12-16 Ene / 16-17 Feb / 17-18 Mar</h4>
-<p>Suspensión por Usos y Costumbres (Carnaval)</p>
-</div>
-</div>
+  <div class="theme-toggle-floating-btn" onclick="toggleTheme()">
+    <ion-icon name="moon-outline" id="themeBtnIcon"></ion-icon>
+  </div>
 
-<div class="list-card" onclick="showEventDetail('Suspensión de Labores', '1 de Enero, 16 de Marzo, 1, 5 y 15 de Mayo de 2026', 'Días de suspensión de labores oficiales')">
-<div class="list-icon" style="color: #FF3B30; background: rgba(255, 59, 48, 0.1);">
-<ion-icon name="close-circle"></ion-icon>
-</div>
-<div class="list-content">
-<h4>1 Ene / 16 Mar / 1, 5, 15 May</h4>
-<p>Suspensión de Labores</p>
-</div>
-</div>
+  <div class="modal-overlay" id="modalOverlay" onclick="closeSheet()"></div>
+  
+  <div class="bottom-sheet" id="bottomSheet">
+    <div class="sheet-handle-bar"></div>
+    <div class="sheet-close-btn" onclick="closeSheet()">
+      <ion-icon name="close"></ion-icon>
+    </div>
+    <div class="sheet-header-icon" id="sheetIconBox">
+      <ion-icon name="book"></ion-icon>
+    </div>
+    <h2 class="sheet-title" id="sheetTitle">Título</h2>
+    <p class="sheet-subtitle" id="sheetSubtitle">Subtítulo</p>
+    <div class="sheet-content-info-list" id="sheetContentList"></div>
+    <div class="sheet-description-box" id="sheetDescBox"></div>
+  </div>
 
-<div class="list-card" onclick="showEventDetail('Vacaciones', '5-9 Ene, 18-20 Feb, 25-31 Mar, 6-30 Abr, 1-30 Jun 2026', 'Periodos vacacionales del calendario escolar')">
-<div class="list-icon" style="color: #34C759; background: rgba(52, 199, 89, 0.1);">
-<ion-icon name="leaf"></ion-icon>
-</div>
-<div class="list-content">
-<h4>Ene - Jun 2026</h4>
-<p>Vacaciones</p>
-</div>
-</div>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  
+  <script>
+    const scheduleData = {
+      'Lunes': [
+        { time: '07:00-07:50', subject: 'Inglés II', code: 'INGLÉS II A3', teacher: 'Graciela Rosalía May Polanco', room: 'A3', type: 'class' },
+        { time: '08:00-08:50', subject: 'Pensamiento Matemático II', code: 'PEMA A10', teacher: 'Nancy Sánchez Puc', room: 'A10', type: 'class' },
+        { time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
+        { time: '09:10-09:50', subject: 'EDIESYG II', code: 'EDIESYG A12', teacher: 'Yolanda Piña Flores', room: 'A12', type: 'class' },
+        { time: '10:00-10:50', subject: 'Lengua y Comunicación II', code: 'LEYCO II A8', teacher: 'Jaime Hernández Solís', room: 'A8', type: 'class' },
+        { time: '11:00-11:50', subject: 'Taller de Ciencias I', code: 'TC A11/LM 1', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11/LM 1', type: 'class' },
+        { time: '12:00-12:50', subject: 'Taller de Ciencias I', code: 'TC A11/LM 1', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11/LM 1', type: 'class' },
+        { time: '13:00-13:50', subject: 'Humanidades II', code: 'HUMA A4', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4', type: 'class' }
+      ],
+      'Martes': [
+        { time: '07:00-07:50', subject: 'Libre', code: null, teacher: null, room: null, type: 'free' },
+        { time: '08:00-08:50', subject: 'Ciencias Sociales II', code: 'CISO A6', teacher: 'Conrado Turriza Maricela', room: 'A6', type: 'class' },
+        { time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
+        { time: '09:10-09:50', subject: 'Taller de Ciencias I', code: 'TC A11', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11', type: 'class' },
+        { time: '10:00-10:50', subject: 'Lengua y Comunicación II', code: 'LEYCO II A8', teacher: 'Jaime Hernández Solís', room: 'A8', type: 'class' },
+        { time: '11:00-11:50', subject: 'Actividades Físicas II', code: 'AFD A15', teacher: 'Luis Humberto Concha Caballero', room: 'A15', type: 'class' },
+        { time: '12:00-12:50', subject: 'Humanidades II', code: 'HUMA A4', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4', type: 'class' },
+        { time: '13:00-13:50', subject: 'Libre', code: null, teacher: null, room: null, type: 'free' }
+      ],
+      'Miércoles': [
+        { time: '07:00-07:50', subject: 'Tutoría', code: 'TUTOR A6', teacher: 'Conrado Turriza Maricela', room: 'A6', type: 'class' },
+        { time: '08:00-08:50', subject: 'CEIM', code: 'CEIM A11/LM 1', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11/LM 1', type: 'class' },
+        { time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
+        { time: '09:10-09:50', subject: 'CEIM', code: 'CEIM A11/LM 1', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11/LM 1', type: 'class' },
+        { time: '10:00-10:50', subject: 'EDIESYG II', code: 'EDIESYG A12', teacher: 'Yolanda Piña Flores', room: 'A12', type: 'class' },
+        { time: '11:00-11:50', subject: 'Humanidades II', code: 'HUMA A4', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4', type: 'class' },
+        { time: '12:00-12:50', subject: 'Humanidades II', code: 'HUMA A4', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4', type: 'class' },
+        { time: '13:00-13:50', subject: 'Cultura Digital II', code: 'CUDI LAB INF', teacher: 'Yeni del Rocío Aguilar Cen', room: 'Lab Informática', type: 'class' }
+      ],
+      'Jueves': [
+        { time: '07:00-07:50', subject: 'Libre', code: null, teacher: null, room: null, type: 'free' },
+        { time: '08:00-08:50', subject: 'Pensamiento Matemático II', code: 'PEMA A10', teacher: 'Nancy Sánchez Puc', room: 'A10', type: 'class' },
+        { time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
+        { time: '09:10-09:50', subject: 'Pensamiento Matemático II', code: 'PEMA A10', teacher: 'Nancy Sánchez Puc', room: 'A10', type: 'class' },
+        { time: '10:00-10:50', subject: 'CEIM', code: 'CEIM A11', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11', type: 'class' },
+        { time: '11:00-11:50', subject: 'CEIM', code: 'CEIM A11', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11', type: 'class' },
+        { time: '12:00-12:50', subject: 'Cultura Digital II', code: 'CUDI LAB INF', teacher: 'Yeni del Rocío Aguilar Cen', room: 'Lab Informática', type: 'class' },
+        { time: '13:00-13:50', subject: 'Inglés II', code: 'INGLÉS II A3', teacher: 'Graciela Rosalía May Polanco', room: 'A3', type: 'class' }
+      ],
+      'Viernes': [
+        { time: '07:00-07:50', subject: 'Libre', code: null, teacher: null, room: null, type: 'free' },
+        { time: '08:00-08:50', subject: 'Pensamiento Matemático II', code: 'PEMA A10', teacher: 'Nancy Sánchez Puc', room: 'A10', type: 'class' },
+        { time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
+        { time: '09:10-09:50', subject: 'Taller de Ciencias I', code: 'TC A11', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11', type: 'class' },
+        { time: '10:00-10:50', subject: 'Inglés II', code: 'INGLÉS II A3', teacher: 'Graciela Rosalía May Polanco', room: 'A3', type: 'class' },
+        { time: '11:00-11:50', subject: 'Lengua y Comunicación II', code: 'LEYCO II A8', teacher: 'Jaime Hernández Solís', room: 'A8', type: 'class' },
+        { time: '12:00-12:50', subject: 'Actividades Físicas II', code: 'AFD A15', teacher: 'Luis Humberto Concha Caballero', room: 'A15', type: 'class' },
+        { time: '13:00-13:50', subject: 'Ciencias Sociales II', code: 'CISO A6', teacher: 'Conrado Turriza Maricela', room: 'A6', type: 'class' }
+      ]
+    };
 
-<div class="list-card" onclick="showEventDetail('Jornada Te Extrañamos en el Salón', '9-13 de Marzo de 2026', 'Jornada especial Te extrañamos en el salón')">
-<div class="list-icon" style="color: #AF52DE; background: rgba(175, 82, 222, 0.1);">
-<ion-icon name="heart"></ion-icon>
-</div>
-<div class="list-content">
-<h4>09-13 Mar</h4>
-<p>Jornada Te Extrañamos en el Salón</p>
-</div>
-</div>
+    const teachers = [
+      { name: 'Uitz Robledo Graciella Luciana', subjects: ['Taller de Ciencias I', 'CEIM'], initials: 'UG' },
+      { name: 'Graciela Rosalía May Polanco', subjects: ['Inglés II', 'Lengua y Comunicación II'], initials: 'GR' },
+      { name: 'Yolanda Piña Flores', subjects: ['EDIESYG II'], initials: 'YP' },
+      { name: 'Yeni del Rocío Aguilar Cen', subjects: ['Cultura Digital II'], initials: 'YA' },
+      { name: 'Nancy Sánchez Puc', subjects: ['Pensamiento Matemático II'], initials: 'NS' },
+      { name: 'Brenda Yazmin Corona Sánchez', subjects: ['Humanidades II'], initials: 'BY' },
+      { name: 'Conrado Turriza Maricela', subjects: ['Ciencias Sociales II', 'Tutoría'], initials: 'CT' },
+      { name: 'Jaime Hernández Solís', subjects: ['Lengua y Comunicación II'], initials: 'JH' },
+      { name: 'Luis Humberto Concha Caballero', subjects: ['Actividades Físicas II'], initials: 'LH' }
+    ];
 
-<div class="list-card" onclick="showEventDetail('Trabajo Colegiado', '24 de Abril de 2026', 'Día de trabajo colegiado para docentes')">
-<div class="list-icon" style="color: #FFCC00; background: rgba(255, 204, 0, 0.1);">
-<ion-icon name="people"></ion-icon>
-</div>
-<div class="list-content">
-<h4>24 Abr</h4>
-<p>Trabajo Colegiado</p>
-</div>
-</div>
+    const events = [
+      { id: 1, name: 'Año Nuevo', dateText: '1 de Enero', description: 'Suspensión oficial de labores', category: 'suspension', dateStart: '2026-01-01', dateEnd: '2026-01-01' },
+      { id: 2, name: 'Receso Intersemestral', dateText: '2 - 6 de Enero', description: 'Periodo de receso escolar intersemestral', category: 'receso', dateStart: '2026-01-02', dateEnd: '2026-01-06' },
+      { id: 3, name: 'Semana de Planeación Sindical', dateText: '7 - 13 de Enero', description: 'Semana de actividades previas para el personal sindicalizado', category: 'academico', dateStart: '2026-01-07', dateEnd: '2026-01-13' },
+      { id: 4, name: 'Trabajo Colegiado Docente', dateText: '14 - 16 de Enero', description: 'Sesiones de trabajo colegiado para el personal escolar', category: 'academico', dateStart: '2026-01-14', dateEnd: '2026-01-16' },
+      { id: 5, name: 'Capacitación Docente Semestral', dateText: '19 - 23 de Enero', description: 'Periodo de capacitación académica semestral para profesores', category: 'academico', dateStart: '2026-01-19', dateEnd: '2026-01-23' },
+      { id: 6, name: 'Jornada "Te Extrañamos en el Salón"', dateText: '19 - 23 de Enero', description: 'Jornada de reinserción escolar y seguimiento estudiantil', category: 'academico', dateStart: '2026-01-19', dateEnd: '2026-01-23' },
+      { id: 7, name: 'Término del Semestre Escolar', dateText: '26 - 30 de Enero', description: 'Conclusión oficial de clases del ciclo semestral', category: 'academico', dateStart: '2026-01-26', dateEnd: '2026-01-30' },
+      { id: 8, name: 'Trabajo Académico de Planeación', dateText: '26 - 30 de Enero', description: 'Actividades de planeación administrativa del plantel', category: 'academico', dateStart: '2026-01-26', dateEnd: '2026-01-30' },
+      { id: 9, name: 'Suspensión: Constitución Mexicana', dateText: '2 de Febrero', description: 'Suspensión oficial por el Aniversario de la Constitución', category: 'suspension', dateStart: '2026-02-02', dateEnd: '2026-02-02' },
+      { id: 10, name: 'Término de Actividades Administrativas', dateText: '3 de Febrero', description: 'Cierre del periodo intersemestral y labores previas', category: 'academico', dateStart: '2026-02-03', dateEnd: '2026-02-03' },
+      { id: 11, name: 'Solicitud de Examen Extraordinario', dateText: '9 - 11 de Febrero', description: 'Fecha para registro y solicitud de pago de exámenes extraordinarios', category: 'tramite', dateStart: '2026-02-09', dateEnd: '2026-02-11' },
+      { id: 12, name: 'Inscripciones y Reinscripciones A', dateText: '9 - 13 de Febrero', description: 'Periodo de inscripción y reinscripción de alumnos para el Semestre A', category: 'tramite', dateStart: '2026-02-09', dateEnd: '2026-02-13' },
+      { id: 13, name: 'Suspensión: Carnaval Escolar', dateText: '16 - 17 de Febrero', description: 'Suspensión de labores por usos y costumbres (Carnaval)', category: 'carnaval', dateStart: '2026-02-16', dateEnd: '2026-02-17' },
+      { id: 14, name: 'Vacaciones de Febrero', dateText: '18 - 20 de Febrero', description: 'Periodo vacacional corto del mes de febrero', category: 'vacacion', dateStart: '2026-02-18', dateEnd: '2026-02-20' },
+      { id: 15, name: 'Inicio de Semestre 2026-A', dateText: '23 de Febrero', description: 'Apertura oficial del periodo escolar e inicio de clases de los grupos A y B', category: 'academico', dateStart: '2026-02-23', dateEnd: '2026-03-06' },
+      { id: 16, name: 'Jornada "Te Extrañamos en el Salón"', dateText: '9 - 13 de Marzo', description: 'Segundo periodo de seguimiento y vinculación estudiantil', category: 'academico', dateStart: '2026-03-09', dateEnd: '2026-03-13' },
+      { id: 17, name: 'Aplicación de Examen Extraordinario', dateText: '11 - 13 de Marzo', description: 'Aplicación oficial de exámenes extraordinarios', category: 'tramite', dateStart: '2026-03-11', dateEnd: '2026-03-13' },
+      { id: 18, name: 'Suspensión: Natalicio Benito Juárez', dateText: '16 de Marzo', description: 'Suspensión oficial de labores', category: 'suspension', dateStart: '2026-03-16', dateEnd: '2026-03-16' },
+      { id: 19, name: 'Suspensión: Carnaval Regional', dateText: '17 - 18 de Marzo', description: 'Suspensión por usos y costumbres por Carnaval local', category: 'carnaval', dateStart: '2026-03-17', dateEnd: '2026-03-18' },
+      { id: 20, name: 'Recuperación Académica Trimestral', dateText: '19 - 20 de Marzo', description: 'Asesorías de recuperación académica para alumnos rezagados', category: 'tramite', dateStart: '2026-03-19', dateEnd: '2026-03-20' },
+      { id: 21, name: 'Evaluación Intermedia de Semestre', dateText: '23 - 24 de Marzo', description: 'Corte de evaluación académica del semestre', category: 'academico', dateStart: '2026-03-23', dateEnd: '2026-03-24' },
+      { id: 22, name: 'Receso Intersemestral Primavera', dateText: '25 de Marzo - 3 de Abril', description: 'Receso de primavera y actividades sin alumnos', category: 'receso', dateStart: '2026-03-25', dateEnd: '2026-04-03' },
+      { id: 23, name: 'Vacaciones de Primavera (Semana Santa)', dateText: '6 - 23 de Abril', description: 'Periodo vacacional de Semana Santa y Pascua', category: 'vacacion', dateStart: '2026-04-06', dateEnd: '2026-04-23' },
+      { id: 24, name: 'Trabajo Colegiado del Plantel', dateText: '24 de Abril', description: 'Sesión académica de Trabajo Colegiado', category: 'academico', dateStart: '2026-04-24', dateEnd: '2026-04-24' },
+      { id: 25, name: 'Suspensión: Día del Trabajo', dateText: '1 de Mayo', description: 'Suspensión oficial de labores', category: 'suspension', dateStart: '2026-05-01', dateEnd: '2026-05-01' },
+      { id: 26, name: 'Suspensión: Batalla de Puebla', dateText: '5 de Mayo', description: 'Suspensión oficial de labores', category: 'suspension', dateStart: '2026-05-05', dateEnd: '2026-05-05' },
+      { id: 27, name: 'Suspensión: Día del Maestro', dateText: '15 de Mayo', description: 'Suspensión oficial de labores de tipo escolar', category: 'suspension', dateStart: '2026-05-15', dateEnd: '2026-05-15' },
+      { id: 28, name: 'Captura de Calificaciones SICE A', dateText: '18 - 22 de Mayo', description: 'Periodo de captura de calificaciones del segundo bloque en el SICE', category: 'tramite', dateStart: '2026-05-18', dateEnd: '2026-05-22' },
+      { id: 29, name: 'Reunión de Evaluación Docente', dateText: '25 - 27 de Mayo', description: 'Evaluación colegiada docente y planeación didáctica', category: 'tramite', dateStart: '2026-05-25', dateEnd: '2026-05-27' },
+      { id: 30, name: 'Captura de Recuperación Académica', dateText: '28 de Mayo - 1 de Junio', description: 'Periodo para registrar en SICE las notas de recuperación', category: 'tramite', dateStart: '2026-05-28', dateEnd: '2026-06-01' },
+      { id: 31, name: 'Curso Propedéutico Aspirantes', dateText: '1 - 3 de Julio', description: 'Sesiones de curso propedéutico para estudiantes de nuevo ingreso', category: 'tramite', dateStart: '2026-07-01', dateEnd: '2026-07-03' },
+      { id: 32, name: 'Periodo de Evaluaciones Finales', dateText: '6 - 9 de Julio', description: 'Aplicación de exámenes ordinarios y evaluaciones finales', category: 'tramite', dateStart: '2026-07-06', dateEnd: '2026-07-09' },
+      { id: 33, name: 'Captura de Recuperación Académica 2', dateText: '10 de Julio', description: 'Captura de evaluaciones remediales en sistema SICE', category: 'tramite', dateStart: '2026-07-10', dateEnd: '2026-07-10' },
+      { id: 34, name: 'Carga Académica y Capturas Finales', dateText: '13 - 14 de Julio', description: 'Captura complementaria de recuperación académica en el sistema', category: 'tramite', dateStart: '2026-07-13', dateEnd: '2026-07-14' },
+      { id: 35, name: 'Término de Clases Semestre A', dateText: '15 de Julio', description: 'Fin oficial del semestre escolar para clases ordinarias', category: 'academico', dateStart: '2026-07-15', dateEnd: '2026-07-15' },
+      { id: 36, name: 'Evaluación del Ciclo Escolar', dateText: '16 - 17 de Julio', description: 'Reunión de balance de ciclo escolar del plantel docente', category: 'academico', dateStart: '2026-07-16', dateEnd: '2026-07-17' },
+      { id: 37, name: 'Capacitación Docente Verano', dateText: '20 - 24 de Julio', description: 'Jornadas de capacitación y formación docente continua de verano', category: 'academico', dateStart: '2026-07-20', dateEnd: '2026-07-24' },
+      { id: 38, name: 'Receso Escolar (Vacaciones de Verano)', dateText: '27 de Julio - 21 de Agosto', description: 'Periodo oficial de receso vacacional de verano para alumnos', category: 'receso', dateStart: '2026-07-27', dateEnd: '2026-08-21' },
+      { id: 39, name: 'Aplicación de Examen Extraordinario 2', dateText: '24 - 26 de Agosto', description: 'Periodo oficial de aplicación de exámenes extraordinarios complementarios', category: 'tramite', dateStart: '2026-08-24', dateEnd: '2026-08-26' },
+      { id: 40, name: 'Inicio de Semestre 2026-B', dateText: '27 de Agosto - 1 de Septiembre', description: 'Apertura oficial de actividades escolares de la segunda mitad de año', category: 'academico', dateStart: '2026-08-27', dateEnd: '2026-09-01' },
+      { id: 41, name: 'Registro Exámenes Extraordinarios B', dateText: '31 de Agosto - 1 de Septiembre', description: 'Fecha límite de solicitud de pago para extraordinarios del bloque B', category: 'tramite', dateStart: '2026-08-31', dateEnd: '2026-09-01' }
+    ];
 
-<div class="list-card" onclick="showEventDetail('Captura de Calificaciones SICE', '18-22 de Mayo y 6-10 de Julio de 2026', 'Periodo de captura de calificaciones en el SICE')">
-<div class="list-icon" style="color: #FF2D55; background: rgba(255, 45, 85, 0.1);">
-<ion-icon name="document-text"></ion-icon>
-</div>
-<div class="list-content">
-<h4>18-22 May / 6-10 Jul</h4>
-<p>Captura de Calificaciones SICE</p>
-</div>
-</div>
+    const timeZone = 'America/Cancun';
+    const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+    let currentActiveTab = 'Hoy';
+    let scheduleViewMode = 'timeline';
+    let selectedDayForTimeline = 'Lunes';
+    let currentEventCategory = 'all';
 
-<div class="list-card" onclick="showEventDetail('Recuperación Académica', '25-29 de Mayo y 15 de Julio de 2026', 'Periodo de recuperación académica para alumnos')">
-<div class="list-icon" style="color: #5AC8FA; background: rgba(90, 200, 250, 0.1);">
-<ion-icon name="refresh-circle"></ion-icon>
-</div>
-<div class="list-content">
-<h4>25-29 May / 15 Jul</h4>
-<p>Recuperación Académica</p>
-</div>
-</div>
+    function getCancunDate() {
+      return new Date(new Date().toLocaleString("en-US", { timeZone }));
+    }
 
-<div class="list-card" onclick="showEventDetail('Captura de Calificaciones Recuperación', '13-14 de Julio de 2026', 'Captura de calificaciones de recuperación académica')">
-<div class="list-icon" style="color: #C69C6D; background: rgba(198, 156, 109, 0.1);">
-<ion-icon name="clipboard"></ion-icon>
-</div>
-<div class="list-content">
-<h4>13-14 Jul</h4>
-<p>Captura de Calificaciones Recuperación</p>
-</div>
-</div>
+    function convertTo12Hour(time24) {
+      const parts = time24.split(':').map(Number);
+      const hours = parts[0];
+      const minutes = parts[1];
+      const period = hours >= 12 ? 'PM' : 'AM';
+      const hours12 = hours % 12 || 12;
+      return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+    }
 
-<div class="list-card" onclick="showEventDetail('Curso Propedéutico', '1-3 de Julio de 2026', 'Curso propedéutico para aspirantes')">
-<div class="list-icon" style="color: #FF6482; background: rgba(255, 100, 130, 0.1);">
-<ion-icon name="book"></ion-icon>
-</div>
-<div class="list-content">
-<h4>01-03 Jul</h4>
-<p>Curso Propedéutico</p>
-</div>
-</div>
+    function parseTime(timeStr) {
+      const parts = timeStr.split(':').map(Number);
+      return parts[0] * 60 + parts[1];
+    }
 
-<div class="list-card" onclick="showEventDetail('Aplicación de Examen Extraordinario', '16-17 de Julio de 2026', 'Aplicación de exámenes extraordinarios')">
-<div class="list-icon" style="color: #007AFF; background: rgba(0, 122, 255, 0.1);">
-<ion-icon name="school"></ion-icon>
-</div>
-<div class="list-content">
-<h4>16-17 Jul</h4>
-<p>Aplicación de Examen Extraordinario</p>
-</div>
-</div>
+    function getCurrentTimeMinutes() {
+      const now = getCancunDate();
+      return now.getHours() * 60 + now.getMinutes();
+    }
 
-<div class="list-card" onclick="showEventDetail('Capacitación Semestral', '20-24 de Julio de 2026', 'Capacitación semestral para docentes')">
-<div class="list-icon" style="color: #32ADE6; background: rgba(50, 173, 230, 0.1);">
-<ion-icon name="ribbon"></ion-icon>
-</div>
-<div class="list-content">
-<h4>20-24 Jul</h4>
-<p>Capacitación Semestral</p>
-</div>
-</div>
+    function getTodayName() {
+      const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+      const now = getCancunDate();
+      return dayNames[now.getDay()];
+    }
 
-<div class="list-card" onclick="showEventDetail('Trabajo Académico', '27-31 de Julio de 2026', 'Periodo de trabajo académico')">
-<div class="list-icon" style="color: #64D2FF; background: rgba(100, 210, 255, 0.1);">
-<ion-icon name="briefcase"></ion-icon>
-</div>
-<div class="list-content">
-<h4>27-31 Jul</h4>
-<p>Trabajo Académico</p>
-</div>
-</div>
+    function getFormattedISO() {
+      const now = getCancunDate();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
 
-<div class="list-card" onclick="showEventDetail('Semana Previa al Inicio de Semestre PEAC', '3-21 de Agosto de 2026', 'Semana previa al inicio de semestre para el PEAC')">
-<div class="list-icon" style="color: #BF5AF2; background: rgba(191, 90, 242, 0.1);">
-<ion-icon name="calendar"></ion-icon>
-</div>
-<div class="list-content">
-<h4>03-21 Ago</h4>
-<p>Semana Previa al Inicio de Semestre PEAC</p>
-</div>
-</div>
+    function getActiveHoliday() {
+      const isoToday = getFormattedISO();
+      return events.find(e => {
+        return isoToday >= e.dateStart && isoToday <= e.dateEnd && 
+          (e.category === 'suspension' || e.category === 'receso' || e.category === 'vacacion' || e.category === 'carnaval');
+      });
+    }
 
-<div class="list-card" onclick="showEventDetail('Inicio del Semestre (Segundo)', '24 de Agosto - 1 de Septiembre de 2026', 'Inicio del segundo semestre y clases A y B')">
-<div class="list-icon" style="color: var(--accent-color); background: rgba(10, 132, 255, 0.1);">
-<ion-icon name="flag"></ion-icon>
-</div>
-<div class="list-content">
-<h4>24 Ago - 1 Sep</h4>
-<p>Inicio del Semestre (Segundo)</p>
-</div>
-</div>
+    function getCurrentClassSlot() {
+      const today = getTodayName();
+      if (!scheduleData[today]) return null;
+      const nowMinutes = getCurrentTimeMinutes();
+      return scheduleData[today].find(slot => {
+        const times = slot.time.split('-').map(t => parseTime(t.trim()));
+        return nowMinutes >= times[0] && nowMinutes < times[1];
+      });
+    }
 
-</div>
+    function getNextClassSlot() {
+      const today = getTodayName();
+      const nowMinutes = getCurrentTimeMinutes();
+      if (!scheduleData[today]) return null;
+      
+      const found = scheduleData[today].find(slot => {
+        const times = slot.time.split('-').map(t => parseTime(t.trim()));
+        return times[0] > nowMinutes;
+      });
+      if (found) return found;
 
-<h2 class="section-title"><ion-icon name="people"></ion-icon> Docentes</h2>
-<div class="list-grid" id="teachersList"></div>
+      const todayIndex = days.indexOf(today);
+      for (let i = todayIndex + 1; i < days.length; i++) {
+        const nextDaySlots = scheduleData[days[i]];
+        const nextClass = nextDaySlots.find(slot => slot.type === 'class');
+        if (nextClass) {
+          return { ...nextClass, nextDayName: days[i] };
+        }
+      }
+      return null;
+    }
 
-</div>
+    function getSubjectClass(subject) {
+      if (!subject) return 'sub-free';
+      const s = subject.toLowerCase();
+      if (s.includes('matemático') || s.includes('pema')) return 'sub-math';
+      if (s.includes('inglés')) return 'sub-english';
+      if (s.includes('humanidades') || s.includes('huma')) return 'sub-humanities';
+      if (s.includes('lengua') || s.includes('leyco')) return 'sub-language';
+      if (s.includes('sociales') || s.includes('ciso')) return 'sub-social';
+      if (s.includes('taller de ciencias') || s.includes('ceim') || s.includes('tc ')) return 'sub-science';
+      if (s.includes('ediesyg')) return 'sub-ediesyg';
+      if (s.includes('físicas') || s.includes('afd')) return 'sub-sports';
+      if (s.includes('digital') || s.includes('cudi')) return 'sub-digital';
+      if (s.includes('tutoría') || s.includes('tutor')) return 'sub-tutor';
+      if (s.includes('receso')) return 'sub-recess';
+      return 'sub-default';
+    }
 
-<div class="fab" id="themeToggle" onclick="toggleTheme()">
-<ion-icon name="moon"></ion-icon>
-</div>
+    function updateAppStatus() {
+      const holiday = getActiveHoliday();
+      const alertPanel = document.getElementById('holidayAlertPanel');
+      const holidaySpan = document.getElementById('holidayAlertName');
+      
+      if (holiday) {
+        alertPanel.style.display = 'flex';
+        holidaySpan.textContent = holiday.name;
+      } else {
+        alertPanel.style.display = 'none';
+      }
 
-<div class="modal-overlay" id="infoModal">
-<div class="modal-card">
-<div class="modal-close" onclick="closeModal()">
-<ion-icon name="close"></ion-icon>
-</div>
-<div class="modal-icon-large" id="modalIcon"></div>
-<h2 class="modal-title" id="modalTitle">Título</h2>
-<p class="modal-subtitle" id="modalSubtitle">Subtítulo</p>
-<div class="modal-boxes" id="modalBody"></div>
-</div>
-</div>
+      const current = getCurrentClassSlot();
+      const next = getNextClassSlot();
+      const today = getTodayName();
+      const nowMinutes = getCurrentTimeMinutes();
+      
+      const activeCard = document.getElementById('activeClassCard');
+      const activeSubject = document.getElementById('activeClassSubject');
+      const activeTime = document.getElementById('activeClassTime');
+      const activeRoom = document.getElementById('activeClassRoom');
+      const activeTeacherBar = document.getElementById('activeTeacherBar');
+      const activeInitials = document.getElementById('activeTeacherInitials');
+      const activeTeacherName = document.getElementById('activeTeacherName');
 
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-<script>
-const scheduleData = {
-'Lunes': [
-{ time: '07:00-07:50', subject: 'Inglés II', code: 'INGLÉS II A3', teacher: 'Graciela Rosalía May Polanco', room: 'A3', type: 'class' },
-{ time: '08:00-08:50', subject: 'Pensamiento Matemático II', code: 'PEMA A10', teacher: 'Nancy Sánchez Puc', room: 'A10', type: 'class' },
-{ time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
-{ time: '09:10-09:50', subject: 'EDIESYG II', code: 'EDIESYG A12', teacher: 'Yolanda Piña Flores', room: 'A12', type: 'class' },
-{ time: '10:00-10:50', subject: 'Lengua y Comunicación II', code: 'LEYCO II A8', teacher: 'Jaime Hernández Solís', room: 'A8', type: 'class' },
-{ time: '11:00-11:50', subject: 'Taller de Ciencias I', code: 'TC A11/LM 1', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11/LM 1', type: 'class' },
-{ time: '12:00-12:50', subject: 'Taller de Ciencias I', code: 'TC A11/LM 1', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11/LM 1', type: 'class' },
-{ time: '13:00-13:50', subject: 'Humanidades II', code: 'HUMA A4', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4', type: 'class' }
-],
-'Martes': [
-{ time: '07:00-07:50', subject: 'Libre', code: null, teacher: null, room: null, type: 'free' },
-{ time: '08:00-08:50', subject: 'Ciencias Sociales II', code: 'CISO A6', teacher: 'Conrado Turriza Maricela', room: 'A6', type: 'class' },
-{ time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
-{ time: '09:10-09:50', subject: 'Taller de Ciencias I', code: 'TC A11', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11', type: 'class' },
-{ time: '10:00-10:50', subject: 'Lengua y Comunicación II', code: 'LEYCO II A8', teacher: 'Jaime Hernández Solís', room: 'A8', type: 'class' },
-{ time: '11:00-11:50', subject: 'Actividades Físicas II', code: 'AFD A15', teacher: 'Luis Humberto Concha Caballero', room: 'A15', type: 'class' },
-{ time: '12:00-12:50', subject: 'Humanidades II', code: 'HUMA A4', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4', type: 'class' },
-{ time: '13:00-13:50', subject: 'Libre', code: null, teacher: null, room: null, type: 'free' }
-],
-'Miércoles': [
-{ time: '07:00-07:50', subject: 'Tutoría', code: 'TUTOR A6', teacher: 'Conrado Turriza Maricela', room: 'A6', type: 'tutor' },
-{ time: '08:00-08:50', subject: 'CEIM', code: 'CEIM A11/LM 1', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11/LM 1', type: 'class' },
-{ time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
-{ time: '09:10-09:50', subject: 'CEIM', code: 'CEIM A11/LM 1', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11/LM 1', type: 'class' },
-{ time: '10:00-10:50', subject: 'EDIESYG II', code: 'EDIESYG A12', teacher: 'Yolanda Piña Flores', room: 'A12', type: 'class' },
-{ time: '11:00-11:50', subject: 'Humanidades II', code: 'HUMA A4', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4', type: 'class' },
-{ time: '12:00-12:50', subject: 'Humanidades II', code: 'HUMA A4', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4', type: 'class' },
-{ time: '13:00-13:50', subject: 'Cultura Digital II', code: 'CUDI LAB INF', teacher: 'Yeni del Rocío Aguilar Cen', room: 'Lab Informática', type: 'class' }
-],
-'Jueves': [
-{ time: '07:00-07:50', subject: 'Libre', code: null, teacher: null, room: null, type: 'free' },
-{ time: '08:00-08:50', subject: 'Pensamiento Matemático II', code: 'PEMA A10', teacher: 'Nancy Sánchez Puc', room: 'A10', type: 'class' },
-{ time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
-{ time: '09:10-09:50', subject: 'Pensamiento Matemático II', code: 'PEMA A10', teacher: 'Nancy Sánchez Puc', room: 'A10', type: 'class' },
-{ time: '10:00-10:50', subject: 'CEIM', code: 'CEIM A11', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11', type: 'class' },
-{ time: '11:00-11:50', subject: 'CEIM', code: 'CEIM A11', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11', type: 'class' },
-{ time: '12:00-12:50', subject: 'Cultura Digital II', code: 'CUDI LAB INF', teacher: 'Yeni del Rocío Aguilar Cen', room: 'Lab Informática', type: 'class' },
-{ time: '13:00-13:50', subject: 'Inglés II', code: 'INGLÉS II A3', teacher: 'Graciela Rosalía May Polanco', room: 'A3', type: 'class' }
-],
-'Viernes': [
-{ time: '07:00-07:50', subject: 'Libre', code: null, teacher: null, room: null, type: 'free' },
-{ time: '08:00-08:50', subject: 'Pensamiento Matemático II', code: 'PEMA A10', teacher: 'Nancy Sánchez Puc', room: 'A10', type: 'class' },
-{ time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
-{ time: '09:10-09:50', subject: 'Taller de Ciencias I', code: 'TC A11', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11', type: 'class' },
-{ time: '10:00-10:50', subject: 'Inglés II', code: 'INGLÉS II A3', teacher: 'Graciela Rosalía May Polanco', room: 'A3', type: 'class' },
-{ time: '11:00-11:50', subject: 'Lengua y Comunicación II', code: 'LEYCO II A8', teacher: 'Jaime Hernández Solís', room: 'A8', type: 'class' },
-{ time: '12:00-12:50', subject: 'Actividades Físicas II', code: 'AFD A15', teacher: 'Luis Humberto Concha Caballero', room: 'A15', type: 'class' },
-{ time: '13:00-13:50', subject: 'Ciencias Sociales II', code: 'CISO A6', teacher: 'Conrado Turriza Maricela', room: 'A6', type: 'class' }
-]
-};
-const teachers = [
-{ name: 'Uitz Robledo Graciella Luciana', subjects: ['Taller de Ciencias I', 'CEIM'], initials: 'UG' },
-{ name: 'Graciela Rosalía May Polanco', subjects: ['Inglés II', 'Lengua y Comunicación II'], initials: 'GR' },
-{ name: 'Yolanda Piña Flores', subjects: ['EDIESYG II'], initials: 'YP' },
-{ name: 'Yeni del Rocío Aguilar Cen', subjects: ['Cultura Digital II'], initials: 'YA' },
-{ name: 'Nancy Sánchez Puc', subjects: ['Pensamiento Matemático II'], initials: 'NS' },
-{ name: 'Brenda Yazmin Corona Sánchez', subjects: ['Humanidades II'], initials: 'BY' },
-{ name: 'Conrado Turriza Maricela', subjects: ['Ciencias Sociales II', 'Tutoría'], initials: 'CT' },
-{ name: 'Jaime Hernández Solís', subjects: ['Lengua y Comunicación II'], initials: 'JH' },
-{ name: 'Luis Humberto Concha Caballero', subjects: ['Actividades Físicas II'], initials: 'LH' }
-];
-const holidays = [
-{ date: '2026-01-01', name: 'Año Nuevo' },
-{ date: '2026-01-05', name: 'Vacaciones' },
-{ date: '2026-01-06', name: 'Vacaciones' },
-{ date: '2026-01-07', name: 'Vacaciones' },
-{ date: '2026-01-08', name: 'Vacaciones' },
-{ date: '2026-01-09', name: 'Vacaciones' },
-{ date: '2026-01-12', name: 'Carnaval' },
-{ date: '2026-01-13', name: 'Carnaval' },
-{ date: '2026-01-14', name: 'Carnaval' },
-{ date: '2026-01-15', name: 'Carnaval' },
-{ date: '2026-01-16', name: 'Carnaval' },
-{ date: '2026-01-19', name: 'Término de Clases A' },
-{ date: '2026-01-20', name: 'Término de Clases A' },
-{ date: '2026-01-21', name: 'Término de Clases A' },
-{ date: '2026-01-22', name: 'Término de Clases A' },
-{ date: '2026-01-23', name: 'Término de Clases A' },
-{ date: '2026-01-26', name: 'Término de Semestre' },
-{ date: '2026-01-27', name: 'Término de Semestre' },
-{ date: '2026-01-28', name: 'Término de Semestre' },
-{ date: '2026-01-29', name: 'Término de Semestre' },
-{ date: '2026-01-30', name: 'Término de Semestre' },
-{ date: '2026-02-02', name: 'Término de Semestre' },
-{ date: '2026-02-03', name: 'Término de Semestre' },
-{ date: '2026-02-09', name: 'Inscripciones' },
-{ date: '2026-02-10', name: 'Inscripciones' },
-{ date: '2026-02-11', name: 'Inscripciones' },
-{ date: '2026-02-12', name: 'Inscripciones' },
-{ date: '2026-02-13', name: 'Inscripciones' },
-{ date: '2026-02-16', name: 'Carnaval' },
-{ date: '2026-02-17', name: 'Carnaval' },
-{ date: '2026-02-18', name: 'Vacaciones' },
-{ date: '2026-02-19', name: 'Vacaciones' },
-{ date: '2026-02-20', name: 'Vacaciones' },
-{ date: '2026-02-23', name: 'Inicio de Semestre' },
-{ date: '2026-02-24', name: 'Inicio de Semestre' },
-{ date: '2026-02-25', name: 'Inicio de Semestre' },
-{ date: '2026-02-26', name: 'Inicio de Semestre' },
-{ date: '2026-02-27', name: 'Inicio de Semestre' },
-{ date: '2026-03-02', name: 'Inicio de Semestre' },
-{ date: '2026-03-03', name: 'Inicio de Semestre' },
-{ date: '2026-03-04', name: 'Inicio de Semestre' },
-{ date: '2026-03-05', name: 'Inicio de Semestre' },
-{ date: '2026-03-06', name: 'Inicio de Semestre' },
-{ date: '2026-03-09', name: 'Te Extrañamos en el Salón' },
-{ date: '2026-03-10', name: 'Te Extrañamos en el Salón' },
-{ date: '2026-03-11', name: 'Te Extrañamos en el Salón' },
-{ date: '2026-03-12', name: 'Te Extrañamos en el Salón' },
-{ date: '2026-03-13', name: 'Te Extrañamos en el Salón' },
-{ date: '2026-03-16', name: 'Suspensión de Labores' },
-{ date: '2026-03-17', name: 'Carnaval' },
-{ date: '2026-03-18', name: 'Carnaval' },
-{ date: '2026-03-19', name: 'Término de Clases A' },
-{ date: '2026-03-20', name: 'Término de Clases A' },
-{ date: '2026-03-23', name: 'Término de Semestre' },
-{ date: '2026-03-24', name: 'Término de Semestre' },
-{ date: '2026-03-25', name: 'Vacaciones' },
-{ date: '2026-03-26', name: 'Vacaciones' },
-{ date: '2026-03-27', name: 'Vacaciones' },
-{ date: '2026-03-30', name: 'Vacaciones' },
-{ date: '2026-03-31', name: 'Vacaciones' },
-{ date: '2026-04-06', name: 'Vacaciones' },
-{ date: '2026-04-07', name: 'Vacaciones' },
-{ date: '2026-04-08', name: 'Vacaciones' },
-{ date: '2026-04-09', name: 'Vacaciones' },
-{ date: '2026-04-10', name: 'Vacaciones' },
-{ date: '2026-04-13', name: 'Vacaciones' },
-{ date: '2026-04-14', name: 'Vacaciones' },
-{ date: '2026-04-15', name: 'Vacaciones' },
-{ date: '2026-04-16', name: 'Vacaciones' },
-{ date: '2026-04-17', name: 'Vacaciones' },
-{ date: '2026-04-20', name: 'Vacaciones' },
-{ date: '2026-04-21', name: 'Vacaciones' },
-{ date: '2026-04-22', name: 'Vacaciones' },
-{ date: '2026-04-23', name: 'Vacaciones' },
-{ date: '2026-04-24', name: 'Trabajo Colegiado' },
-{ date: '2026-04-27', name: 'Vacaciones' },
-{ date: '2026-04-28', name: 'Vacaciones' },
-{ date: '2026-04-29', name: 'Vacaciones' },
-{ date: '2026-04-30', name: 'Vacaciones' },
-{ date: '2026-05-01', name: 'Día del Trabajo' },
-{ date: '2026-05-05', name: 'Batalla de Puebla' },
-{ date: '2026-05-15', name: 'Suspensión de Labores' },
-{ date: '2026-05-18', name: 'Captura SICE' },
-{ date: '2026-05-19', name: 'Captura SICE' },
-{ date: '2026-05-20', name: 'Captura SICE' },
-{ date: '2026-05-21', name: 'Captura SICE' },
-{ date: '2026-05-22', name: 'Captura SICE' },
-{ date: '2026-05-25', name: 'Recuperación Académica' },
-{ date: '2026-05-26', name: 'Recuperación Académica' },
-{ date: '2026-05-27', name: 'Recuperación Académica' },
-{ date: '2026-05-28', name: 'Recuperación Académica' },
-{ date: '2026-05-29', name: 'Recuperación Académica' },
-{ date: '2026-06-01', name: 'Vacaciones' },
-{ date: '2026-06-02', name: 'Vacaciones' },
-{ date: '2026-06-03', name: 'Vacaciones' },
-{ date: '2026-06-04', name: 'Vacaciones' },
-{ date: '2026-06-05', name: 'Vacaciones' },
-{ date: '2026-06-08', name: 'Vacaciones' },
-{ date: '2026-06-09', name: 'Vacaciones' },
-{ date: '2026-06-10', name: 'Vacaciones' },
-{ date: '2026-06-11', name: 'Vacaciones' },
-{ date: '2026-06-12', name: 'Vacaciones' },
-{ date: '2026-06-15', name: 'Vacaciones' },
-{ date: '2026-06-16', name: 'Vacaciones' },
-{ date: '2026-06-17', name: 'Vacaciones' },
-{ date: '2026-06-18', name: 'Vacaciones' },
-{ date: '2026-06-19', name: 'Vacaciones' },
-{ date: '2026-06-22', name: 'Vacaciones' },
-{ date: '2026-06-23', name: 'Vacaciones' },
-{ date: '2026-06-24', name: 'Vacaciones' },
-{ date: '2026-06-25', name: 'Vacaciones' },
-{ date: '2026-06-26', name: 'Vacaciones' },
-{ date: '2026-06-29', name: 'Vacaciones' },
-{ date: '2026-06-30', name: 'Vacaciones' },
-{ date: '2026-07-01', name: 'Curso Propedéutico' },
-{ date: '2026-07-02', name: 'Curso Propedéutico' },
-{ date: '2026-07-03', name: 'Curso Propedéutico' },
-{ date: '2026-07-06', name: 'Captura SICE' },
-{ date: '2026-07-07', name: 'Captura SICE' },
-{ date: '2026-07-08', name: 'Captura SICE' },
-{ date: '2026-07-09', name: 'Captura SICE' },
-{ date: '2026-07-10', name: 'Captura SICE' },
-{ date: '2026-07-13', name: 'Captura Recuperación' },
-{ date: '2026-07-14', name: 'Captura Recuperación' },
-{ date: '2026-07-15', name: 'Recuperación Académica' },
-{ date: '2026-07-16', name: 'Examen Extraordinario' },
-{ date: '2026-07-17', name: 'Examen Extraordinario' },
-{ date: '2026-07-20', name: 'Capacitación Semestral' },
-{ date: '2026-07-21', name: 'Capacitación Semestral' },
-{ date: '2026-07-22', name: 'Capacitación Semestral' },
-{ date: '2026-07-23', name: 'Capacitación Semestral' },
-{ date: '2026-07-24', name: 'Capacitación Semestral' },
-{ date: '2026-07-27', name: 'Trabajo Académico' },
-{ date: '2026-07-28', name: 'Trabajo Académico' },
-{ date: '2026-07-29', name: 'Trabajo Académico' },
-{ date: '2026-07-30', name: 'Trabajo Académico' },
-{ date: '2026-07-31', name: 'Trabajo Académico' },
-{ date: '2026-08-03', name: 'Semana Previa PEAC' },
-{ date: '2026-08-04', name: 'Semana Previa PEAC' },
-{ date: '2026-08-05', name: 'Semana Previa PEAC' },
-{ date: '2026-08-06', name: 'Semana Previa PEAC' },
-{ date: '2026-08-07', name: 'Semana Previa PEAC' },
-{ date: '2026-08-10', name: 'Semana Previa PEAC' },
-{ date: '2026-08-11', name: 'Semana Previa PEAC' },
-{ date: '2026-08-12', name: 'Semana Previa PEAC' },
-{ date: '2026-08-13', name: 'Semana Previa PEAC' },
-{ date: '2026-08-14', name: 'Semana Previa PEAC' },
-{ date: '2026-08-17', name: 'Semana Previa PEAC' },
-{ date: '2026-08-18', name: 'Semana Previa PEAC' },
-{ date: '2026-08-19', name: 'Semana Previa PEAC' },
-{ date: '2026-08-20', name: 'Semana Previa PEAC' },
-{ date: '2026-08-21', name: 'Semana Previa PEAC' },
-{ date: '2026-08-24', name: 'Inicio de Semestre' },
-{ date: '2026-08-25', name: 'Inicio de Semestre' },
-{ date: '2026-08-26', name: 'Inicio de Semestre' },
-{ date: '2026-08-27', name: 'Inicio de Semestre' },
-{ date: '2026-08-28', name: 'Inicio de Semestre' },
-{ date: '2026-08-31', name: 'Inicio de Semestre' },
-{ date: '2026-09-01', name: 'Inicio de Semestre' }
-];
-const timeZone = 'America/Cancun';
-const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+      if (current) {
+        activeSubject.textContent = current.subject;
+        activeTime.textContent = current.time.split('-').map(t => convertTo12Hour(t.trim())).join(' - ');
+        activeRoom.textContent = current.room ? `Aula ${current.room}` : 'Sin Aula';
+        
+        const subClass = getSubjectClass(current.subject);
+        activeCard.className = 'main-widget ' + subClass;
+        
+        if (current.type === 'recess' || current.type === 'free') {
+          activeTeacherBar.style.display = 'none';
+        } else {
+          activeTeacherBar.style.display = 'flex';
+          activeTeacherName.textContent = current.teacher || '--';
+          activeInitials.textContent = current.teacher ? current.teacher.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : '--';
+          
+          const teacherObj = teachers.find(t => t.name === current.teacher);
+          const initials = teacherObj ? teacherObj.initials : '--';
+          activeInitials.textContent = initials;
+        }
+      } else {
+        activeSubject.textContent = 'Fuera de Horario';
+        activeTime.textContent = '--:--';
+        activeRoom.textContent = 'Plantel Cerrado';
+        activeTeacherBar.style.display = 'none';
+        activeCard.className = 'main-widget sub-free';
+      }
 
-function convertTo12Hour(time24) {
-const [hours, minutes] = time24.split(':').map(Number);
-const period = hours >= 12 ? 'PM' : 'AM';
-const hours12 = hours % 12 || 12;
-return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
-}
+      const nextCard = document.getElementById('nextClassCard');
+      const nextSubject = document.getElementById('nextClassSubject');
+      const nextTime = document.getElementById('nextClassTime');
+      const nextRoom = document.getElementById('nextClassRoom');
+      const nextCountdown = document.getElementById('nextClassCountdown');
+      const nextTeacherBar = document.getElementById('nextTeacherBar');
+      const nextInitials = document.getElementById('nextTeacherInitials');
+      const nextTeacherName = document.getElementById('nextTeacherName');
 
-function parseTime(timeStr) {
-const [hours, minutes] = timeStr.split(':').map(Number);
-return hours * 60 + minutes;
-}
+      if (next) {
+        nextSubject.textContent = next.subject;
+        nextTime.textContent = next.time.split('-').map(t => convertTo12Hour(t.trim())).join(' - ');
+        nextRoom.textContent = next.room ? `Aula ${next.room}` : '';
+        
+        const nextSubClass = getSubjectClass(next.subject);
+        nextCard.className = 'main-widget ' + nextSubClass;
+        
+        if (next.nextDayName) {
+          nextCountdown.textContent = `${next.nextDayName} a las ${convertTo12Hour(next.time.split('-')[0].trim())}`;
+          nextTeacherBar.style.display = 'none';
+        } else {
+          const startTime = parseTime(next.time.split('-')[0].trim());
+          const diff = startTime - nowMinutes;
+          nextCountdown.textContent = `En ${diff} min`;
+          
+          if (next.teacher && next.type === 'class') {
+            nextTeacherBar.style.display = 'flex';
+            nextTeacherName.textContent = next.teacher;
+            
+            const teacherObj = teachers.find(t => t.name === next.teacher);
+            const initials = teacherObj ? teacherObj.initials : '--';
+            nextInitials.textContent = initials;
+          } else {
+            nextTeacherBar.style.display = 'none';
+          }
+        }
+      } else {
+        nextSubject.textContent = 'Jornada Finalizada';
+        nextTime.textContent = '--:--';
+        nextRoom.textContent = '';
+        nextCountdown.textContent = '¡Buen descanso!';
+        nextTeacherBar.style.display = 'none';
+        nextCard.className = 'main-widget sub-free';
+      }
 
-function getCurrentTime() {
-const now = new Date(new Date().toLocaleString("en-US", { timeZone }));
-return now.getHours() * 60 + now.getMinutes();
-}
+      const progressCircle = document.getElementById('progressCircleVal');
+      const progressText = document.getElementById('progressValText');
+      const classesCount = document.getElementById('classesCountText');
+      const timeLeft = document.getElementById('timeLeftText');
 
-function getTodayName() {
-const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-const now = new Date(new Date().toLocaleString("en-US", { timeZone }));
-return dayNames[now.getDay()];
-}
+      if (scheduleData[today]) {
+        const classSlots = scheduleData[today].filter(s => s.type === 'class');
+        classesCount.textContent = classSlots.length;
+        
+        let completed = 0;
+        
+        scheduleData[today].forEach((slot) => {
+          if (slot.type === 'class') {
+            const times = slot.time.split('-').map(t => parseTime(t.trim()));
+            if (nowMinutes >= times[1]) completed++;
+          }
+        });
+        
+        const total = classSlots.length;
+        const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+        progressText.textContent = `${percent}%`;
+        
+        const perimeter = 2 * Math.PI * 21;
+        const strokeOffset = perimeter - (percent / 100) * perimeter;
+        progressCircle.style.strokeDashoffset = strokeOffset;
 
-function isHoliday() {
-const today = new Date(new Date().toLocaleString("en-US", { timeZone })).toISOString().split('T')[0];
-return holidays.find(h => h.date === today);
-}
+        const lastClassSlot = [...scheduleData[today]].reverse().find(s => s.type === 'class');
+        if (lastClassSlot) {
+          const classEndTime = parseTime(lastClassSlot.time.split('-')[1].trim());
+          const diffTime = classEndTime - nowMinutes;
+          if (diffTime > 0) {
+            const hours = Math.floor(diffTime / 60);
+            const mins = diffTime % 60;
+            timeLeft.textContent = `${hours}h ${mins}m`;
+          } else {
+            timeLeft.textContent = '--';
+          }
+        } else {
+          timeLeft.textContent = '--';
+        }
+      } else {
+        classesCount.textContent = '0';
+        timeLeft.textContent = '--';
+        progressText.textContent = '0%';
+        progressCircle.style.strokeDashoffset = 131.95;
+      }
+      
+      highlightGridCells();
+      renderTimelineView();
+    }
 
-function getCurrentClass() {
-const today = getTodayName();
-if (!scheduleData[today]) return null;
-const now = getCurrentTime();
-return scheduleData[today].find(slot => {
-const [start, end] = slot.time.split('-').map(t => parseTime(t.trim()));
-return now >= start && now < end;
-});
-}
+    function switchTab(tabId, btnElement) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+      
+      document.getElementById(`tab${tabId}`).classList.add('active');
+      btnElement.classList.add('active');
+      currentActiveTab = tabId;
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-function getNextClass() {
-const today = getTodayName();
-const now = getCurrentTime();
-if (!scheduleData[today]) return null;
-for (let slot of scheduleData[today]) {
-const [start] = slot.time.split('-').map(t => parseTime(t.trim()));
-if (start > now && slot.type !== 'recess') return slot;
-}
-const todayIndex = days.indexOf(today);
-for (let i = todayIndex + 1; i < days.length; i++) {
-for (let slot of scheduleData[days[i]]) {
-if (slot.type !== 'recess' && slot.type !== 'free') {
-return { ...slot, day: days[i] };
-}
-}
-}
-return null;
-}
+    function toggleTheme() {
+      const body = document.body;
+      const meta = document.getElementById('themeColorMeta');
+      const icon = document.getElementById('themeBtnIcon');
+      
+      if (body.classList.contains('dark-mode')) {
+        body.classList.remove('dark-mode');
+        body.classList.add('light-mode');
+        localStorage.setItem('themeState', 'light');
+        meta.setAttribute('content', '#F5F5FA');
+        icon.setAttribute('name', 'moon-outline');
+      } else {
+        body.classList.remove('light-mode');
+        body.classList.add('dark-mode');
+        localStorage.setItem('themeState', 'dark');
+        meta.setAttribute('content', '#08080C');
+        icon.setAttribute('name', 'sunny-outline');
+      }
+    }
 
-function updateClock() {
-const now = new Date(new Date().toLocaleString("en-US", { timeZone }));
-let hours = now.getHours();
-const minutes = now.getMinutes().toString().padStart(2, '0');
-const seconds = now.getSeconds().toString().padStart(2, '0');
-const ampm = hours >= 12 ? 'PM' : 'AM';
-hours = hours % 12;
-hours = hours ? hours : 12;
-document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
-const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone };
-let dateStr = now.toLocaleDateString('es-MX', options);
-dateStr = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
-document.getElementById('date').textContent = dateStr;
-const holiday = isHoliday();
-const holidayAlert = document.getElementById('holidayAlert');
-if (holiday) {
-holidayAlert.classList.add('show');
-document.getElementById('holidayName').textContent = holiday.name;
-} else {
-holidayAlert.classList.remove('show');
-}
-updateStatus();
-}
+    function applySystemTheme() {
+      const saved = localStorage.getItem('themeState');
+      const meta = document.getElementById('themeColorMeta');
+      const icon = document.getElementById('themeBtnIcon');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.body.className = 'dark-mode';
+        meta.setAttribute('content', '#08080C');
+        icon.setAttribute('name', 'sunny-outline');
+      } else {
+        document.body.className = 'light-mode';
+        meta.setAttribute('content', '#F5F5FA');
+        icon.setAttribute('name', 'moon-outline');
+      }
+    }
 
-function updateStatus() {
-const current = getCurrentClass();
-const next = getNextClass();
-const today = getTodayName();
-const now = getCurrentTime();
-const currentCard = document.getElementById('currentCard');
-if (current) {
-document.getElementById('currentSubject').textContent = current.subject;
-document.getElementById('currentTimeBadge').textContent = current.time.split('-').map(t => convertTo12Hour(t.trim())).join(' - ');
-document.getElementById('currentRoom').textContent = current.room ? `Aula ${current.room}` : '';
-if (current.teacher) {
-document.getElementById('currentTeacher').textContent = current.teacher;
-document.getElementById('currentInitials').textContent = current.teacher.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-document.getElementById('currentTeacherInfo').style.display = 'flex';
-} else {
-document.getElementById('currentTeacherInfo').style.display = 'none';
-}
-currentCard.className = 'widget ' + (current.type === 'recess' ? 'recess' : 'active');
-if (current.type === 'free') currentCard.className = 'widget';
-} else {
-document.getElementById('currentSubject').textContent = 'Fuera de horario';
-document.getElementById('currentTimeBadge').textContent = '--:--';
-document.getElementById('currentRoom').textContent = '';
-document.getElementById('currentTeacherInfo').style.display = 'none';
-currentCard.className = 'widget';
-}
-if (next) {
-document.getElementById('nextSubject').textContent = next.subject;
-document.getElementById('nextTimeBadge').textContent = next.time.split('-').map(t => convertTo12Hour(t.trim())).join(' - ');
-document.getElementById('nextRoom').textContent = next.room ? `Aula ${next.room}` : '';
-if (next.day) {
-document.getElementById('nextCountdown').textContent = `Mañana (${next.day})`;
-} else {
-const [start] = next.time.split('-').map(t => parseTime(t.trim()));
-const diff = start - now;
-document.getElementById('nextCountdown').textContent = diff > 0 ? `En ${diff} min` : 'Próxima clase';
-}
-if (next.teacher) {
-document.getElementById('nextTeacher').textContent = next.teacher;
-document.getElementById('nextInitials').textContent = next.teacher.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-document.getElementById('nextTeacherInfo').style.display = 'flex';
-} else {
-document.getElementById('nextTeacherInfo').style.display = 'none';
-}
-} else {
-document.getElementById('nextSubject').textContent = 'Fin de la jornada';
-document.getElementById('nextTimeBadge').textContent = '--:--';
-document.getElementById('nextRoom').textContent = '';
-document.getElementById('nextCountdown').textContent = '¡Buen descanso!';
-document.getElementById('nextTeacherInfo').style.display = 'none';
-}
-if (scheduleData[today]) {
-const classesToday = scheduleData[today].filter(s => s.type === 'class').length;
-document.getElementById('totalClasses').textContent = classesToday;
-const lastClass = [...scheduleData[today]].reverse().find(s => s.type === 'class');
-if (lastClass && now < parseTime(lastClass.time.split('-')[1].trim())) {
-const endTime = parseTime(lastClass.time.split('-')[1].trim());
-const diff = endTime - now;
-const hours = Math.floor(diff / 60);
-const mins = diff % 60;
-document.getElementById('timeLeft').textContent = `${hours}h ${mins}m`;
-} else {
-document.getElementById('timeLeft').textContent = '--';
-}
-} else {
-document.getElementById('totalClasses').textContent = '0';
-document.getElementById('timeLeft').textContent = '--';
-}
-const currentDayIndex = days.indexOf(today);
-const progress = currentDayIndex >= 0 ? ((currentDayIndex) / 5) * 100 : 0;
-document.getElementById('weekProgress').textContent = Math.round(progress) + '%';
-highlightCurrentTable();
-}
+    function renderGridSchedule() {
+      const body = document.getElementById('scheduleTableBody');
+      body.innerHTML = '';
+      
+      const timeSlots = scheduleData['Lunes'].map(s => s.time);
+      
+      timeSlots.forEach((time, index) => {
+        const tr = document.createElement('tr');
+        const timeTd = document.createElement('td');
+        timeTd.className = 'time-col';
+        timeTd.textContent = time.split('-').map(t => convertTo12Hour(t.trim())).join(' - ');
+        tr.appendChild(timeTd);
+        
+        days.forEach(day => {
+          const slot = scheduleData[day][index];
+          const td = document.createElement('td');
+          td.dataset.day = day;
+          td.dataset.subject = slot.subject;
+          td.dataset.time = slot.time;
+          
+          if (slot.type === 'recess') {
+            td.className = 'class-cell sub-recess';
+            td.innerHTML = `<div class="cell-subject-name">${slot.subject}</div>`;
+          } else if (slot.type === 'free') {
+            td.className = 'class-cell cell-free sub-free';
+            td.innerHTML = `<div class="cell-subject-name">Libre</div>`;
+          } else {
+            td.className = 'class-cell ' + getSubjectClass(slot.subject);
+            td.innerHTML = `
+              <div class="cell-subject-name">${slot.subject}</div>
+              <div class="cell-room-code">${slot.room || ''}</div>
+            `;
+            td.onclick = () => {
+              openClassSheet(slot, day);
+            };
+          }
+          tr.appendChild(td);
+        });
+        body.appendChild(tr);
+      });
+    }
 
-function renderTable() {
-const tbody = document.getElementById('tableBody');
-tbody.innerHTML = '';
-const timeSlots = Object.values(scheduleData)[0].map(s => s.time);
-timeSlots.forEach((time, idx) => {
-const tr = document.createElement('tr');
-const timeTd = document.createElement('td');
-timeTd.className = 'time-col';
-timeTd.textContent = time.split('-').map(t => convertTo12Hour(t.trim())).join(' - ');
-tr.appendChild(timeTd);
-days.forEach(day => {
-const td = document.createElement('td');
-const slot = scheduleData[day][idx];
-td.className = 'class-cell';
-if (slot.type === 'recess') td.classList.add('recess');
-if (slot.type === 'free') td.classList.add('free');
-td.innerHTML = `<div class="cell-subject">${slot.subject}</div>${slot.code && slot.type !== 'recess' ? `<div class="cell-code">${slot.code}</div>` : ''}`;
-td.onclick = () => {
-if (slot.type === 'class' || slot.type === 'tutor') showClassDetail(slot, day);
-};
-td.dataset.day = day;
-td.dataset.subject = slot.subject;
-tr.appendChild(td);
-});
-tbody.appendChild(tr);
-});
-}
+    function highlightGridCells() {
+      const current = getCurrentClassSlot();
+      const today = getTodayName();
+      
+      document.querySelectorAll('#scheduleTableBody td').forEach(td => {
+        td.classList.remove('cell-active');
+        if (current && td.dataset.day === today && td.dataset.subject === current.subject && td.dataset.time === current.time && current.type === 'class') {
+          td.classList.add('cell-active');
+        }
+      });
+    }
 
-function highlightCurrentTable() {
-const current = getCurrentClass();
-const today = getTodayName();
-const cells = document.querySelectorAll('#tableBody td');
-cells.forEach(cell => {
-cell.classList.remove('active-highlight');
-if (current && cell.dataset.day === today && cell.dataset.subject === current.subject && current.type === 'class') {
-cell.classList.add('active-highlight');
-}
-});
-}
+    function setTimetableView(view) {
+      scheduleViewMode = view;
+      document.getElementById('btnSwitchTimeline').classList.toggle('active', view === 'timeline');
+      document.getElementById('btnSwitchGrid').classList.toggle('active', view === 'grid');
+      
+      document.getElementById('timelineScheduleView').style.display = view === 'timeline' ? 'block' : 'none';
+      document.getElementById('gridScheduleView').style.display = view === 'grid' ? 'block' : 'none';
+    }
 
-function renderTeachers() {
-const container = document.getElementById('teachersList');
-container.innerHTML = "";
-teachers.forEach(teacher => {
-const div = document.createElement('div');
-div.className = 'list-card';
-div.innerHTML = `
-<div class="list-icon">${teacher.initials}</div>
-<div class="list-content">
-<h4>${teacher.name}</h4>
-<p>${teacher.subjects.join(', ')}</p>
-</div>
-`;
-div.onclick = () => showTeacherDetail(teacher);
-container.appendChild(div);
-});
-}
+    function renderTimelineSelector() {
+      const container = document.getElementById('daySelectPills');
+      container.innerHTML = '';
+      
+      days.forEach(d => {
+        const btn = document.createElement('button');
+        btn.className = `filter-pill ${d === selectedDayForTimeline ? 'active' : ''}`;
+        btn.textContent = d;
+        btn.onclick = () => {
+          selectedDayForTimeline = d;
+          document.querySelectorAll('#daySelectPills .filter-pill').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderTimelineView();
+        };
+        container.appendChild(btn);
+      });
+    }
 
-function showClassDetail(slot, day) {
-document.getElementById('modalIcon').innerHTML = '<ion-icon name="book"></ion-icon>';
-document.getElementById('modalTitle').textContent = slot.subject;
-document.getElementById('modalSubtitle').textContent = `${day} • ${slot.time.split('-').map(t => convertTo12Hour(t.trim())).join(' - ')}`;
-let content = '';
-if (slot.code) {
-content += `<div class="modal-box"><div class="box-label"><ion-icon name="barcode"></ion-icon> Código</div><div class="box-value">${slot.code}</div></div>`;
-}
-if (slot.teacher) {
-content += `<div class="modal-box"><div class="box-label"><ion-icon name="person"></ion-icon> Docente</div><div class="box-value">${slot.teacher}</div></div>`;
-}
-if (slot.room) {
-content += `<div class="modal-box"><div class="box-label"><ion-icon name="location"></ion-icon> Aula</div><div class="box-value">${slot.room}</div></div>`;
-}
-document.getElementById('modalBody').innerHTML = content;
-document.getElementById('infoModal').classList.add('show');
-}
+    function renderTimelineView() {
+      const container = document.getElementById('timelineItemsContainer');
+      container.innerHTML = '';
+      
+      const slots = scheduleData[selectedDayForTimeline];
+      const today = getTodayName();
+      const current = getCurrentClassSlot();
+      
+      slots.forEach(slot => {
+        const div = document.createElement('div');
+        const subjectClass = getSubjectClass(slot.subject);
+        let classes = 'timeline-item ' + subjectClass;
+        const isCurrent = current && today === selectedDayForTimeline && slot.subject === current.subject && slot.time === current.time && slot.type === 'class';
+        if (isCurrent) classes += ' active';
+        div.className = classes;
+        
+        const timesFormatted = slot.time.split('-').map(t => convertTo12Hour(t.trim()));
+        
+        let detailsHtml = '';
+        if (slot.type === 'recess') {
+          detailsHtml = `
+            <h4>${slot.subject}</h4>
+            <div class="timeline-subdetails">
+              <span><ion-icon name="restaurant-outline"></ion-icon> Comedor</span>
+            </div>
+          `;
+        } else if (slot.type === 'free') {
+          detailsHtml = `
+            <h4>Libre</h4>
+            <div class="timeline-subdetails">
+              <span><ion-icon name="sparkles-outline"></ion-icon> Sin Clases</span>
+            </div>
+          `;
+        } else {
+          detailsHtml = `
+            <h4>${slot.subject}</h4>
+            <div class="timeline-subdetails">
+              <span><ion-icon name="location-outline"></ion-icon> Aula ${slot.room || ''}</span>
+              <span><ion-icon name="person-outline"></ion-icon> ${slot.teacher ? slot.teacher.split(' ')[0] : ''}</span>
+            </div>
+          `;
+          div.onclick = () => openClassSheet(slot, selectedDayForTimeline);
+        }
+        
+        div.innerHTML = `
+          <div class="timeline-time">
+            <span>${timesFormatted[0]}</span>
+            <span class="time-end">${timesFormatted[1]}</span>
+          </div>
+          <div class="timeline-details">${detailsHtml}</div>
+        `;
+        
+        container.appendChild(div);
+      });
+    }
 
-function showTeacherDetail(teacher) {
-document.getElementById('modalIcon').innerHTML = '<span>' + teacher.initials + '</span>';
-document.getElementById('modalTitle').textContent = teacher.name;
-document.getElementById('modalSubtitle').textContent = 'Docente';
-const tags = teacher.subjects.map(s => `<div class="tag">${s}</div>`).join('');
-document.getElementById('modalBody').innerHTML = `
-<div class="modal-box" style="flex-direction: column; align-items: flex-start; gap: 12px; border: none; background: transparent; padding: 0;">
-<div class="box-label" style="text-transform: uppercase;">Materias</div>
-<div class="tag-container">${tags}</div>
-</div>`;
-document.getElementById('infoModal').classList.add('show');
-}
+    function renderEvents() {
+      const container = document.getElementById('eventsListContainer');
+      container.innerHTML = '';
+      
+      const searchVal = document.getElementById('eventSearchInput').value.toLowerCase().trim();
+      const filtered = events.filter(e => {
+        const matchSearch = e.name.toLowerCase().includes(searchVal) || e.description.toLowerCase().includes(searchVal);
+        const matchCategory = currentEventCategory === 'all' || 
+                             (currentEventCategory === 'suspension' && e.category === 'suspension') ||
+                             (currentEventCategory === 'vacacion' && (e.category === 'vacacion' || e.category === 'receso' || e.category === 'carnaval')) ||
+                             (currentEventCategory === 'tramite' && e.category === 'tramite');
+        return matchSearch && matchCategory;
+      });
+      
+      if (filtered.length === 0) {
+        const emptyDiv = document.createElement('div');
+        emptyDiv.className = 'sheet-description-box';
+        emptyDiv.textContent = 'No se encontraron eventos.';
+        container.appendChild(emptyDiv);
+        return;
+      }
 
-function showEventDetail(title, date, desc) {
-document.getElementById('modalIcon').innerHTML = '<ion-icon name="calendar"></ion-icon>';
-document.getElementById('modalTitle').textContent = title;
-document.getElementById('modalSubtitle').textContent = date;
-document.getElementById('modalBody').innerHTML = `<div class="modal-box" style="justify-content: center;"><div class="box-value" style="text-align: center; font-weight: 500;">${desc}</div></div>`;
-document.getElementById('infoModal').classList.add('show');
-}
+      filtered.forEach(e => {
+        const card = document.createElement('div');
+        card.className = `event-card cat-${e.category}`;
+        
+        card.innerHTML = `
+          <div class="event-badge-indicator"></div>
+          <div class="event-date-box">
+            <h5>${e.dateText}</h5>
+          </div>
+          <div class="event-info-box">
+            <h4>${e.name}</h4>
+            <p>${e.category === 'suspension' ? 'Suspensión Oficial' : e.category === 'vacacion' ? 'Vacaciones' : e.category === 'receso' ? 'Receso' : e.category === 'carnaval' ? 'Carnaval' : e.category === 'tramite' ? 'Trámite / Notas' : 'Académico'}</p>
+          </div>
+        `;
+        
+        card.onclick = () => openEventSheet(e);
+        container.appendChild(card);
+      });
+    }
 
-function closeModal() {
-document.getElementById('infoModal').classList.remove('show');
-}
+    function setEventCategoryFilter(category, element) {
+      currentEventCategory = category;
+      document.querySelectorAll('#tabEventos .filter-pill').forEach(b => b.classList.remove('active'));
+      element.classList.add('active');
+      renderEvents();
+    }
 
-function matchSystemTheme() {
-if (localStorage.getItem('theme')) return;
-const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-if (isDark) {
-document.body.classList.add('dark-mode');
-document.getElementById('themeColorMeta').setAttribute('content', '#000000');
-document.getElementById('themeToggle').innerHTML = '<ion-icon name="sunny"></ion-icon>';
-}
-}
+    function filterEvents() {
+      renderEvents();
+    }
 
-function toggleTheme() {
-const body = document.body;
-const btn = document.getElementById('themeToggle');
-const meta = document.getElementById('themeColorMeta');
-if (body.classList.contains('dark-mode')) {
-body.classList.remove('dark-mode');
-body.classList.add('light-mode');
-localStorage.setItem('theme', 'light');
-btn.innerHTML = '<ion-icon name="moon"></ion-icon>';
-meta.setAttribute('content', '#F2F2F7');
-} else if (body.classList.contains('light-mode') || !window.matchMedia('(prefers-color-scheme: dark)').matches) {
-body.classList.remove('light-mode');
-body.classList.add('dark-mode');
-localStorage.setItem('theme', 'dark');
-btn.innerHTML = '<ion-icon name="sunny"></ion-icon>';
-meta.setAttribute('content', '#000000');
-} else {
-body.classList.remove('dark-mode');
-body.classList.add('light-mode');
-localStorage.setItem('theme', 'light');
-btn.innerHTML = '<ion-icon name="moon"></ion-icon>';
-meta.setAttribute('content', '#F2F2F7');
-}
-}
+    function renderTeachers() {
+      const container = document.getElementById('teachersListContainer');
+      container.innerHTML = '';
+      
+      const searchVal = document.getElementById('teacherSearchInput').value.toLowerCase().trim();
+      const filtered = teachers.filter(t => {
+        return t.name.toLowerCase().includes(searchVal) || t.subjects.some(s => s.toLowerCase().includes(searchVal));
+      });
 
-function initTheme() {
-const savedTheme = localStorage.getItem('theme');
-const btn = document.getElementById('themeToggle');
-const meta = document.getElementById('themeColorMeta');
-if (savedTheme === 'dark') {
-document.body.classList.add('dark-mode');
-btn.innerHTML = '<ion-icon name="sunny"></ion-icon>';
-meta.setAttribute('content', '#000000');
-} else if (savedTheme === 'light') {
-document.body.classList.add('light-mode');
-btn.innerHTML = '<ion-icon name="moon"></ion-icon>';
-meta.setAttribute('content', '#F2F2F7');
-} else {
-matchSystemTheme();
-}
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-if (!localStorage.getItem('theme')) {
-if (e.matches) {
-document.body.classList.add('dark-mode');
-btn.innerHTML = '<ion-icon name="sunny"></ion-icon>';
-meta.setAttribute('content', '#000000');
-} else {
-document.body.classList.remove('dark-mode');
-btn.innerHTML = '<ion-icon name="moon"></ion-icon>';
-meta.setAttribute('content', '#F2F2F7');
-}
-}
-});
-}
+      if (filtered.length === 0) {
+        const emptyDiv = document.createElement('div');
+        emptyDiv.className = 'sheet-description-box';
+        emptyDiv.textContent = 'No se encontraron docentes.';
+        container.appendChild(emptyDiv);
+        return;
+      }
 
-document.addEventListener('DOMContentLoaded', () => {
-initTheme();
-renderTable();
-renderTeachers();
-updateClock();
-setInterval(updateClock, 1000);
-document.getElementById('infoModal').addEventListener('click', (e) => {
-if (e.target.id === 'infoModal') closeModal();
-});
-});
-</script>
+      filtered.forEach(t => {
+        const card = document.createElement('div');
+        card.className = 'teacher-card';
+        const subjectsHtml = t.subjects.map(s => {
+          const subClass = getSubjectClass(s);
+          return `<span class="${subClass}" style="color: var(--sub-color); font-weight: 600; margin-right: 8px; display: inline-block;">${s}</span>`;
+        }).join('');
+        card.innerHTML = `
+          <div class="teacher-initials-badge">${t.initials}</div>
+          <div class="teacher-card-info">
+            <h4>${t.name}</h4>
+            <p>${subjectsHtml}</p>
+          </div>
+        `;
+        
+        card.onclick = () => openTeacherSheet(t);
+        container.appendChild(card);
+      });
+    }
+
+    function filterTeachers() {
+      renderTeachers();
+    }
+
+    function openClassSheet(slot, day) {
+      const title = document.getElementById('sheetTitle');
+      const subtitle = document.getElementById('sheetSubtitle');
+      const contentList = document.getElementById('sheetContentList');
+      const descBox = document.getElementById('sheetDescBox');
+      const iconBox = document.getElementById('sheetIconBox');
+      const subColor = getSubjectClass(slot.subject);
+      
+      iconBox.innerHTML = '<ion-icon name="book-outline"></ion-icon>';
+      iconBox.className = 'sheet-header-icon ' + subColor;
+      iconBox.style.color = '';
+      iconBox.style.background = '';
+      
+      title.textContent = slot.subject;
+      title.className = 'sheet-title ' + subColor;
+      title.style.color = 'var(--sub-color)';
+      subtitle.textContent = `Clase • ${day}`;
+      
+      let listHtml = `
+        <div class="sheet-info-row">
+          <div class="sheet-row-label"><ion-icon name="time-outline"></ion-icon> Horario</div>
+          <div class="sheet-row-value">${slot.time.split('-').map(t => convertTo12Hour(t.trim())).join(' - ')}</div>
+        </div>
+      `;
+      if (slot.room) {
+        listHtml += `
+          <div class="sheet-info-row">
+            <div class="sheet-row-label"><ion-icon name="location-outline"></ion-icon> Aula</div>
+            <div class="sheet-row-value">${slot.room}</div>
+          </div>
+        `;
+      }
+      if (slot.code) {
+        listHtml += `
+          <div class="sheet-info-row">
+            <div class="sheet-row-label"><ion-icon name="barcode-outline"></ion-icon> Clave</div>
+            <div class="sheet-row-value">${slot.code}</div>
+          </div>
+        `;
+      }
+      if (slot.teacher) {
+        listHtml += `
+          <div class="sheet-info-row">
+            <div class="sheet-row-label"><ion-icon name="person-outline"></ion-icon> Docente</div>
+            <div class="sheet-row-value">${slot.teacher}</div>
+          </div>
+        `;
+      }
+      contentList.innerHTML = listHtml;
+      descBox.style.display = 'none';
+      
+      showSheet();
+    }
+
+    function openEventSheet(event) {
+      const title = document.getElementById('sheetTitle');
+      const subtitle = document.getElementById('sheetSubtitle');
+      const contentList = document.getElementById('sheetContentList');
+      const descBox = document.getElementById('sheetDescBox');
+      const iconBox = document.getElementById('sheetIconBox');
+      
+      let categoryName = 'Académico';
+      let iconName = 'calendar-outline';
+      let categoryColor = 'var(--color-academico)';
+      
+      if (event.category === 'suspension') {
+        categoryName = 'Suspensión Oficial';
+        iconName = 'ban-outline';
+        categoryColor = 'var(--color-suspension)';
+      } else if (event.category === 'vacacion') {
+        categoryName = 'Vacaciones';
+        iconName = 'leaf-outline';
+        categoryColor = 'var(--color-vacacion)';
+      } else if (event.category === 'receso') {
+        categoryName = 'Receso';
+        iconName = 'sunny-outline';
+        categoryColor = 'var(--color-receso)';
+      } else if (event.category === 'carnaval') {
+        categoryName = 'Carnaval';
+        iconName = 'sparkles-outline';
+        categoryColor = 'var(--color-carnaval)';
+      } else if (event.category === 'tramite') {
+        categoryName = 'Trámite / Evaluación';
+        iconName = 'document-text-outline';
+        categoryColor = 'var(--color-tramite)';
+      }
+      
+      iconBox.innerHTML = `<ion-icon name="${iconName}"></ion-icon>`;
+      iconBox.className = 'sheet-header-icon';
+      iconBox.style.color = categoryColor;
+      iconBox.style.background = `${categoryColor}15`;
+      
+      title.textContent = event.name;
+      title.className = 'sheet-title';
+      title.style.color = '';
+      subtitle.textContent = categoryName;
+      
+      contentList.innerHTML = `
+        <div class="sheet-info-row">
+          <div class="sheet-row-label"><ion-icon name="calendar-clear-outline"></ion-icon> Fecha</div>
+          <div class="sheet-row-value">${event.dateText}</div>
+        </div>
+        <div class="sheet-info-row">
+          <div class="sheet-row-label"><ion-icon name="hourglass-outline"></ion-icon> Ciclo</div>
+          <div class="sheet-row-value">Semestre 2026-A</div>
+        </div>
+      `;
+      
+      descBox.textContent = event.description;
+      descBox.style.display = 'block';
+      
+      showSheet();
+    }
+
+    function openTeacherSheet(teacher) {
+      const title = document.getElementById('sheetTitle');
+      const subtitle = document.getElementById('sheetSubtitle');
+      const contentList = document.getElementById('sheetContentList');
+      const descBox = document.getElementById('sheetDescBox');
+      const iconBox = document.getElementById('sheetIconBox');
+      
+      iconBox.innerHTML = `<span>${teacher.initials}</span>`;
+      iconBox.className = 'sheet-header-icon';
+      iconBox.style.color = 'var(--theme-primary)';
+      iconBox.style.background = 'var(--active-card)';
+      
+      title.textContent = teacher.name;
+      title.className = 'sheet-title';
+      title.style.color = '';
+      subtitle.textContent = 'Docente COBAQROO';
+      
+      const tags = teacher.subjects.map(s => {
+        const subClass = getSubjectClass(s);
+        return `<span class="sheet-info-tag ${subClass}" style="color: var(--sub-color); background: var(--sub-bg); border-color: var(--sub-border);">${s}</span>`;
+      }).join('');
+      
+      contentList.innerHTML = `
+        <div class="sheet-info-row" style="flex-direction: column; align-items: flex-start; gap: 10px;">
+          <div class="sheet-row-label"><ion-icon name="book-outline"></ion-icon> Asignaturas Asignadas</div>
+          <div class="tags-flex-wrap">${tags}</div>
+        </div>
+      `;
+      descBox.style.display = 'none';
+      
+      showSheet();
+    }
+
+    function showSheet() {
+      document.getElementById('modalOverlay').classList.add('active');
+      const sheet = document.getElementById('bottomSheet');
+      sheet.classList.add('active');
+      sheet.style.transform = '';
+    }
+
+    function closeSheet() {
+      document.getElementById('modalOverlay').classList.remove('active');
+      const sheet = document.getElementById('bottomSheet');
+      sheet.classList.remove('active');
+      setTimeout(() => {
+        sheet.style.transform = '';
+      }, 400);
+    }
+
+    let startY = 0;
+    let currentY = 0;
+    let isDragging = false;
+    const sheet = document.getElementById('bottomSheet');
+
+    sheet.addEventListener('touchstart', e => {
+      startY = e.touches[0].clientY;
+      isDragging = true;
+      sheet.style.transition = 'none';
+    }, { passive: true });
+
+    sheet.addEventListener('touchmove', e => {
+      if (!isDragging) return;
+      currentY = e.touches[0].clientY;
+      const deltaY = currentY - startY;
+      if (deltaY > 0) {
+        sheet.style.transform = `translateY(${deltaY}px)`;
+      }
+    }, { passive: true });
+
+    sheet.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      sheet.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+      const deltaY = currentY - startY;
+      if (deltaY > 120) {
+        closeSheet();
+      } else {
+        sheet.style.transform = '';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      applySystemTheme();
+      renderGridSchedule();
+      renderTimelineSelector();
+      
+      const today = getTodayName();
+      if (days.includes(today)) {
+        selectedDayForTimeline = today;
+      }
+      
+      updateAppStatus();
+      renderEvents();
+      renderTeachers();
+      
+      setInterval(updateAppStatus, 1000);
+      
+      const now = getCancunDate();
+      let hours = now.getHours();
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+      document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+      
+      setInterval(() => {
+        const time = getCancunDate();
+        let hr = time.getHours();
+        const min = String(time.getMinutes()).padStart(2, '0');
+        const sec = String(time.getSeconds()).padStart(2, '0');
+        const amp = hr >= 12 ? 'PM' : 'AM';
+        hr = hr % 12 || 12;
+        document.getElementById('clock').textContent = `${hr}:${min}:${sec} ${amp}`;
+      }, 1000);
+      
+      const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone };
+      let dateString = now.toLocaleDateString('es-MX', dateOptions);
+      dateString = dateString.charAt(0).toUpperCase() + dateString.slice(1);
+      document.getElementById('date').textContent = dateString;
+
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      mediaQuery.addEventListener('change', () => {
+        if (!localStorage.getItem('themeState')) {
+          applySystemTheme();
+        }
+      });
+    });
+  </script>
 </body>
 </html>
