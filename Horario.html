@@ -568,14 +568,14 @@
     td.cell-active::after {
       content: 'AHORA';
       position: absolute;
-      top: -6px;
+      top: -8px;
       right: 4px;
       background: linear-gradient(135deg, #FFE259, #FFA751);
       color: #000;
-      font-size: 8px;
+      font-size: 9px;
       font-weight: 800;
-      padding: 1px 4px;
-      border-radius: 5px;
+      padding: 2px 6px;
+      border-radius: 6px;
       box-shadow: 0 2px 6px rgba(255, 167, 81, 0.4);
       letter-spacing: 0.5px;
       z-index: 10;
@@ -660,10 +660,10 @@
       right: 12px;
       background: linear-gradient(135deg, #FFE259, #FFA751);
       color: #000;
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 6px;
+      padding: 3px 8px;
+      border-radius: 7px;
       box-shadow: 0 2px 6px rgba(255, 167, 81, 0.4);
       letter-spacing: 0.5px;
       z-index: 10;
@@ -1394,103 +1394,107 @@
 
     @media (max-width: 580px) {
       .container {
-        padding: 12px 10px;
+        padding: 16px 14px;
       }
       header {
         flex-direction: row;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 16px;
-        padding: 6px 4px;
+        margin-bottom: 20px;
+        padding: 8px 4px;
+        gap: 12px;
       }
       .header-logo h1 {
-        font-size: 20px;
+        font-size: 24px;
       }
       .header-logo p {
-        font-size: 10px;
+        font-size: 11px;
       }
       .header-info {
         text-align: right;
       }
       #clock {
-        font-size: 16px;
+        font-size: 20px;
       }
       #date {
-        font-size: 9px;
+        font-size: 11px;
       }
       .stats-grid {
         grid-template-columns: repeat(3, 1fr);
-        gap: 6px;
-        margin-bottom: 16px;
+        gap: 10px;
+        margin-bottom: 20px;
       }
       .stat-card {
-        padding: 10px 4px;
-        border-radius: var(--radius-md);
+        padding: 14px 8px;
+        border-radius: var(--radius-lg);
       }
       .stat-circle {
-        width: 36px;
-        height: 36px;
-        margin-bottom: 6px;
+        width: 46px;
+        height: 46px;
+        margin-bottom: 8px;
       }
       .stat-circle-val {
-        font-size: 9px;
+        font-size: 11px;
       }
       .stat-icon-wrapper {
-        width: 30px;
-        height: 30px;
-        font-size: 14px;
-        margin-bottom: 6px;
+        width: 38px;
+        height: 38px;
+        font-size: 18px;
+        margin-bottom: 8px;
       }
       .stat-label {
-        font-size: 8px;
-        letter-spacing: 0.3px;
+        font-size: 9px;
+        letter-spacing: 0.5px;
       }
       .stat-value-text {
-        font-size: 13px;
-        margin-top: 2px;
+        font-size: 16px;
+        margin-top: 4px;
       }
       .main-widget {
-        padding: 16px;
-        border-radius: var(--radius-lg);
-        margin-bottom: 12px;
+        padding: 20px;
+        border-radius: var(--radius-xl);
+        margin-bottom: 16px;
       }
       .main-widget-header {
-        margin-bottom: 12px;
+        margin-bottom: 16px;
       }
       .main-widget-body h3 {
-        font-size: 20px;
+        font-size: 22px;
       }
       .widget-badge {
-        padding: 4px 8px;
-        font-size: 9px;
+        padding: 5px 10px;
+        font-size: 10px;
       }
       .widget-teacher-bar {
-        margin-top: 16px;
-        padding-top: 10px;
+        margin-top: 20px;
+        padding-top: 12px;
       }
       .filter-pills-scroll {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
+        overflow-x: auto;
+        gap: 10px;
         width: 100%;
-        gap: 4px;
+        padding: 6px 4px;
+        -webkit-overflow-scrolling: touch;
       }
       .filter-pill {
-        flex: 1;
-        text-align: center;
-        padding: 8px 4px;
-        font-size: 11px;
-        border-radius: 15px;
+        flex: none;
+        padding: 10px 18px;
+        font-size: 13px;
+        border-radius: 20px;
       }
       #tabEventos .filter-pills-scroll {
         display: flex;
         justify-content: flex-start;
         overflow-x: auto;
-        gap: 6px;
-        width: auto;
+        gap: 10px;
+        width: 100%;
       }
       #tabEventos .filter-pill {
         flex: none;
-        padding: 8px 12px;
+        padding: 10px 16px;
       }
       .switcher-pill {
         width: 100%;
@@ -1499,6 +1503,57 @@
       .switcher-btn {
         flex: 1;
         text-align: center;
+        padding: 8px 16px;
+        font-size: 13px;
+      }
+      .timeline-item {
+        padding: 18px;
+        border-radius: var(--radius-lg);
+      }
+      .timeline-time span {
+        font-size: 13px;
+      }
+      .timeline-time span.time-end {
+        font-size: 11px;
+      }
+      .timeline-details h4 {
+        font-size: 17px;
+      }
+      .timeline-subdetails {
+        font-size: 12px;
+      }
+      .event-card {
+        padding: 18px;
+      }
+      .event-info-box h4 {
+        font-size: 16px;
+      }
+      .event-info-box p {
+        font-size: 12px;
+      }
+      .teacher-card {
+        padding: 18px;
+      }
+      .teacher-card-info h4 {
+        font-size: 16px;
+      }
+      .teacher-card-info p {
+        font-size: 13px;
+      }
+      .bottom-sheet {
+        padding: 20px 24px 34px;
+      }
+      .sheet-title {
+        font-size: 24px;
+      }
+      .sheet-subtitle {
+        font-size: 14px;
+      }
+      .sheet-row-value {
+        font-size: 15px;
+      }
+      .sheet-row-label {
+        font-size: 13px;
       }
     }
   </style>
