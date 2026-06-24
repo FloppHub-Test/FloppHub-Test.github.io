@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruleta Aleatoria 1-45</title>
+<style>
+*{
+    box-sizing:border-box;
+}
+body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+        radial-gradient(circle at top,#1e293b 0%,#020617 42%,#000 100%);
+    color:white;
+    font-family:Arial, Helvetica, sans-serif;
+    overflow:hidden;
+}
+.app{
+    width:min(94vw,520px);
+    text-align:center;
+    padding:24px;
+}
+h1{
+    margin:0 0 8px;
+    font-size:clamp(30px,7vw,48px);
+    letter-spacing:.5px;
+}
+.subtitulo{
+    margin:0 0 24px;
+    color:#cbd5e1;
+    font-size:15px;
+}
+.ruleta-wrap{
+    position:relative;
+    width:min(88vw,420px);
+    aspect-ratio:1/1;
+    margin:0 auto;
+    display:grid;
+    place-items:center;
+}
+.ruleta-glow{
+    position:absolute;
+    inset:5%;
+    border-radius:50%;
+    background:conic-gradient(#22c55e,#38bdf8,#a855f7,#f97316,#22c55e);
+    filter:blur(26px);
+    opacity:.42;
+}
+canvas{
+    position:relative;
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    filter:drop-shadow(0 24px 38px rgba(0,0,0,.75));
+}
+.flecha{
+    position:absolute;
+    top:-5px;
+    left:50%;
+    transform:translateX(-50%);
+    width:44px;
+    height:58px;
+    z-index:5;
+    filter:drop-shadow(0 8px 12px rgba(0,0,0,.55));
+}
+.flecha::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    clip-path:polygon(50% 100%,0 0,100% 0);
+    background:linear-gradient(180deg,#fde047,#f97316);
+    border-radius:8px;
+}
+.panel{
+    margin:24px auto 0;
+    width:min(100%,420px);
+    padding:18px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:24px;
+    background:rgba(15,23,42,.72);
+    backdrop-filter:blur(14px);
+    box-shadow:0 16px 45px rgba(0,0,0,.35);
+}
+.resultado{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    min-height:58px;
+    margin-bottom:16px;
+    border-radius:18px;
+    background:rgba(255,255,255,.06);
+    font-weight:800;
+    font-size:28px;
+}
+.resultado span{
+    color:#facc15;
+}
+button{
+    width:100%;
+    border:0;
+    border-radius:18px;
+    padding:16px 22px;
+    color:#03120a;
+    background:linear-gradient(135deg,#22c55e,#86efac);
+    font-size:18px;
+    font-weight:900;
+    cursor:pointer;
+    box-shadow:0 14px 28px rgba(34,197,94,.28);
+    transition:transform .16s ease, filter .16s ease, opacity .16s ease;
+}
+button:hover{
+    filter:brightness(1.07);
+}
+button:active{
+    transform:scale(.97);
+}
+button:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+.historial{
+    margin-top:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    flex-wrap:wrap;
+    min-height:34px;
+}
+.bola{
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:#f8fafc;
+    color:#020617;
+    font-size:13px;
+    font-weight:900;
+    box-shadow:inset 0 -4px 8px rgba(0,0,0,.18);
+}
+.vacio{
+    color:#94a3b8;
+    font-size:13px;
+}
+@media(max-width:420px){
+    .app{
+        padding:18px;
+    }
+    .panel{
+        padding:14px;
+    }
+    .resultado{
+        font-size:24px;
+    }
+}
+</style>
+</head>
+<body>
+<div class="app">
+    <h1>Ruleta 1-45</h1>
+    <p class="subtitulo">Presiona el botón y deja que el azar elija el número.</p>
+
+    <div class="ruleta-wrap">
+        <div class="ruleta-glow"></div>
+        <div class="flecha"></div>
+        <canvas id="ruleta" width="900" height="900"></canvas>
+    </div>
+
+    <div class="panel">
+        <div class="resultado">Número: <span id="numero">-</span></div>
+        <button id="boton">Girar ruleta</button>
+        <div class="historial" id="historial">
+            <div class="vacio">Aquí aparecerán los últimos resultados</div>
+        </div>
+    </div>
+</div>
+
+<script>
+const canvas = document.getElementById("ruleta");
+const ctx = canvas.getContext("2d");
+const boton = document.getElementById("boton");
+const numero = document.getElementById("numero");
+const historial = document.getElementById("historial");
+
+const total = 45;
+const valores = Array.from({length: total}, (_, i) => i + 1);
+const colores = ["#ef4444","#f97316","#eab308","#22c55e","#06b6d4","#3b82f6","#8b5cf6","#ec4899"];
+let rotacion = 0;
+let girando = false;
+let ultimos = [];
+
+function dibujar(){
+    const w = canvas.width;
+    const h = canvas.height;
+    const cx = w / 2;
+    const cy = h / 2;
+    const radio = Math.min(cx, cy) - 18;
+    const segmento = Math.PI * 2 / total;
+
+    ctx.clearRect(0,0,w,h);
+
+    for(let i = 0; i < total; i++){
+        const inicio = rotacion + i * segmento;
+        const fin = inicio + segmento;
+
+        ctx.beginPath();
+        ctx.moveTo(cx,cy);
+        ctx.arc(cx,cy,radio,inicio,fin);
+        ctx.closePath();
+        ctx.fillStyle = colores[i % colores.length];
+        ctx.fill();
+
+        ctx.strokeStyle = "rgba(255,255,255,.24)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.save();
+        ctx.translate(cx,cy);
+        ctx.rotate(inicio + segmento / 2);
+        ctx.textAlign = "right";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#fff";
+        ctx.font = "800 24px Arial";
+        ctx.shadowColor = "rgba(0,0,0,.65)";
+        ctx.shadowBlur = 5;
+        ctx.fillText(valores[i], radio - 28, 0);
+        ctx.restore();
+    }
+
+    ctx.beginPath();
+    ctx.arc(cx,cy,radio * .22,0,Math.PI * 2);
+    ctx.fillStyle = "#020617";
+    ctx.fill();
+    ctx.lineWidth = 8;
+    ctx.strokeStyle = "rgba(255,255,255,.18)";
+    ctx.stroke();
+
+    ctx.fillStyle = "#f8fafc";
+    ctx.font = "900 34px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("GIRA",cx,cy - 4);
+
+    ctx.fillStyle = "#94a3b8";
+    ctx.font = "700 17px Arial";
+    ctx.fillText("1-45",cx,cy + 34);
+}
+
+function easeOutQuint(t){
+    return 1 - Math.pow(1 - t, 5);
+}
+
+function actualizarHistorial(n){
+    ultimos.unshift(n);
+    ultimos = ultimos.slice(0,6);
+    historial.innerHTML = "";
+    ultimos.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "bola";
+        div.textContent = item;
+        historial.appendChild(div);
+    });
+}
+
+function girar(){
+    if(girando) return;
+
+    girando = true;
+    boton.disabled = true;
+    numero.textContent = "...";
+
+    const elegido = Math.floor(Math.random() * total);
+    const segmento = Math.PI * 2 / total;
+    const anguloFlecha = Math.PI * 1.5;
+    const objetivo = anguloFlecha - elegido * segmento - segmento / 2;
+    const vueltas = Math.PI * 2 * (7 + Math.floor(Math.random() * 3));
+    const inicio = rotacion;
+    const final = inicio + vueltas + normalizar(objetivo - inicio);
+    const duracion = 4700;
+    const comienzo = performance.now();
+
+    function animar(t){
+        const progreso = Math.min((t - comienzo) / duracion, 1);
+        const suave = easeOutQuint(progreso);
+        rotacion = inicio + (final - inicio) * suave;
+        dibujar();
+
+        if(progreso < 1){
+            requestAnimationFrame(animar);
+        }else{
+            rotacion = objetivo;
+            dibujar();
+            numero.textContent = valores[elegido];
+            actualizarHistorial(valores[elegido]);
+            girando = false;
+            boton.disabled = false;
+        }
+    }
+
+    requestAnimationFrame(animar);
+}
+
+function normalizar(a){
+    const dosPi = Math.PI * 2;
+    return ((a % dosPi) + dosPi) % dosPi;
+}
+
+boton.addEventListener("click", girar);
+dibujar();
+</script>
+</body>
+</html>
