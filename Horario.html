@@ -2,2270 +2,794 @@
 <html lang="es-MX">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#F5F5FA" id="themeColorMeta">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#000000" id="themeColorMeta">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <title>Horario 2°C | COBAQROO</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Horario III B">
+  <title>Horario III B | COBAQROO</title>
   <style>
     :root {
-      --bg-base: #F5F5FA;
-      --bg-container: #FFFFFF;
-      --text-main: #0F121D;
-      --text-muted: #6A6E82;
-      --glass-bg: rgba(255, 255, 255, 0.7);
-      --glass-border: rgba(0, 122, 255, 0.08);
-      --active-card: rgba(0, 122, 255, 0.04);
-      
-      --theme-primary: #007AFF;
-      --theme-dark: #0056B3;
-      --theme-light: #B3D7FF;
-      --theme-glow: rgba(0, 122, 255, 0.25);
-      --theme-gradient: linear-gradient(135deg, #007AFF, #00C7BE, #00F5FF);
-      
-      --color-suspension: #FF3B30;
-      --color-vacacion: #34C759;
-      --color-receso: #FF9500;
-      --color-carnaval: #00C7BE;
-      --color-tramite: #007AFF;
-      --color-academico: #1F52C5;
-      
-      --radius-xl: 30px;
-      --radius-lg: 20px;
-      --radius-md: 14px;
-      --radius-sm: 10px;
-      
-      --shadow-premium: 0 10px 40px rgba(0, 122, 255, 0.05);
-      --shadow-inset: inset 0 1.5px 3px rgba(255, 255, 255, 0.4);
-      --blur-glass: blur(25px);
-      --transition-spring: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      --bg: #000;
+      --card: #111;
+      --ink: #fff;
+      --mute: #8E8E93;
+      --line: #1C1C1E;
+      --teal: #2DD4BF;
+      --r: 16px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
-    body.dark-mode {
-      --bg-base: #000000;
-      --bg-container: #000000;
-      --text-main: #F1F3F9;
-      --text-muted: #82869A;
-      --glass-bg: rgba(0, 0, 0, 0.7);
-      --glass-border: rgba(10, 132, 255, 0.12);
-      --active-card: rgba(10, 132, 255, 0.08);
-      
-      --theme-primary: #0A84FF;
-      --theme-dark: #0056B3;
-      --theme-light: #80BFFF;
-      --theme-glow: rgba(10, 132, 255, 0.35);
-      --theme-gradient: linear-gradient(135deg, #0A84FF, #00C7BE, #00F5FF);
-      
-      --shadow-premium: 0 10px 40px rgba(0, 0, 0, 0.45);
-      --shadow-inset: inset 0 1.5px 3px rgba(255, 255, 255, 0.05);
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html { overflow-x: hidden; }
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-base);
-      color: var(--text-main);
+      font-family: var(--font);
+      background: #000;
+      color: var(--ink);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-      transition: background 0.5s ease, color 0.5s ease;
-      padding-bottom: 90px;
+      padding-bottom: calc(100px + env(safe-area-inset-bottom));
     }
 
-    .app-background-glow {
-      position: fixed;
-      top: -150px;
-      right: -150px;
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, var(--theme-glow) 0%, rgba(0,122,255,0) 70%);
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.6;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 1100px;
+    .wrap {
+      position: relative; z-index: 1;
+      width: min(980px, 100%);
       margin: 0 auto;
-      padding: 24px 20px;
-      position: relative;
-      z-index: 1;
+      padding: 28px 22px 12px;
     }
 
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-      padding: 10px 4px;
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 28px; gap: 16px;
     }
-
-    .header-logo {
-      display: flex;
-      flex-direction: column;
+    .brand { display: flex; flex-direction: column; gap: 4px; }
+    .brand small {
+      font-size: 12px; color: var(--mute); font-weight: 500;
     }
-
-    .header-logo h1 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      line-height: 1.1;
-      background: var(--theme-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .brand h1 {
+      font-size: 28px; font-weight: 700; letter-spacing: -0.04em; line-height: 1.1;
+      color: var(--ink);
     }
+    .brand h1 span { color: var(--teal); }
+    .brand p { font-size: 13px; color: var(--mute); font-weight: 400; margin-top: 2px; }
 
-    .header-logo p {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-muted);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-top: 4px;
-    }
-
-    .header-info {
-      text-align: right;
-    }
-
+    .meta { text-align: right; }
     #clock {
-      font-family: 'Outfit', sans-serif;
-      font-size: 24px;
-      font-weight: 700;
-      background: var(--theme-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: 20px; font-weight: 600; letter-spacing: -0.03em;
+      color: var(--ink); font-variant-numeric: tabular-nums;
+    }
+    #date { font-size: 11px; color: var(--mute); margin-top: 2px; }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
     }
 
-    #date {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-top: 2px;
+    .tab { display: none; }
+    .tab.active { display: block; animation: in 0.4s var(--ease); }
+    @keyframes in {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: none; }
     }
 
-    .tab-content {
-      display: none;
-      animation: fadeSlideIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    .alert {
+      display: none; align-items: center; gap: 10px;
+      padding: 14px 16px; border-radius: 16px; margin-bottom: 18px;
+      font-size: 13px; font-weight: 500;
     }
+    .alert b { color: #E8B4B4; font-weight: 600; }
 
-    .tab-content.active {
-      display: block;
+    .metrics {
+      display: grid; grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: center; gap: 0;
+      border-radius: var(--r); padding: 16px 8px; margin-bottom: 12px;
     }
-
-    @keyframes fadeSlideIn {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .metric { text-align: center; }
+    .metric b {
+      display: block; font-size: 20px; font-weight: 700; letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
     }
-
-    .alert-panel {
-      background: var(--glass-bg);
-      backdrop-filter: var(--blur-glass);
-      -webkit-backdrop-filter: var(--blur-glass);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-lg);
-      padding: 16px 20px;
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      box-shadow: var(--shadow-premium), var(--shadow-inset);
-      transform: scale(1);
-      transition: var(--transition-spring);
+    .metric span {
+      display: block; margin-top: 3px; font-size: 11px; color: var(--mute); font-weight: 500;
     }
+    .rule { width: 1px; height: 32px; background: var(--line); }
 
-    .alert-panel:hover {
-      transform: scale(1.01);
+    .hero {
+      border-radius: var(--r); padding: 20px;
+      margin-bottom: 10px; position: relative; overflow: hidden;
     }
-
-    .alert-icon {
-      font-size: 24px;
-      color: var(--color-suspension);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: pulseAlert 2s infinite;
+    .hero::before {
+      content: ""; position: absolute; left: 0; top: 18px; bottom: 18px; width: 2px;
+      background: var(--accent, var(--teal)); border-radius: 2px; opacity: 0.9;
     }
-
-    @keyframes pulseAlert {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.15); opacity: 0.8; }
-      100% { transform: scale(1); opacity: 1; }
+    .hero-top {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
     }
-
-    .alert-text {
-      font-size: 14px;
-      font-weight: 600;
+    .chip {
+      font-size: 12px; color: var(--accent, var(--teal)); font-weight: 600;
+      display: inline-flex; align-items: center; gap: 6px;
     }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-bottom: 24px;
+    .chip i {
+      width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+      box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 18%, transparent);
     }
-
-    .stat-card {
-      background: var(--glass-bg);
-      backdrop-filter: var(--blur-glass);
-      -webkit-backdrop-filter: var(--blur-glass);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-lg);
-      padding: 18px;
-      text-align: center;
-      box-shadow: var(--shadow-premium), var(--shadow-inset);
-      transition: var(--transition-spring);
-      position: relative;
-      overflow: hidden;
+    .hero time { font-size: 12px; color: var(--mute); font-variant-numeric: tabular-nums; }
+    .hero h2 {
+      font-size: 22px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.25;
+      color: var(--ink);
     }
-
-    .stat-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--theme-primary);
+    .hero .where {
+      margin-top: 10px; font-size: 13px; color: var(--mute); font-weight: 500;
     }
-
-    .stat-circle {
-      width: 50px;
-      height: 50px;
-      margin: 0 auto 10px;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .who {
+      display: flex; align-items: center; gap: 12px;
+      margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line);
     }
-
-    .stat-circle svg {
-      width: 100%;
-      height: 100%;
-      transform: rotate(-90deg);
+    .ava {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: grid; place-items: center;
+      background: color-mix(in srgb, var(--accent, var(--teal)) 16%, transparent);
+      color: var(--accent, var(--teal));
+      font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
     }
+    .who p { font-size: 13.5px; font-weight: 500; }
 
-    .stat-circle circle {
-      fill: none;
-      stroke-width: 3.5;
+    .next {
+      border-radius: var(--r); padding: 16px;
+      display: grid; grid-template-columns: 1fr auto; gap: 8px 16px; align-items: center;
     }
-
-    .stat-circle .circle-bg {
-      stroke: var(--glass-border);
+    .next small {
+      grid-column: 1 / -1; font-size: 12px; color: var(--mute); font-weight: 600;
     }
-
-    .stat-circle .circle-progress {
-      stroke: var(--theme-primary);
-      stroke-linecap: round;
-      transition: stroke-dashoffset 0.6s ease;
+    .next h3 {
+      font-size: 16px; font-weight: 600; letter-spacing: -0.02em;
     }
+    .next em { font-style: normal; font-size: 12px; color: var(--teal); font-weight: 600; }
+    .next span { font-size: 12px; color: var(--mute); }
 
-    .stat-circle-val {
-      position: absolute;
-      font-size: 12px;
-      font-weight: 700;
-      font-family: 'Outfit', sans-serif;
+    .bar {
+      display: flex; justify-content: flex-end; margin-bottom: 14px;
     }
-
-    .stat-icon-wrapper {
-      width: 44px;
-      height: 44px;
-      background: var(--active-card);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      color: var(--theme-primary);
-      margin: 0 auto 10px;
+    .seg {
+      display: flex; padding: 3px; border-radius: 999px;
     }
-
-    .stat-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
+    .seg button {
+      border: 0; background: transparent; color: var(--mute);
+      font: 600 13px var(--font); padding: 8px 16px; border-radius: 999px;
+      cursor: pointer; transition: 0.25s var(--ease);
     }
+    .seg button.active { background: var(--teal); color: #000; }
 
-    .stat-value-text {
-      font-family: 'Outfit', sans-serif;
-      font-size: 20px;
-      font-weight: 700;
-      margin-top: 4px;
-    }
-
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 1.3fr 1fr;
-      gap: 20px;
-    }
-
-    .main-widget {
-      background: var(--glass-bg);
-      backdrop-filter: var(--blur-glass);
-      -webkit-backdrop-filter: var(--blur-glass);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-xl);
-      padding: 24px;
-      box-shadow: var(--shadow-premium), var(--shadow-inset);
-      transition: var(--transition-spring);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      overflow: hidden;
-    }
-
-    .main-widget::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 6px;
-      background: var(--sub-color, var(--theme-primary));
-      border-radius: var(--radius-xl) 0 0 var(--radius-xl);
-    }
-
-    body.dark-mode .main-widget::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: var(--radius-xl);
-      box-shadow: 0 0 25px var(--sub-glow, rgba(99, 102, 241, 0.15));
-      pointer-events: none;
-      opacity: 0.8;
-      z-index: -1;
-    }
-
-    .main-widget-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 24px;
-    }
-
-    .widget-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--active-card);
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--sub-color, var(--theme-primary));
-    }
-
-    .widget-time {
-      font-family: 'Outfit', sans-serif;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-
-    .main-widget-body h3 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      margin-bottom: 6px;
-      line-height: 1.2;
-      color: var(--sub-color);
-    }
-
-    .widget-location {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-muted);
-    }
-
-    .widget-teacher-bar {
-      margin-top: 24px;
-      padding-top: 16px;
-      border-top: 1px solid var(--glass-border);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .avatar-circle {
-      width: 38px;
-      height: 38px;
-      background: var(--sub-color, var(--theme-primary));
-      color: #FFFFFF;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Outfit', sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      box-shadow: 0 4px 10px var(--sub-glow, rgba(0, 180, 216, 0.2));
-    }
-
-    .teacher-name {
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .countdown-text {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--sub-color, var(--theme-primary));
-      margin-top: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .section-header-title {
-      font-family: 'Outfit', sans-serif;
-      font-size: 20px;
-      font-weight: 700;
-      margin: 28px 0 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .section-header-title ion-icon {
-      color: var(--theme-primary);
-      font-size: 24px;
-    }
-
-    .view-switcher-bar {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 16px;
-    }
-
-    .switcher-pill {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      padding: 3px;
-      display: flex;
-      gap: 2px;
-    }
-
-    .switcher-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      padding: 6px 14px;
-      font-size: 12px;
-      font-weight: 700;
-      border-radius: 16px;
-      cursor: pointer;
-      transition: var(--transition-spring);
-    }
-
-    .switcher-btn.active {
-      background: var(--theme-primary);
-      color: #FFFFFF;
-      box-shadow: 0 4px 12px var(--theme-glow);
-    }
-
-    .schedule-wrapper {
-      background: var(--glass-bg);
-      backdrop-filter: var(--blur-glass);
-      -webkit-backdrop-filter: var(--blur-glass);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-xl);
-      padding: 10px;
-      box-shadow: var(--shadow-premium), var(--shadow-inset);
-      overflow-x: auto;
+    .days {
+      display: flex; gap: 8px; overflow-x: auto; padding: 2px 0 14px;
       -webkit-overflow-scrolling: touch;
     }
+    .days::-webkit-scrollbar { display: none; }
+    .days button {
+      border: 1px solid var(--line); background: transparent; color: var(--mute);
+      font: 500 13px var(--font); padding: 8px 14px; border-radius: 999px;
+      cursor: pointer; white-space: nowrap; transition: 0.25s var(--ease);
+    }
+    .days button.active { background: #fff; color: #000; border-color: #fff; }
 
-    table {
-      width: 100%;
-      min-width: 800px;
-      border-collapse: separate;
-      border-spacing: 6px;
+    .rail { display: flex; flex-direction: column; gap: 0; }
+    .row {
+      display: grid; grid-template-columns: 78px 18px 1fr;
+      gap: 0 4px; cursor: pointer; min-height: 76px;
+    }
+    .row.quiet { cursor: default; min-height: 52px; }
+    .tcol {
+      display: flex; flex-direction: column; justify-content: center;
+      font-variant-numeric: tabular-nums; padding: 12px 0;
+    }
+    .tcol b { font-size: 13px; font-weight: 600; }
+    .tcol span { font-size: 11px; color: var(--mute); margin-top: 2px; }
+    .axis { position: relative; }
+    .axis::before {
+      content: ""; position: absolute; left: 8px; top: 0; bottom: 0; width: 1px;
+      background: var(--line);
+    }
+    .axis::after {
+      content: ""; position: absolute; left: 5px; top: 28px; width: 7px; height: 7px;
+      border-radius: 50%; background: var(--accent, var(--teal));
+      box-shadow: 0 0 0 4px #000;
+    }
+    .row.quiet .axis::after { background: var(--mute); opacity: 0.5; }
+    .row.now .axis::after {
+      background: var(--teal);
+      box-shadow: 0 0 0 4px #000;
+    }
+    .card {
+      margin: 8px 0; padding: 14px 16px; border-radius: 14px;
+      background: #111;
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--accent, var(--teal));
+      transition: transform 0.2s var(--ease);
+    }
+    .row:active .card { transform: scale(0.985); }
+    .card h4 {
+      font-size: 15px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3;
+    }
+    .card p { margin-top: 5px; font-size: 12px; color: var(--mute); }
+    .card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+    .now-tag {
+      flex-shrink: 0; font-size: 11px;
+      color: #000; background: var(--teal); padding: 3px 8px; border-radius: 6px;
+      font-weight: 700; margin-top: 1px;
+    }
+    .note {
+      margin: 10px 0; text-align: center; font-size: 12px; color: var(--mute); font-weight: 600;
     }
 
+    .week { border-radius: 22px; padding: 8px; overflow-x: auto; }
+    table { width: 100%; min-width: 760px; border-collapse: separate; border-spacing: 6px; }
     th {
-      font-family: 'Outfit', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-muted);
-      padding: 12px 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--mute); font-weight: 600; padding: 10px 4px;
     }
-
     td {
-      background: rgba(142, 142, 147, 0.05);
-      border: 1px solid transparent;
-      border-radius: var(--radius-md);
-      padding: 14px 10px;
-      text-align: center;
-      transition: var(--transition-spring);
-      cursor: pointer;
-      vertical-align: middle;
+      border-radius: 12px; padding: 12px 8px; text-align: center; cursor: pointer;
+      background: rgba(255,255,255,0.03); border: 1px solid transparent;
+      transition: 0.25s var(--ease); vertical-align: middle;
+    }
+    td.time {
+      background: none; cursor: default; width: 88px;
+      font-size: 11px; color: var(--mute); font-variant-numeric: tabular-nums; line-height: 1.35;
+    }
+    td.cls {
+      background: color-mix(in srgb, var(--accent, var(--teal)) 10%, transparent);
+      border-color: color-mix(in srgb, var(--accent, var(--teal)) 16%, transparent);
+    }
+    td.cls b { display: block; font-size: 12px; font-weight: 600; color: var(--ink); }
+    td.cls span { display: block; margin-top: 3px; font-size: 10px; color: var(--mute); }
+    td.off { border: 1px dashed var(--line); color: var(--mute); opacity: 0.5; font-size: 12px; cursor: default; }
+    td.rec { cursor: default; font-size: 12px; color: var(--mute); background: #111; }
+    td.now { outline: 1px solid var(--teal); }
+
+    .search {
+      width: 100%; border: 1px solid var(--line); background: #111;
+      color: var(--ink); border-radius: 14px; padding: 13px 16px 13px 42px;
+      font: 400 15px var(--font); outline: none; margin-bottom: 14px;
+    }
+    .search-wrap { position: relative; }
+    .search-wrap ion-icon {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--mute); font-size: 18px;
     }
 
-    td:hover:not(.time-col) {
-      transform: scale(1.02) translateY(-2px);
-      box-shadow: var(--shadow-premium);
+    .faculty { display: flex; flex-direction: column; gap: 8px; }
+    .prof {
+      display: grid; grid-template-columns: 46px 1fr auto; gap: 14px; align-items: center;
+      padding: 14px 16px; border-radius: 18px; cursor: pointer;
+      transition: transform 0.3s var(--ease);
+    }
+    .prof:active { transform: scale(0.985); }
+    .prof h4 { font-size: 14.5px; font-weight: 600; letter-spacing: -0.02em; }
+    .prof p { font-size: 12px; color: var(--mute); margin-top: 3px; }
+    .hrs {
+      font-size: 12px; color: var(--teal); font-weight: 600;
+      padding: 5px 9px; border-radius: 999px; background: rgba(45,212,191,0.12);
     }
 
-    .time-col {
-      font-family: 'Outfit', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-muted);
-      background: transparent;
-      width: 120px;
-      cursor: default;
-    }
-
-    td.class-cell {
-      background: var(--sub-bg);
-      border: 1.5px solid var(--sub-border);
-      color: var(--text-main);
-      position: relative;
-    }
-
-    td.class-cell::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 4px;
-      background: var(--sub-color);
-      border-radius: var(--radius-md) 0 0 var(--radius-md);
-    }
-
-    td.cell-active {
-      border: 2px solid #FFD700 !important;
-      box-shadow: 0 0 15px rgba(255, 215, 0, 0.5), inset 0 0 10px rgba(255, 215, 0, 0.2) !important;
-      position: relative;
-    }
-    
-    td.cell-active::after {
-      content: 'AHORA';
-      position: absolute;
-      top: -8px;
-      right: 4px;
-      background: linear-gradient(135deg, #FFE259, #FFA751);
-      color: #000;
-      font-size: 9px;
-      font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 6px;
-      box-shadow: 0 2px 6px rgba(255, 167, 81, 0.4);
-      letter-spacing: 0.5px;
-      z-index: 10;
-    }
-
-    td.cell-free {
-      background: transparent;
-      border: 1px dashed var(--glass-border);
-      color: var(--text-muted);
-      opacity: 0.6;
-    }
-
-    td.cell-free::before {
-      display: none;
-    }
-
-    .cell-subject-name {
-      font-size: 13.5px;
-      font-weight: 700;
-      line-height: 1.25;
-      margin-bottom: 3px;
-      text-shadow: none;
-      filter: none;
-      position: relative;
-      z-index: 1;
-      color: var(--sub-color);
-    }
-
-    .cell-room-code {
-      font-size: 10.5px;
-      font-weight: 600;
-      color: var(--text-muted);
-    }
-
-    .mobile-timeline {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .timeline-item {
-      background: var(--sub-bg);
-      border: 1.5px solid var(--sub-border);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      box-shadow: var(--shadow-premium), var(--shadow-inset);
-      transition: var(--transition-spring);
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 5px;
-      background: var(--sub-color);
-      border-radius: var(--radius-lg) 0 0 var(--radius-lg);
-    }
-
-    .timeline-item:hover {
-      transform: translateY(-2px);
-      border-color: var(--sub-color);
-    }
-
-    .timeline-item.active {
-      border: 2px solid #FFD700 !important;
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.4) !important;
-      position: relative;
-    }
-
-    .timeline-item.active::after {
-      content: 'AHORA';
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: linear-gradient(135deg, #FFE259, #FFA751);
-      color: #000;
-      font-size: 10px;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 7px;
-      box-shadow: 0 2px 6px rgba(255, 167, 81, 0.4);
-      letter-spacing: 0.5px;
-      z-index: 10;
-    }
-    
-    .main-widget.cell-active {
-      border: 2px solid #FFD700 !important;
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.35) !important;
-    }
-
-    .timeline-time {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-width: 80px;
-      padding-right: 12px;
-      border-right: 1.5px solid var(--glass-border);
-      text-align: center;
-    }
-
-    .timeline-time span {
-      font-family: 'Outfit', sans-serif;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .timeline-time span.time-end {
-      font-size: 10px;
-      color: var(--text-muted);
-      font-weight: 500;
-      margin-top: 2px;
-    }
-
-    .timeline-details {
-      flex-grow: 1;
-    }
-
-    .timeline-details h4 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 16px;
-      font-weight: 700;
-      line-height: 1.2;
-      color: var(--sub-color);
-    }
-
-    .timeline-subdetails {
-      display: flex;
-      gap: 12px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    .search-filter-container {
-      margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .search-input-wrapper {
-      position: relative;
-      width: 100%;
-    }
-
-    .search-input-wrapper ion-icon {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 20px;
-      color: var(--text-muted);
-    }
-
-    .search-input {
-      width: 100%;
-      background: var(--glass-bg);
-      backdrop-filter: var(--blur-glass);
-      -webkit-backdrop-filter: var(--blur-glass);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-lg);
-      padding: 14px 16px 14px 48px;
-      font-family: inherit;
-      font-size: 14px;
-      color: inherit;
-      box-shadow: var(--shadow-premium), var(--shadow-inset);
-      transition: var(--transition-spring);
-      outline: none;
-    }
-
-    .search-input:focus {
-      border-color: var(--theme-primary);
-      box-shadow: 0 0 15px var(--theme-glow);
-    }
-
-    .filter-pills-scroll {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding: 4px 2px;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .filter-pills-scroll::-webkit-scrollbar {
-      display: none;
-    }
-
-    .filter-pill {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      padding: 8px 16px;
-      font-size: 12px;
-      font-weight: 700;
-      white-space: nowrap;
-      cursor: pointer;
-      transition: var(--transition-spring);
-      color: var(--text-muted);
-    }
-
-    .filter-pill.active {
-      background: var(--theme-primary);
-      color: #FFFFFF;
-      border-color: var(--theme-primary);
-      box-shadow: 0 4px 12px var(--theme-glow);
-    }
-
-    .event-timeline {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .event-card {
-      background: var(--glass-bg);
-      backdrop-filter: var(--blur-glass);
-      -webkit-backdrop-filter: var(--blur-glass);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      box-shadow: var(--shadow-premium), var(--shadow-inset);
-      transition: var(--transition-spring);
-      cursor: pointer;
-    }
-
-    .event-card:hover {
-      transform: translateY(-2px);
-      border-color: var(--theme-primary);
-    }
-
-    .event-badge-indicator {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .event-card.cat-suspension .event-badge-indicator { background: var(--color-suspension); box-shadow: 0 0 8px var(--color-suspension); }
-    .event-card.cat-vacacion .event-badge-indicator { background: var(--color-vacacion); box-shadow: 0 0 8px var(--color-vacacion); }
-    .event-card.cat-receso .event-badge-indicator { background: var(--color-receso); box-shadow: 0 0 8px var(--color-receso); }
-    .event-card.cat-carnaval .event-badge-indicator { background: var(--color-carnaval); box-shadow: 0 0 8px var(--color-carnaval); }
-    .event-card.cat-tramite .event-badge-indicator { background: var(--color-tramite); box-shadow: 0 0 8px var(--color-tramite); }
-    .event-card.cat-academico .event-badge-indicator { background: var(--color-academico); box-shadow: 0 0 8px var(--color-academico); }
-
-    .event-date-box {
-      min-width: 90px;
-      text-align: left;
-    }
-
-    .event-date-box h5 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .event-info-box {
-      flex-grow: 1;
-    }
-
-    .event-info-box h4 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 15px;
-      font-weight: 700;
-      line-height: 1.25;
-    }
-
-    .event-info-box p {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-weight: 600;
-      margin-top: 2px;
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-    }
-
-    .teachers-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
-    }
-
-    .teacher-card {
-      background: var(--glass-bg);
-      backdrop-filter: var(--blur-glass);
-      -webkit-backdrop-filter: var(--blur-glass);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      box-shadow: var(--shadow-premium), var(--shadow-inset);
-      transition: var(--transition-spring);
-      cursor: pointer;
-    }
-
-    .teacher-card:hover {
-      transform: translateY(-2px) scale(1.01);
-      border-color: var(--theme-primary);
-    }
-
-    .teacher-initials-badge {
-      width: 48px;
-      height: 48px;
-      background: var(--active-card);
-      border: 1px solid var(--glass-border);
-      color: var(--theme-primary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Outfit', sans-serif;
-      font-weight: 700;
-      font-size: 18px;
-      box-shadow: var(--shadow-inset);
-    }
-
-    .teacher-card-info h4 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 15px;
-      font-weight: 700;
-      line-height: 1.2;
-    }
-
-    .teacher-card-info p {
-      font-size: 12px;
-      color: var(--text-muted);
-      font-weight: 500;
-      margin-top: 3px;
-    }
-
-    .bottom-nav-dock {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
+    .dock {
+      position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom));
       transform: translateX(-50%);
-      width: calc(100% - 40px);
-      max-width: 460px;
-      height: 68px;
-      background: rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(30px) saturate(190%);
-      -webkit-backdrop-filter: blur(30px) saturate(190%);
-      border: 1.5px solid rgba(255, 255, 255, 0.4);
-      border-radius: 35px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), inset 0 2px 4px rgba(255,255,255,0.4);
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 100;
-      padding: 0 10px;
-      transition: background 0.4s, border-color 0.4s, transform 0.3s;
+      width: calc(100% - 24px); max-width: 380px; height: 64px;
+      display: flex; justify-content: space-around; align-items: center;
+      border-radius: 22px; z-index: 80; padding: 0 6px;
+      background: #000;
+      border: 1px solid #222;
     }
+    .nav {
+      background: none; border: 0; color: var(--mute); width: 96px; height: 54px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 3px; cursor: pointer; font-family: inherit;
+    }
+    .nav ion-icon { font-size: 20px; }
+    .nav span { font-size: 11px; font-weight: 600; }
+    .nav.on { color: var(--teal); }
 
-    body.dark-mode .bottom-nav-dock {
-      background: rgba(16, 16, 24, 0.4);
-      border: 1.5px solid rgba(255, 255, 255, 0.05);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255,255,255,0.05);
+    .veil {
+      position: fixed; inset: 0; background: rgba(4, 8, 7, 0.55);
+      backdrop-filter: blur(8px); z-index: 120;
+      opacity: 0; visibility: hidden; transition: 0.3s var(--ease);
     }
+    .veil.on { opacity: 1; visibility: visible; }
+    .sheet {
+      position: fixed; left: 0; bottom: 0; width: 100%;
+      background: #0A0A0A; border-top: 1px solid var(--line);
+      border-radius: 20px 20px 0 0; z-index: 130;
+      padding: 14px 22px 32px; max-height: 84vh; overflow: auto;
+      transform: translateY(110%); transition: transform 0.45s var(--ease), opacity 0.3s var(--ease);
+      visibility: hidden; pointer-events: none; opacity: 0;
+    }
+    .sheet.on { transform: none; visibility: visible; pointer-events: auto; opacity: 1; }
+    .handle { width: 36px; height: 4px; border-radius: 4px; background: var(--line); margin: 0 auto 18px; }
+    .x {
+      position: absolute; top: 16px; right: 16px; width: 30px; height: 30px;
+      border-radius: 50%; border: 1px solid var(--line); background: transparent;
+      color: var(--mute); display: grid; place-items: center; cursor: pointer;
+    }
+    .sheet h2 {
+      text-align: center; font-size: 20px; font-weight: 700; margin-bottom: 4px;
+    }
+    .sheet .sub {
+      text-align: center; font-size: 13px; color: var(--mute); margin-bottom: 20px;
+    }
+    .kv {
+      display: flex; justify-content: space-between; gap: 12px;
+      padding: 13px 14px; border-radius: 14px; border: 1px solid var(--line);
+      margin-bottom: 8px;
+    }
+    .kv small { font-size: 12px; color: var(--mute); }
+    .kv b { font-size: 13.5px; font-weight: 600; text-align: right; }
 
-    .bottom-nav-dock:hover {
-      transform: translateX(-50%) scale(1.02);
-    }
-
-    .nav-tab-btn {
-      background: transparent;
-      border: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-      cursor: pointer;
-      width: 60px;
-      height: 54px;
-      border-radius: 20px;
-      transition: var(--transition-spring);
-      position: relative;
-    }
-
-    .nav-tab-btn.active {
-      color: var(--theme-primary);
-    }
-
-    .nav-tab-btn ion-icon {
-      font-size: 22px;
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .nav-tab-btn.active ion-icon {
-      transform: scale(1.15) translateY(-2px);
-    }
-
-    .nav-tab-btn span {
-      font-size: 10px;
-      font-weight: 700;
-      margin-top: 3px;
-      opacity: 0.8;
-    }
-
-    .nav-tab-indicator-dot {
-      position: absolute;
-      bottom: 2px;
-      width: 4px;
-      height: 4px;
-      background: var(--theme-primary);
-      border-radius: 50%;
-      box-shadow: 0 0 6px var(--theme-primary);
-      opacity: 0;
-      transform: scale(0);
-      transition: var(--transition-spring);
-    }
-
-    .nav-tab-btn.active .nav-tab-indicator-dot {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .theme-toggle-header-btn {
-      width: 38px;
-      height: 38px;
-      background: var(--glass-bg);
-      backdrop-filter: var(--blur-glass);
-      -webkit-backdrop-filter: var(--blur-glass);
-      border: 1px solid var(--glass-border);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: var(--shadow-inset);
-      cursor: pointer;
-      transition: var(--transition-spring);
-      outline: none;
-      color: var(--text-main);
-    }
-
-    .theme-toggle-header-btn:hover {
-      transform: scale(1.08) rotate(15deg);
-      border-color: var(--theme-primary);
-    }
-
-    .theme-toggle-header-btn ion-icon {
-      font-size: 18px;
-      color: var(--text-main);
-    }
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 15, 25, 0.4);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      z-index: 999;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.4s;
-    }
-
-    .modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .bottom-sheet {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: var(--bg-container);
-      border-top: 1.5px solid var(--glass-border);
-      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
-      z-index: 1000;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(100%);
-      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease, visibility 0.4s ease;
-      padding: 16px 24px 34px;
-      max-height: 85vh;
-      overflow-y: auto;
-    }
-
-    .bottom-sheet.active {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
-    .sheet-handle-bar {
-      width: 40px;
-      height: 5px;
-      background: var(--glass-border);
-      border-radius: 3px;
-      margin: 0 auto 20px;
-      cursor: grab;
-    }
-
-    .sheet-close-btn {
-      position: absolute;
-      top: 16px;
-      right: 20px;
-      width: 32px;
-      height: 32px;
-      background: var(--active-card);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 20px;
-      color: var(--text-muted);
-      border: 1px solid var(--glass-border);
-    }
-
-    .sheet-header-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: var(--active-card);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      color: var(--theme-primary);
-      margin: 10px auto 16px;
-    }
-
-    .sheet-title {
-      font-family: 'Outfit', sans-serif;
-      font-size: 22px;
-      font-weight: 800;
-      text-align: center;
-      margin-bottom: 4px;
-    }
-
-    .sheet-subtitle {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-align: center;
-      margin-bottom: 24px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .sheet-content-info-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .sheet-info-row {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-md);
-      padding: 14px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .sheet-row-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .sheet-row-value {
-      font-size: 14px;
-      font-weight: 700;
-      text-align: right;
-    }
-
-    .sheet-description-box {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      font-size: 14px;
-      line-height: 1.5;
-      font-weight: 500;
-      text-align: center;
-      margin-top: 12px;
-    }
-
-    .tags-flex-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      margin-top: 10px;
-    }
-
-    .sheet-info-tag {
-      background: var(--active-card);
-      border: 1.5px solid var(--glass-border);
-      color: var(--theme-primary);
-      font-size: 12px;
-      font-weight: 700;
-      padding: 6px 14px;
-      border-radius: 20px;
-      box-shadow: var(--shadow-inset);
-    }
-
-    .sub-math {
-      --sub-color: #32ADE6;
-      --sub-border: rgba(50, 173, 230, 0.6);
-      --sub-bg: rgba(50, 173, 230, 0.38);
-      --sub-glow: rgba(50, 173, 230, 0.25);
-    }
-    body.dark-mode .sub-math {
-      --sub-color: #64D2FF;
-      --sub-border: rgba(100, 210, 255, 0.65);
-      --sub-bg: rgba(100, 210, 255, 0.38);
-      --sub-glow: rgba(100, 210, 255, 0.4);
-    }
-    
-    .sub-english {
-      --sub-color: #FF2D55;
-      --sub-border: rgba(255, 45, 85, 0.6);
-      --sub-bg: rgba(255, 45, 85, 0.38);
-      --sub-glow: rgba(255, 45, 85, 0.25);
-    }
-    body.dark-mode .sub-english {
-      --sub-color: #FF85A2;
-      --sub-border: rgba(255, 133, 162, 0.65);
-      --sub-bg: rgba(255, 133, 162, 0.38);
-      --sub-glow: rgba(255, 133, 162, 0.4);
-    }
-    
-    .sub-humanities {
-      --sub-color: #FF9500;
-      --sub-border: rgba(255, 149, 0, 0.6);
-      --sub-bg: rgba(255, 149, 0, 0.38);
-      --sub-glow: rgba(255, 149, 0, 0.25);
-    }
-    body.dark-mode .sub-humanities {
-      --sub-color: #FFB74D;
-      --sub-border: rgba(255, 183, 77, 0.65);
-      --sub-bg: rgba(255, 183, 77, 0.38);
-      --sub-glow: rgba(255, 183, 77, 0.4);
-    }
-    
-    .sub-language {
-      --sub-color: #007AFF;
-      --sub-border: rgba(0, 122, 255, 0.6);
-      --sub-bg: rgba(0, 122, 255, 0.38);
-      --sub-glow: rgba(0, 122, 255, 0.25);
-    }
-    body.dark-mode .sub-language {
-      --sub-color: #7EC2FF;
-      --sub-border: rgba(126, 194, 255, 0.65);
-      --sub-bg: rgba(126, 194, 255, 0.38);
-      --sub-glow: rgba(126, 194, 255, 0.4);
-    }
-    
-    .sub-science {
-      --sub-color: #34C759;
-      --sub-border: rgba(52, 199, 89, 0.6);
-      --sub-bg: rgba(52, 199, 89, 0.38);
-      --sub-glow: rgba(52, 199, 89, 0.25);
-    }
-    body.dark-mode .sub-science {
-      --sub-color: #8CEF9C;
-      --sub-border: rgba(140, 239, 156, 0.65);
-      --sub-bg: rgba(140, 239, 156, 0.38);
-      --sub-glow: rgba(140, 239, 156, 0.4);
-    }
-    
-    .sub-social {
-      --sub-color: #1F52C5;
-      --sub-border: rgba(31, 82, 197, 0.6);
-      --sub-bg: rgba(31, 82, 197, 0.38);
-      --sub-glow: rgba(31, 82, 197, 0.25);
-    }
-    body.dark-mode .sub-social {
-      --sub-color: #5E9BFF;
-      --sub-border: rgba(94, 155, 255, 0.65);
-      --sub-bg: rgba(94, 155, 255, 0.38);
-      --sub-glow: rgba(94, 155, 255, 0.4);
-    }
-    
-    .sub-ediesyg {
-      --sub-color: #FF3B30;
-      --sub-border: rgba(255, 59, 48, 0.6);
-      --sub-bg: rgba(255, 59, 48, 0.38);
-      --sub-glow: rgba(255, 59, 48, 0.25);
-    }
-    body.dark-mode .sub-ediesyg {
-      --sub-color: #FF8A80;
-      --sub-border: rgba(255, 138, 128, 0.65);
-      --sub-bg: rgba(255, 138, 128, 0.38);
-      --sub-glow: rgba(255, 138, 128, 0.4);
-    }
-    
-    .sub-sports {
-      --sub-color: #FFCC00;
-      --sub-border: rgba(255, 204, 0, 0.6);
-      --sub-bg: rgba(255, 204, 0, 0.38);
-      --sub-glow: rgba(255, 204, 0, 0.25);
-    }
-    body.dark-mode .sub-sports {
-      --sub-color: #FFE082;
-      --sub-border: rgba(255, 224, 130, 0.65);
-      --sub-bg: rgba(255, 224, 130, 0.38);
-      --sub-glow: rgba(255, 224, 130, 0.4);
-    }
-    
-    .sub-digital {
-      --sub-color: #00C7BE;
-      --sub-border: rgba(0, 199, 190, 0.6);
-      --sub-bg: rgba(0, 199, 190, 0.38);
-      --sub-glow: rgba(0, 199, 190, 0.25);
-    }
-    body.dark-mode .sub-digital {
-      --sub-color: #64FFDA;
-      --sub-border: rgba(100, 255, 218, 0.65);
-      --sub-bg: rgba(100, 255, 218, 0.38);
-      --sub-glow: rgba(100, 255, 218, 0.4);
-    }
-    
-    .sub-tutor {
-      --sub-color: #8E8E93;
-      --sub-border: rgba(142, 142, 147, 0.6);
-      --sub-bg: rgba(142, 142, 147, 0.38);
-      --sub-glow: rgba(142, 142, 147, 0.25);
-    }
-    body.dark-mode .sub-tutor {
-      --sub-color: #B0B0B5;
-      --sub-border: rgba(176, 176, 181, 0.65);
-      --sub-bg: rgba(176, 176, 181, 0.38);
-      --sub-glow: rgba(176, 176, 181, 0.4);
-    }
-    
-    .sub-recess {
-      --sub-color: #FF9500;
-      --sub-border: rgba(255, 149, 0, 0.6);
-      --sub-bg: rgba(255, 149, 0, 0.38);
-      --sub-glow: rgba(255, 149, 0, 0.25);
-    }
-    body.dark-mode .sub-recess {
-      --sub-color: #FFB74D;
-      --sub-border: rgba(255, 183, 77, 0.65);
-      --sub-bg: rgba(255, 183, 77, 0.38);
-      --sub-glow: rgba(255, 183, 77, 0.4);
-    }
-    
-    .sub-free {
-      --sub-color: #AEAEB2;
-      --sub-border: rgba(174, 174, 178, 0.3);
-      --sub-bg: transparent;
-      --sub-glow: transparent;
-    }
-    body.dark-mode .sub-free {
-      --sub-color: #3A3A3C;
-      --sub-border: rgba(58, 58, 60, 0.3);
-      --sub-bg: transparent;
-      --sub-glow: transparent;
-    }
-    
-    .sub-default {
-      --sub-color: #8E8E93;
-      --sub-border: rgba(142, 142, 147, 0.6);
-      --sub-bg: rgba(142, 142, 147, 0.38);
-      --sub-glow: rgba(142, 142, 147, 0.25);
-    }
-    body.dark-mode .sub-default {
-      --sub-color: #B0B0B5;
-      --sub-border: rgba(176, 176, 181, 0.65);
-      --sub-bg: rgba(176, 176, 181, 0.38);
-      --sub-glow: rgba(176, 176, 181, 0.4);
-    }
-
-    @media (max-width: 860px) {
-      .dashboard-grid {
-        grid-template-columns: 1fr;
-      }
-      .app-background-glow {
-        width: 300px;
-        height: 300px;
-      }
-    }
+    .s-math { --accent: #7EB6FF; }
+    .s-eng { --accent: #E28B9A; }
+    .s-hum { --accent: #D4B15A; }
+    .s-len { --accent: #A99BE8; }
+    .s-eco { --accent: #5EC8BF; }
+    .s-sci { --accent: #7BCFA0; }
+    .s-edu { --accent: #8EA0E8; }
+    .s-noc { --accent: #C89BE8; }
+    .s-sal { --accent: #E08A8A; }
+    .s-art { --accent: #D6C36A; }
+    .s-tut { --accent: #9AA4A1; }
+    .s-rec { --accent: #8E8E93; }
+    .s-off { --accent: #6B7572; }
 
     @media (min-width: 769px) {
-      .bottom-sheet {
-        max-width: 480px;
-        left: 50%;
-        top: 50%;
-        bottom: auto;
-        border-radius: var(--radius-xl);
-        border: 1px solid var(--glass-border);
-        transform: translate(-50%, -40%) scale(0.95);
+      .sheet {
+        max-width: 440px; left: 50%; bottom: auto; top: 50%;
+        border-radius: 22px; border: 1px solid var(--line);
+        transform: translate(-50%, -46%) scale(0.98);
       }
-      
-      .bottom-sheet.active {
-        transform: translate(-50%, -50%) scale(1);
-      }
+      .sheet.on { transform: translate(-50%, -50%); }
     }
-
     @media (max-width: 580px) {
-      .container {
-        padding: 16px 12px;
-      }
-      header {
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 24px;
-        padding: 8px 4px;
-        gap: 12px;
-      }
-      .header-logo h1 {
-        font-size: 24px;
-      }
-      .header-logo p {
-        font-size: 11px;
-      }
-      .header-info {
-        text-align: right;
-      }
-      #clock {
-        font-size: 20px;
-      }
-      #date {
-        font-size: 11px;
-      }
-      .stats-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 12px;
-        margin-bottom: 24px;
-      }
-      .stat-card {
-        padding: 20px 8px;
-        border-radius: var(--radius-xl);
-      }
-      .stat-circle {
-        width: 54px;
-        height: 54px;
-        margin-bottom: 10px;
-      }
-      .stat-circle-val {
-        font-size: 13px;
-        font-weight: 800;
-      }
-      .stat-icon-wrapper {
-        width: 46px;
-        height: 46px;
-        font-size: 22px;
-        margin-bottom: 10px;
-      }
-      .stat-label {
-        font-size: 10px;
-        letter-spacing: 0.5px;
-        font-weight: 700;
-      }
-      .stat-value-text {
-        font-size: 18px;
-        font-weight: 800;
-        margin-top: 4px;
-      }
-      .main-widget {
-        padding: 24px;
-        border-radius: var(--radius-xl);
-        margin-bottom: 20px;
-      }
-      .main-widget-header {
-        margin-bottom: 18px;
-      }
-      .main-widget-body h3 {
-        font-size: 24px;
-      }
-      .widget-badge {
-        padding: 6px 12px;
-        font-size: 11px;
-      }
-      .widget-teacher-bar {
-        margin-top: 24px;
-        padding-top: 14px;
-      }
-      .filter-pills-scroll {
-        display: flex;
-        justify-content: flex-start;
-        overflow-x: auto;
-        gap: 12px;
-        width: 100%;
-        padding: 8px 4px;
-        -webkit-overflow-scrolling: touch;
-      }
-      .filter-pill {
-        flex: none;
-        padding: 12px 22px;
-        font-size: 14px;
-        border-radius: 24px;
-      }
-      #tabEventos .filter-pills-scroll {
-        display: flex;
-        justify-content: flex-start;
-        overflow-x: auto;
-        gap: 12px;
-        width: 100%;
-      }
-      #tabEventos .filter-pill {
-        flex: none;
-        padding: 12px 20px;
-      }
-      .switcher-pill {
-        width: 100%;
-        display: flex;
-        padding: 4px;
-        border-radius: 22px;
-      }
-      .switcher-btn {
-        flex: 1;
-        text-align: center;
-        padding: 10px 20px;
-        font-size: 14px;
-        border-radius: 18px;
-      }
-      .timeline-item {
-        padding: 22px;
-        border-radius: var(--radius-xl);
-      }
-      .timeline-time span {
-        font-size: 14px;
-      }
-      .timeline-time span.time-end {
-        font-size: 12px;
-      }
-      .timeline-details h4 {
-        font-size: 19px;
-      }
-      .timeline-subdetails {
-        font-size: 13px;
-      }
-      .event-card {
-        padding: 22px;
-      }
-      .event-info-box h4 {
-        font-size: 18px;
-      }
-      .event-info-box p {
-        font-size: 13px;
-      }
-      .teacher-card {
-        padding: 22px;
-      }
-      .teacher-card-info h4 {
-        font-size: 18px;
-      }
-      .teacher-card-info p {
-        font-size: 14px;
-      }
-      .bottom-sheet {
-        padding: 24px 24px 34px;
-      }
-      .sheet-title {
-        font-size: 26px;
-      }
-      .sheet-subtitle {
-        font-size: 15px;
-      }
-      .sheet-row-value {
-        font-size: 16px;
-      }
-      .sheet-row-label {
-        font-size: 14px;
-      }
-      .bottom-nav-dock {
-        height: 78px;
-        bottom: 16px;
-        width: calc(100% - 24px);
-        border-radius: 39px;
-        padding: 0 8px;
-      }
-      .nav-tab-btn {
-        flex: 1;
-        height: 64px;
-        border-radius: 20px;
-      }
-      .nav-tab-btn ion-icon {
-        font-size: 26px;
-      }
-      .nav-tab-btn span {
-        font-size: 11px;
-        margin-top: 4px;
-        font-weight: 700;
-      }
+      .wrap { padding: 20px 16px 8px; }
+      .brand h1 { font-size: 24px; }
+      #clock { font-size: 17px; }
+      .hero h2 { font-size: 20px; }
+      .seg { width: 100%; }
+      .seg button { flex: 1; }
+      .dock { width: calc(100% - 20px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
-<body class="light-mode">
-  <div class="app-background-glow"></div>
-
-  <div class="container">
+<body>
+  <div class="wrap">
     <header>
-      <div class="header-logo">
-        <h1>2° Semestre Grupo C</h1>
-        <p>COBAQROO • Plantel Cancún Cuatro</p>
+      <div class="brand">
+        <small>Horario</small>
+        <h1>III<span> · </span>B</h1>
+        <p>Cancún 4 · 2026-B</p>
       </div>
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <div class="header-info">
-          <div id="clock">--:--:-- --</div>
-          <div id="date">Cargando...</div>
-        </div>
-        <button class="theme-toggle-header-btn" onclick="toggleTheme()">
-          <ion-icon name="moon-outline" id="themeBtnIcon"></ion-icon>
-        </button>
+      <div class="meta">
+        <div id="clock">--:--</div>
+        <div id="date">Cargando…</div>
       </div>
     </header>
 
-    <div id="holidayAlertPanel" class="alert-panel" style="display: none;">
-      <div class="alert-icon">
-        <ion-icon name="alert-circle"></ion-icon>
-      </div>
-      <div class="alert-text">
-        Hoy no hay clases: <span id="holidayAlertName" style="color: var(--color-suspension);"></span>
-      </div>
+    <div id="holidayAlertPanel" class="alert panel">
+      Hoy no hay clases · <b id="holidayAlertName"></b>
     </div>
 
-    <div id="tabHoy" class="tab-content active">
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-circle">
-            <svg>
-              <circle class="circle-bg" cx="25" cy="25" r="21"></circle>
-              <circle class="circle-progress" cx="25" cy="25" r="21" stroke-dasharray="131.95" stroke-dashoffset="131.95" id="progressCircleVal"></circle>
-            </svg>
-            <span class="stat-circle-val" id="progressValText">0%</span>
-          </div>
-          <div class="stat-label">Progreso</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon-wrapper">
-            <ion-icon name="book"></ion-icon>
-          </div>
-          <div class="stat-value-text" id="classesCountText">0</div>
-          <div class="stat-label">Clases Hoy</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon-wrapper">
-            <ion-icon name="time"></ion-icon>
-          </div>
-          <div class="stat-value-text" id="timeLeftText">--</div>
-          <div class="stat-label">Salida en</div>
-        </div>
+    <section id="tabHoy" class="tab active">
+      <div class="metrics panel">
+        <div class="metric"><b id="progressValText">0%</b><span>Progreso</span></div>
+        <div class="rule"></div>
+        <div class="metric"><b id="classesCountText">0</b><span>Clases</span></div>
+        <div class="rule"></div>
+        <div class="metric"><b id="timeLeftText">—</b><span>Salida</span></div>
       </div>
 
-      <div class="dashboard-grid">
-        <div class="main-widget" id="activeClassCard">
-          <div class="main-widget-header">
-            <div class="widget-badge">
-              <ion-icon name="play-circle"></ion-icon>
-              <span>Clase Actual</span>
-            </div>
-            <div class="widget-time" id="activeClassTime">--:-- - --:--</div>
-          </div>
-          <div class="main-widget-body">
-            <h3 id="activeClassSubject">Cargando...</h3>
-            <div class="widget-location">
-              <ion-icon name="location"></ion-icon>
-              <span id="activeClassRoom">Aula --</span>
-            </div>
-          </div>
-          <div class="widget-teacher-bar" id="activeTeacherBar">
-            <div class="avatar-circle" id="activeTeacherInitials">--</div>
-            <div class="teacher-name" id="activeTeacherName">--</div>
-          </div>
+      <article class="hero panel" id="activeClassCard">
+        <div class="hero-top">
+          <div class="chip"><i></i> Ahora</div>
+          <time id="activeClassTime">—</time>
         </div>
+        <h2 id="activeClassSubject">Cargando…</h2>
+        <div class="where" id="activeClassRoom">—</div>
+        <div class="who" id="activeTeacherBar">
+          <div class="ava" id="activeTeacherInitials">—</div>
+          <p id="activeTeacherName">—</p>
+        </div>
+      </article>
 
-        <div class="main-widget" id="nextClassCard">
-          <div class="main-widget-header">
-            <div class="widget-badge" style="color: var(--text-muted); background: var(--glass-border);">
-              <ion-icon name="play-forward"></ion-icon>
-              <span>Siguiente</span>
-            </div>
-            <div class="widget-time" id="nextClassTime">--:-- - --:--</div>
-          </div>
-          <div class="main-widget-body">
-            <h3 id="nextClassSubject">--</h3>
-            <div class="widget-location">
-              <ion-icon name="location"></ion-icon>
-              <span id="nextClassRoom">Aula --</span>
-            </div>
-            <div class="countdown-text">
-              <ion-icon name="hourglass-outline"></ion-icon>
-              <span id="nextClassCountdown">En -- min</span>
-            </div>
-          </div>
-          <div class="widget-teacher-bar" id="nextTeacherBar" style="display: none;">
-            <div class="avatar-circle" id="nextTeacherInitials">--</div>
-            <div class="teacher-name" id="nextTeacherName">--</div>
-          </div>
+      <article class="next panel" id="nextClassCard">
+        <small>Siguiente</small>
+        <h3 id="nextClassSubject">—</h3>
+        <em id="nextClassCountdown">—</em>
+        <span id="nextClassRoom"></span>
+        <span id="nextClassTime">—</span>
+      </article>
+    </section>
+
+    <section id="tabHorario" class="tab">
+      <div class="bar">
+        <div class="seg panel">
+          <button id="btnSwitchTimeline" class="active" onclick="setTimetableView('timeline')">Día</button>
+          <button id="btnSwitchGrid" onclick="setTimetableView('grid')">Semana</button>
         </div>
       </div>
-    </div>
-
-    <div id="tabHorario" class="tab-content">
-      <div class="view-switcher-bar">
-        <div class="switcher-pill">
-          <button id="btnSwitchTimeline" class="switcher-btn active" onclick="setTimetableView('timeline')">Día</button>
-          <button id="btnSwitchGrid" class="switcher-btn" onclick="setTimetableView('grid')">Semana</button>
-        </div>
-      </div>
-
-      <div id="gridScheduleView" style="display: none;">
-        <div class="schedule-wrapper">
-          <table id="scheduleTable">
+      <div id="gridScheduleView" style="display:none">
+        <div class="week panel">
+          <table>
             <thead>
               <tr>
-                <th>Hora</th>
-                <th>Lunes</th>
-                <th>Martes</th>
-                <th>Miércoles</th>
-                <th>Jueves</th>
-                <th>Viernes</th>
+                <th>Hora</th><th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th>
               </tr>
             </thead>
             <tbody id="scheduleTableBody"></tbody>
           </table>
         </div>
       </div>
-
       <div id="timelineScheduleView">
-        <div class="search-filter-container">
-          <div class="filter-pills-scroll" id="daySelectPills"></div>
-        </div>
-        <div class="mobile-timeline" id="timelineItemsContainer"></div>
+        <div class="days" id="daySelectPills"></div>
+        <div class="rail" id="timelineItemsContainer"></div>
       </div>
-    </div>
+    </section>
 
-    <div id="tabEventos" class="tab-content">
-      <div class="search-filter-container">
-        <div class="search-input-wrapper">
-          <ion-icon name="search-outline"></ion-icon>
-          <input type="text" id="eventSearchInput" class="search-input" placeholder="Buscar eventos por nombre..." oninput="filterEvents()">
-        </div>
-        <div class="filter-pills-scroll">
-          <button class="filter-pill active" onclick="setEventCategoryFilter('all', this)">Todos</button>
-          <button class="filter-pill" onclick="setEventCategoryFilter('suspension', this)">Suspensiones</button>
-          <button class="filter-pill" onclick="setEventCategoryFilter('vacacion', this)">Vacaciones / Recesos</button>
-          <button class="filter-pill" onclick="setEventCategoryFilter('tramite', this)">Trámites / Calificaciones</button>
-        </div>
+    <section id="tabProfesores" class="tab">
+      <div class="search-wrap">
+        <ion-icon name="search-outline"></ion-icon>
+        <input id="teacherSearchInput" class="search" placeholder="Buscar docente o materia" oninput="filterTeachers()">
       </div>
-      <div class="event-timeline" id="eventsListContainer"></div>
-    </div>
-
-    <div id="tabProfesores" class="tab-content">
-      <div class="search-filter-container">
-        <div class="search-input-wrapper">
-          <ion-icon name="search-outline"></ion-icon>
-          <input type="text" id="teacherSearchInput" class="search-input" placeholder="Buscar docentes por nombre o materia..." oninput="filterTeachers()">
-        </div>
-      </div>
-      <div class="teachers-grid" id="teachersListContainer"></div>
-    </div>
+      <div class="faculty" id="teachersListContainer"></div>
+    </section>
   </div>
 
-  <nav class="bottom-nav-dock">
-    <button class="nav-tab-btn active" onclick="switchTab('Hoy', this)">
-      <ion-icon name="today"></ion-icon>
-      <span>Hoy</span>
-      <div class="nav-tab-indicator-dot"></div>
+  <nav class="dock">
+    <button class="nav on" onclick="switchTab('Hoy', this)">
+      <ion-icon name="today-outline"></ion-icon><span>Hoy</span>
     </button>
-    <button class="nav-tab-btn" onclick="switchTab('Horario', this)">
-      <ion-icon name="calendar"></ion-icon>
-      <span>Horario</span>
-      <div class="nav-tab-indicator-dot"></div>
+    <button class="nav" onclick="switchTab('Horario', this)">
+      <ion-icon name="calendar-outline"></ion-icon><span>Horario</span>
     </button>
-    <button class="nav-tab-btn" onclick="switchTab('Eventos', this)">
-      <ion-icon name="list-circle"></ion-icon>
-      <span>Eventos</span>
-      <div class="nav-tab-indicator-dot"></div>
-    </button>
-    <button class="nav-tab-btn" onclick="switchTab('Profesores', this)">
-      <ion-icon name="people"></ion-icon>
-      <span>Docentes</span>
-      <div class="nav-tab-indicator-dot"></div>
+    <button class="nav" onclick="switchTab('Profesores', this)">
+      <ion-icon name="people-outline"></ion-icon><span>Docentes</span>
     </button>
   </nav>
 
-
-
-  <div class="modal-overlay" id="modalOverlay" onclick="closeSheet()"></div>
-  
-  <div class="bottom-sheet" id="bottomSheet">
-    <div class="sheet-handle-bar"></div>
-    <div class="sheet-close-btn" onclick="closeSheet()">
-      <ion-icon name="close"></ion-icon>
-    </div>
-    <div class="sheet-header-icon" id="sheetIconBox">
-      <ion-icon name="book"></ion-icon>
-    </div>
-    <h2 class="sheet-title" id="sheetTitle">Título</h2>
-    <p class="sheet-subtitle" id="sheetSubtitle">Subtítulo</p>
-    <div class="sheet-content-info-list" id="sheetContentList"></div>
-    <div class="sheet-description-box" id="sheetDescBox"></div>
+  <div class="veil" id="modalOverlay" onclick="closeSheet()"></div>
+  <div class="sheet" id="bottomSheet">
+    <div class="handle"></div>
+    <button class="x" onclick="closeSheet()" aria-label="Cerrar"><ion-icon name="close"></ion-icon></button>
+    <h2 id="sheetTitle">—</h2>
+    <p class="sub" id="sheetSubtitle"></p>
+    <div id="sheetContentList"></div>
   </div>
 
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-  
   <script>
+    const T = {
+      leng: { subject: 'Lengua y Comunicación III', short: 'Lengua III', teacher: 'Helberth Arnold Ríos Sansores', codeBase: 'LENG III' },
+      huma: { subject: 'Humanidades III', short: 'Humanidades III', teacher: 'Yolanda Piña Flores', codeBase: 'HUMA III' },
+      sist: { subject: 'Sistema Educativo Nacional', short: 'Sist. Educativo', teacher: 'Leonela Paola Manzo de León', codeBase: 'SIST. EDUCA.' },
+      eco: { subject: 'Ecosistemas', short: 'Ecosistemas', teacher: 'Carlos Castañeda Trujillo', codeBase: 'ECOSISTEMAS' },
+      art: { subject: 'Actividades Físicas y Artísticas III', short: 'Act. Artísticas', teacher: 'Luis Humberto Concha Caballero', codeBase: 'ACT. ART. CULT. FIS. Y DEPOR. III' },
+      eng: { subject: 'Inglés III', short: 'Inglés III', teacher: 'Graciela Rosalía May Polanco', codeBase: 'INGLÉS III' },
+      pema: { subject: 'Pensamiento Matemático III', short: 'PEMA III', teacher: 'Inés Carreón Martínez', codeBase: 'PENMAT' },
+      noc: { subject: 'Nociones de la Intervención Educativa', short: 'Nociones', teacher: 'Leonela Paola Manzo de León', codeBase: 'NOCIONES' },
+      cien: { subject: 'Taller de Ciencias II', short: 'Ciencias II', teacher: 'Carlos Castañeda Trujillo', codeBase: 'CIENCIAS II' },
+      salud: { subject: 'Educación para la Salud I', short: 'Educ. Salud I', teacher: 'Aurora de la Cruz Buenfil', codeBase: 'EDUC. SALUD I' },
+      tutor: { subject: 'Tutoría', short: 'Tutoría', teacher: 'Tutor responsable de grupo', codeBase: 'TUTOR' }
+    };
+
+    function slot(time, key, room) {
+      if (!key) return { time, subject: 'Libre', short: 'Libre', code: null, teacher: null, room: null, type: 'free' };
+      if (key === 'recess') return { time, subject: 'Receso', short: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' };
+      const m = T[key];
+      return { time, subject: m.subject, short: m.short, code: `${m.codeBase} ${room}`, teacher: m.teacher, room, type: 'class' };
+    }
+
     const scheduleData = {
       'Lunes': [
-        { time: '07:00-07:50', subject: 'Inglés II', code: 'INGLÉS II A3', teacher: 'Graciela Rosalía May Polanco', room: 'A3', type: 'class' },
-        { time: '08:00-08:50', subject: 'Pensamiento Matemático II', code: 'PEMA A10', teacher: 'Nancy Sánchez Puc', room: 'A10', type: 'class' },
-        { time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
-        { time: '09:10-09:50', subject: 'EDIESYG II', code: 'EDIESYG A12', teacher: 'Yolanda Piña Flores', room: 'A12', type: 'class' },
-        { time: '10:00-10:50', subject: 'Lengua y Comunicación II', code: 'LEYCO II A8', teacher: 'Jaime Hernández Solís', room: 'A8', type: 'class' },
-        { time: '11:00-11:50', subject: 'Taller de Ciencias I', code: 'TC A11/LM 1', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11/LM 1', type: 'class' },
-        { time: '12:00-12:50', subject: 'Taller de Ciencias I', code: 'TC A11/LM 1', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11/LM 1', type: 'class' },
-        { time: '13:00-13:50', subject: 'Humanidades II', code: 'HUMA A4', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4', type: 'class' }
+        slot('07:00-07:50', 'leng', 'A8'),
+        slot('08:00-08:50', 'huma', 'A11'),
+        slot('09:00-09:45', 'huma', 'A11'),
+        slot('09:45-10:15', 'recess'),
+        slot('10:15-11:00', 'sist', 'A14'),
+        slot('11:00-11:50', 'sist', 'A14'),
+        slot('12:00-12:50', 'eco', 'A5'),
+        slot('13:00-13:50', 'art', 'A12')
       ],
       'Martes': [
-        { time: '07:00-07:50', subject: 'Libre', code: null, teacher: null, room: null, type: 'free' },
-        { time: '08:00-08:50', subject: 'Ciencias Sociales II', code: 'CISO A6', teacher: 'Conrado Turriza Maricela', room: 'A6', type: 'class' },
-        { time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
-        { time: '09:10-09:50', subject: 'Taller de Ciencias I', code: 'TC A11', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11', type: 'class' },
-        { time: '10:00-10:50', subject: 'Lengua y Comunicación II', code: 'LEYCO II A8', teacher: 'Jaime Hernández Solís', room: 'A8', type: 'class' },
-        { time: '11:00-11:50', subject: 'Actividades Físicas II', code: 'AFD A15', teacher: 'Luis Humberto Concha Caballero', room: 'A15', type: 'class' },
-        { time: '12:00-12:50', subject: 'Humanidades II', code: 'HUMA A4', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4', type: 'class' },
-        { time: '13:00-13:50', subject: 'Libre', code: null, teacher: null, room: null, type: 'free' }
+        slot('07:00-07:50', 'eng', 'A10'),
+        slot('08:00-08:50', 'eco', 'LM2/A5'),
+        slot('09:00-09:45', 'eco', 'LM2/A5'),
+        slot('09:45-10:15', 'recess'),
+        slot('10:15-11:00', 'leng', 'A8'),
+        slot('11:00-11:50', 'huma', 'A11'),
+        slot('12:00-12:50', 'pema', 'A7'),
+        slot('13:00-13:50', null)
       ],
       'Miércoles': [
-        { time: '07:00-07:50', subject: 'Tutoría', code: 'TUTOR A6', teacher: 'Conrado Turriza Maricela', room: 'A6', type: 'class' },
-        { time: '08:00-08:50', subject: 'CEIM', code: 'CEIM A11/LM 1', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11/LM 1', type: 'class' },
-        { time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
-        { time: '09:10-09:50', subject: 'CEIM', code: 'CEIM A11/LM 1', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11/LM 1', type: 'class' },
-        { time: '10:00-10:50', subject: 'EDIESYG II', code: 'EDIESYG A12', teacher: 'Yolanda Piña Flores', room: 'A12', type: 'class' },
-        { time: '11:00-11:50', subject: 'Humanidades II', code: 'HUMA A4', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4', type: 'class' },
-        { time: '12:00-12:50', subject: 'Humanidades II', code: 'HUMA A4', teacher: 'Brenda Yazmin Corona Sánchez', room: 'A4', type: 'class' },
-        { time: '13:00-13:50', subject: 'Cultura Digital II', code: 'CUDI LAB INF', teacher: 'Yeni del Rocío Aguilar Cen', room: 'Lab Informática', type: 'class' }
+        slot('07:00-07:50', null),
+        slot('08:00-08:50', null),
+        slot('09:00-09:45', 'eng', 'A10'),
+        slot('09:45-10:15', 'recess'),
+        slot('10:15-11:00', 'noc', 'A14'),
+        slot('11:00-11:50', 'noc', 'A14'),
+        slot('12:00-12:50', 'cien', 'A5'),
+        slot('13:00-13:50', 'pema', 'A7')
       ],
       'Jueves': [
-        { time: '07:00-07:50', subject: 'Libre', code: null, teacher: null, room: null, type: 'free' },
-        { time: '08:00-08:50', subject: 'Pensamiento Matemático II', code: 'PEMA A10', teacher: 'Nancy Sánchez Puc', room: 'A10', type: 'class' },
-        { time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
-        { time: '09:10-09:50', subject: 'Pensamiento Matemático II', code: 'PEMA A10', teacher: 'Nancy Sánchez Puc', room: 'A10', type: 'class' },
-        { time: '10:00-10:50', subject: 'CEIM', code: 'CEIM A11', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11', type: 'class' },
-        { time: '11:00-11:50', subject: 'CEIM', code: 'CEIM A11', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11', type: 'class' },
-        { time: '12:00-12:50', subject: 'Cultura Digital II', code: 'CUDI LAB INF', teacher: 'Yeni del Rocío Aguilar Cen', room: 'Lab Informática', type: 'class' },
-        { time: '13:00-13:50', subject: 'Inglés II', code: 'INGLÉS II A3', teacher: 'Graciela Rosalía May Polanco', room: 'A3', type: 'class' }
+        slot('07:00-07:50', 'huma', 'A11'),
+        slot('08:00-08:50', 'pema', 'A7'),
+        slot('09:00-09:45', 'pema', 'A7'),
+        slot('09:45-10:15', 'recess'),
+        slot('10:15-11:00', 'cien', 'A5'),
+        slot('11:00-11:50', 'cien', 'A5'),
+        slot('12:00-12:50', 'noc', 'A14'),
+        slot('13:00-13:50', 'noc', 'A14')
       ],
       'Viernes': [
-        { time: '07:00-07:50', subject: 'Libre', code: null, teacher: null, room: null, type: 'free' },
-        { time: '08:00-08:50', subject: 'Pensamiento Matemático II', code: 'PEMA A10', teacher: 'Nancy Sánchez Puc', room: 'A10', type: 'class' },
-        { time: '08:50-09:10', subject: 'Receso', code: 'RECESO', teacher: null, room: null, type: 'recess' },
-        { time: '09:10-09:50', subject: 'Taller de Ciencias I', code: 'TC A11', teacher: 'Uitz Robledo Graciella Luciana', room: 'A11', type: 'class' },
-        { time: '10:00-10:50', subject: 'Inglés II', code: 'INGLÉS II A3', teacher: 'Graciela Rosalía May Polanco', room: 'A3', type: 'class' },
-        { time: '11:00-11:50', subject: 'Lengua y Comunicación II', code: 'LEYCO II A8', teacher: 'Jaime Hernández Solís', room: 'A8', type: 'class' },
-        { time: '12:00-12:50', subject: 'Actividades Físicas II', code: 'AFD A15', teacher: 'Luis Humberto Concha Caballero', room: 'A15', type: 'class' },
-        { time: '13:00-13:50', subject: 'Ciencias Sociales II', code: 'CISO A6', teacher: 'Conrado Turriza Maricela', room: 'A6', type: 'class' }
+        slot('07:00-07:50', 'huma', 'A11'),
+        slot('08:00-08:50', 'leng', 'A8'),
+        slot('09:00-09:45', 'sist', 'A14'),
+        slot('09:45-10:15', 'recess'),
+        slot('10:15-11:00', 'eco', 'A5'),
+        slot('11:00-11:50', 'eng', 'A10'),
+        slot('12:00-12:50', 'salud', 'A12'),
+        slot('13:00-13:50', 'tutor', 'A11')
       ]
     };
 
     const teachers = [
-      { name: 'Uitz Robledo Graciella Luciana', subjects: ['Taller de Ciencias I', 'CEIM'], initials: 'UG' },
-      { name: 'Graciela Rosalía May Polanco', subjects: ['Inglés II', 'Lengua y Comunicación II'], initials: 'GR' },
-      { name: 'Yolanda Piña Flores', subjects: ['EDIESYG II'], initials: 'YP' },
-      { name: 'Yeni del Rocío Aguilar Cen', subjects: ['Cultura Digital II'], initials: 'YA' },
-      { name: 'Nancy Sánchez Puc', subjects: ['Pensamiento Matemático II'], initials: 'NS' },
-      { name: 'Brenda Yazmin Corona Sánchez', subjects: ['Humanidades II'], initials: 'BY' },
-      { name: 'Conrado Turriza Maricela', subjects: ['Ciencias Sociales II', 'Tutoría'], initials: 'CT' },
-      { name: 'Jaime Hernández Solís', subjects: ['Lengua y Comunicación II'], initials: 'JH' },
-      { name: 'Luis Humberto Concha Caballero', subjects: ['Actividades Físicas II'], initials: 'LH' }
+      { name: 'Inés Carreón Martínez', subjects: ['Pensamiento Matemático III'], initials: 'IC', hours: 4 },
+      { name: 'Graciela Rosalía May Polanco', subjects: ['Inglés III'], initials: 'GR', hours: 3 },
+      { name: 'Aurora de la Cruz Buenfil', subjects: ['Educación para la Salud I'], initials: 'AC', hours: 1 },
+      { name: 'Yolanda Piña Flores', subjects: ['Humanidades III'], initials: 'YP', hours: 5 },
+      { name: 'Carlos Castañeda Trujillo', subjects: ['Taller de Ciencias II', 'Ecosistemas'], initials: 'CC', hours: 7 },
+      { name: 'Leonela Paola Manzo de León', subjects: ['Sistema Educativo Nacional', 'Nociones de la Intervención Educativa'], initials: 'LM', hours: 7 },
+      { name: 'Helberth Arnold Ríos Sansores', subjects: ['Lengua y Comunicación III'], initials: 'HR', hours: 3 },
+      { name: 'Luis Humberto Concha Caballero', subjects: ['Actividades Físicas y Artísticas III'], initials: 'LH', hours: 2 }
     ];
 
-    const events = [
-      { id: 1, name: 'Año Nuevo', dateText: '1 de Enero', description: 'Suspensión oficial de labores', category: 'suspension', dateStart: '2026-01-01', dateEnd: '2026-01-01' },
-      { id: 2, name: 'Receso Intersemestral', dateText: '2 - 6 de Enero', description: 'Periodo de receso escolar intersemestral', category: 'receso', dateStart: '2026-01-02', dateEnd: '2026-01-06' },
-      { id: 3, name: 'Semana de Planeación Sindical', dateText: '7 - 13 de Enero', description: 'Semana de actividades previas para el personal sindicalizado', category: 'academico', dateStart: '2026-01-07', dateEnd: '2026-01-13' },
-      { id: 4, name: 'Trabajo Colegiado Docente', dateText: '14 - 16 de Enero', description: 'Sesiones de trabajo colegiado para el personal escolar', category: 'academico', dateStart: '2026-01-14', dateEnd: '2026-01-16' },
-      { id: 5, name: 'Capacitación Docente Semestral', dateText: '19 - 23 de Enero', description: 'Periodo de capacitación académica semestral para profesores', category: 'academico', dateStart: '2026-01-19', dateEnd: '2026-01-23' },
-      { id: 6, name: 'Jornada "Te Extrañamos en el Salón"', dateText: '19 - 23 de Enero', description: 'Jornada de reinserción escolar y seguimiento estudiantil', category: 'academico', dateStart: '2026-01-19', dateEnd: '2026-01-23' },
-      { id: 7, name: 'Término del Semestre Escolar', dateText: '26 - 30 de Enero', description: 'Conclusión oficial de clases del ciclo semestral', category: 'academico', dateStart: '2026-01-26', dateEnd: '2026-01-30' },
-      { id: 8, name: 'Trabajo Académico de Planeación', dateText: '26 - 30 de Enero', description: 'Actividades de planeación administrativa del plantel', category: 'academico', dateStart: '2026-01-26', dateEnd: '2026-01-30' },
-      { id: 9, name: 'Suspensión: Constitución Mexicana', dateText: '2 de Febrero', description: 'Suspensión oficial por el Aniversario de la Constitución', category: 'suspension', dateStart: '2026-02-02', dateEnd: '2026-02-02' },
-      { id: 10, name: 'Término de Actividades Administrativas', dateText: '3 de Febrero', description: 'Cierre del periodo intersemestral y labores previas', category: 'academico', dateStart: '2026-02-03', dateEnd: '2026-02-03' },
-      { id: 11, name: 'Solicitud de Examen Extraordinario', dateText: '9 - 11 de Febrero', description: 'Fecha para registro y solicitud de pago de exámenes extraordinarios', category: 'tramite', dateStart: '2026-02-09', dateEnd: '2026-02-11' },
-      { id: 12, name: 'Inscripciones y Reinscripciones A', dateText: '9 - 13 de Febrero', description: 'Periodo de inscripción y reinscripción de alumnos para el Semestre A', category: 'tramite', dateStart: '2026-02-09', dateEnd: '2026-02-13' },
-      { id: 13, name: 'Suspensión: Carnaval Escolar', dateText: '16 - 17 de Febrero', description: 'Suspensión de labores por usos y costumbres (Carnaval)', category: 'carnaval', dateStart: '2026-02-16', dateEnd: '2026-02-17' },
-      { id: 14, name: 'Vacaciones de Febrero', dateText: '18 - 20 de Febrero', description: 'Periodo vacacional corto del mes de febrero', category: 'vacacion', dateStart: '2026-02-18', dateEnd: '2026-02-20' },
-      { id: 15, name: 'Inicio de Semestre 2026-A', dateText: '23 de Febrero', description: 'Apertura oficial del periodo escolar e inicio de clases de los grupos A y B', category: 'academico', dateStart: '2026-02-23', dateEnd: '2026-03-06' },
-      { id: 16, name: 'Jornada "Te Extrañamos en el Salón"', dateText: '9 - 13 de Marzo', description: 'Segundo periodo de seguimiento y vinculación estudiantil', category: 'academico', dateStart: '2026-03-09', dateEnd: '2026-03-13' },
-      { id: 17, name: 'Aplicación de Examen Extraordinario', dateText: '11 - 13 de Marzo', description: 'Aplicación oficial de exámenes extraordinarios', category: 'tramite', dateStart: '2026-03-11', dateEnd: '2026-03-13' },
-      { id: 18, name: 'Suspensión: Natalicio Benito Juárez', dateText: '16 de Marzo', description: 'Suspensión oficial de labores', category: 'suspension', dateStart: '2026-03-16', dateEnd: '2026-03-16' },
-      { id: 19, name: 'Suspensión: Carnaval Regional', dateText: '17 - 18 de Marzo', description: 'Suspensión por usos y costumbres por Carnaval local', category: 'carnaval', dateStart: '2026-03-17', dateEnd: '2026-03-18' },
-      { id: 20, name: 'Recuperación Académica Trimestral', dateText: '19 - 20 de Marzo', description: 'Asesorías de recuperación académica para alumnos rezagados', category: 'tramite', dateStart: '2026-03-19', dateEnd: '2026-03-20' },
-      { id: 21, name: 'Evaluación Intermedia de Semestre', dateText: '23 - 24 de Marzo', description: 'Corte de evaluación académica del semestre', category: 'academico', dateStart: '2026-03-23', dateEnd: '2026-03-24' },
-      { id: 22, name: 'Receso Intersemestral Primavera', dateText: '25 de Marzo - 3 de Abril', description: 'Receso de primavera y actividades sin alumnos', category: 'receso', dateStart: '2026-03-25', dateEnd: '2026-04-03' },
-      { id: 23, name: 'Vacaciones de Primavera (Semana Santa)', dateText: '6 - 23 de Abril', description: 'Periodo vacacional de Semana Santa y Pascua', category: 'vacacion', dateStart: '2026-04-06', dateEnd: '2026-04-23' },
-      { id: 24, name: 'Trabajo Colegiado del Plantel', dateText: '24 de Abril', description: 'Sesión académica de Trabajo Colegiado', category: 'academico', dateStart: '2026-04-24', dateEnd: '2026-04-24' },
-      { id: 25, name: 'Suspensión: Día del Trabajo', dateText: '1 de Mayo', description: 'Suspensión oficial de labores', category: 'suspension', dateStart: '2026-05-01', dateEnd: '2026-05-01' },
-      { id: 26, name: 'Suspensión: Batalla de Puebla', dateText: '5 de Mayo', description: 'Suspensión oficial de labores', category: 'suspension', dateStart: '2026-05-05', dateEnd: '2026-05-05' },
-      { id: 27, name: 'Suspensión: Día del Maestro', dateText: '15 de Mayo', description: 'Suspensión oficial de labores de tipo escolar', category: 'suspension', dateStart: '2026-05-15', dateEnd: '2026-05-15' },
-      { id: 28, name: 'Captura de Calificaciones SICE A', dateText: '18 - 22 de Mayo', description: 'Periodo de captura de calificaciones del segundo bloque en el SICE', category: 'tramite', dateStart: '2026-05-18', dateEnd: '2026-05-22' },
-      { id: 29, name: 'Reunión de Evaluación Docente', dateText: '25 - 27 de Mayo', description: 'Evaluación colegiada docente y planeación didáctica', category: 'tramite', dateStart: '2026-05-25', dateEnd: '2026-05-27' },
-      { id: 30, name: 'Captura de Recuperación Académica', dateText: '28 de Mayo - 1 de Junio', description: 'Periodo para registrar en SICE las notas de recuperación', category: 'tramite', dateStart: '2026-05-28', dateEnd: '2026-06-01' },
-      { id: 31, name: 'Curso Propedéutico Aspirantes', dateText: '1 - 3 de Julio', description: 'Sesiones de curso propedéutico para estudiantes de nuevo ingreso', category: 'tramite', dateStart: '2026-07-01', dateEnd: '2026-07-03' },
-      { id: 32, name: 'Periodo de Evaluaciones Finales', dateText: '6 - 9 de Julio', description: 'Aplicación de exámenes ordinarios y evaluaciones finales', category: 'tramite', dateStart: '2026-07-06', dateEnd: '2026-07-09' },
-      { id: 33, name: 'Captura de Recuperación Académica 2', dateText: '10 de Julio', description: 'Captura de evaluaciones remediales en sistema SICE', category: 'tramite', dateStart: '2026-07-10', dateEnd: '2026-07-10' },
-      { id: 34, name: 'Carga Académica y Capturas Finales', dateText: '13 - 14 de Julio', description: 'Captura complementaria de recuperación académica en el sistema', category: 'tramite', dateStart: '2026-07-13', dateEnd: '2026-07-14' },
-      { id: 35, name: 'Término de Clases Semestre A', dateText: '15 de Julio', description: 'Fin oficial del semestre escolar para clases ordinarias', category: 'academico', dateStart: '2026-07-15', dateEnd: '2026-07-15' },
-      { id: 36, name: 'Evaluación del Ciclo Escolar', dateText: '16 - 17 de Julio', description: 'Reunión de balance de ciclo escolar del plantel docente', category: 'academico', dateStart: '2026-07-16', dateEnd: '2026-07-17' },
-      { id: 37, name: 'Capacitación Docente Verano', dateText: '20 - 24 de Julio', description: 'Jornadas de capacitación y formación docente continua de verano', category: 'academico', dateStart: '2026-07-20', dateEnd: '2026-07-24' },
-      { id: 38, name: 'Receso Escolar (Vacaciones de Verano)', dateText: '27 de Julio - 21 de Agosto', description: 'Periodo oficial de receso vacacional de verano para alumnos', category: 'receso', dateStart: '2026-07-27', dateEnd: '2026-08-21' },
-      { id: 39, name: 'Aplicación de Examen Extraordinario 2', dateText: '24 - 26 de Agosto', description: 'Periodo oficial de aplicación de exámenes extraordinarios complementarios', category: 'tramite', dateStart: '2026-08-24', dateEnd: '2026-08-26' },
-      { id: 40, name: 'Inicio de Semestre 2026-B', dateText: '27 de Agosto - 1 de Septiembre', description: 'Apertura oficial de actividades escolares de la segunda mitad de año', category: 'academico', dateStart: '2026-08-27', dateEnd: '2026-09-01' },
-      { id: 41, name: 'Registro Exámenes Extraordinarios B', dateText: '31 de Agosto - 1 de Septiembre', description: 'Fecha límite de solicitud de pago para extraordinarios del bloque B', category: 'tramite', dateStart: '2026-08-31', dateEnd: '2026-09-01' }
+    const holidays = [
+      { name: 'Año Nuevo', dateStart: '2026-01-01', dateEnd: '2026-01-01' },
+      { name: 'Receso intersemestral', dateStart: '2026-01-02', dateEnd: '2026-01-06' },
+      { name: 'Constitución Mexicana', dateStart: '2026-02-02', dateEnd: '2026-02-02' },
+      { name: 'Carnaval escolar', dateStart: '2026-02-16', dateEnd: '2026-02-17' },
+      { name: 'Vacaciones de febrero', dateStart: '2026-02-18', dateEnd: '2026-02-20' },
+      { name: 'Natalicio de Benito Juárez', dateStart: '2026-03-16', dateEnd: '2026-03-16' },
+      { name: 'Carnaval regional', dateStart: '2026-03-17', dateEnd: '2026-03-18' },
+      { name: 'Receso de primavera', dateStart: '2026-03-25', dateEnd: '2026-04-03' },
+      { name: 'Vacaciones de Semana Santa', dateStart: '2026-04-06', dateEnd: '2026-04-23' },
+      { name: 'Día del Trabajo', dateStart: '2026-05-01', dateEnd: '2026-05-01' },
+      { name: 'Batalla de Puebla', dateStart: '2026-05-05', dateEnd: '2026-05-05' },
+      { name: 'Día del Maestro', dateStart: '2026-05-15', dateEnd: '2026-05-15' },
+      { name: 'Vacaciones de verano', dateStart: '2026-07-27', dateEnd: '2026-08-21' }
     ];
 
     const timeZone = 'America/Cancun';
     const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-    let currentActiveTab = 'Hoy';
-    let scheduleViewMode = 'timeline';
     let selectedDayForTimeline = 'Lunes';
-    let currentEventCategory = 'all';
 
     function getCancunDate() {
       const urlParams = new URLSearchParams(window.location.search);
       const mockDay = urlParams.get('mockDay');
       const mockTime = urlParams.get('mockTime');
       if (mockDay || mockTime) {
-        const now = new Date(new Date().toLocaleString("en-US", { timeZone }));
+        const now = new Date(new Date().toLocaleString('en-US', { timeZone }));
         if (mockTime) {
-          const parts = mockTime.split(':').map(Number);
-          now.setHours(parts[0]);
-          now.setMinutes(parts[1]);
-          now.setSeconds(0);
+          const [h, m] = mockTime.split(':').map(Number);
+          now.setHours(h, m || 0, 0, 0);
         }
         if (mockDay) {
-          const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-          const targetIndex = dayNames.indexOf(mockDay);
-          if (targetIndex !== -1) {
-            const currentDayIndex = now.getDay();
-            const diff = targetIndex - currentDayIndex;
-            now.setDate(now.getDate() + diff);
-          }
+          const names = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+          const i = names.indexOf(mockDay);
+          if (i !== -1) now.setDate(now.getDate() + (i - now.getDay()));
         }
         return now;
       }
-      return new Date(new Date().toLocaleString("en-US", { timeZone }));
+      return new Date(new Date().toLocaleString('en-US', { timeZone }));
     }
 
-    function convertTo12Hour(time24) {
-      const parts = time24.split(':').map(Number);
-      const hours = parts[0];
-      const minutes = parts[1];
-      const period = hours >= 12 ? 'PM' : 'AM';
-      const hours12 = hours % 12 || 12;
-      return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+    function convertTo12Hour(t) {
+      const [h, m] = t.split(':').map(Number);
+      return `${h % 12 || 12}:${String(m).padStart(2, '0')} ${h >= 12 ? 'PM' : 'AM'}`;
     }
-
-    function parseTime(timeStr) {
-      const parts = timeStr.split(':').map(Number);
-      return parts[0] * 60 + parts[1];
-    }
-
-    function getCurrentTimeMinutes() {
-      const now = getCancunDate();
-      return now.getHours() * 60 + now.getMinutes();
-    }
-
+    function parseTime(t) { const [h, m] = t.split(':').map(Number); return h * 60 + m; }
+    function getCurrentTimeMinutes() { const n = getCancunDate(); return n.getHours() * 60 + n.getMinutes(); }
     function getTodayName() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const mockDay = urlParams.get('mockDay');
-      if (mockDay) return mockDay;
-      const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-      const now = getCancunDate();
-      return dayNames[now.getDay()];
+      const mock = new URLSearchParams(window.location.search).get('mockDay');
+      if (mock) return mock;
+      return ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'][getCancunDate().getDay()];
     }
-
-    function getFormattedISO() {
-      const now = getCancunDate();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
+    function isoToday() {
+      const n = getCancunDate();
+      return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`;
     }
-
     function getActiveHoliday() {
-      const isoToday = getFormattedISO();
-      return events.find(e => {
-        return isoToday >= e.dateStart && isoToday <= e.dateEnd && 
-          (e.category === 'suspension' || e.category === 'receso' || e.category === 'vacacion' || e.category === 'carnaval');
-      });
+      const d = isoToday();
+      return holidays.find(h => d >= h.dateStart && d <= h.dateEnd);
     }
-
     function getCurrentClassSlot() {
       const today = getTodayName();
       if (!scheduleData[today]) return null;
-      const nowMinutes = getCurrentTimeMinutes();
-      return scheduleData[today].find(slot => {
-        const times = slot.time.split('-').map(t => parseTime(t.trim()));
-        return nowMinutes >= times[0] && nowMinutes < times[1];
+      const now = getCurrentTimeMinutes();
+      const cur = scheduleData[today].find(s => {
+        const [a, b] = s.time.split('-').map(t => parseTime(t.trim()));
+        return now >= a && now < b;
       });
+      if (cur) return cur;
+      const slots = scheduleData[today];
+      const first = parseTime(slots[0].time.split('-')[0].trim());
+      const last = parseTime(slots[slots.length-1].time.split('-')[1].trim());
+      if (now >= first && now < last) return { subject: 'Cambio de clase', type: 'gap', time: '', teacher: null, room: null };
+      return null;
     }
-
     function getNextClassSlot() {
       const today = getTodayName();
-      const nowMinutes = getCurrentTimeMinutes();
-      if (!scheduleData[today]) return null;
-      
-      const found = scheduleData[today].find(slot => {
-        const times = slot.time.split('-').map(t => parseTime(t.trim()));
-        return times[0] > nowMinutes;
-      });
-      if (found) return found;
-
-      const todayIndex = days.indexOf(today);
-      for (let i = todayIndex + 1; i < days.length; i++) {
-        const nextDaySlots = scheduleData[days[i]];
-        const nextClass = nextDaySlots.find(slot => slot.type === 'class');
-        if (nextClass) {
-          return { ...nextClass, nextDayName: days[i] };
-        }
+      const now = getCurrentTimeMinutes();
+      if (scheduleData[today]) {
+        const f = scheduleData[today].find(s => parseTime(s.time.split('-')[0].trim()) > now && s.type !== 'free');
+        if (f) return f;
+      }
+      const i = days.indexOf(today);
+      for (let k = Math.max(i + 1, 0); k < days.length; k++) {
+        const c = scheduleData[days[k]].find(s => s.type === 'class');
+        if (c) return { ...c, nextDayName: days[k] };
+      }
+      if (i === -1) {
+        const c = scheduleData.Lunes.find(s => s.type === 'class');
+        if (c) return { ...c, nextDayName: 'Lunes' };
       }
       return null;
     }
-
     function getSubjectClass(subject) {
-      if (!subject) return 'sub-free';
+      if (!subject) return 's-off';
       const s = subject.toLowerCase();
-      if (s.includes('matemático') || s.includes('pema')) return 'sub-math';
-      if (s.includes('inglés')) return 'sub-english';
-      if (s.includes('humanidades') || s.includes('huma')) return 'sub-humanities';
-      if (s.includes('lengua') || s.includes('leyco')) return 'sub-language';
-      if (s.includes('sociales') || s.includes('ciso')) return 'sub-social';
-      if (s.includes('taller de ciencias') || s.includes('ceim') || s.includes('tc ')) return 'sub-science';
-      if (s.includes('ediesyg')) return 'sub-ediesyg';
-      if (s.includes('físicas') || s.includes('afd')) return 'sub-sports';
-      if (s.includes('digital') || s.includes('cudi')) return 'sub-digital';
-      if (s.includes('tutoría') || s.includes('tutor')) return 'sub-tutor';
-      if (s.includes('receso')) return 'sub-recess';
-      return 'sub-default';
+      if (s.includes('matemático') || s.includes('pema')) return 's-math';
+      if (s.includes('inglés')) return 's-eng';
+      if (s.includes('humanidades')) return 's-hum';
+      if (s.includes('lengua')) return 's-len';
+      if (s.includes('ecosistema')) return 's-eco';
+      if (s.includes('ciencias') || s.includes('taller')) return 's-sci';
+      if (s.includes('sistema educativo') || s.includes('sist')) return 's-edu';
+      if (s.includes('nociones') || s.includes('intervención')) return 's-noc';
+      if (s.includes('salud')) return 's-sal';
+      if (s.includes('físi') || s.includes('artíst') || s.includes('activid')) return 's-art';
+      if (s.includes('tutor')) return 's-tut';
+      if (s.includes('receso')) return 's-rec';
+      return 's-off';
+    }
+    function teacherInitials(name) {
+      const f = teachers.find(t => t.name === name);
+      return f ? f.initials : (name ? name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : '—');
+    }
+    function formatRange(time) {
+      if (!time) return '—';
+      return time.split('-').map(t => convertTo12Hour(t.trim())).join(' – ');
+    }
+    function roomLabel(room, type) {
+      if (type === 'recess') return 'Descanso';
+      if (type === 'free' || type === 'gap') return 'Sin clase';
+      if (!room) return 'Sin aula';
+      if (room.includes('/') || room.toLowerCase().includes('lab')) return room;
+      return `Aula ${room}`;
     }
 
     function updateAppStatus() {
       const holiday = getActiveHoliday();
-      const alertPanel = document.getElementById('holidayAlertPanel');
-      const holidaySpan = document.getElementById('holidayAlertName');
-      
+      const alert = document.getElementById('holidayAlertPanel');
       if (holiday) {
-        alertPanel.style.display = 'flex';
-        holidaySpan.textContent = holiday.name;
-      } else {
-        alertPanel.style.display = 'none';
-      }
+        alert.style.display = 'flex';
+        document.getElementById('holidayAlertName').textContent = holiday.name;
+      } else alert.style.display = 'none';
 
       const current = getCurrentClassSlot();
       const next = getNextClassSlot();
       const today = getTodayName();
-      const nowMinutes = getCurrentTimeMinutes();
-      
-      const activeCard = document.getElementById('activeClassCard');
-      const activeSubject = document.getElementById('activeClassSubject');
-      const activeTime = document.getElementById('activeClassTime');
-      const activeRoom = document.getElementById('activeClassRoom');
-      const activeTeacherBar = document.getElementById('activeTeacherBar');
-      const activeInitials = document.getElementById('activeTeacherInitials');
-      const activeTeacherName = document.getElementById('activeTeacherName');
+      const now = getCurrentTimeMinutes();
+      const hero = document.getElementById('activeClassCard');
+      const bar = document.getElementById('activeTeacherBar');
 
       if (current) {
-        activeSubject.textContent = current.subject;
-        activeTime.textContent = current.time.split('-').map(t => convertTo12Hour(t.trim())).join(' - ');
-        activeRoom.textContent = current.room ? `Aula ${current.room}` : 'Sin Aula';
-        
-        const subClass = getSubjectClass(current.subject);
-        if (current.type === 'class') {
-          activeCard.className = 'main-widget ' + subClass + ' cell-active';
-        } else {
-          activeCard.className = 'main-widget ' + subClass;
-        }
-        
-        if (current.type === 'recess' || current.type === 'free') {
-          activeTeacherBar.style.display = 'none';
-        } else {
-          activeTeacherBar.style.display = 'flex';
-          activeTeacherName.textContent = current.teacher || '--';
-          activeInitials.textContent = current.teacher ? current.teacher.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : '--';
-          
-          const teacherObj = teachers.find(t => t.name === current.teacher);
-          const initials = teacherObj ? teacherObj.initials : '--';
-          activeInitials.textContent = initials;
-        }
+        document.getElementById('activeClassSubject').textContent = current.type === 'free' ? 'Hora libre' : current.subject;
+        document.getElementById('activeClassTime').textContent = current.type === 'gap' ? 'Entre clases' : formatRange(current.time);
+        document.getElementById('activeClassRoom').textContent = roomLabel(current.room, current.type);
+        hero.className = 'hero panel ' + getSubjectClass(current.subject);
+        if (current.type === 'class' && current.teacher && !current.teacher.startsWith('Tutor')) {
+          bar.style.display = 'flex';
+          document.getElementById('activeTeacherName').textContent = current.teacher;
+          document.getElementById('activeTeacherInitials').textContent = teacherInitials(current.teacher);
+        } else bar.style.display = 'none';
       } else {
-        activeSubject.textContent = 'Fuera de Horario';
-        activeTime.textContent = '--:--';
-        activeRoom.textContent = 'Plantel Cerrado';
-        activeTeacherBar.style.display = 'none';
-        activeCard.className = 'main-widget sub-free';
+        document.getElementById('activeClassSubject').textContent = 'Fuera de horario';
+        document.getElementById('activeClassTime').textContent = '—';
+        document.getElementById('activeClassRoom').textContent = days.includes(today) ? 'Sin clase ahora' : 'Fin de semana';
+        bar.style.display = 'none';
+        hero.className = 'hero panel s-off';
       }
 
       const nextCard = document.getElementById('nextClassCard');
-      const nextSubject = document.getElementById('nextClassSubject');
-      const nextTime = document.getElementById('nextClassTime');
-      const nextRoom = document.getElementById('nextClassRoom');
-      const nextCountdown = document.getElementById('nextClassCountdown');
-      const nextTeacherBar = document.getElementById('nextTeacherBar');
-      const nextInitials = document.getElementById('nextTeacherInitials');
-      const nextTeacherName = document.getElementById('nextTeacherName');
-
       if (next) {
-        nextSubject.textContent = next.subject;
-        nextTime.textContent = next.time.split('-').map(t => convertTo12Hour(t.trim())).join(' - ');
-        nextRoom.textContent = next.room ? `Aula ${next.room}` : '';
-        
-        const nextSubClass = getSubjectClass(next.subject);
-        nextCard.className = 'main-widget ' + nextSubClass;
-        
-        if (next.nextDayName) {
-          nextCountdown.textContent = `${next.nextDayName} a las ${convertTo12Hour(next.time.split('-')[0].trim())}`;
-          nextTeacherBar.style.display = 'none';
-        } else {
-          const startTime = parseTime(next.time.split('-')[0].trim());
-          const diff = startTime - nowMinutes;
-          nextCountdown.textContent = `En ${diff} min`;
-          
-          if (next.teacher && next.type === 'class') {
-            nextTeacherBar.style.display = 'flex';
-            nextTeacherName.textContent = next.teacher;
-            
-            const teacherObj = teachers.find(t => t.name === next.teacher);
-            const initials = teacherObj ? teacherObj.initials : '--';
-            nextInitials.textContent = initials;
-          } else {
-            nextTeacherBar.style.display = 'none';
-          }
-        }
+        document.getElementById('nextClassSubject').textContent = next.subject;
+        document.getElementById('nextClassTime').textContent = formatRange(next.time);
+        document.getElementById('nextClassRoom').textContent = next.room ? roomLabel(next.room, next.type) : '';
+        nextCard.className = 'next panel ' + getSubjectClass(next.subject);
+        document.getElementById('nextClassCountdown').textContent = next.nextDayName
+          ? `${next.nextDayName} · ${convertTo12Hour(next.time.split('-')[0].trim())}`
+          : `En ${parseTime(next.time.split('-')[0].trim()) - now} min`;
       } else {
-        nextSubject.textContent = 'Jornada Finalizada';
-        nextTime.textContent = '--:--';
-        nextRoom.textContent = '';
-        nextCountdown.textContent = '¡Buen descanso!';
-        nextTeacherBar.style.display = 'none';
-        nextCard.className = 'main-widget sub-free';
+        document.getElementById('nextClassSubject').textContent = 'Jornada terminada';
+        document.getElementById('nextClassTime').textContent = '—';
+        document.getElementById('nextClassRoom').textContent = '';
+        document.getElementById('nextClassCountdown').textContent = 'Buen descanso';
+        nextCard.className = 'next panel s-off';
       }
-
-      const progressCircle = document.getElementById('progressCircleVal');
-      const progressText = document.getElementById('progressValText');
-      const classesCount = document.getElementById('classesCountText');
-      const timeLeft = document.getElementById('timeLeftText');
 
       if (scheduleData[today]) {
-        const classSlots = scheduleData[today].filter(s => s.type === 'class');
-        classesCount.textContent = classSlots.length;
-        
-        let completed = 0;
-        
-        scheduleData[today].forEach((slot) => {
-          if (slot.type === 'class') {
-            const times = slot.time.split('-').map(t => parseTime(t.trim()));
-            if (nowMinutes >= times[1]) completed++;
-          }
-        });
-        
-        const total = classSlots.length;
-        const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
-        progressText.textContent = `${percent}%`;
-        
-        const perimeter = 2 * Math.PI * 21;
-        const strokeOffset = perimeter - (percent / 100) * perimeter;
-        progressCircle.style.strokeDashoffset = strokeOffset;
-
-        const lastClassSlot = [...scheduleData[today]].reverse().find(s => s.type === 'class');
-        if (lastClassSlot) {
-          const classEndTime = parseTime(lastClassSlot.time.split('-')[1].trim());
-          const diffTime = classEndTime - nowMinutes;
-          if (diffTime > 0) {
-            const hours = Math.floor(diffTime / 60);
-            const mins = diffTime % 60;
-            timeLeft.textContent = `${hours}h ${mins}m`;
-          } else {
-            timeLeft.textContent = '--';
-          }
-        } else {
-          timeLeft.textContent = '--';
+        const classes = scheduleData[today].filter(s => s.type === 'class');
+        document.getElementById('classesCountText').textContent = classes.length;
+        const done = classes.filter(s => now >= parseTime(s.time.split('-')[1].trim())).length;
+        document.getElementById('progressValText').textContent = classes.length ? `${Math.round(done / classes.length * 100)}%` : '0%';
+        const last = [...scheduleData[today]].reverse().find(s => s.type === 'class');
+        if (last) {
+          const d = parseTime(last.time.split('-')[1].trim()) - now;
+          document.getElementById('timeLeftText').textContent = d > 0 ? `${Math.floor(d/60)}h ${d%60}m` : '—';
         }
       } else {
-        classesCount.textContent = '0';
-        timeLeft.textContent = '--';
-        progressText.textContent = '0%';
-        progressCircle.style.strokeDashoffset = 131.95;
+        document.getElementById('classesCountText').textContent = '0';
+        document.getElementById('timeLeftText').textContent = '—';
+        document.getElementById('progressValText').textContent = '0%';
       }
-      
+
       highlightGridCells();
       renderTimelineView();
     }
 
-    function switchTab(tabId, btnElement) {
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
-      
-      document.getElementById(`tab${tabId}`).classList.add('active');
-      btnElement.classList.add('active');
-      currentActiveTab = tabId;
-      
+    function switchTab(id, btn) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.nav').forEach(b => b.classList.remove('on'));
+      document.getElementById('tab' + id).classList.add('active');
+      btn.classList.add('on');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function toggleTheme() {
-      const body = document.body;
-      const meta = document.getElementById('themeColorMeta');
-      const icon = document.getElementById('themeBtnIcon');
-      
-      if (body.classList.contains('dark-mode')) {
-        body.classList.remove('dark-mode');
-        body.classList.add('light-mode');
-        localStorage.setItem('themeState', 'light');
-        meta.setAttribute('content', '#F5F5FA');
-        icon.setAttribute('name', 'moon-outline');
-      } else {
-        body.classList.remove('light-mode');
-        body.classList.add('dark-mode');
-        localStorage.setItem('themeState', 'dark');
-        meta.setAttribute('content', '#08080C');
-        icon.setAttribute('name', 'sunny-outline');
-      }
-    }
-
-    function applySystemTheme() {
-      const saved = localStorage.getItem('themeState');
-      const meta = document.getElementById('themeColorMeta');
-      const icon = document.getElementById('themeBtnIcon');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      
-      if (saved === 'dark' || (!saved && prefersDark)) {
-        document.body.className = 'dark-mode';
-        meta.setAttribute('content', '#08080C');
-        icon.setAttribute('name', 'sunny-outline');
-      } else {
-        document.body.className = 'light-mode';
-        meta.setAttribute('content', '#F5F5FA');
-        icon.setAttribute('name', 'moon-outline');
-      }
+    function setTimetableView(view) {
+      document.getElementById('btnSwitchTimeline').classList.toggle('active', view === 'timeline');
+      document.getElementById('btnSwitchGrid').classList.toggle('active', view === 'grid');
+      document.getElementById('timelineScheduleView').style.display = view === 'timeline' ? 'block' : 'none';
+      document.getElementById('gridScheduleView').style.display = view === 'grid' ? 'block' : 'none';
     }
 
     function renderGridSchedule() {
       const body = document.getElementById('scheduleTableBody');
       body.innerHTML = '';
-      
-      const timeSlots = scheduleData['Lunes'].map(s => s.time);
-      
-      timeSlots.forEach((time, index) => {
+      scheduleData.Lunes.map(s => s.time).forEach((time, i) => {
         const tr = document.createElement('tr');
-        const timeTd = document.createElement('td');
-        timeTd.className = 'time-col';
-        timeTd.textContent = time.split('-').map(t => convertTo12Hour(t.trim())).join(' - ');
-        tr.appendChild(timeTd);
-        
+        const ttd = document.createElement('td');
+        ttd.className = 'time';
+        const [a, b] = time.split('-').map(t => convertTo12Hour(t.trim()));
+        ttd.innerHTML = `${a}<br>${b}`;
+        tr.appendChild(ttd);
         days.forEach(day => {
-          const slot = scheduleData[day][index];
+          const item = scheduleData[day][i];
+          if (item.type === 'recess') {
+            if (day === 'Lunes') {
+              const td = document.createElement('td');
+              td.colSpan = 5; td.className = 'rec'; td.textContent = 'Receso';
+              tr.appendChild(td);
+            }
+            return;
+          }
           const td = document.createElement('td');
-          td.dataset.day = day;
-          td.dataset.subject = slot.subject;
-          td.dataset.time = slot.time;
-          
-          if (slot.type === 'recess') {
-            td.className = 'class-cell sub-recess';
-            td.innerHTML = `<div class="cell-subject-name">${slot.subject}</div>`;
-          } else if (slot.type === 'free') {
-            td.className = 'class-cell cell-free sub-free';
-            td.innerHTML = `<div class="cell-subject-name">Libre</div>`;
+          td.dataset.day = day; td.dataset.subject = item.subject; td.dataset.time = item.time;
+          if (item.type === 'free') {
+            td.className = 'off'; td.textContent = 'Libre';
           } else {
-            td.className = 'class-cell ' + getSubjectClass(slot.subject);
-            td.innerHTML = `
-              <div class="cell-subject-name">${slot.subject}</div>
-              <div class="cell-room-code">${slot.room || ''}</div>
-            `;
-            td.onclick = () => {
-              openClassSheet(slot, day);
-            };
+            td.className = 'cls ' + getSubjectClass(item.subject);
+            td.innerHTML = `<b>${item.short}</b><span>${item.room || ''}</span>`;
+            td.onclick = () => openClassSheet(item, day);
           }
           tr.appendChild(td);
         });
@@ -2274,434 +798,168 @@
     }
 
     function highlightGridCells() {
-      const current = getCurrentClassSlot();
+      const cur = getCurrentClassSlot();
       const today = getTodayName();
-      
       document.querySelectorAll('#scheduleTableBody td').forEach(td => {
-        td.classList.remove('cell-active');
-        if (current && td.dataset.day === today && td.dataset.subject === current.subject && td.dataset.time === current.time && current.type === 'class') {
-          td.classList.add('cell-active');
+        td.classList.remove('now');
+        if (cur && cur.type === 'class' && td.dataset.day === today && td.dataset.subject === cur.subject && td.dataset.time === cur.time) {
+          td.classList.add('now');
         }
       });
     }
 
-    function setTimetableView(view) {
-      scheduleViewMode = view;
-      document.getElementById('btnSwitchTimeline').classList.toggle('active', view === 'timeline');
-      document.getElementById('btnSwitchGrid').classList.toggle('active', view === 'grid');
-      
-      document.getElementById('timelineScheduleView').style.display = view === 'timeline' ? 'block' : 'none';
-      document.getElementById('gridScheduleView').style.display = view === 'grid' ? 'block' : 'none';
-    }
-
     function renderTimelineSelector() {
-      const container = document.getElementById('daySelectPills');
-      container.innerHTML = '';
-      
+      const box = document.getElementById('daySelectPills');
+      box.innerHTML = '';
       days.forEach(d => {
-        const btn = document.createElement('button');
-        btn.className = `filter-pill ${d === selectedDayForTimeline ? 'active' : ''}`;
-        btn.textContent = d;
-        btn.onclick = () => {
+        const b = document.createElement('button');
+        b.textContent = d;
+        if (d === selectedDayForTimeline) b.className = 'active';
+        b.onclick = () => {
           selectedDayForTimeline = d;
-          document.querySelectorAll('#daySelectPills .filter-pill').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
+          document.querySelectorAll('#daySelectPills button').forEach(x => x.classList.remove('active'));
+          b.classList.add('active');
           renderTimelineView();
         };
-        container.appendChild(btn);
+        box.appendChild(b);
+        if (d === selectedDayForTimeline) requestAnimationFrame(() => b.scrollIntoView({ inline: 'center', block: 'nearest' }));
       });
     }
 
     function renderTimelineView() {
-      const container = document.getElementById('timelineItemsContainer');
-      container.innerHTML = '';
-      
+      const box = document.getElementById('timelineItemsContainer');
+      if (!box) return;
+      box.innerHTML = '';
       const slots = scheduleData[selectedDayForTimeline];
       const today = getTodayName();
-      const current = getCurrentClassSlot();
-      
-      slots.forEach(slot => {
-        const div = document.createElement('div');
-        const subjectClass = getSubjectClass(slot.subject);
-        let classes = 'timeline-item ' + subjectClass;
-        const isCurrent = current && today === selectedDayForTimeline && slot.subject === current.subject && slot.time === current.time && slot.type === 'class';
-        if (isCurrent) classes += ' active';
-        div.className = classes;
-        
-        const timesFormatted = slot.time.split('-').map(t => convertTo12Hour(t.trim()));
-        
-        let detailsHtml = '';
-        if (slot.type === 'recess') {
-          detailsHtml = `
-            <h4>${slot.subject}</h4>
-            <div class="timeline-subdetails">
-              <span><ion-icon name="restaurant-outline"></ion-icon> Comedor</span>
-            </div>
-          `;
-        } else if (slot.type === 'free') {
-          detailsHtml = `
-            <h4>Libre</h4>
-            <div class="timeline-subdetails">
-              <span><ion-icon name="sparkles-outline"></ion-icon> Sin Clases</span>
-            </div>
-          `;
-        } else {
-          detailsHtml = `
-            <h4>${slot.subject}</h4>
-            <div class="timeline-subdetails">
-              <span><ion-icon name="location-outline"></ion-icon> Aula ${slot.room || ''}</span>
-              <span><ion-icon name="person-outline"></ion-icon> ${slot.teacher ? slot.teacher.split(' ')[0] : ''}</span>
-            </div>
-          `;
-          div.onclick = () => openClassSheet(slot, selectedDayForTimeline);
+      const cur = getCurrentClassSlot();
+      slots.forEach(item => {
+        const [start, end] = formatRange(item.time).split(' – ');
+        const isNow = cur && today === selectedDayForTimeline && item.type === 'class' && item.subject === cur.subject && item.time === cur.time;
+        const row = document.createElement('div');
+        if (item.type === 'recess') {
+          row.className = 'row quiet s-rec';
+          row.innerHTML = `<div class="tcol"><b>${start}</b><span>${end}</span></div><div class="axis"></div><div class="note">Receso</div>`;
+          box.appendChild(row); return;
         }
-        
-        div.innerHTML = `
-          <div class="timeline-time">
-            <span>${timesFormatted[0]}</span>
-            <span class="time-end">${timesFormatted[1]}</span>
-          </div>
-          <div class="timeline-details">${detailsHtml}</div>
-        `;
-        
-        container.appendChild(div);
+        if (item.type === 'free') {
+          row.className = 'row quiet s-off';
+          row.innerHTML = `<div class="tcol"><b>${start}</b><span>${end}</span></div><div class="axis"></div><div class="note" style="color:var(--mute);letter-spacing:.12em">Libre</div>`;
+          box.appendChild(row); return;
+        }
+        row.className = 'row ' + getSubjectClass(item.subject) + (isNow ? ' now' : '');
+        row.onclick = () => openClassSheet(item, selectedDayForTimeline);
+        const teacher = item.teacher && !item.teacher.startsWith('Tutor') ? ` · ${item.teacher.split(' ')[0]}` : '';
+        row.innerHTML = `
+          <div class="tcol"><b>${start}</b><span>${end}</span></div>
+          <div class="axis"></div>
+          <div class="card">
+            <div class="card-head">
+              <h4>${item.subject}</h4>
+              ${isNow ? '<span class="now-tag">Ahora</span>' : ''}
+            </div>
+            <p>${roomLabel(item.room, item.type)}${teacher}</p>
+          </div>`;
+        box.appendChild(row);
       });
-    }
-
-    function renderEvents() {
-      const container = document.getElementById('eventsListContainer');
-      container.innerHTML = '';
-      
-      const searchVal = document.getElementById('eventSearchInput').value.toLowerCase().trim();
-      const filtered = events.filter(e => {
-        const matchSearch = e.name.toLowerCase().includes(searchVal) || e.description.toLowerCase().includes(searchVal);
-        const matchCategory = currentEventCategory === 'all' || 
-                             (currentEventCategory === 'suspension' && e.category === 'suspension') ||
-                             (currentEventCategory === 'vacacion' && (e.category === 'vacacion' || e.category === 'receso' || e.category === 'carnaval')) ||
-                             (currentEventCategory === 'tramite' && e.category === 'tramite');
-        return matchSearch && matchCategory;
-      });
-      
-      if (filtered.length === 0) {
-        const emptyDiv = document.createElement('div');
-        emptyDiv.className = 'sheet-description-box';
-        emptyDiv.textContent = 'No se encontraron eventos.';
-        container.appendChild(emptyDiv);
-        return;
-      }
-
-      filtered.forEach(e => {
-        const card = document.createElement('div');
-        card.className = `event-card cat-${e.category}`;
-        
-        card.innerHTML = `
-          <div class="event-badge-indicator"></div>
-          <div class="event-date-box">
-            <h5>${e.dateText}</h5>
-          </div>
-          <div class="event-info-box">
-            <h4>${e.name}</h4>
-            <p>${e.category === 'suspension' ? 'Suspensión Oficial' : e.category === 'vacacion' ? 'Vacaciones' : e.category === 'receso' ? 'Receso' : e.category === 'carnaval' ? 'Carnaval' : e.category === 'tramite' ? 'Trámite / Notas' : 'Académico'}</p>
-          </div>
-        `;
-        
-        card.onclick = () => openEventSheet(e);
-        container.appendChild(card);
-      });
-    }
-
-    function setEventCategoryFilter(category, element) {
-      currentEventCategory = category;
-      document.querySelectorAll('#tabEventos .filter-pill').forEach(b => b.classList.remove('active'));
-      element.classList.add('active');
-      renderEvents();
-    }
-
-    function filterEvents() {
-      renderEvents();
     }
 
     function renderTeachers() {
-      const container = document.getElementById('teachersListContainer');
-      container.innerHTML = '';
-      
-      const searchVal = document.getElementById('teacherSearchInput').value.toLowerCase().trim();
-      const filtered = teachers.filter(t => {
-        return t.name.toLowerCase().includes(searchVal) || t.subjects.some(s => s.toLowerCase().includes(searchVal));
-      });
-
-      if (filtered.length === 0) {
-        const emptyDiv = document.createElement('div');
-        emptyDiv.className = 'sheet-description-box';
-        emptyDiv.textContent = 'No se encontraron docentes.';
-        container.appendChild(emptyDiv);
+      const box = document.getElementById('teachersListContainer');
+      const q = document.getElementById('teacherSearchInput').value.toLowerCase().trim();
+      const list = teachers.filter(t => t.name.toLowerCase().includes(q) || t.subjects.some(s => s.toLowerCase().includes(q)));
+      box.innerHTML = '';
+      if (!list.length) {
+        box.innerHTML = '<p class="note" style="color:var(--mute)">Sin resultados</p>';
         return;
       }
-
-      filtered.forEach(t => {
-        const card = document.createElement('div');
-        card.className = 'teacher-card';
-        const subjectsHtml = t.subjects.map(s => {
-          const subClass = getSubjectClass(s);
-          return `<span class="${subClass}" style="color: var(--sub-color); font-weight: 600; margin-right: 8px; display: inline-block;">${s}</span>`;
-        }).join('');
-        card.innerHTML = `
-          <div class="teacher-initials-badge">${t.initials}</div>
-          <div class="teacher-card-info">
+      list.forEach(t => {
+        const el = document.createElement('article');
+        el.className = 'prof panel';
+        el.innerHTML = `
+          <div class="ava">${t.initials}</div>
+          <div>
             <h4>${t.name}</h4>
-            <p>${subjectsHtml}</p>
+            <p>${t.subjects.join(' · ')}</p>
           </div>
-        `;
-        
-        card.onclick = () => openTeacherSheet(t);
-        container.appendChild(card);
+          <div class="hrs">${t.hours} h</div>`;
+        el.onclick = () => openTeacherSheet(t);
+        box.appendChild(el);
       });
     }
+    function filterTeachers() { renderTeachers(); }
 
-    function filterTeachers() {
-      renderTeachers();
+    function kv(label, value) {
+      return `<div class="kv"><small>${label}</small><b>${value}</b></div>`;
     }
 
-    function openClassSheet(slot, day) {
-      const title = document.getElementById('sheetTitle');
-      const subtitle = document.getElementById('sheetSubtitle');
-      const contentList = document.getElementById('sheetContentList');
-      const descBox = document.getElementById('sheetDescBox');
-      const iconBox = document.getElementById('sheetIconBox');
-      const subColor = getSubjectClass(slot.subject);
-      
-      iconBox.innerHTML = '<ion-icon name="book-outline"></ion-icon>';
-      iconBox.className = 'sheet-header-icon ' + subColor;
-      iconBox.style.color = '';
-      iconBox.style.background = '';
-      
-      title.textContent = slot.subject;
-      title.className = 'sheet-title ' + subColor;
-      title.style.color = 'var(--sub-color)';
-      subtitle.textContent = `Clase • ${day}`;
-      
-      let listHtml = `
-        <div class="sheet-info-row">
-          <div class="sheet-row-label"><ion-icon name="time-outline"></ion-icon> Horario</div>
-          <div class="sheet-row-value">${slot.time.split('-').map(t => convertTo12Hour(t.trim())).join(' - ')}</div>
-        </div>
-      `;
-      if (slot.room) {
-        listHtml += `
-          <div class="sheet-info-row">
-            <div class="sheet-row-label"><ion-icon name="location-outline"></ion-icon> Aula</div>
-            <div class="sheet-row-value">${slot.room}</div>
-          </div>
-        `;
-      }
-      if (slot.code) {
-        listHtml += `
-          <div class="sheet-info-row">
-            <div class="sheet-row-label"><ion-icon name="barcode-outline"></ion-icon> Clave</div>
-            <div class="sheet-row-value">${slot.code}</div>
-          </div>
-        `;
-      }
-      if (slot.teacher) {
-        listHtml += `
-          <div class="sheet-info-row">
-            <div class="sheet-row-label"><ion-icon name="person-outline"></ion-icon> Docente</div>
-            <div class="sheet-row-value">${slot.teacher}</div>
-          </div>
-        `;
-      }
-      contentList.innerHTML = listHtml;
-      descBox.style.display = 'none';
-      
+    function openClassSheet(item, day) {
+      document.getElementById('sheetTitle').textContent = item.subject;
+      document.getElementById('sheetSubtitle').textContent = `Clase · ${day}`;
+      let html = kv('Horario', formatRange(item.time));
+      if (item.room) html += kv('Aula', item.room);
+      if (item.code) html += kv('Clave', item.code);
+      if (item.teacher) html += kv('Docente', item.teacher);
+      document.getElementById('sheetContentList').innerHTML = html;
       showSheet();
     }
 
-    function openEventSheet(event) {
-      const title = document.getElementById('sheetTitle');
-      const subtitle = document.getElementById('sheetSubtitle');
-      const contentList = document.getElementById('sheetContentList');
-      const descBox = document.getElementById('sheetDescBox');
-      const iconBox = document.getElementById('sheetIconBox');
-      
-      let categoryName = 'Académico';
-      let iconName = 'calendar-outline';
-      let categoryColor = 'var(--color-academico)';
-      
-      if (event.category === 'suspension') {
-        categoryName = 'Suspensión Oficial';
-        iconName = 'ban-outline';
-        categoryColor = 'var(--color-suspension)';
-      } else if (event.category === 'vacacion') {
-        categoryName = 'Vacaciones';
-        iconName = 'leaf-outline';
-        categoryColor = 'var(--color-vacacion)';
-      } else if (event.category === 'receso') {
-        categoryName = 'Receso';
-        iconName = 'sunny-outline';
-        categoryColor = 'var(--color-receso)';
-      } else if (event.category === 'carnaval') {
-        categoryName = 'Carnaval';
-        iconName = 'sparkles-outline';
-        categoryColor = 'var(--color-carnaval)';
-      } else if (event.category === 'tramite') {
-        categoryName = 'Trámite / Evaluación';
-        iconName = 'document-text-outline';
-        categoryColor = 'var(--color-tramite)';
-      }
-      
-      iconBox.innerHTML = `<ion-icon name="${iconName}"></ion-icon>`;
-      iconBox.className = 'sheet-header-icon';
-      iconBox.style.color = categoryColor;
-      iconBox.style.background = `${categoryColor}15`;
-      
-      title.textContent = event.name;
-      title.className = 'sheet-title';
-      title.style.color = '';
-      subtitle.textContent = categoryName;
-      
-      contentList.innerHTML = `
-        <div class="sheet-info-row">
-          <div class="sheet-row-label"><ion-icon name="calendar-clear-outline"></ion-icon> Fecha</div>
-          <div class="sheet-row-value">${event.dateText}</div>
-        </div>
-        <div class="sheet-info-row">
-          <div class="sheet-row-label"><ion-icon name="hourglass-outline"></ion-icon> Ciclo</div>
-          <div class="sheet-row-value">Semestre 2026-A</div>
-        </div>
-      `;
-      
-      descBox.textContent = event.description;
-      descBox.style.display = 'block';
-      
-      showSheet();
-    }
-
-    function openTeacherSheet(teacher) {
-      const title = document.getElementById('sheetTitle');
-      const subtitle = document.getElementById('sheetSubtitle');
-      const contentList = document.getElementById('sheetContentList');
-      const descBox = document.getElementById('sheetDescBox');
-      const iconBox = document.getElementById('sheetIconBox');
-      
-      iconBox.innerHTML = `<span>${teacher.initials}</span>`;
-      iconBox.className = 'sheet-header-icon';
-      iconBox.style.color = 'var(--theme-primary)';
-      iconBox.style.background = 'var(--active-card)';
-      
-      title.textContent = teacher.name;
-      title.className = 'sheet-title';
-      title.style.color = '';
-      subtitle.textContent = 'Docente COBAQROO';
-      
-      const tags = teacher.subjects.map(s => {
-        const subClass = getSubjectClass(s);
-        return `<span class="sheet-info-tag ${subClass}" style="color: var(--sub-color); background: var(--sub-bg); border-color: var(--sub-border);">${s}</span>`;
-      }).join('');
-      
-      contentList.innerHTML = `
-        <div class="sheet-info-row" style="flex-direction: column; align-items: flex-start; gap: 10px;">
-          <div class="sheet-row-label"><ion-icon name="book-outline"></ion-icon> Asignaturas Asignadas</div>
-          <div class="tags-flex-wrap">${tags}</div>
-        </div>
-      `;
-      descBox.style.display = 'none';
-      
+    function openTeacherSheet(t) {
+      document.getElementById('sheetTitle').textContent = t.name;
+      document.getElementById('sheetSubtitle').textContent = 'Docente COBAQROO';
+      document.getElementById('sheetContentList').innerHTML =
+        kv('Horas', `${t.hours} h / semana`) + kv('Asignaturas', t.subjects.join(' · '));
       showSheet();
     }
 
     function showSheet() {
-      document.getElementById('modalOverlay').classList.add('active');
-      const sheet = document.getElementById('bottomSheet');
-      sheet.classList.add('active');
-      sheet.style.transform = '';
+      document.getElementById('modalOverlay').classList.add('on');
+      const s = document.getElementById('bottomSheet');
+      s.classList.add('on'); s.style.transform = '';
     }
-
     function closeSheet() {
-      document.getElementById('modalOverlay').classList.remove('active');
-      const sheet = document.getElementById('bottomSheet');
-      sheet.classList.remove('active');
-      setTimeout(() => {
-        sheet.style.transform = '';
-      }, 400);
+      document.getElementById('modalOverlay').classList.remove('on');
+      document.getElementById('bottomSheet').classList.remove('on');
     }
 
-    let startY = 0;
-    let currentY = 0;
-    let isDragging = false;
     const sheet = document.getElementById('bottomSheet');
-
-    sheet.addEventListener('touchstart', e => {
-      startY = e.touches[0].clientY;
-      isDragging = true;
-      sheet.style.transition = 'none';
-    }, { passive: true });
-
+    let startY = 0, curY = 0, drag = false;
+    sheet.addEventListener('touchstart', e => { startY = e.touches[0].clientY; drag = true; sheet.style.transition = 'none'; }, { passive: true });
     sheet.addEventListener('touchmove', e => {
-      if (!isDragging) return;
-      currentY = e.touches[0].clientY;
-      const deltaY = currentY - startY;
-      if (deltaY > 0) {
-        sheet.style.transform = `translateY(${deltaY}px)`;
-      }
+      if (!drag) return;
+      curY = e.touches[0].clientY;
+      const d = curY - startY;
+      if (d > 0) sheet.style.transform = `translateY(${d}px)`;
     }, { passive: true });
-
     sheet.addEventListener('touchend', () => {
-      if (!isDragging) return;
-      isDragging = false;
-      sheet.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
-      const deltaY = currentY - startY;
-      if (deltaY > 120) {
-        closeSheet();
-      } else {
-        sheet.style.transform = '';
-      }
+      if (!drag) return;
+      drag = false;
+      sheet.style.transition = '';
+      if (curY - startY > 110) closeSheet(); else sheet.style.transform = '';
     });
 
+    function tickClock() {
+      const t = getCancunDate();
+      let h = t.getHours();
+      const m = String(t.getMinutes()).padStart(2, '0');
+      const s = String(t.getSeconds()).padStart(2, '0');
+      const ap = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      document.getElementById('clock').textContent = `${h}:${m}:${s} ${ap}`;
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-      applySystemTheme();
       renderGridSchedule();
-      
       const today = getTodayName();
-      if (days.includes(today)) {
-        selectedDayForTimeline = today;
-      }
-      
+      if (days.includes(today)) selectedDayForTimeline = today;
       renderTimelineSelector();
       updateAppStatus();
-      renderEvents();
       renderTeachers();
-      
+      tickClock();
       setInterval(updateAppStatus, 1000);
-      
-      const now = getCancunDate();
-      let hours = now.getHours();
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12 || 12;
-      document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
-      
-      setInterval(() => {
-        const time = getCancunDate();
-        let hr = time.getHours();
-        const min = String(time.getMinutes()).padStart(2, '0');
-        const sec = String(time.getSeconds()).padStart(2, '0');
-        const amp = hr >= 12 ? 'PM' : 'AM';
-        hr = hr % 12 || 12;
-        document.getElementById('clock').textContent = `${hr}:${min}:${sec} ${amp}`;
-      }, 1000);
-      
-      const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone };
-      let dateString = now.toLocaleDateString('es-MX', dateOptions);
-      dateString = dateString.charAt(0).toUpperCase() + dateString.slice(1);
-      document.getElementById('date').textContent = dateString;
-
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      mediaQuery.addEventListener('change', () => {
-        if (!localStorage.getItem('themeState')) {
-          applySystemTheme();
-        }
-      });
+      setInterval(tickClock, 1000);
+      let ds = getCancunDate().toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone });
+      document.getElementById('date').textContent = ds.charAt(0).toUpperCase() + ds.slice(1);
     });
   </script>
 </body>
