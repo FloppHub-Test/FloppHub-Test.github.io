@@ -833,7 +833,7 @@
     .bot-stage {
       position: relative;
       height: auto;
-      margin: 12px 0 8px;
+      margin: 8px 0 4px;
       overflow: visible;
       display: flex;
       justify-content: center;
@@ -841,7 +841,7 @@
       pointer-events: none;
     }
     .hoy-bot {
-      width: min(78%, 300px);
+      width: min(42%, 148px);
       aspect-ratio: 1;
       position: relative;
       bottom: 0;
@@ -849,7 +849,7 @@
       translate: none;
       pointer-events: auto;
       overflow: visible;
-      filter: drop-shadow(0 18px 32px rgba(0,0,0,0.55));
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,0.45));
     }
     .hoy-bot .hoy-grok {
       width: 100%;
@@ -859,7 +859,7 @@
       --fg: #f4f1ea;
       --bg: #0a0a0a;
     }
-    .bot-stage { padding: 8px 0 16px; }
+    .bot-stage { padding: 4px 0 8px; }
     .grok-bot-mark { width: 100%; height: auto; display: block; overflow: visible; }
     .grok-bot-mark__head { fill: #fff; }
     .grok-bot-mark__eye { fill: #000; }
@@ -1069,19 +1069,19 @@
     <nav class="dock" id="dock">
       <div class="dock-edge"></div>
       <div class="dock-pill" id="dockPill"></div>
-      <button class="nav on" onclick="switchTab('Hoy', this)">
+      <button class="nav on" data-tab="Hoy" onclick="switchTab('Hoy', this)">
         <span class="nav-ic"><ion-icon name="today-outline"></ion-icon></span>
         <span>Hoy</span>
       </button>
-      <button class="nav" onclick="switchTab('Horario', this)">
+      <button class="nav" data-tab="Horario" onclick="switchTab('Horario', this)">
         <span class="nav-ic"><ion-icon name="calendar-outline"></ion-icon></span>
         <span>Horario</span>
       </button>
-      <button class="nav" onclick="switchTab('Tareas', this)">
+      <button class="nav" data-tab="Tareas" onclick="switchTab('Tareas', this)">
         <span class="nav-ic"><ion-icon name="checkbox-outline"></ion-icon></span>
         <span>Tareas</span>
       </button>
-      <button class="nav" onclick="switchTab('Profesores', this)">
+      <button class="nav" data-tab="Profesores" onclick="switchTab('Profesores', this)">
         <span class="nav-ic"><ion-icon name="people-outline"></ion-icon></span>
         <span>Docentes</span>
       </button>
@@ -1497,23 +1497,85 @@
       layoutGlassPill(document.getElementById('daysPill'), active, punch);
     }
 
-    function switchTab(id, btn) {
-      closeSubjectMenu();
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.nav').forEach(b => { b.classList.remove('on', 'pop'); });
-      document.getElementById('tab' + id).classList.add('active');
-      btn.classList.add('on', 'pop');
-      layoutDockPill(btn, true);
-      if (id === 'Horario') requestAnimationFrame(() => { layoutSegPill(); layoutDaysPill(); });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    let currentTabId = 'Hoy';
+    let currentTimetableView = 'timeline';
+    let syncingHash = false;
+
+    function hashForState(tab, view) {
+      if (tab === 'Horario') return view === 'grid' ? '/Horarios/Semanal' : '/Horario';
+      if (tab === 'Tareas') return '/Tareas';
+      if (tab === 'Profesores') return '/Profesores';
+      return '/Hoy';
     }
 
-    function setTimetableView(view) {
-      document.getElementById('btnSwitchTimeline').classList.toggle('active', view === 'timeline');
-      document.getElementById('btnSwitchGrid').classList.toggle('active', view === 'grid');
-      document.getElementById('timelineScheduleView').style.display = view === 'timeline' ? 'block' : 'none';
-      document.getElementById('gridScheduleView').style.display = view === 'grid' ? 'block' : 'none';
-      requestAnimationFrame(() => layoutSegPill(true));
+    function parseRouteHash(hash) {
+      let path = String(hash || '').replace(/^#/, '').trim();
+      if (path && path.charAt(0) !== '/') path = '/' + path;
+      path = path.replace(/\/+$/, '') || '';
+      const p = path.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      if (!p || p === '/' || p === '/hoy') return { tab: 'Hoy', view: null };
+      if (p === '/tareas') return { tab: 'Tareas', view: null };
+      if (p === '/profesores' || p === '/docentes') return { tab: 'Profesores', view: null };
+      if (
+        p === '/horarios/semanal' || p === '/horario/semanal' ||
+        p === '/horarios/semana' || p === '/horario/semana' ||
+        p === '/horario/grid'
+      ) return { tab: 'Horario', view: 'grid' };
+      if (
+        p === '/horario' || p === '/horarios' ||
+        p === '/horario/dia' || p === '/horarios/dia'
+      ) return { tab: 'Horario', view: 'timeline' };
+      return { tab: 'Hoy', view: null };
+    }
+
+    function writeRouteHash(tab, view) {
+      const next = '#' + hashForState(tab, view);
+      if (location.hash === next) return;
+      syncingHash = true;
+      location.hash = next;
+    }
+
+    function applyRouteFromHash(opts) {
+      const fromLoad = !!(opts && opts.fromLoad);
+      const route = parseRouteHash(location.hash);
+      if (route.view) setTimetableView(route.view, { silent: true, punch: !fromLoad });
+      switchTab(route.tab, null, { fromHash: true, fromLoad: fromLoad });
+    }
+
+    function switchTab(id, btn, opts) {
+      opts = opts || {};
+      closeSubjectMenu();
+      const tabEl = document.getElementById('tab' + id);
+      if (!tabEl) return;
+      currentTabId = id;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.nav').forEach(b => { b.classList.remove('on', 'pop'); });
+      tabEl.classList.add('active');
+      if (!btn) btn = document.querySelector('.nav[data-tab="' + id + '"]');
+      if (btn) {
+        btn.classList.add('on');
+        if (!opts.fromHash) btn.classList.add('pop');
+        layoutDockPill(btn, !opts.fromLoad);
+      }
+      if (id === 'Horario') requestAnimationFrame(() => { layoutSegPill(); layoutDaysPill(); });
+      if (opts.fromLoad) window.scrollTo(0, 0);
+      else window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (!opts.fromHash) writeRouteHash(id, currentTimetableView);
+    }
+
+    function setTimetableView(view, opts) {
+      opts = opts || {};
+      currentTimetableView = view === 'grid' ? 'grid' : 'timeline';
+      document.getElementById('btnSwitchTimeline').classList.toggle('active', currentTimetableView === 'timeline');
+      document.getElementById('btnSwitchGrid').classList.toggle('active', currentTimetableView === 'grid');
+      document.getElementById('timelineScheduleView').style.display = currentTimetableView === 'timeline' ? 'block' : 'none';
+      document.getElementById('gridScheduleView').style.display = currentTimetableView === 'grid' ? 'block' : 'none';
+      requestAnimationFrame(() => layoutSegPill(opts.punch !== false));
+      if (!opts.silent) {
+        currentTabId = 'Horario';
+        switchTab('Horario', null, { fromHash: true });
+        writeRouteHash('Horario', currentTimetableView);
+      }
     }
 
     function renderGridSchedule() {
@@ -1887,10 +1949,15 @@
       let ds = getCancunDate().toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone });
       document.getElementById('date').textContent = ds.charAt(0).toUpperCase() + ds.slice(1);
       initTasks();
+      applyRouteFromHash({ fromLoad: true });
       requestAnimationFrame(() => {
         layoutDockPill(document.querySelector('.nav.on'));
         layoutSegPill();
         layoutDaysPill();
+      });
+      window.addEventListener('hashchange', () => {
+        if (syncingHash) { syncingHash = false; return; }
+        applyRouteFromHash();
       });
       window.addEventListener('resize', () => {
         layoutDockPill(document.querySelector('.nav.on'));
