@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Impostor</title>
+<style>
+  :root {
+    --ink: #f4f4f5;
+    --cream: #000;
+    --pink: #ff2d6a;
+    --yellow: #ffe14a;
+    --blue: #7ecbff;
+    --mint: #8ee6b0;
+    --card: #0c0c0c;
+    --safe-t: env(safe-area-inset-top, 0px);
+    --safe-b: env(safe-area-inset-bottom, 0px);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    min-height: 100dvh; color: var(--ink);
+    font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+    background: #000;
+    overflow: hidden;
+  }
+  button, input { font-family: inherit; color: var(--ink); }
+  button { cursor: pointer; border: 0; }
+  #app {
+    height: 100dvh; display: flex; flex-direction: column;
+    padding: calc(12px + var(--safe-t)) 16px calc(14px + var(--safe-b));
+  }
+  .screen { display: none; flex: 1; min-height: 0; flex-direction: column; }
+  .screen.on { display: flex; }
+  .scroll { overflow: auto; flex: 1; min-height: 0; }
+  h1 {
+    font-size: 64px; line-height: .86; margin: 8px 0 18px; letter-spacing: -2px;
+    color: #fff; text-shadow: 0 0 24px rgba(255,45,106,.45);
+  }
+  .face {
+    width: 108px; height: 108px; border-radius: 36px; border: 3px solid #3a3a3a;
+    background: #111; box-shadow: 0 0 0 1px #000, 0 0 28px rgba(255,225,74,.2);
+    display: grid; place-items: center; margin-bottom: 8px;
+  }
+  .btn, .step button, .ghost, .primary {
+    min-height: 64px; border-radius: 22px; border: 3px solid #2c2c2c;
+    font-size: 24px; font-weight: 800; box-shadow: none;
+  }
+  .primary { background: var(--pink); color: white; width: 100%; border-color: #ff2d6a; }
+  .ghost { background: #111; color: #fff; width: 100%; }
+  .primary:active, .ghost:active, .step button:active, .pbtn:active { transform: translateY(1px); }
+  .stack { display: grid; gap: 12px; margin-top: auto; }
+  .block {
+    background: #0a0a0a; border: 3px solid #222; border-radius: 26px;
+    box-shadow: none; padding: 14px 16px; margin-bottom: 12px;
+  }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .k { font-size: 22px; font-weight: 800; }
+  .step { display: flex; align-items: center; gap: 8px; }
+  .step button {
+    width: 58px; background: #111; color: #fff; font-size: 32px; padding: 0;
+  }
+  .num { font-size: 40px; font-weight: 900; min-width: 42px; text-align: center; }
+  .names { display: grid; gap: 10px; }
+  .names input {
+    width: 100%; min-height: 58px; border-radius: 18px; border: 3px solid #2a2a2a;
+    background: #000; color: #fff; font-size: 22px; font-weight: 800; padding: 0 14px;
+  }
+  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .mode {
+    min-height: 74px; border-radius: 20px; border: 3px solid #2a2a2a;
+    background: #111; color: #fff; font-size: 18px; font-weight: 800; box-shadow: none;
+  }
+  .mode.on { background: #1a1400; border-color: var(--yellow); color: var(--yellow); }
+  .who { text-align: center; font-size: 18px; font-weight: 800; opacity: .7; }
+  .pname { text-align: center; font-size: 48px; font-weight: 900; line-height: .95; margin: 4px 0 8px; letter-spacing: -1px; }
+  .stage { flex: 1; position: relative; min-height: 280px; }
+  .role, .cover {
+    position: absolute; inset: 0; border-radius: 32px; border: 3px solid #2a2a2a;
+    box-shadow: none; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center; padding: 22px;
+  }
+  .role.det { background: #041018; border-color: #164e63; }
+  .role.imp { background: #14060c; border-color: #9f1239; }
+  .cover { background: #0a0a0a; border-color: #3a3a3a; z-index: 2; touch-action: none; justify-content: flex-end; align-items: flex-start; }
+  .badge {
+    font-size: 18px; font-weight: 900; letter-spacing: .12em;
+    background: #000; border: 3px solid #333; border-radius: 999px; padding: 6px 12px; color: #fff;
+  }
+  .secret { font-size: 46px; font-weight: 900; line-height: .95; margin: 12px 0; letter-spacing: -1px; color: #fff; }
+  .timer { font-size: 78px; font-weight: 900; text-align: center; letter-spacing: -3px; line-height: .9; color: #fff; }
+  .timer.warn { color: var(--yellow); }
+  .timer.late { color: var(--pink); }
+  .players { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .pbtn {
+    min-height: 78px; text-align: left; padding: 12px; border-radius: 22px;
+    border: 3px solid #2a2a2a; background: #0c0c0c; color: #fff; box-shadow: none; font-size: 20px; font-weight: 900;
+  }
+  .pbtn.on { background: var(--pink); color: white; border-color: var(--pink); }
+  .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .pill {
+    background: #111; border: 3px solid #2a2a2a; border-radius: 999px;
+    padding: 6px 12px; font-weight: 800; font-size: 16px; color: #fff;
+  }
+  .tiny { text-align: center; font-weight: 800; font-size: 18px; margin: 0 0 8px; }
+  .back {
+    width: auto; min-height: 48px; padding: 0 14px; font-size: 18px; background: #111; color: #fff;
+  }
+  svg circle, svg path { stroke: #ffe14a; }
+  svg circle { fill: #ffe14a; }
+</style>
+</head>
+<body>
+<div id="app">
+  <section class="screen on" id="home">
+    <div class="face" aria-hidden="true">
+      <svg width="74" height="74" viewBox="0 0 74 74" fill="none">
+        <circle cx="26" cy="30" r="6" fill="#ffe14a"/>
+        <circle cx="48" cy="30" r="6" fill="#ffe14a"/>
+        <path d="M24 48c6 8 20 8 26 0" stroke="#ffe14a" stroke-width="5" stroke-linecap="round"/>
+        <path d="M14 22c4-8 10-8 14-2M60 22c-4-8-10-8-14-2" stroke="#ffe14a" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1>Impostor</h1>
+    <div class="stack">
+      <button class="primary" id="goSetup">Jugar</button>
+    </div>
+  </section>
+
+  <section class="screen" id="setup">
+    <div class="top"><button class="ghost back" id="setupBack">Atrás</button><span class="pill" id="timerPreview">07:00</span></div>
+    <div class="scroll">
+      <div class="block">
+        <div class="row">
+          <div class="k">Jugadores</div>
+          <div class="step"><button type="button" id="minusP">−</button><div class="num" id="pCount">4</div><button type="button" id="plusP">+</button></div>
+        </div>
+      </div>
+      <div class="block">
+        <div class="row">
+          <div class="k">Impostores</div>
+          <div class="step"><button type="button" id="minusI">−</button><div class="num" id="iCount">1</div><button type="button" id="plusI">+</button></div>
+        </div>
+      </div>
+      <div class="block">
+        <div class="names" id="nameList"></div>
+      </div>
+      <div class="modes">
+        <button class="mode on" id="modeSame" type="button">Misma pista</button>
+        <button class="mode" id="modeDiff" type="button">Pistas distintas</button>
+      </div>
+    </div>
+    <button class="primary" id="startBtn">Empezar</button>
+  </section>
+
+  <section class="screen" id="pass">
+    <div class="who" id="passHelp">1 de 4</div>
+    <div class="pname" id="passName">—</div>
+    <div class="stage" id="stage">
+      <div class="role" id="roleCard"></div>
+      <div class="cover" id="cover">
+        <div class="pname" id="coverName" style="font-size:42px">—</div>
+        <div class="k">Desliza ↑</div>
+      </div>
+    </div>
+    <div class="stack" id="beforeReveal">
+      <button class="ghost" id="tapReveal">Ver rol</button>
+    </div>
+    <div class="stack" id="afterReveal" style="display:none">
+      <button class="primary" id="hidePass">Listo</button>
+    </div>
+  </section>
+
+  <section class="screen" id="discuss">
+    <div class="top"><span class="pill" id="startNote">Empieza</span><span class="pill" id="alivePill">4</span></div>
+    <div class="timer" id="timer">07:00</div>
+    <div class="scroll"><div class="players" id="aliveList"></div></div>
+    <div class="stack">
+      <button class="primary" id="toVote">Votar</button>
+      <button class="ghost" id="pauseBtn">Pausa</button>
+    </div>
+  </section>
+
+  <section class="screen" id="vote">
+    <div class="pname" id="voteTitle" style="font-size:40px">¿A quién?</div>
+    <div class="scroll"><div class="players" id="voteList"></div></div>
+    <button class="ghost" id="backDiscuss">Volver</button>
+  </section>
+
+  <section class="screen" id="expel">
+    <div class="scroll" id="expelBox"></div>
+    <button class="primary" id="continueBtn">Seguir</button>
+  </section>
+
+  <section class="screen" id="win">
+    <div class="scroll" id="winBox"></div>
+    <div class="stack">
+      <button class="primary" id="againBtn">Otra ronda</button>
+      <button class="ghost" id="menuBtn">Jugadores</button>
+    </div>
+  </section>
+</div>
+<script>
+const WORDS = [{"w": "León", "c": "Animales", "h": ["Mucha melena larga", "Ruge muy fuerte", "Es el rey"]}, {"w": "Tigre", "c": "Animales", "h": ["Rayas de naranja", "Vive en selva", "Tiene garras grandes"]}, {"w": "Elefante", "c": "Animales", "h": ["Tiene una trompa", "Animal muy grande", "Orejas bien grandes"]}, {"w": "Jirafa", "c": "Animales", "h": ["Cuello muy largo", "Tiene muchas manchas", "Come hojas altas"]}, {"w": "Cebra", "c": "Animales", "h": ["Rayas blanco negro", "Parece un caballo", "Vive en campo"]}, {"w": "Pingüino", "c": "Animales", "h": ["Vive en hielo", "Blanco y negro", "Pájaro que camina"]}, {"w": "Delfín", "c": "Animales", "h": ["Salta en mar", "Animal muy amable", "Color casi gris"]}, {"w": "Tiburón", "c": "Animales", "h": ["Dientes muy filosos", "Vive en mar", "Tiene una aleta"]}, {"w": "Ballena", "c": "Animales", "h": ["Gigante del mar", "Sale mucha agua", "Animal muy grande"]}, {"w": "Pulpo", "c": "Animales", "h": ["Tiene ocho brazos", "Suelta tinta negra", "Vive en mar"]}, {"w": "Águila", "c": "Animales", "h": ["Ave que vuela", "Tiene un pico", "Mira desde alto"]}, {"w": "Búho", "c": "Animales", "h": ["Sale de noche", "Ojos muy grandes", "Ave que vuela"]}, {"w": "Serpiente", "c": "Animales", "h": ["Cuerpo muy largo", "No tiene patas", "Saca la lengua"]}, {"w": "Cocodrilo", "c": "Animales", "h": ["Vive en río", "Dientes muy grandes", "Animal color verde"]}, {"w": "Canguro", "c": "Animales", "h": ["Salta muy alto", "Tiene una bolsa", "Cola bien larga"]}, {"w": "Koala", "c": "Animales", "h": ["Duerme muy mucho", "Vive en árbol", "Animal color gris"]}, {"w": "Oso", "c": "Animales", "h": ["Animal muy grande", "Le gusta miel", "Vive en bosque"]}, {"w": "Lobo", "c": "Animales", "h": ["Aúlla de noche", "Vive en manada", "Corre por bosque"]}, {"w": "Zorro", "c": "Animales", "h": ["Color naranja vivo", "Cola bien peluda", "Animal muy listo"]}, {"w": "Conejo", "c": "Animales", "h": ["Orejas muy largas", "Come una zanahoria", "Salta muy rápido"]}, {"w": "Tortuga", "c": "Animales", "h": ["Tiene un caparazón", "Camina muy lento", "Animal color verde"]}, {"w": "Rana", "c": "Animales", "h": ["Salta en charco", "Color bien verde", "Hace un ruido"]}, {"w": "Abeja", "c": "Animales", "h": ["Hace la miel", "Amarilla y negra", "Vuela y pica"]}, {"w": "Mariposa", "c": "Animales", "h": ["Alas de colores", "Vuela entre flores", "Insecto muy bonito"]}, {"w": "Araña", "c": "Animales", "h": ["Tiene ocho patas", "Hace su red", "Se esconde rincón"]}, {"w": "Camello", "c": "Animales", "h": ["Vive en desierto", "Tiene una joroba", "Aguanta sin agua"]}, {"w": "Hipopótamo", "c": "Animales", "h": ["Boca muy grande", "Vive en río", "Animal bien pesado"]}, {"w": "Flamenco", "c": "Animales", "h": ["Pájaro color rosa", "Se para una", "Patas muy largas"]}, {"w": "Panda", "c": "Animales", "h": ["Blanco y negro", "Come mucho bambú", "Animal muy tierno"]}, {"w": "Pavo real", "c": "Animales", "h": ["Plumas de colores", "Abre su abanico", "Pájaro muy bonito"]}, {"w": "Pizza", "c": "Comida", "h": ["Tiene mucho queso", "Se come rebanada", "Sale del horno"]}, {"w": "Taco", "c": "Comida", "h": ["Lleva una tortilla", "Tiene mucha salsa", "Comida de México"]}, {"w": "Sushi", "c": "Comida", "h": ["Lleva mucho arroz", "Se come pescado", "Se usan palillos"]}, {"w": "Hamburguesa", "c": "Comida", "h": ["Pan con carne", "Lleva mucho queso", "Va con papas"]}, {"w": "Helado", "c": "Comida", "h": ["Postre bien frío", "Se pone cono", "Se puede derretir"]}, {"w": "Chocolate", "c": "Comida", "h": ["Dulce color café", "Viene en tableta", "Postre muy rico"]}, {"w": "Pan", "c": "Comida", "h": ["Sale del horno", "Se come desayuno", "Suave y caliente"]}, {"w": "Queso", "c": "Comida", "h": ["Sale de leche", "Se puede derretir", "Amarillo o blanco"]}, {"w": "Manzana", "c": "Comida", "h": ["Fruta color roja", "Crece en árbol", "Se come dulce"]}, {"w": "Plátano", "c": "Comida", "h": ["Fruta color amarillo", "Se quita cáscara", "Le gusta monos"]}, {"w": "Fresa", "c": "Comida", "h": ["Fruta color roja", "Dulce y pequeña", "Va con crema"]}, {"w": "Sandía", "c": "Comida", "h": ["Verde por fuera", "Roja por dentro", "Fruta de verano"]}, {"w": "Mango", "c": "Comida", "h": ["Fruta color amarillo", "Sabe muy dulce", "Fruta bien tropical"]}, {"w": "Elote", "c": "Comida", "h": ["Granos color amarillo", "Se come feria", "Va en mazorca"]}, {"w": "Pozole", "c": "Comida", "h": ["Caldo con maíz", "Comida de fiesta", "Plato de México"]}, {"w": "Tamal", "c": "Comida", "h": ["Envuelto en hoja", "Hecho de masa", "Comida bien caliente"]}, {"w": "Chilaquiles", "c": "Comida", "h": ["Totopos con salsa", "Comida de desayuno", "Plato de México"]}, {"w": "Guacamole", "c": "Comida", "h": ["Hecho de aguacate", "Verde para botana", "Puede picar mucho"]}, {"w": "Ceviche", "c": "Comida", "h": ["Pescado con limón", "Comida bien fresca", "Sabe a mar"]}, {"w": "Ramen", "c": "Comida", "h": ["Sopa con fideos", "Comida bien caliente", "Plato de Japón"]}, {"w": "Pasta", "c": "Comida", "h": ["Fideos con salsa", "Comida de Italia", "Se come caliente"]}, {"w": "Hot dog", "c": "Comida", "h": ["Salchicha en pan", "Lleva mucha mostaza", "Se come feria"]}, {"w": "Dona", "c": "Comida", "h": ["Dulce con agujero", "Cubierta de azúcar", "Redonda y suave"]}, {"w": "Palomitas", "c": "Comida", "h": ["Se comen cine", "Hechas de maíz", "Blancas y saladas"]}, {"w": "Café", "c": "Comida", "h": ["Se toma taza", "Bebida de mañana", "Sabor bien oscuro"]}, {"w": "Leche", "c": "Comida", "h": ["Bebida color blanca", "Sale de vaca", "Se toma desayuno"]}, {"w": "Huevo", "c": "Comida", "h": ["Sale de gallina", "Se come desayuno", "Tiene una cáscara"]}, {"w": "Arroz", "c": "Comida", "h": ["Granos color blanco", "Acompaña la comida", "Se sirve caliente"]}, {"w": "Frijol", "c": "Comida", "h": ["Se cuece olla", "Comida de México", "Puede ser negro"]}, {"w": "Chile", "c": "Comida", "h": ["Pica en boca", "Va en salsa", "Rojo o verde"]}, {"w": "Pastel", "c": "Comida", "h": ["Se come cumpleaños", "Dulce con velas", "Se parte rebanada"]}, {"w": "Galleta", "c": "Comida", "h": ["Dulce y crujiente", "Sale del horno", "Va con leche"]}, {"w": "Sushi roll", "c": "Comida", "h": ["Rollo de arroz", "Lleva un alga", "Puede tener pescado"]}, {"w": "Churro", "c": "Comida", "h": ["Dulce con azúcar", "Se come feria", "Largo y crujiente"]}, {"w": "Playa", "c": "Lugares", "h": ["Arena y mar", "Hay mucho sol", "Lugar de verano"]}, {"w": "Pirámide", "c": "Lugares", "h": ["Construcción muy antigua", "Hecha de piedra", "Subes los escalones"]}, {"w": "Escuela", "c": "Lugares", "h": ["Ahí hay clases", "Hay un maestro", "También hay receso"]}, {"w": "Hospital", "c": "Lugares", "h": ["Ahí van doctores", "Cuando alguien enferma", "Camas y batas"]}, {"w": "Aeropuerto", "c": "Lugares", "h": ["Ahí salen aviones", "Llevas una maleta", "Lugar para viajar"]}, {"w": "Cine", "c": "Lugares", "h": ["Ves una película", "Comes unas palomitas", "Sala bien oscura"]}, {"w": "Estadio", "c": "Lugares", "h": ["Ahí hay juegos", "Mucha mucha gente", "Puede haber gol"]}, {"w": "Biblioteca", "c": "Lugares", "h": ["Llena de libros", "Hay que callar", "Lugar para leer"]}, {"w": "Museo", "c": "Lugares", "h": ["Ves cosas antiguas", "Hay muchos cuadros", "Lugar de visita"]}, {"w": "Selva", "c": "Lugares", "h": ["Llena de árboles", "Hay muchos animales", "Lugar bien verde"]}, {"w": "Desierto", "c": "Lugares", "h": ["Lleno de arena", "Hace mucho calor", "Casi no llueve"]}, {"w": "Montaña", "c": "Lugares", "h": ["Lugar bien alto", "Se puede subir", "Arriba hay nieve"]}, {"w": "Isla", "c": "Lugares", "h": ["Rodeada de mar", "Tiene una playa", "Lugar casi solo"]}, {"w": "Volcán", "c": "Lugares", "h": ["Sale fuego lava", "Montaña con humo", "Puede hacer erupción"]}, {"w": "Castillo", "c": "Lugares", "h": ["Vive un rey", "Tiene altas torres", "Hecho de piedra"]}, {"w": "Granja", "c": "Lugares", "h": ["Hay muchos animales", "Se usa tractor", "Lugar de campo"]}, {"w": "Mercado", "c": "Lugares", "h": ["Hay muchos puestos", "Compras la comida", "Lleno de gente"]}, {"w": "Parque", "c": "Lugares", "h": ["Hay mucho pasto", "Juegos para niños", "Lugar para caminar"]}, {"w": "Iglesia", "c": "Lugares", "h": ["Lugar para rezar", "Suena la campana", "Tiene una cruz"]}, {"w": "Faro", "c": "Lugares", "h": ["Torre con luz", "Guía a barcos", "Está junto mar"]}, {"w": "Cueva", "c": "Lugares", "h": ["Lugar bien oscuro", "Hecha de piedra", "Puede haber murciélagos"]}, {"w": "Cascada", "c": "Lugares", "h": ["Agua que cae", "Baja de alto", "Sale de río"]}, {"w": "Cenote", "c": "Lugares", "h": ["Agua color azul", "Lugar para nadar", "Está en México"]}, {"w": "Cancún", "c": "Lugares", "h": ["Playas y hoteles", "Mar bien azul", "Ciudad de México"]}, {"w": "Paraguas", "c": "Objetos", "h": ["Se usa lluvia", "Se abre arriba", "Evita mojarse cuerpo"]}, {"w": "Reloj", "c": "Objetos", "h": ["Marca la hora", "Se pone muñeca", "Tiene unos números"]}, {"w": "Llave", "c": "Objetos", "h": ["Abre una puerta", "También la cierra", "Hecha de metal"]}, {"w": "Espejo", "c": "Objetos", "h": ["Te ves cara", "Está en baño", "Muestra tu reflejo"]}, {"w": "Lámpara", "c": "Objetos", "h": ["Da mucha luz", "Se usa noche", "Está en cuarto"]}, {"w": "Almohada", "c": "Objetos", "h": ["Se usa dormir", "Suave para cabeza", "Va sobre cama"]}, {"w": "Tijeras", "c": "Objetos", "h": ["Sirven para cortar", "Cortan el papel", "Tienen dos hojas"]}, {"w": "Martillo", "c": "Objetos", "h": ["Golpea un clavo", "Se usa obra", "Se agarra mano"]}, {"w": "Cepillo", "c": "Objetos", "h": ["Limpia los dientes", "También el pelo", "Se usa mañana"]}, {"w": "Mochila", "c": "Objetos", "h": ["Se lleva escuela", "Va en espalda", "Cargas los libros"]}, {"w": "Lápiz", "c": "Objetos", "h": ["Sirve para escribir", "Tiene una punta", "Se usa escuela"]}, {"w": "Libro", "c": "Objetos", "h": ["Sirve para leer", "Tiene muchas páginas", "Cuenta una historia"]}, {"w": "Cámara", "c": "Objetos", "h": ["Toma una foto", "Guarda un recuerdo", "Puede sacar flash"]}, {"w": "Teléfono", "c": "Objetos", "h": ["Sirve para llamar", "Manda unos mensajes", "Cabe en bolsillo"]}, {"w": "Guitarra", "c": "Objetos", "h": ["Se toca música", "Tiene unas cuerdas", "Acompaña al cantar"]}, {"w": "Balón", "c": "Objetos", "h": ["Sirve para jugar", "Es bien redondo", "Se puede patear"]}, {"w": "Anillo", "c": "Objetos", "h": ["Se pone dedo", "Se usa boda", "Brilla en mano"]}, {"w": "Corona", "c": "Objetos", "h": ["La usa rey", "Va en cabeza", "Dorada y brillante"]}, {"w": "Vela", "c": "Objetos", "h": ["Tiene una llama", "Da poca luz", "Se sopla cumpleaños"]}, {"w": "Escoba", "c": "Objetos", "h": ["Sirve para barrer", "Limpia el piso", "Se usa casa"]}, {"w": "Maleta", "c": "Objetos", "h": ["Se usa viaje", "Llevas tu ropa", "Puede tener ruedas"]}, {"w": "Brújula", "c": "Objetos", "h": ["Marca el norte", "Evita perder camino", "Tiene una flecha"]}, {"w": "Microscopio", "c": "Objetos", "h": ["Ver cosas chiquitas", "Se usa escuela", "Parece una lupa"]}, {"w": "Telescopio", "c": "Objetos", "h": ["Ver las estrellas", "Mira muy lejos", "Apunta al cielo"]}, {"w": "Control", "c": "Objetos", "h": ["Sirve para jugar", "Tiene unos botones", "Se usa sofá"]}, {"w": "Fútbol", "c": "Deportes", "h": ["Se mete gol", "Se patea balón", "Se juega cancha"]}, {"w": "Baloncesto", "c": "Deportes", "h": ["Se encesta aro", "Hay mucho rebote", "Se usa balón"]}, {"w": "Béisbol", "c": "Deportes", "h": ["Se usa bate", "Se atrapa guante", "Se corre bases"]}, {"w": "Tenis", "c": "Deportes", "h": ["Se usa raqueta", "Hay una red", "Pelota bien rápida"]}, {"w": "Natación", "c": "Deportes", "h": ["Se nada agua", "Se usa alberca", "Te mojas cuerpo"]}, {"w": "Boxeo", "c": "Deportes", "h": ["Se usan guantes", "Hay muchos golpes", "Se pelea ring"]}, {"w": "Ciclismo", "c": "Deportes", "h": ["Se usa bici", "Das a pedales", "Llevas un casco"]}, {"w": "Golf", "c": "Deportes", "h": ["Se mete hoyo", "Se usa palo", "Pelota bien chica"]}, {"w": "Voleibol", "c": "Deportes", "h": ["Se pasa red", "Se usa pelota", "Se puede saltar"]}, {"w": "Atletismo", "c": "Deportes", "h": ["Se corre pista", "Hay que rápido", "Llegas a meta"]}, {"w": "Surf", "c": "Deportes", "h": ["Te subes ola", "Usas una tabla", "Se hace mar"]}, {"w": "Patinaje", "c": "Deportes", "h": ["Usas unas ruedas", "O patinas hielo", "Necesitas buen equilibrio"]}, {"w": "Esgrima", "c": "Deportes", "h": ["Usas una espada", "Llevas una máscara", "Hay que tocar"]}, {"w": "Judo", "c": "Deportes", "h": ["Haces una llave", "Puedes caer suelo", "Se usa tatami"]}, {"w": "Karate", "c": "Deportes", "h": ["Das una patada", "Llevas un cinturón", "Pegas con mano"]}, {"w": "Gimnasia", "c": "Deportes", "h": ["Haces unas vueltas", "Cuerpo bien flexible", "Puedes usar listón"]}, {"w": "Doctor", "c": "Profesiones", "h": ["Trabaja en hospital", "Cura a enfermos", "Usa una bata"]}, {"w": "Maestro", "c": "Profesiones", "h": ["Da la clase", "Trabaja en escuela", "Escribe el pizarrón"]}, {"w": "Bombero", "c": "Profesiones", "h": ["Apaga el fuego", "Usa una manguera", "Camión color rojo"]}, {"w": "Policía", "c": "Profesiones", "h": ["Anda en patrulla", "Cuida la calle", "Suena una sirena"]}, {"w": "Chef", "c": "Profesiones", "h": ["Cocina la comida", "Usa un gorrito", "Trabaja en cocina"]}, {"w": "Piloto", "c": "Profesiones", "h": ["Maneja un avión", "Vuela por cielo", "Lleva de viaje"]}, {"w": "Astronauta", "c": "Profesiones", "h": ["Viaja al espacio", "Usa un traje", "Puede ver luna"]}, {"w": "Veterinario", "c": "Profesiones", "h": ["Cura a animales", "Doctor de mascotas", "Trabaja en clínica"]}, {"w": "Arquitecto", "c": "Profesiones", "h": ["Dibuja las casas", "Hace unos planos", "Diseña un edificio"]}, {"w": "Periodista", "c": "Profesiones", "h": ["Cuenta las noticias", "Hace unas preguntas", "Usa un micrófono"]}, {"w": "Cantante", "c": "Profesiones", "h": ["Canta una canción", "Usa su voz", "Sale al escenario"]}, {"w": "Actor", "c": "Profesiones", "h": ["Sale en película", "Sabe actuar bien", "Sale en cámara"]}, {"w": "Ingeniero", "c": "Profesiones", "h": ["Ayuda a construir", "Lee unos planos", "Usa un casco"]}, {"w": "Abogado", "c": "Profesiones", "h": ["Conoce las leyes", "Defiende un caso", "Habla con juez"]}, {"w": "Panadero", "c": "Profesiones", "h": ["Hace el pan", "Usa el horno", "Trabaja de madrugada"]}, {"w": "Pescador", "c": "Profesiones", "h": ["Atrapa un pez", "Usa una caña", "Sale en barco"]}, {"w": "Granjero", "c": "Profesiones", "h": ["Trabaja en campo", "Cuida los animales", "Maneja un tractor"]}, {"w": "Dentista", "c": "Profesiones", "h": ["Revisa los dientes", "Mira tu boca", "Quita el dolor"]}, {"w": "Enfermera", "c": "Profesiones", "h": ["Ayuda en hospital", "Cuida al paciente", "Puede poner inyección"]}, {"w": "Científico", "c": "Profesiones", "h": ["Prueba en laboratorio", "Busca un descubrimiento", "Usa una bata"]}, {"w": "Arcoíris", "c": "Naturaleza", "h": ["Arco de colores", "Sale tras lluvia", "Se ve cielo"]}, {"w": "Trueno", "c": "Naturaleza", "h": ["Ruido bien fuerte", "Llega con lluvia", "Suena en tormenta"]}, {"w": "Nieve", "c": "Naturaleza", "h": ["Blanca y fría", "Cae en invierno", "Cubre el piso"]}, {"w": "Huracán", "c": "Naturaleza", "h": ["Viento muy fuerte", "Llega mucha lluvia", "Hay que cuidarse"]}, {"w": "Terremoto", "c": "Naturaleza", "h": ["La tierra tiembla", "Se siente fuerte", "Da mucho miedo"]}, {"w": "Eclipse", "c": "Naturaleza", "h": ["El sol tapa", "Se pone oscuro", "Pasa en cielo"]}, {"w": "Aurora", "c": "Naturaleza", "h": ["Luces en cielo", "Se ve noche", "Tiene varios colores"]}, {"w": "Tornado", "c": "Naturaleza", "h": ["Viento que gira", "Forma un embudo", "Muy muy fuerte"]}, {"w": "Marea", "c": "Naturaleza", "h": ["El mar sube", "Luego el baja", "Pasa en playa"]}, {"w": "Niebla", "c": "Naturaleza", "h": ["Casi no ves", "Aire bien blanco", "Pasa en mañana"]}, {"w": "Géiser", "c": "Naturaleza", "h": ["Agua bien caliente", "Sale del suelo", "Sube un chorro"]}, {"w": "Estrella", "c": "Naturaleza", "h": ["Brilla de noche", "Está en cielo", "Se ve lejos"]}, {"w": "Luna", "c": "Naturaleza", "h": ["Sale de noche", "Redonda y blanca", "Está en cielo"]}, {"w": "Sol", "c": "Naturaleza", "h": ["Sale de día", "Da mucho calor", "Luz color amarillo"]}, {"w": "Cactus", "c": "Naturaleza", "h": ["Tiene unas espinas", "Vive en desierto", "Planta color verde"]}, {"w": "Robot", "c": "Tecnología", "h": ["Máquina de metal", "Puede moverse solo", "Parece del futuro"]}, {"w": "Dron", "c": "Tecnología", "h": ["Aparato que vuela", "Lleva una cámara", "Lo manejas control"]}, {"w": "Internet", "c": "Tecnología", "h": ["Sirve para buscar", "Conecta el celular", "Abres unas páginas"]}, {"w": "Computadora", "c": "Tecnología", "h": ["Tiene una pantalla", "Tiene un teclado", "Sirve para trabajar"]}, {"w": "Videojuego", "c": "Tecnología", "h": ["Sirve para jugar", "Se ve pantalla", "Usas un control"]}, {"w": "Satélite", "c": "Tecnología", "h": ["Está en cielo", "Manda una señal", "Viaja por espacio"]}, {"w": "Batería", "c": "Tecnología", "h": ["Da la carga", "Se pone celular", "Se puede acabar"]}, {"w": "Audífonos", "c": "Tecnología", "h": ["Escuchas la música", "Van en orejas", "Pueden tener cable"]}, {"w": "Teclado", "c": "Tecnología", "h": ["Tiene unas letras", "Sirve para escribir", "Va con computadora"]}, {"w": "Ratón", "c": "Tecnología", "h": ["Haces un clic", "Mueve la flecha", "Va con computadora"]}, {"w": "Impresora", "c": "Tecnología", "h": ["Saca una hoja", "Usa la tinta", "Imprime en papel"]}, {"w": "Código", "c": "Tecnología", "h": ["Sirve para programar", "Se escribe computadora", "Hace un juego"]}, {"w": "Wifi", "c": "Tecnología", "h": ["Da el internet", "Pide una contraseña", "Manda una señal"]}, {"w": "Aplicación", "c": "Tecnología", "h": ["Icono del celular", "La puedes abrir", "La puedes descargar"]}, {"w": "Examen", "c": "Escuela", "h": ["Tiene unas preguntas", "Se hace escuela", "Te ponen calificación"]}, {"w": "Receso", "c": "Escuela", "h": ["Tiempo de descanso", "Sales al patio", "Puedes jugar rato"]}, {"w": "Pizarrón", "c": "Escuela", "h": ["Se escribe clase", "Está al frente", "Se puede borrar"]}, {"w": "Uniforme", "c": "Escuela", "h": ["Ropa casi igual", "Se usa escuela", "Camisa y pantalón"]}, {"w": "Tarea", "c": "Escuela", "h": ["Se hace casa", "Viene de escuela", "La anotas libreta"]}, {"w": "Laboratorio", "c": "Escuela", "h": ["Lugar para probar", "Se usa ciencia", "Ahí hay bata"]}, {"w": "Graduación", "c": "Escuela", "h": ["Terminas la escuela", "Hay una fiesta", "Te dan diploma"]}, {"w": "Diploma", "c": "Escuela", "h": ["Papel de logro", "Dice que terminaste", "Se guarda marco"]}, {"w": "Calculadora", "c": "Escuela", "h": ["Hace las sumas", "Tiene unos números", "Se usa mate"]}, {"w": "Compás", "c": "Escuela", "h": ["Dibuja un círculo", "Tiene una punta", "Se usa escuela"]}, {"w": "Borrador", "c": "Escuela", "h": ["Borra el lápiz", "Quita un error", "Es una goma"]}, {"w": "Crayón", "c": "Escuela", "h": ["Pinta con color", "Lo usan niños", "Dibuja en papel"]}, {"w": "Avión", "c": "Transporte", "h": ["Vuela por cielo", "Sirve para viajar", "Tiene unas alas"]}, {"w": "Barco", "c": "Transporte", "h": ["Va por mar", "Flota en agua", "Sirve para viajar"]}, {"w": "Tren", "c": "Transporte", "h": ["Va por vías", "Lleva unos vagones", "Para en estación"]}, {"w": "Bicicleta", "c": "Transporte", "h": ["Tiene dos ruedas", "Das a pedales", "Llevas un casco"]}, {"w": "Motocicleta", "c": "Transporte", "h": ["Tiene un motor", "Tiene dos ruedas", "Llevas un casco"]}, {"w": "Submarino", "c": "Transporte", "h": ["Va bajo mar", "Viaja bien profundo", "Es como barco"]}, {"w": "Helicóptero", "c": "Transporte", "h": ["Vuela con hélices", "Se queda aire", "Sube bien alto"]}, {"w": "Cohete", "c": "Transporte", "h": ["Sube con fuego", "Va al espacio", "Puede llegar luna"]}, {"w": "Camión", "c": "Transporte", "h": ["Vehículo bien grande", "Lleva mucha carga", "Rueda en carretera"]}, {"w": "Taxi", "c": "Transporte", "h": ["Coche de calle", "Pagas el viaje", "Te lleva lugar"]}, {"w": "Patineta", "c": "Transporte", "h": ["Tabla con ruedas", "Se usa calle", "Haces un truco"]}, {"w": "Globo aerostático", "c": "Transporte", "h": ["Canasta en cielo", "Tiene varios colores", "Vuela con aire"]}, {"w": "Mariachi", "c": "México", "h": ["Toca la música", "Lleva un sombrero", "Canta en México"]}, {"w": "Piñata", "c": "México", "h": ["Tiene unos dulces", "Se golpea fiesta", "Llena de colores"]}, {"w": "Sombrero", "c": "México", "h": ["Se pone cabeza", "Tapa del sol", "Grande de México"]}, {"w": "Catrina", "c": "México", "h": ["Calavera bien elegante", "Sale en muertos", "Figura de México"]}, {"w": "Alebrije", "c": "México", "h": ["Figura de colores", "Parece animal raro", "Hecho en México"]}, {"w": "Mole", "c": "México", "h": ["Salsa bien oscura", "Se come pollo", "Comida de México"]}, {"w": "Cempasúchil", "c": "México", "h": ["Flor color naranja", "Se pone ofrenda", "Sale en muertos"]}, {"w": "Lucha libre", "c": "México", "h": ["Pelean con máscara", "Se suben ring", "Deporte de México"]}, {"w": "Charro", "c": "México", "h": ["Lleva un sombrero", "Monta un caballo", "Traje de México"]}, {"w": "Chichén Itzá", "c": "México", "h": ["Pirámide de México", "Lugar bien antiguo", "Hecha por mayas"]}, {"w": "Xoloitzcuintle", "c": "México", "h": ["Perro sin pelo", "Perro de México", "Casi siempre negro"]}, {"w": "Papel picado", "c": "México", "h": ["Papel de colores", "Se cuelga fiesta", "Adorno de México"]}, {"w": "Nopal", "c": "México", "h": ["Planta con espinas", "Verde de México", "Sale en bandera"]}, {"w": "Aguacate", "c": "México", "h": ["Verde con hueso", "Sirve para guacamole", "Fruta de México"]}, {"w": "Ofrenda", "c": "México", "h": ["Se arma muertos", "Lleva unas flores", "Ponen una foto"]}, {"w": "Piano", "c": "Música", "h": ["Tiene unas teclas", "Se toca música", "Blanco y negro"]}, {"w": "Micrófono", "c": "Música", "h": ["Se usa cantar", "Amplifica la voz", "Va en escenario"]}, {"w": "Violín", "c": "Música", "h": ["Se toca arco", "Tiene unas cuerdas", "Instrumento de música"]}, {"w": "Trompeta", "c": "Música", "h": ["Se toca soplando", "Hecha de metal", "Suena bien fuerte"]}, {"w": "Saxofón", "c": "Música", "h": ["Se toca soplando", "Dorado y curvo", "Instrumento de música"]}, {"w": "Flauta", "c": "Música", "h": ["Se toca soplando", "Tiene unos agujeros", "Suena bien suave"]}, {"w": "Disco", "c": "Música", "h": ["Redondo y negro", "Guarda la música", "Se oye antiguo"]}, {"w": "Concierto", "c": "Música", "h": ["Música en vivo", "Hay un escenario", "Mucha mucha gente"]}, {"w": "Karaoke", "c": "Música", "h": ["Cantas la letra", "Usas un micrófono", "Se hace fiesta"]}, {"w": "Partitura", "c": "Música", "h": ["Papel de música", "Tiene unas notas", "El músico lee"]}, {"w": "Coro", "c": "Música", "h": ["Varias personas cantan", "Voces bien juntas", "Cantan en grupo"]}, {"w": "Refrigerador", "c": "Casa", "h": ["Guarda la comida", "Está bien frío", "Está en cocina"]}, {"w": "Sofá", "c": "Casa", "h": ["Sirve para sentarse", "Está en sala", "Suave y grande"]}, {"w": "Cama", "c": "Casa", "h": ["Sirve para dormir", "Está en cuarto", "Lleva una almohada"]}, {"w": "Ventana", "c": "Casa", "h": ["Ves hacia afuera", "Hecha de vidrio", "Entra la luz"]}, {"w": "Puerta", "c": "Casa", "h": ["Sirve para entrar", "Se abre cierra", "Usa una llave"]}, {"w": "Escalera", "c": "Casa", "h": ["Sirve para subir", "Tiene unos escalones", "Une los pisos"]}, {"w": "Chimenea", "c": "Casa", "h": ["Tiene un fuego", "Calienta la casa", "Se usa invierno"]}, {"w": "Ducha", "c": "Casa", "h": ["Sale mucha agua", "Está en baño", "Te lavas mañana"]}, {"w": "Alfombra", "c": "Casa", "h": ["Cubre el piso", "Suave al pisar", "Está en sala"]}, {"w": "Cortina", "c": "Casa", "h": ["Tapa la ventana", "Hecha de tela", "Da más privacidad"]}, {"w": "Horno", "c": "Casa", "h": ["Cocina bien caliente", "Ahí sale pastel", "Está en cocina"]}, {"w": "Lavadora", "c": "Casa", "h": ["Lava la ropa", "Gira con agua", "Usa el jabón"]}, {"w": "Sillón", "c": "Casa", "h": ["Sirve para sentarse", "Está en sala", "Cómodo para descansar"]}, {"w": "Vestido", "c": "Ropa", "h": ["Ropa de fiesta", "Lo usa mujer", "Puede ser largo"]}, {"w": "Zapatos", "c": "Ropa", "h": ["Van en pies", "Sirven para caminar", "Se amarran agujetas"]}, {"w": "Bufanda", "c": "Ropa", "h": ["Va en cuello", "Se usa frío", "Suave de invierno"]}, {"w": "Guantes", "c": "Ropa", "h": ["Van en manos", "Tapan los dedos", "Se usan frío"]}, {"w": "Lentes", "c": "Ropa", "h": ["Van en ojos", "Ayudan a ver", "También del sol"]}, {"w": "Corbata", "c": "Ropa", "h": ["Va en cuello", "Ropa bien formal", "Se usa oficina"]}, {"w": "Chamarra", "c": "Ropa", "h": ["Ropa de frío", "Tiene un cierre", "Abriga el cuerpo"]}, {"w": "Falda", "c": "Ropa", "h": ["Ropa de cintura", "La usa mujer", "Puede ser corta"]}, {"w": "Botas", "c": "Ropa", "h": ["Zapatos bien altos", "Sirven para lluvia", "Cubren el pie"]}, {"w": "Calcetas", "c": "Ropa", "h": ["Van en pies", "Van con zapatos", "Suaves y pares"]}, {"w": "Collar", "c": "Ropa", "h": ["Va en cuello", "Tiene una cadena", "Puede brillar mucho"]}, {"w": "Corazón", "c": "Cuerpo", "h": ["Late en pecho", "Se relaciona amor", "Es color rojo"]}, {"w": "Cerebro", "c": "Cuerpo", "h": ["Sirve para pensar", "Está en cabeza", "Guarda las ideas"]}, {"w": "Ojo", "c": "Cuerpo", "h": ["Sirve para ver", "Está en cara", "Tiene una pestaña"]}, {"w": "Diente", "c": "Cuerpo", "h": ["Está en boca", "Sirve para morder", "Blanco en sonrisa"]}, {"w": "Hueso", "c": "Cuerpo", "h": ["Parte bien dura", "Está en cuerpo", "Forma el esqueleto"]}, {"w": "Músculo", "c": "Cuerpo", "h": ["Da la fuerza", "Está en brazo", "Crece con gym"]}, {"w": "Pulmón", "c": "Cuerpo", "h": ["Sirve para respirar", "Entra el aire", "Está en pecho"]}, {"w": "Oreja", "c": "Cuerpo", "h": ["Sirve para oír", "Está en cabeza", "Ahí va arete"]}, {"w": "Cabello", "c": "Cuerpo", "h": ["Crece en cabeza", "Se peina cepillo", "Puede ser largo"]}, {"w": "Nariz", "c": "Cuerpo", "h": ["Sirve para oler", "Está en cara", "Ahí estornudas fuerte"]}];
+const KEY = "impostor-config-v2";
+const $ = (id) => document.getElementById(id);
+const screens = [...document.querySelectorAll(".screen")];
+function show(id) { screens.forEach(s => s.classList.toggle("on", s.id === id)); }
+let playersN = 4, impostorsN = 1, hintMode = "same";
+let names = ["Jugador 1","Jugador 2","Jugador 3","Jugador 4"];
+let game = null, timerId = null;
+function maxImp(n) { return Math.max(1, n - 2); }
+function roundSeconds(n) { return (5 + Math.floor(n / 2)) * 60; }
+function fmt(s) { s = Math.max(0, s|0); return String(Math.floor(s/60)).padStart(2,"0") + ":" + String(s%60).padStart(2,"0"); }
+function shuffle(a) { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; }
+function beep(freq=440) { try { const ctx = new (window.AudioContext || window.webkitAudioContext)(); const o = ctx.createOscillator(); const g = ctx.createGain(); o.frequency.value = freq; o.connect(g); g.connect(ctx.destination); g.gain.setValueAtTime(0.05, ctx.currentTime); o.start(); o.stop(ctx.currentTime + 0.08); } catch (e) {} if (navigator.vibrate) navigator.vibrate(12); }
+function saveConfig() {
+  try { localStorage.setItem(KEY, JSON.stringify({ playersN, impostorsN, hintMode, names: names.slice(0, playersN) })); } catch (e) {}
+}
+function renderNames() {
+  names = names.slice(0, playersN);
+  while (names.length < playersN) names.push("Jugador " + (names.length + 1));
+  const box = $("nameList");
+  box.innerHTML = "";
+  names.forEach((n, i) => {
+    const input = document.createElement("input");
+    input.value = n; input.maxLength = 18;
+    input.addEventListener("input", () => { names[i] = input.value; saveConfig(); });
+    box.appendChild(input);
+  });
+  $("pCount").textContent = playersN;
+  impostorsN = Math.min(Math.max(1, impostorsN), maxImp(playersN));
+  $("iCount").textContent = impostorsN;
+  $("timerPreview").textContent = fmt(roundSeconds(playersN));
+  $("modeSame").classList.toggle("on", hintMode === "same");
+  $("modeDiff").classList.toggle("on", hintMode === "diff");
+  saveConfig();
+}
+function loadConfig() {
+  try {
+    const raw = localStorage.getItem(KEY) || localStorage.getItem("impostor-names");
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (Array.isArray(data)) { names = data; playersN = Math.min(16, Math.max(3, data.length)); return; }
+    if (Array.isArray(data.names)) names = data.names;
+    if (data.playersN) playersN = Math.min(16, Math.max(3, data.playersN));
+    if (data.impostorsN) impostorsN = data.impostorsN;
+    if (data.hintMode === "diff" || data.hintMode === "same") hintMode = data.hintMode;
+  } catch (e) {}
+}
+loadConfig();
+renderNames();
+$("minusP").onclick = () => { if (playersN > 3) { playersN--; renderNames(); } };
+$("plusP").onclick = () => { if (playersN < 16) { playersN++; renderNames(); } };
+$("minusI").onclick = () => { if (impostorsN > 1) { impostorsN--; renderNames(); } };
+$("plusI").onclick = () => { if (impostorsN < maxImp(playersN)) { impostorsN++; renderNames(); } };
+$("modeSame").onclick = () => { hintMode = "same"; renderNames(); };
+$("modeDiff").onclick = () => { hintMode = "diff"; renderNames(); };
+$("goSetup").onclick = () => show("setup");
+$("setupBack").onclick = () => show("home");
+function cleanNames() {
+  const used = {};
+  return names.slice(0, playersN).map((n, i) => {
+    let base = (n || "").trim() || ("Jugador " + (i + 1));
+    let name = base, k = 2;
+    while (used[name.toLowerCase()]) { name = base + " " + k; k++; }
+    used[name.toLowerCase()] = true;
+    return name;
+  });
+}
+function assign() {
+  const entry = WORDS[Math.floor(Math.random() * WORDS.length)];
+  const bag = hintMode === "same" ? Array(impostorsN).fill(entry.h[Math.floor(Math.random() * entry.h.length)]) : shuffle(entry.h);
+  const roles = shuffle([...Array(impostorsN).fill("imp"), ...Array(playersN - impostorsN).fill("det")]);
+  let hi = 0;
+  const people = cleanNames().map((name, i) => ({ name, role: roles[i], hint: roles[i] === "imp" ? bag[hi++ % bag.length] : null, alive: true }));
+  game = { word: entry.w, category: entry.c, people, order: shuffle(people.map((_, i) => i)), cursor: 0, revealed: false, seconds: roundSeconds(people.length), paused: false, mustVote: false, starter: people[Math.floor(Math.random() * people.length)].name };
+}
+$("startBtn").onclick = () => { saveConfig(); assign(); openPass(); show("pass"); };
+function openPass() {
+  const p = game.people[game.order[game.cursor]];
+  $("passName").textContent = p.name;
+  $("coverName").textContent = p.name;
+  $("passHelp").textContent = (game.cursor + 1) + " / " + game.order.length;
+  $("afterReveal").style.display = "none";
+  $("beforeReveal").style.display = "grid";
+  const cover = $("cover");
+  cover.style.transition = "none";
+  cover.style.transform = "translateY(0)";
+  cover.style.opacity = "1";
+  game.revealed = false;
+  const card = $("roleCard");
+  card.className = "role " + p.role;
+  card.innerHTML = p.role === "det"
+    ? `<div class="badge">DETECTIVE</div><div class="secret">${game.word}</div>`
+    : `<div class="badge">IMPOSTOR</div><div class="secret">${p.hint}</div>`;
+}
+let drag = null;
+const cover = $("cover");
+function revealRole() {
+  if (!game || game.revealed) return;
+  cover.style.transition = "transform .35s ease, opacity .35s ease";
+  cover.style.transform = "translateY(-120%)";
+  cover.style.opacity = "0";
+  game.revealed = true;
+  $("beforeReveal").style.display = "none";
+  $("afterReveal").style.display = "grid";
+  beep(620);
+}
+cover.addEventListener("touchstart", e => { if (!$("pass").classList.contains("on") || game?.revealed) return; drag = { y: e.touches[0].clientY, dy: 0 }; }, {passive: false});
+cover.addEventListener("mousedown", e => { if (!$("pass").classList.contains("on") || game?.revealed) return; drag = { y: e.clientY, dy: 0 }; });
+function moveDrag(e) {
+  if (!drag) return;
+  const y = e.touches ? e.touches[0].clientY : e.clientY;
+  drag.dy = Math.min(0, y - drag.y);
+  cover.style.transition = "none";
+  cover.style.transform = `translateY(${drag.dy}px)`;
+  if (e.cancelable) e.preventDefault();
+}
+window.addEventListener("touchmove", moveDrag, {passive: false});
+window.addEventListener("mousemove", moveDrag);
+function endDrag() {
+  if (!drag) return;
+  const dy = drag.dy; drag = null;
+  if (dy < -110) revealRole();
+  else { cover.style.transition = "transform .25s ease"; cover.style.transform = "translateY(0)"; }
+}
+window.addEventListener("touchend", endDrag);
+window.addEventListener("mouseup", endDrag);
+$("tapReveal").onclick = revealRole;
+$("hidePass").onclick = () => { game.cursor++; if (game.cursor >= game.order.length) beginDiscuss(); else openPass(); };
+function beginDiscuss() {
+  show("discuss");
+  $("startNote").textContent = "Empieza " + game.starter;
+  renderAlive();
+  startClock();
+}
+function renderAlive() {
+  const alive = game.people.filter(p => p.alive);
+  $("alivePill").textContent = alive.length;
+  $("aliveList").innerHTML = alive.map(p => `<div class="pbtn">${p.name}</div>`).join("");
+}
+function paintTimer() {
+  const el = $("timer");
+  el.textContent = fmt(game.seconds);
+  el.className = "timer" + (game.seconds <= 30 ? " late" : game.seconds <= 60 ? " warn" : "");
+}
+function startClock() {
+  clearInterval(timerId);
+  game.paused = false;
+  $("pauseBtn").textContent = "Pausa";
+  paintTimer();
+  timerId = setInterval(() => {
+    if (game.paused) return;
+    game.seconds--;
+    paintTimer();
+    if (game.seconds <= 0) { clearInterval(timerId); forceVote(); }
+  }, 1000);
+}
+$("pauseBtn").onclick = () => { game.paused = !game.paused; $("pauseBtn").textContent = game.paused ? "Seguir" : "Pausa"; };
+$("toVote").onclick = () => { game.paused = true; game.mustVote = false; beginVote(); };
+function forceVote() {
+  game.mustVote = true;
+  game.paused = true;
+  beginVote();
+}
+function beginVote() {
+  show("vote");
+  $("voteTitle").textContent = game.mustVote ? "Voto obligatorio" : "¿A quién?";
+  $("voteList").innerHTML = "";
+  $("backDiscuss").style.display = game.mustVote ? "none" : "block";
+  game.people.filter(p => p.alive).forEach(p => {
+    const b = document.createElement("button");
+    b.className = "pbtn";
+    b.textContent = p.name;
+    b.onclick = () => expelPlayer(p.name);
+    $("voteList").appendChild(b);
+  });
+}
+$("backDiscuss").onclick = () => { if (game.mustVote) return; show("discuss"); if (game.seconds > 0) startClock(); };
+function expelPlayer(name) {
+  const person = game.people.find(x => x.name === name);
+  person.alive = false;
+  game.lastExpelImp = person.role === "imp";
+  show("expel");
+  $("expelBox").innerHTML = `<div class="role ${person.role}" style="position:relative;min-height:320px"><div class="badge">${person.role === "imp" ? "IMPOSTOR" : "DETECTIVE"}</div><div class="secret">${person.name}</div><div class="tiny">${person.role === "imp" ? "Sí era impostor" : "No era impostor"}</div></div>`;
+  beep(person.role === "imp" ? 520 : 220);
+}
+$("continueBtn").onclick = () => {
+  const alive = game.people.filter(p => p.alive);
+  const imps = alive.filter(p => p.role === "imp").length;
+  const dets = alive.length - imps;
+  if (imps === 0) return endGame("det");
+  if (imps >= dets) return endGame("imp");
+  if (game.seconds <= 0) game.seconds = 180;
+  game.mustVote = false;
+  game.starter = alive[Math.floor(Math.random() * alive.length)].name;
+  show("discuss");
+  $("startNote").textContent = game.seconds === 180 ? "3 min más" : ("Empieza " + game.starter);
+  renderAlive();
+  startClock();
+};
+function endGame(winner) {
+  clearInterval(timerId);
+  show("win");
+  const imps = game.people.filter(p => p.role === "imp");
+  const won = winner === "det";
+  $("winBox").innerHTML = `
+    <div class="badge">FIN</div>
+    <div class="pname" style="font-size:40px">${won ? "Ganaron los detectives" : "Ganaron los impostores"}</div>
+    <div class="tiny">${won ? "Expulsaron a todos los impostores" : "Los detectives no lograron echarlos"}</div>
+    <div class="role ${won ? "det" : "imp"}" style="position:relative;min-height:200px;margin-top:12px"><div class="tiny">La palabra era</div><div class="secret">${game.word}</div></div>
+    <div class="block" style="margin-top:12px">${game.people.map(p => `<div class="row" style="margin:10px 0"><b>${p.name}</b><span>${p.role === "imp" ? "Impostor" : "Detective"}</span></div>`).join("")}</div>`;
+}
+$("againBtn").onclick = () => { names = game.people.map(p => p.name); playersN = names.length; saveConfig(); assign(); openPass(); show("pass"); };
+$("menuBtn").onclick = () => { clearInterval(timerId); show("setup"); renderNames(); };
+</script>
+</body>
+</html>
