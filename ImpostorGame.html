@@ -1630,6 +1630,7 @@ Nasa|Tecnología|trampa|mariscos|jaula
 });
 
 const KEY = "impostor-config-v3";
+const ROTATION_KEY = "impostor-served-v1";
 const $ = (id) => document.getElementById(id);
 const screens = [...document.querySelectorAll(".screen")];
 function show(id) {
@@ -1728,22 +1729,56 @@ function cleanNames() {
     return name;
   });
 }
+function loadServed() {
+  try {
+    const data = JSON.parse(localStorage.getItem(ROTATION_KEY) || "[]");
+    return new Set(Array.isArray(data) ? data.map(n => String(n).toLowerCase()) : []);
+  } catch (e) {
+    return new Set();
+  }
+}
+function saveServed(served) {
+  try { localStorage.setItem(ROTATION_KEY, JSON.stringify([...served])); } catch (e) {}
+}
+function pickImpostorIndexes(playerNames) {
+  const served = loadServed();
+  const keys = playerNames.map(n => n.toLowerCase());
+  let fresh = [];
+  keys.forEach((k, i) => { if (!served.has(k)) fresh.push(i); });
+  if (!fresh.length) {
+    served.clear();
+    fresh = keys.map((_, i) => i);
+  }
+  const chosen = shuffle(fresh).slice(0, impostorsN);
+  if (chosen.length < impostorsN) {
+    const used = new Set(chosen);
+    const rest = shuffle(keys.map((_, i) => i).filter(i => !used.has(i)));
+    while (chosen.length < impostorsN && rest.length) chosen.push(rest.pop());
+  }
+  const keep = new Set(keys);
+  [...served].forEach(k => { if (!keep.has(k)) served.delete(k); });
+  chosen.forEach(i => served.add(keys[i]));
+  if (keys.every(k => served.has(k))) served.clear();
+  saveServed(served);
+  return new Set(chosen);
+}
 function assign() {
   const entry = PACK[Math.floor(Math.random() * PACK.length)];
   const bag = hintMode === "same"
     ? Array(impostorsN).fill(entry.h[Math.floor(Math.random() * entry.h.length)])
     : shuffle(entry.h);
-  const roles = shuffle([
-    ...Array(impostorsN).fill("imp"),
-    ...Array(playersN - impostorsN).fill("crew")
-  ]);
+  const playerNames = cleanNames();
+  const impostorAt = pickImpostorIndexes(playerNames);
   let hi = 0;
-  const people = cleanNames().map((name, i) => ({
-    name,
-    role: roles[i],
-    hint: roles[i] === "imp" ? bag[hi++ % bag.length] : null,
-    alive: true
-  }));
+  const people = playerNames.map((name, i) => {
+    const role = impostorAt.has(i) ? "imp" : "crew";
+    return {
+      name,
+      role,
+      hint: role === "imp" ? bag[hi++ % bag.length] : null,
+      alive: true
+    };
+  });
   game = {
     word: entry.w,
     category: entry.c,
