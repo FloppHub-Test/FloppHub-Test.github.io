@@ -1323,7 +1323,7 @@ function show(id) {
 let playersN = 4, impostorsN = 1, hintMode = "same";
 let names = ["Jugador 1", "Jugador 2", "Jugador 3", "Jugador 4"];
 let game = null, timerId = null, wakeLock = null, toastId = null;
-function maxImp(n) { return Math.max(1, Math.floor((n - 1) / 2)); }
+function maxImp(n) { return Math.max(1, n - 2); }
 function roundSeconds(n) { return (5 + Math.floor(n / 2)) * 60; }
 function fmt(s) {
   s = Math.max(0, s | 0);
@@ -1796,7 +1796,7 @@ function expelPlayer(idx) {
   $("expelBox").innerHTML = imp
     ? `<div class="badge imp">ERA IMPOSTOR</div><div class="who-big">${safe}</div><div class="cat">${impsLeft ? left : "¡Ya no queda ninguno!"}</div>`
     : `<div class="badge crew">NO ERA IMPOSTOR</div><div class="who-big">${safe}</div><div class="cat">Echaron a un inocente</div>`;
-  const finished = impsLeft === 0 || impsLeft >= alive.length - impsLeft;
+  const finished = impsLeft === 0 || alive.length - impsLeft <= 1;
   $("continueBtn").textContent = finished ? "Ver resultado" : "Seguir discutiendo";
   beep(imp ? 520 : 220);
 }
@@ -1805,7 +1805,7 @@ $("continueBtn").onclick = () => {
   const imps = alive.filter(p => p.role === "imp").length;
   const crew = alive.length - imps;
   if (imps === 0) return endGame("crew");
-  if (imps >= crew) return endGame("imp");
+  if (crew <= 1) return endGame("imp");
   if (game.seconds <= 0) { game.seconds = 180; game.total = 180; game.extra = true; }
   game.mustVote = false;
   game.starter = alive[Math.floor(Math.random() * alive.length)].name;
