@@ -3,168 +3,283 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#121212">
+<meta name="theme-color" content="#07060a">
 <meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Impostor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #121212;
-    --surface: #1e1e1e;
-    --surface-2: #2a2a2a;
-    --ink: #f3f0f4;
-    --muted: #c8c5c9;
-    --line: #3c3c3c;
+    --bg: #07060a;
+    --app-1: #17121f;
+    --app-2: #0d0b13;
+    --surface: rgba(255, 255, 255, .055);
+    --surface-2: rgba(255, 255, 255, .095);
+    --surface-3: rgba(255, 255, 255, .15);
+    --line: rgba(255, 255, 255, .08);
+    --ink: #f7f4fa;
+    --muted: #a9a2b6;
+    --faint: #6e6779;
     --pink: #ff2d6a;
-    --pink-dim: #3a1020;
-    --mint: #7dffa1;
-    --yellow: #ffe14a;
+    --pink-2: #ff7aa0;
+    --pink-dim: rgba(255, 45, 106, .16);
+    --violet: #8b6cff;
+    --mint: #53f0a0;
+    --yellow: #ffd84a;
+    --blue: #7cb8ff;
     --safe-t: env(safe-area-inset-top, 0px);
     --safe-b: env(safe-area-inset-bottom, 0px);
+    --frame-w: min(100vw, calc(100vh * 9 / 16));
+    --frame-h: min(100vh, calc(100vw * 16 / 9));
+  }
+  @supports (height: 100dvh) {
+    :root {
+      --frame-w: min(100vw, calc(100dvh * 9 / 16));
+      --frame-h: min(100dvh, calc(100vw * 16 / 9));
+    }
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { margin: 0; height: 100%; }
+  html, body { margin: 0; height: 100%; background: var(--bg); }
   body {
-    min-height: 100dvh;
+    display: grid;
+    place-items: center;
     color: var(--ink);
-    font-family: Roboto, "Segoe UI", system-ui, sans-serif;
-    background: var(--bg);
+    font-family: "Outfit", Roboto, "Segoe UI", system-ui, sans-serif;
     overflow: hidden;
     user-select: none;
+    -webkit-user-select: none;
   }
   button, input { font-family: inherit; color: inherit; }
-  button { cursor: pointer; border: 0; background: none; }
-  input { user-select: text; }
+  button { cursor: pointer; border: 0; background: none; padding: 0; }
+  button:disabled { cursor: default; }
+  input { user-select: text; -webkit-user-select: text; }
+  :focus-visible { outline: 2px solid var(--pink-2); outline-offset: 2px; }
+
   #app {
-    height: 100dvh;
+    position: relative;
+    width: var(--frame-w);
+    height: var(--frame-h);
     display: flex;
     flex-direction: column;
-    padding: calc(8px + var(--safe-t)) 16px calc(12px + var(--safe-b));
-    max-width: 480px;
-    margin: 0 auto;
+    padding: calc(10px + var(--safe-t)) 18px calc(14px + var(--safe-b));
+    background:
+      radial-gradient(120% 55% at 50% -12%, #3d1430 0%, transparent 62%),
+      radial-gradient(90% 45% at 105% 108%, #1f1745 0%, transparent 62%),
+      linear-gradient(180deg, var(--app-1), var(--app-2));
+    overflow: hidden;
+    isolation: isolate;
   }
+  @media (min-aspect-ratio: 10/16), (max-aspect-ratio: 8/16) {
+    #app { border-radius: 28px; box-shadow: 0 0 0 1px var(--line), 0 30px 90px rgba(0, 0, 0, .65); }
+  }
+  :fullscreen #app { border-radius: 0; }
+
   .screen { display: none; flex: 1; min-height: 0; flex-direction: column; }
-  .screen.on { display: flex; }
-  .scroll { overflow: auto; flex: 1; min-height: 0; padding-bottom: 8px; }
-  .appbar {
-    display: flex; align-items: center; gap: 8px;
-    min-height: 56px; margin-bottom: 4px;
+  .screen.on { display: flex; animation: enter 320ms cubic-bezier(.2, .8, .2, 1) both; }
+  @keyframes enter {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
   }
-  .appbar h2 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: 0; }
+  .scroll {
+    overflow: auto; flex: 1; min-height: 0; padding-bottom: 10px;
+    scrollbar-width: none;
+    mask-image: linear-gradient(180deg, #000 calc(100% - 18px), transparent);
+    -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 18px), transparent);
+  }
+  .scroll::-webkit-scrollbar { display: none; }
+
+  .appbar { display: flex; align-items: center; gap: 6px; min-height: 56px; margin-bottom: 6px; }
+  .appbar h2 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -.3px; }
   .iconbtn {
-    width: 48px; height: 48px; border-radius: 24px;
+    width: 44px; height: 44px; border-radius: 14px; flex: none;
     display: grid; place-items: center; color: var(--ink);
+    background: var(--surface);
+    transition: background .15s, transform .15s;
   }
-  .iconbtn:active { background: #ffffff14; }
+  .iconbtn:active { background: var(--surface-3); transform: scale(.94); }
   .pill {
     margin-left: auto;
+    display: inline-flex; align-items: center; gap: 6px;
     background: var(--surface-2);
     border-radius: 999px;
-    padding: 8px 14px;
+    padding: 8px 13px;
     font-weight: 700;
     font-size: 14px;
-    letter-spacing: .02em;
+    font-variant-numeric: tabular-nums;
   }
+  .pill svg { opacity: .7; }
+  .fsbtn .fs-off, .is-fs .fsbtn .fs-on { display: none; }
+  .is-fs .fsbtn .fs-off { display: block; }
+  .no-fs .fsbtn { display: none; }
+  .home-top { display: flex; justify-content: flex-end; min-height: 44px; }
+
   .primary, .ghost {
-    min-height: 56px;
-    border-radius: 28px;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: .02em;
+    min-height: 58px;
+    border-radius: 20px;
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: .01em;
     width: 100%;
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    transition: transform .12s, background .2s, opacity .2s, box-shadow .2s;
   }
-  .primary { background: var(--pink); color: #fff; }
+  .primary {
+    background: linear-gradient(180deg, #ff4a7f, var(--pink));
+    color: #fff;
+    box-shadow: 0 10px 30px -8px rgba(255, 45, 106, .65), inset 0 1px 0 rgba(255, 255, 255, .25);
+  }
+  .primary:disabled { background: var(--surface-2); color: var(--faint); box-shadow: none; }
+  .primary.danger { background: linear-gradient(180deg, #ff5a5a, #e0284a); }
   .ghost { background: var(--surface-2); color: var(--ink); }
-  .primary:active, .ghost:active { transform: scale(.98); }
-  .stack { display: grid; gap: 10px; margin-top: auto; padding-top: 10px; }
+  .primary:not(:disabled):active, .ghost:active { transform: scale(.975); }
+  .stack { display: grid; gap: 10px; margin-top: auto; padding-top: 12px; }
+  .stack.two { grid-template-columns: 1fr 1.6fr; }
   .stack[hidden] { display: none; }
 
-  /* Inicio */
   #home { justify-content: flex-end; }
   .hero {
     flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; text-align: center; gap: 8px;
+    align-items: center; justify-content: center; text-align: center; gap: 6px;
     min-height: 0;
   }
+  .mark-wrap { position: relative; margin-bottom: 14px; }
+  .mark-wrap::before {
+    content: ""; position: absolute; inset: -18px; border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(255, 45, 106, .45), transparent);
+    filter: blur(8px); z-index: -1;
+    animation: breathe 4s ease-in-out infinite;
+  }
+  @keyframes breathe { 50% { transform: scale(1.12); opacity: .7; } }
   .mark {
-    width: 112px; height: 112px; border-radius: 32px;
+    display: block;
+    width: 116px; height: 116px; border-radius: 34px;
     object-fit: cover;
-    box-shadow: 0 12px 40px #ff2d6a33;
-    margin-bottom: 8px;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .12), 0 18px 40px rgba(0, 0, 0, .5);
+    background: var(--surface-2);
   }
   .wordmark {
-    margin: 0; font-size: 44px; font-weight: 800; letter-spacing: -1px; line-height: 1;
+    margin: 0; font-size: 54px; font-weight: 900; letter-spacing: -2px; line-height: .95;
+    background: linear-gradient(180deg, #fff 30%, #ffc2d3);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  .tag { margin: 0; color: var(--muted); font-size: 16px; font-weight: 500; }
-  .steps { width: 100%; display: grid; gap: 8px; margin: 18px 0 8px; text-align: left; }
+  .tag { margin: 4px 0 0; color: var(--muted); font-size: 17px; font-weight: 500; }
+  .steps { width: 100%; display: grid; gap: 8px; margin: 18px 0 4px; text-align: left; }
   .stepcard {
     display: flex; gap: 14px; align-items: center;
-    background: var(--surface); border-radius: 20px; padding: 12px 14px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 20px; padding: 12px 14px;
   }
   .numdot {
-    width: 36px; height: 36px; border-radius: 18px; flex: none;
+    width: 38px; height: 38px; border-radius: 12px; flex: none;
     display: grid; place-items: center;
-    background: var(--pink-dim); color: #ffd0dc; font-weight: 800;
+    background: var(--pink-dim); color: var(--pink-2); font-weight: 900; font-size: 17px;
   }
-  .stepcard b { display: block; font-size: 15px; }
-  .stepcard span { color: var(--muted); font-size: 13px; }
+  .stepcard b { display: block; font-size: 16px; font-weight: 700; }
+  .stepcard span { color: var(--muted); font-size: 14px; }
 
-  /* Ajustes */
+  .label {
+    font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--faint); margin: 16px 4px 8px;
+  }
   .card {
     background: var(--surface);
-    border-radius: 24px;
-    padding: 6px 16px;
-    margin-bottom: 12px;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 4px 16px;
   }
-  .row {
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 12px; min-height: 64px;
-  }
-  .k { font-size: 16px; font-weight: 600; }
-  .stepper { display: flex; align-items: center; gap: 4px; }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 68px; }
+  .divider { height: 1px; background: var(--line); }
+  .k { font-size: 17px; font-weight: 700; }
+  .sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .stepper { display: flex; align-items: center; gap: 2px; background: rgba(0, 0, 0, .25); border-radius: 16px; padding: 4px; }
   .stepper button {
-    width: 40px; height: 40px; border-radius: 20px;
+    width: 40px; height: 40px; border-radius: 12px;
     background: var(--surface-2); color: #fff; font-size: 22px; font-weight: 600;
+    display: grid; place-items: center;
+    transition: transform .12s, opacity .2s;
   }
-  .stepper button:active { transform: scale(.94); }
-  .num { font-size: 22px; font-weight: 800; min-width: 32px; text-align: center; }
-  .names { display: grid; gap: 8px; padding: 8px 0 12px; }
-  .names input {
-    width: 100%; min-height: 52px; border-radius: 16px; border: 0;
-    background: var(--bg); color: #fff; font-size: 16px; font-weight: 600; padding: 0 16px;
-    outline: none;
+  .stepper button:active { transform: scale(.9); }
+  .stepper button:disabled { opacity: .3; }
+  .num { font-size: 22px; font-weight: 900; min-width: 38px; text-align: center; font-variant-numeric: tabular-nums; }
+  .num.bump { animation: bump 220ms ease; }
+  @keyframes bump { 40% { transform: scale(1.25); color: var(--pink-2); } }
+  .names { display: grid; gap: 8px; padding: 12px; }
+  .name-row {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(0, 0, 0, .28); border-radius: 15px; padding-left: 8px;
+    transition: box-shadow .15s;
   }
-  .names input:focus { box-shadow: inset 0 0 0 2px var(--pink); }
+  .name-row:focus-within { box-shadow: inset 0 0 0 2px var(--pink); }
+  .idx {
+    width: 30px; height: 30px; border-radius: 10px; flex: none;
+    display: grid; place-items: center;
+    background: var(--surface-2); color: var(--muted); font-size: 13px; font-weight: 800;
+  }
+  .name-row input {
+    flex: 1; min-width: 0; min-height: 50px; border: 0; background: none;
+    color: #fff; font-size: 16px; font-weight: 600; padding: 0 12px 0 2px; outline: none;
+  }
+  .name-row input::placeholder { color: var(--faint); }
   .segment {
+    position: relative;
     display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
-    background: var(--bg); border-radius: 18px; padding: 4px; margin: 8px 0 12px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 4px;
   }
   .segment button {
-    min-height: 44px; border-radius: 14px; font-weight: 700; font-size: 14px; color: var(--muted);
+    min-height: 46px; border-radius: 14px; font-weight: 700; font-size: 15px; color: var(--muted);
+    transition: background .2s, color .2s;
   }
-  .segment button.on { background: var(--surface-2); color: var(--ink); }
+  .segment button.on { background: var(--surface-3); color: var(--ink); }
+  .seg-note { font-size: 13px; color: var(--muted); margin: 8px 6px 0; }
+  .rot { padding: 14px 16px; margin-top: 16px; }
+  .rot-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .chip {
+    flex: none; padding: 9px 13px; border-radius: 12px; background: var(--surface-2);
+    font-size: 13px; font-weight: 700; color: var(--ink);
+  }
+  .chip:active { background: var(--surface-3); }
+  .chip:disabled { opacity: .35; }
+  .rot-bar { height: 8px; border-radius: 99px; background: rgba(0, 0, 0, .35); margin-top: 12px; overflow: hidden; }
+  .rot-bar i { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, var(--violet), var(--pink)); transition: width .4s ease; }
+  .rot-faces { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .face {
+    font-size: 12px; font-weight: 700; padding: 5px 9px; border-radius: 99px;
+    background: rgba(0, 0, 0, .3); color: var(--muted);
+  }
+  .face.done { background: var(--pink-dim); color: var(--pink-2); text-decoration: line-through; text-decoration-thickness: 2px; }
 
-  /* Pasar el celular */
-  #pass { overflow: hidden; }
+  .pass-top { display: flex; align-items: center; gap: 12px; min-height: 48px; }
+  .dots { flex: 1; display: flex; gap: 5px; }
+  .dots i { flex: 1; height: 5px; border-radius: 99px; background: var(--surface-2); transition: background .3s; }
+  .dots i.done { background: var(--pink); }
+  .dots i.now { background: var(--pink-2); animation: blink 1.2s ease-in-out infinite; }
+  @keyframes blink { 50% { opacity: .45; } }
   .who {
-    text-align: center; color: var(--muted); font-size: 13px; font-weight: 700;
-    letter-spacing: .08em; text-transform: uppercase; margin-top: 4px;
+    text-align: center; color: var(--muted); font-size: 13px; font-weight: 800;
+    letter-spacing: .14em; text-transform: uppercase; margin-top: 14px;
   }
   .pname {
-    text-align: center; font-size: 32px; font-weight: 800;
-    letter-spacing: -0.5px; margin: 2px 0 12px; line-height: 1.1;
+    text-align: center; font-size: 40px; font-weight: 900;
+    letter-spacing: -1px; margin: 2px 0 16px; line-height: 1.05; word-break: break-word;
   }
   .stage { flex: 1; position: relative; min-height: 0; }
   .role, .cover {
-    position: absolute; inset: 0; border-radius: 28px;
+    position: absolute; inset: 0; border-radius: 30px;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center; text-align: center; padding: 24px;
+    border: 1px solid var(--line);
   }
-  .role { background: var(--surface); visibility: hidden; }
+  .role { background: var(--surface); visibility: hidden; overflow: hidden; }
   .role.in { visibility: visible; }
-  .role.imp { background: linear-gradient(180deg, #3a1020, #1a0a10); }
-  .role.crew { background: linear-gradient(180deg, #1a2430, #141416); }
+  .role.imp { background: radial-gradient(120% 80% at 50% 0%, #5a1430, #1a0810 70%); border-color: rgba(255, 45, 106, .35); }
+  .role.crew { background: radial-gradient(120% 80% at 50% 0%, #1c2c48, #0f1420 70%); border-color: rgba(124, 184, 255, .25); }
   .cover {
-    background: var(--surface-2);
+    background:
+      repeating-linear-gradient(135deg, rgba(255, 255, 255, .025) 0 14px, transparent 14px 28px),
+      linear-gradient(180deg, #221b2d, #18131f);
     z-index: 2;
     opacity: 1;
     visibility: visible;
@@ -174,148 +289,188 @@
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity 200ms ease, visibility 0s linear 200ms;
+    transform: scale(1.03);
+    transition: opacity 220ms ease, transform 220ms ease, visibility 0s linear 220ms;
   }
   .lock {
-    width: 72px; height: 72px; border-radius: 24px;
-    background: #121212; display: grid; place-items: center; margin-bottom: 16px;
+    width: 84px; height: 84px; border-radius: 28px;
+    background: rgba(0, 0, 0, .35); display: grid; place-items: center; margin-bottom: 18px;
+    box-shadow: 0 0 0 1px rgba(255, 45, 106, .25), 0 0 40px rgba(255, 45, 106, .2);
   }
-  .cover p { margin: 0; color: var(--muted); font-size: 15px; font-weight: 500; max-width: 220px; }
+  .cover p { margin: 0; color: var(--muted); font-size: 16px; font-weight: 500; max-width: 240px; line-height: 1.4; }
+  .cover p b { color: var(--ink); }
   .badge {
-    font-size: 13px; font-weight: 800; letter-spacing: .14em;
-    border-radius: 999px; padding: 6px 12px; margin-bottom: 8px;
+    font-size: 13px; font-weight: 900; letter-spacing: .16em;
+    border-radius: 999px; padding: 7px 14px; margin-bottom: 12px;
   }
-  .role.imp .badge { background: var(--pink); color: #fff; }
-  .role.crew .badge { background: #243044; color: #d6e6ff; }
-  .hint-label { color: #ffb3c4; font-size: 14px; font-weight: 600; }
+  .role.imp .badge { background: var(--pink); color: #fff; box-shadow: 0 0 30px rgba(255, 45, 106, .5); }
+  .role.crew .badge { background: rgba(124, 184, 255, .16); color: #d6e8ff; }
+  .hint-label { color: var(--pink-2); font-size: 15px; font-weight: 600; }
   .secret {
-    font-size: 48px; font-weight: 800; line-height: 1; margin: 8px 0;
-    letter-spacing: -1px; word-break: break-word;
+    font-size: 52px; font-weight: 900; line-height: 1; margin: 10px 0;
+    letter-spacing: -1.5px; word-break: break-word;
   }
-  .role.in .secret {
-    animation: rise 420ms cubic-bezier(.2, .85, .2, 1.08) both;
+  .role.in .secret { animation: rise 460ms cubic-bezier(.2, .85, .2, 1.08) both; }
+  .cat {
+    color: var(--muted); font-size: 14px; font-weight: 700;
+    background: rgba(0, 0, 0, .3); padding: 6px 12px; border-radius: 99px;
   }
-  .cat { color: var(--muted); font-size: 14px; font-weight: 600; }
+  .role-tip { position: absolute; bottom: 18px; left: 18px; right: 18px; font-size: 13px; color: var(--muted); }
   @keyframes rise {
-    from { transform: translateY(16px) scale(.96); opacity: 0; }
+    from { transform: translateY(18px) scale(.94); opacity: 0; }
     to { transform: none; opacity: 1; }
   }
 
-  /* El botón que hay que tocar */
   .call { position: relative; }
   .call::after {
     content: "";
     position: absolute; inset: 0; border-radius: inherit;
-    border: 2px solid #ffb3c4;
-    animation: ring 1.5s cubic-bezier(.2, .7, .2, 1) infinite;
+    border: 2px solid var(--pink-2);
+    animation: ring 1.6s cubic-bezier(.2, .7, .2, 1) infinite;
     pointer-events: none;
   }
   @keyframes ring {
     0% { transform: scale(1); opacity: .85; }
-    100% { transform: scale(1.14); opacity: 0; }
+    100% { transform: scale(1.08, 1.3); opacity: 0; }
   }
-  .call {
-    animation: pressme 1.5s cubic-bezier(.2, .8, .2, 1) infinite;
-  }
-  @keyframes pressme {
-    0%, 62%, 100% { transform: scale(1); }
-    76% { transform: scale(1.045); }
-    88% { transform: scale(.985); }
-  }
-  .call:active { animation: none; transform: scale(.97); }
 
-  /* Partida */
-  .timer {
-    font-size: 72px; font-weight: 800; text-align: center;
-    letter-spacing: -2px; line-height: .9; margin: 4px 0 12px;
+  .starter {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    font-size: 15px; color: var(--muted); font-weight: 600;
   }
-  .timer.warn { color: var(--yellow); }
-  .timer.late { color: var(--pink); }
-  .players { display: grid; gap: 8px; }
+  .starter b { color: var(--ink); font-size: 17px; font-weight: 800; }
+  .ring-wrap {
+    position: relative; width: min(62%, 240px); aspect-ratio: 1; margin: 10px auto 14px;
+    display: grid; place-items: center; flex: none;
+  }
+  .ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring circle { fill: none; stroke-width: 10; }
+  .ring-bg { stroke: var(--surface-2); }
+  .ring-fg { stroke: var(--mint); stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke .4s; }
+  .ring-wrap.warn .ring-fg { stroke: var(--yellow); }
+  .ring-wrap.late .ring-fg { stroke: var(--pink); }
+  .ring-wrap.paused .ring-fg { stroke: var(--faint); }
+  .timer-box { text-align: center; }
+  .timer { font-size: 58px; font-weight: 900; letter-spacing: -2px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .ring-wrap.warn .timer { color: var(--yellow); }
+  .ring-wrap.late .timer { color: var(--pink); animation: blink 1s ease-in-out infinite; }
+  .ring-wrap.paused .timer { opacity: .5; }
+  .timer-sub { font-size: 13px; font-weight: 800; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; margin-top: 4px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .pchip {
+    padding: 10px 14px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line);
+    font-weight: 700; font-size: 15px;
+  }
+  .pchip.out { color: var(--faint); text-decoration: line-through; background: transparent; }
+
+  .hint { margin: -2px 4px 12px; color: var(--muted); font-size: 15px; }
+  .players { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .pbtn {
-    min-height: 64px; text-align: left; padding: 0 18px; border-radius: 20px;
-    background: var(--surface); color: #fff; font-size: 18px; font-weight: 700;
-    width: 100%;
+    min-height: 64px; text-align: left; padding: 0 16px; border-radius: 18px;
+    background: var(--surface); border: 1px solid var(--line); color: #fff; font-size: 17px; font-weight: 700;
+    width: 100%; display: flex; align-items: center; gap: 10px;
+    transition: background .15s, border-color .15s, transform .12s;
+    overflow: hidden;
   }
-  .pbtn:active { transform: scale(.985); background: var(--surface-2); }
-  .alive-row {
-    min-height: 52px; border-radius: 16px; background: var(--surface);
-    display: flex; align-items: center; padding: 0 16px; font-weight: 700;
+  .pbtn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pbtn .av {
+    width: 32px; height: 32px; border-radius: 11px; flex: none; display: grid; place-items: center;
+    background: var(--surface-2); font-size: 14px; font-weight: 900; color: var(--muted);
   }
+  .pbtn:active { transform: scale(.97); }
+  .pbtn.sel { background: var(--pink-dim); border-color: var(--pink); }
+  .pbtn.sel .av { background: var(--pink); color: #fff; }
 
-  /* Resultado */
   .result {
     flex: 1; min-height: 0; display: flex; flex-direction: column;
-    align-items: center; text-align: center; overflow: auto;
+    align-items: center; justify-content: center; text-align: center; overflow: auto;
   }
-  .kicker {
-    margin: 12px 0 0; font-size: 14px; font-weight: 800;
-    letter-spacing: .18em; color: var(--muted);
-  }
-  .win-title {
-    margin: 4px 0 0; font-size: 52px; line-height: .92; font-weight: 800;
-    letter-spacing: -1.5px;
-  }
-  #win.imp .win-title { color: var(--pink); }
-  #win.crew .win-title { color: var(--mint); }
-  .win-sub { margin: 8px 0 18px; color: var(--muted); font-size: 16px; }
-  .imps-label {
-    font-size: 12px; font-weight: 800; letter-spacing: .14em;
-    color: #ffb3c4; margin-bottom: 8px;
-  }
-  .imp-name {
-    font-size: 36px; font-weight: 800; line-height: 1.05; letter-spacing: -0.5px;
-  }
+  .kicker { margin: 0; font-size: 14px; font-weight: 800; letter-spacing: .22em; color: var(--muted); }
+  .win-title { margin: 6px 0 0; font-size: 60px; line-height: .92; font-weight: 900; letter-spacing: -2px; }
+  #win.imp .win-title { color: var(--pink); text-shadow: 0 0 40px rgba(255, 45, 106, .45); }
+  #win.crew .win-title { color: var(--mint); text-shadow: 0 0 40px rgba(83, 240, 160, .35); }
+  .win-sub { margin: 10px 0 22px; color: var(--muted); font-size: 17px; }
+  .imps-label { font-size: 12px; font-weight: 800; letter-spacing: .16em; color: var(--pink-2); margin-bottom: 8px; }
+  .imp-name { font-size: 36px; font-weight: 900; line-height: 1.1; letter-spacing: -.5px; }
   .wordbox {
-    margin-top: 18px; background: var(--surface); border-radius: 24px;
+    margin-top: 22px; background: var(--surface); border: 1px solid var(--line); border-radius: 22px;
     padding: 16px 22px; width: 100%;
   }
-  .wordbox span { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: .08em; }
-  .wordbox b { display: block; font-size: 28px; margin-top: 4px; }
+  .wordbox span { color: var(--muted); font-size: 12px; font-weight: 800; letter-spacing: .14em; }
+  .wordbox b { display: block; font-size: 30px; font-weight: 900; margin-top: 4px; }
+  .wordbox small { display: block; color: var(--muted); font-size: 14px; margin-top: 2px; }
   #win { position: relative; }
-  .fx {
-    position: absolute; inset: 0; overflow: hidden;
-    pointer-events: none; z-index: 4;
-  }
-  .scrap, .ink {
-    position: absolute; top: -8%;
-    opacity: 0;
-    animation: fall linear forwards;
-  }
+  .fx { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 4; }
+  .scrap, .ink { position: absolute; top: -8%; opacity: 0; animation: fall linear forwards; }
   .scrap {
     border-radius: 1px;
     clip-path: polygon(8% 0, 18% 22%, 0 22%, 0 100%, 100% 100%, 100% 22%, 82% 22%, 70% 0, 52% 18%, 34% 0);
   }
-  .ink {
-    width: 9px; height: 28px;
-    border-radius: 10px;
-    background: #ff2d6a;
-    box-shadow: 0 14px 0 #2a0610;
-  }
+  .ink { width: 9px; height: 28px; border-radius: 10px; background: #ff2d6a; box-shadow: 0 14px 0 #2a0610; }
   @keyframes fall {
     0% { transform: translate3d(0, -12vh, 0) rotate(0deg); opacity: 1; }
     85% { opacity: 1; }
     100% { transform: translate3d(var(--dx), 118vh, 0) rotate(var(--rot)); opacity: 0; }
   }
-  @media (prefers-reduced-motion: reduce) {
-    .scrap, .ink { animation: none; opacity: 0; }
-  }
 
   .expel-card {
-    flex: 1; border-radius: 28px; display: flex; flex-direction: column;
+    flex: 1; border-radius: 30px; display: flex; flex-direction: column;
     align-items: center; justify-content: center; text-align: center; padding: 24px;
-    margin-bottom: 12px;
+    border: 1px solid var(--line);
   }
-  .expel-card.imp { background: linear-gradient(180deg, #3a1020, #1a0a10); }
+  .expel-card.imp { background: radial-gradient(120% 80% at 50% 0%, #5a1430, #1a0810 70%); border-color: rgba(255, 45, 106, .35); }
   .expel-card.crew { background: var(--surface); }
-  .expel-card .who-big { font-size: 44px; font-weight: 800; line-height: 1; margin: 8px 0; }
+  .expel-card .badge.imp { background: var(--pink); color: #fff; }
+  .expel-card .badge.crew { background: var(--surface-3); color: #fff; }
+  .expel-card .who-big { font-size: 48px; font-weight: 900; line-height: 1; margin: 6px 0 14px; letter-spacing: -1px; word-break: break-word; }
+  .expel-card { animation: pop 420ms cubic-bezier(.2, .9, .3, 1.2) both; }
+  @keyframes pop { from { transform: scale(.9); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  .sheet {
+    position: absolute; inset: 0; z-index: 20;
+    background: rgba(5, 4, 8, .7);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    display: flex; align-items: flex-end; padding: 12px;
+    animation: fade .2s ease both;
+  }
+  .sheet[hidden] { display: none; }
+  .sheet-card {
+    width: 100%; background: #1d1726; border: 1px solid var(--line); border-radius: 26px;
+    padding: 22px 18px calc(18px + var(--safe-b));
+    animation: up .28s cubic-bezier(.2, .9, .3, 1) both;
+  }
+  .sheet-card h3 { margin: 0 0 6px; font-size: 22px; font-weight: 800; }
+  .sheet-card p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.45; }
+  @keyframes fade { from { opacity: 0; } }
+  @keyframes up { from { transform: translateY(40px); opacity: 0; } }
+
+  .toast {
+    position: absolute; left: 50%; top: calc(14px + var(--safe-t)); z-index: 30;
+    transform: translate(-50%, -20px); opacity: 0; pointer-events: none;
+    background: #2a2236; border: 1px solid var(--line); border-radius: 14px;
+    padding: 10px 14px; font-size: 14px; font-weight: 600; white-space: nowrap;
+    transition: opacity .25s, transform .25s;
+  }
+  .toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+  @media (max-height: 640px) {
+    .steps { display: none; }
+    .ring-wrap { width: min(48%, 180px); }
+    .timer { font-size: 44px; }
+    .secret { font-size: 42px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+    .scrap, .ink { opacity: 0; }
+  }
 </style>
 </head>
 <body>
 <div id="app">
   <section class="screen on" id="home">
+    <div class="home-top"><button type="button" class="iconbtn fsbtn" aria-label="Pantalla completa"><svg class="fs-on" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="fs-off" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
     <div class="hero">
-      <img class="mark" src="https://files.catbox.moe/e58ywh.jpg" alt="" width="112" height="112">
+      <div class="mark-wrap"><img class="mark" src="https://files.catbox.moe/e58ywh.jpg" alt="" width="116" height="116"></div>
       <h1 class="wordmark">Impostor</h1>
       <p class="tag">Pasa el celular. Encuentra quién miente.</p>
       <div class="steps">
@@ -325,84 +480,130 @@
       </div>
     </div>
     <div class="stack">
-      <button class="primary" id="goSetup">Jugar</button>
+      <button class="primary" id="goSetup">Jugar
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
   </section>
 
   <section class="screen" id="setup">
-    <div class="appbar">
+    <header class="appbar">
       <button class="iconbtn" id="setupBack" aria-label="Atrás">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5L8 12l7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5L8 12l7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <h2>Partida</h2>
-      <span class="pill" id="timerPreview">07:00</span>
-    </div>
+      <h2>Nueva partida</h2>
+      <span class="pill" title="Duración de la ronda">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="13" r="8" stroke="currentColor" stroke-width="2.2"/><path d="M12 9v4l2.5 2M9 2h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        <span id="timerPreview">07:00</span>
+      </span>
+      <button type="button" class="iconbtn fsbtn" aria-label="Pantalla completa"><svg class="fs-on" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="fs-off" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </header>
     <div class="scroll">
       <div class="card">
         <div class="row">
-          <div class="k">Jugadores</div>
+          <div><div class="k">Jugadores</div><div class="sub">De 3 a 16</div></div>
           <div class="stepper"><button type="button" id="minusP" aria-label="Menos jugadores">−</button><div class="num" id="pCount">4</div><button type="button" id="plusP" aria-label="Más jugadores">+</button></div>
         </div>
-      </div>
-      <div class="card">
+        <div class="divider"></div>
         <div class="row">
-          <div class="k">Impostores</div>
+          <div><div class="k">Impostores</div><div class="sub" id="impSub">Máximo 2</div></div>
           <div class="stepper"><button type="button" id="minusI" aria-label="Menos impostores">−</button><div class="num" id="iCount">1</div><button type="button" id="plusI" aria-label="Más impostores">+</button></div>
         </div>
       </div>
-      <div class="card">
-        <div class="names" id="nameList"></div>
-      </div>
+
+      <div class="label">Pistas del impostor</div>
       <div class="segment" role="group" aria-label="Pistas">
         <button type="button" id="modeSame">Misma pista</button>
         <button type="button" id="modeDiff">Pistas distintas</button>
       </div>
+      <p class="seg-note" id="modeNote"></p>
+
+      <div class="label">Nombres</div>
+      <div class="card names" id="nameList"></div>
+
+      <div class="card rot">
+        <div class="rot-top">
+          <div><div class="k">Turnos de impostor</div><div class="sub" id="rotText"></div></div>
+          <button type="button" class="chip" id="rotReset">Reiniciar</button>
+        </div>
+        <div class="rot-bar"><i id="rotFill"></i></div>
+        <div class="rot-faces" id="rotFaces"></div>
+      </div>
     </div>
-    <button class="primary" id="startBtn">Empezar</button>
+    <div class="stack">
+      <button class="primary" id="startBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Empezar
+      </button>
+    </div>
   </section>
 
   <section class="screen" id="pass">
-    <div class="who" id="passHelp">1 de 4</div>
+    <div class="pass-top">
+      <button class="iconbtn quit" aria-label="Terminar partida">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </button>
+      <div class="dots" id="dots"></div>
+      <button type="button" class="iconbtn fsbtn" aria-label="Pantalla completa"><svg class="fs-on" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="fs-off" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+    <div class="who" id="passHelp">Turno 1 de 4</div>
     <div class="pname" id="passName">—</div>
     <div class="stage" id="stage">
       <div class="role" id="roleCard" aria-hidden="true"></div>
       <div class="cover" id="cover">
         <div class="lock" aria-hidden="true">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="#ff2d6a" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="#ff2d6a" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2.5" stroke="#ff2d6a" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="#ff2d6a" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="15.5" r="1.4" fill="#ff2d6a"/></svg>
         </div>
-        <p>Tu rol está oculto. Toca el botón de abajo.</p>
+        <p id="coverText">Rol oculto.</p>
       </div>
     </div>
     <div class="stack" id="beforeReveal">
-      <button class="primary call" id="tapReveal">Ver rol</button>
+      <button class="primary call" id="tapReveal">Ver mi rol</button>
     </div>
     <div class="stack" id="afterReveal" hidden>
-      <button class="primary" id="hidePass">Listo, pasa el celular</button>
+      <button class="primary" id="hidePass">Ocultar y pasar</button>
     </div>
   </section>
 
   <section class="screen" id="discuss">
-    <div class="appbar">
-      <h2 id="startNote">Empieza</h2>
-      <span class="pill" id="alivePill">4</span>
+    <header class="appbar">
+      <button class="iconbtn quit" aria-label="Terminar partida">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </button>
+      <h2>Discusión</h2>
+      <span class="pill" id="alivePill">4 vivos</span>
+      <button type="button" class="iconbtn fsbtn" aria-label="Pantalla completa"><svg class="fs-on" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="fs-off" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </header>
+    <div class="starter"><span id="starterLabel">Empieza</span><b id="starterName">—</b></div>
+    <div class="ring-wrap" id="ringWrap">
+      <svg class="ring" viewBox="0 0 200 200" aria-hidden="true"><circle class="ring-bg" cx="100" cy="100" r="88"/><circle class="ring-fg" id="ringFg" cx="100" cy="100" r="88"/></svg>
+      <div class="timer-box">
+        <div class="timer" id="timer">07:00</div>
+        <div class="timer-sub" id="timerSub">restante</div>
+      </div>
     </div>
-    <div class="timer" id="timer">07:00</div>
-    <div class="scroll"><div class="players" id="aliveList"></div></div>
-    <div class="stack">
-      <button class="primary" id="toVote">Votar</button>
+    <div class="scroll"><div class="chips" id="aliveList"></div></div>
+    <div class="stack two">
       <button class="ghost" id="pauseBtn">Pausa</button>
+      <button class="primary" id="toVote">Votar</button>
     </div>
   </section>
 
   <section class="screen" id="vote">
-    <div class="appbar"><h2 id="voteTitle">¿A quién echan?</h2></div>
+    <header class="appbar"><h2 id="voteTitle">¿A quién echan?</h2></header>
+    <p class="hint" id="voteHint">Toquen a quien quieran echar.</p>
     <div class="scroll"><div class="players" id="voteList"></div></div>
-    <button class="ghost" id="backDiscuss">Volver</button>
+    <div class="stack">
+      <button class="primary" id="confirmVote" disabled>Elijan a alguien</button>
+      <button class="ghost" id="backDiscuss">Volver a la discusión</button>
+    </div>
   </section>
 
   <section class="screen" id="expel">
     <div class="expel-card" id="expelBox"></div>
-    <button class="primary" id="continueBtn">Seguir</button>
+    <div class="stack">
+      <button class="primary" id="continueBtn">Seguir</button>
+    </div>
   </section>
 
   <section class="screen" id="win">
@@ -413,1233 +614,716 @@
       <button class="ghost" id="menuBtn">Editar jugadores</button>
     </div>
   </section>
+
+  <div class="sheet" id="sheet" hidden>
+    <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+      <h3 id="sheetTitle"></h3>
+      <p id="sheetText"></p>
+      <div class="stack">
+        <button class="primary danger" id="sheetYes"></button>
+        <button class="ghost" id="sheetNo">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
 </div>
 <script>
 const PACK = `
-León|Animales|melena|rugido|selva
-Tigre|Animales|rayas|selva|garras
-Elefante|Animales|trompa|gigante|orejas
-Jirafa|Animales|cuello|manchas|sabana
-Cebra|Animales|rayas|caballo|sabana
-Pingüino|Animales|hielo|antártida|smoking
-Delfín|Animales|mar|saltos|sonar
-Tiburón|Animales|aleta|dientes|océano
-Ballena|Animales|mar|chorro|gigante
-Pulpo|Animales|tinta|mar|tentáculos
-Águila|Animales|vuelo|pico|cielo
-Búho|Animales|noche|ojos|ulular
-Serpiente|Animales|veneno|reptil|silbido
-Cocodrilo|Animales|río|dientes|escamas
-Canguro|Animales|salto|bolsa|Australia
-Koala|Animales|eucalipto|siesta|Australia
-Oso|Animales|miel|bosque|garras
-Lobo|Animales|aullido|manada|bosque
-Zorro|Animales|astuto|cola|naranja
-Conejo|Animales|zanahoria|orejas|salto
-Tortuga|Animales|caparazón|lenta|verde
-Rana|Animales|charco|verde|croar
-Abeja|Animales|miel|aguijón|colmena
-Mariposa|Animales|alas|flores|capullo
-Araña|Animales|telaraña|ocho|rincón
-Camello|Animales|desierto|joroba|arena
-Hipopótamo|Animales|río|boca|pesado
-Flamenco|Animales|rosa|patas|laguna
-Panda|Animales|bambú|China|blanco
-Pizza|Comida|queso|horno|rebanada
-Taco|Comida|tortilla|salsa|México
-Sushi|Comida|arroz|pescado|palillos
-Hamburguesa|Comida|carne|pan|queso
-Helado|Comida|frío|cono|vainilla
-Chocolate|Comida|cacao|dulce|tableta
-Pan|Comida|horno|trigo|migaja
-Queso|Comida|leche|amarillo|derretir
-Manzana|Comida|roja|árbol|fruta
-Plátano|Comida|amarillo|cáscara|mono
-Fresa|Comida|roja|dulce|semillas
-Sandía|Comida|verano|roja|semillas
-Mango|Comida|tropical|amarillo|dulce
-Elote|Comida|maíz|mazorca|feria
-Pozole|Comida|maíz|caldo|fiesta
-Tamal|Comida|masa|hoja|maíz
-Chilaquiles|Comida|totopos|salsa|desayuno
-Guacamole|Comida|aguacate|verde|botana
-Ceviche|Comida|limón|pescado|mar
-Ramen|Comida|fideos|caldo|Japón
-Pasta|Comida|fideos|Italia|salsa
-Hot dog|Comida|salchicha|mostaza|pan
-Dona|Comida|azúcar|agujero|glaseado
-Palomitas|Comida|cine|maíz|sal
-Café|Comida|taza|mañana|oscuro
-Leche|Comida|vaca|blanca|vaso
-Huevo|Comida|gallina|cáscara|yema
-Arroz|Comida|granos|blanco|olla
-Frijol|Comida|olla|negro|México
-Chile|Comida|picante|salsa|rojo
-Pastel|Comida|cumpleaños|velas|betún
-Galleta|Comida|horno|crujiente|azúcar
-Churro|Comida|azúcar|feria|canela
-Playa|Lugares|arena|mar|sol
-Pirámide|Lugares|Egipto|piedra|faraón
-Escuela|Lugares|clases|maestro|recreo
-Hospital|Lugares|doctor|bata|camilla
-Aeropuerto|Lugares|avión|maleta|vuelo
-Cine|Lugares|película|palomitas|pantalla
-Estadio|Lugares|gol|graderías|hinchada
-Biblioteca|Lugares|libros|silencio|estantería
-Museo|Lugares|cuadros|historia|visita
-Selva|Lugares|árboles|monos|verde
-Desierto|Lugares|arena|calor|cactus
-Montaña|Lugares|cima|nieve|altura
-Isla|Lugares|mar|playa|palmeras
-Volcán|Lugares|lava|humo|erupción
-Castillo|Lugares|rey|torre|foso
-Granja|Lugares|tractor|vacas|campo
-Mercado|Lugares|puestos|fruta|compra
-Parque|Lugares|pasto|bancas|juegos
-Iglesia|Lugares|campana|rezar|cruz
-Faro|Lugares|luz|barcos|costa
-Cueva|Lugares|oscuridad|murciélago|estalactita
-Cascada|Lugares|agua|río|caída
-Cenote|Lugares|México|azul|nadar
-Paraguas|Objetos|lluvia|tela|mango
-Reloj|Objetos|hora|manecillas|tic
-Llave|Objetos|puerta|metal|cerradura
-Espejo|Objetos|reflejo|baño|vidrio
-Lámpara|Objetos|luz|foco|noche
-Almohada|Objetos|dormir|suave|cama
-Tijeras|Objetos|cortar|papel|hojas
-Martillo|Objetos|clavo|golpe|obra
-Mochila|Objetos|escuela|espalda|libros
-Lápiz|Objetos|escribir|punta|grafito
-Libro|Objetos|páginas|leer|historia
-Cámara|Objetos|foto|flash|lente
-Teléfono|Objetos|llamar|pantalla|bolsillo
-Guitarra|Objetos|cuerdas|música|acorde
-Balón|Objetos|redondo|gol|patear
-Anillo|Objetos|dedo|boda|brillo
-Corona|Objetos|rey|oro|cabeza
-Vela|Objetos|llama|cera|cumpleaños
-Escoba|Objetos|barrer|piso|cerdas
-Maleta|Objetos|viaje|ruedas|ropa
-Brújula|Objetos|norte|aguja|mapa
-Control|Objetos|botones|videojuego|sofá
-Fútbol|Deportes|gol|cancha|balón
-Baloncesto|Deportes|aro|encestar|rebote
-Béisbol|Deportes|bate|guante|jonrón
-Tenis|Deportes|raqueta|red|pelota
-Natación|Deportes|alberca|agua|brazada
-Boxeo|Deportes|guantes|ring|golpe
-Ciclismo|Deportes|bici|pedales|casco
-Golf|Deportes|hoyo|palo|green
-Voleibol|Deportes|red|saque|playa
-Surf|Deportes|ola|tabla|mar
-Karate|Deportes|patada|cinturón|dojo
-Doctor|Profesiones|hospital|bata|estetoscopio
-Maestro|Profesiones|pizarrón|escuela|clase
-Bombero|Profesiones|fuego|manguera|camión
-Policía|Profesiones|sirena|patrulla|placa
-Chef|Profesiones|cocina|gorro|sartén
-Piloto|Profesiones|avión|cabina|cielo
-Astronauta|Profesiones|espacio|luna|traje
-Veterinario|Profesiones|mascotas|clínica|perro
-Cantante|Profesiones|micrófono|escenario|voz
-Actor|Profesiones|película|cámara|escena
-Dentista|Profesiones|dientes|consulta|muela
-Panadero|Profesiones|horno|pan|harina
-Pescador|Profesiones|caña|barco|anzuelo
-Arcoíris|Naturaleza|colores|lluvia|cielo
-Trueno|Naturaleza|tormenta|ruido|rayo
-Nieve|Naturaleza|invierno|frío|blanco
-Huracán|Naturaleza|viento|lluvia|ojo
-Terremoto|Naturaleza|temblor|suelo|grieta
-Eclipse|Naturaleza|sol|luna|oscuridad
-Tornado|Naturaleza|embudo|viento|giro
-Estrella|Naturaleza|noche|brillo|cielo
-Luna|Naturaleza|noche|cráter|plata
-Sol|Naturaleza|día|calor|amarillo
-Cactus|Naturaleza|espinas|desierto|verde
-Robot|Tecnología|metal|circuitos|futuro
-Dron|Tecnología|hélices|cámara|vuelo
-Internet|Tecnología|wifi|red|navegador
-Computadora|Tecnología|teclado|pantalla|mouse
-Videojuego|Tecnología|control|pantalla|jugador
-Satélite|Tecnología|órbita|señal|espacio
-Audífonos|Tecnología|música|orejas|volumen
-Impresora|Tecnología|papel|tinta|hoja
-Wifi|Tecnología|contraseña|señal|router
-Avión|Transporte|alas|cielo|piloto
-Barco|Transporte|mar|ancla|puerto
-Tren|Transporte|vías|vagón|estación
-Bicicleta|Transporte|pedales|ruedas|casco
-Cohete|Transporte|espacio|fuego|luna
-Taxi|Transporte|tarifa|calle|chofer
-Patineta|Transporte|ruedas|truco|tabla
-Mariachi|México|sombrero|trompeta|serenata
-Piñata|México|dulces|fiesta|palo
-Catrina|México|calavera|muertos|elegante
-Alebrije|México|colores|madera|fantasía
-Mole|México|chocolate|pollo|salsa
-Cempasúchil|México|naranja|ofrenda|muertos
-Nopal|México|espinas|bandera|verde
-Aguacate|México|guacamole|hueso|verde
-Ofrenda|México|velas|foto|muertos
-Piano|Música|teclas|notas|cola
-Micrófono|Música|cantar|voz|escenario
-Violín|Música|arco|cuerdas|orquesta
-Trompeta|Música|viento|metal|jazz
-Flauta|Música|aire|agujeros|soplar
-Karaoke|Música|letra|micrófono|cantar
-Refrigerador|Casa|frío|cocina|hielo
-Sofá|Casa|sala|cojines|sentarse
-Cama|Casa|dormir|sábanas|almohada
-Ventana|Casa|vidrio|vista|cortina
-Puerta|Casa|llave|picaporte|entrar
-Escalera|Casa|escalón|subir|barandal
-Ducha|Casa|agua|baño|jabón
-Horno|Casa|calor|pastel|cocina
-Lavadora|Casa|ropa|jabón|centrifugar
-Vestido|Ropa|fiesta|falda|tela
-Zapatos|Ropa|pies|agujetas|suela
-Bufanda|Ropa|invierno|cuello|lana
-Guantes|Ropa|manos|frío|dedos
-Lentes|Ropa|ojos|vista|armazón
-Corbata|Ropa|oficina|nudo|formal
-Chamarra|Ropa|cierre|frío|abrigo
-Botas|Ropa|lluvia|tacón|cuero
-Corazón|Cuerpo|latido|pecho|amor
-Cerebro|Cuerpo|pensar|cabeza|ideas
-Ojo|Cuerpo|ver|pestaña|pupila
-Diente|Cuerpo|morder|blanco|muela
-Hueso|Cuerpo|esqueleto|duro|calcio
-Pulmón|Cuerpo|aire|respirar|pecho
-Oreja|Cuerpo|oír|arete|sonido
-Nariz|Cuerpo|oler|estornudo|punta
-Arete|Accesorios|oreja|aro|brillo
-Pulsera|Accesorios|muñeca|cadena|adorno
-Diadema|Accesorios|cabeza|brillo|princesa
-Gorra|Accesorios|visera|cabeza|sol
-Boina|Accesorios|cabeza|lana|artista
-Cinturón|Accesorios|hebilla|cintura|cuero
-Moño|Accesorios|lazo|regalo|pelo
-Pasador|Accesorios|pelo|pinza|cabello
-Broche|Accesorios|prendedor|tela|adorno
-Pendiente|Accesorios|oreja|aro|brillo
-Tobillera|Accesorios|tobillo|cadena|playa
-Cadena|Accesorios|cuello|oro|plata
-Medalla|Accesorios|premio|cuello|oro
-Insignia|Accesorios|pin|uniforme|escudo
-Pañuelo|Accesorios|cuello|seda|bolsillo
-Gemelos|Accesorios|camisa|puño|formal
-Tirantes|Accesorios|pantalón|hombros|tiras
-Riñonera|Accesorios|cintura|bolsa|viaje
-Bolso|Accesorios|mano|asa|cartera
-Cartera|Accesorios|dinero|bolsillo|tarjetas
-Monedero|Accesorios|monedas|cierre|bolsillo
-Cangurera|Accesorios|cintura|viaje|bolsa
-Visera|Accesorios|sol|frente|deporte
-Gafas|Accesorios|sol|ojos|oscuras
-Parche|Accesorios|ojo|pirata|tela
-Máscara|Accesorios|cara|disfraz|antifaz
-Antifaz|Accesorios|ojos|baile|carnaval
-Tiara|Accesorios|princesa|brillo|cabeza
-Mitones|Accesorios|dedos|frío|lana
-Chal|Accesorios|hombros|tela|frío
-Sombrilla|Accesorios|sol|playa|sombra
-Abanico|Accesorios|aire|calor|mano
-Peineta|Accesorios|pelo|adorno|flamenco
-Horquilla|Accesorios|pelo|moño|metal
-Coletero|Accesorios|cola|pelo|liga
-Liga|Accesorios|pelo|cola|elástico
-Pinza|Accesorios|pelo|broche|cabello
-Hebilla|Accesorios|cinturón|metal|cierre
-Correa|Accesorios|reloj|muñeca|cuero
-Dije|Accesorios|collar|colgante|cadena
-Agua|Bebidas|vaso|sed|transparente
-Jugo|Bebidas|fruta|vaso|dulce
-Refresco|Bebidas|gas|lata|dulce
-Té|Bebidas|taza|hojas|caliente
-Vino|Bebidas|uva|copa|tinto
-Cerveza|Bebidas|espuma|vaso|cebada
-Sidra|Bebidas|manzana|burbujas|copa
-Licuado|Bebidas|fruta|vaso|espeso
-Batido|Bebidas|leche|dulce|vaso
-Atole|Bebidas|maíz|taza|caliente
-Horchata|Bebidas|arroz|canela|vaso
-Jamaica|Bebidas|flor|roja|vaso
-Tamarindo|Bebidas|pulpa|ácido|vaso
-Limonada|Bebidas|limón|vaso|fría
-Naranjada|Bebidas|naranja|vaso|fría
-Malteada|Bebidas|helado|pajilla|dulce
-Capuchino|Bebidas|café|espuma|taza
-Espresso|Bebidas|café|corto|taza
-Moka|Bebidas|café|chocolate|taza
-Ponche|Bebidas|fruta|caliente|fiesta
-Tequila|Bebidas|agave|caballito|México
-Mezcal|Bebidas|agave|ahumado|México
-Ron|Bebidas|caña|vaso|caribe
-Whisky|Bebidas|barril|vaso|ámbar
-Champán|Bebidas|burbujas|copa|brindis
-Mate|Bebidas|hierba|bombilla|caliente
-Sake|Bebidas|arroz|Japón|vaso
-Pulque|Bebidas|maguey|México|blanco
-Vodka|Bebidas|transparente|vaso|frío
-Ginebra|Bebidas|enebro|vaso|botánica
-Flan|Postres|caramelo|huevo|molde
-Gelatina|Postres|temblor|molde|dulce
-Brownie|Postres|chocolate|horno|cuadro
-Cupcake|Postres|betún|papel|dulce
-Muffin|Postres|horno|dulce|desayuno
-Pay|Postres|relleno|corteza|rebanada
-Cheesecake|Postres|queso|frío|base
-Merengue|Postres|huevo|azúcar|blanco
-Paleta|Postres|palo|fría|dulce
-Bombón|Postres|chocolate|relleno|dulce
-Trufa|Postres|chocolate|cacao|bola
-Mazapán|Postres|cacahuate|dulce|México
-Alegría|Postres|amaranto|miel|dulce
-Cajeta|Postres|leche|cabra|dulce
-Glorias|Postres|cajeta|nuez|dulce
-Buñuelo|Postres|azúcar|feria|frito
-Empanada|Postres|relleno|horno|dulce
-Rosca|Postres|reyes|higo|pan
-Concha|Postres|azúcar|pan|desayuno
-Cuerno|Postres|panadería|mantequilla|dulce
-Polvorón|Postres|azúcar|migaja|dulce
-Beso|Postres|merengue|chocolate|dulce
-Oblea|Postres|cajeta|delgada|dulce
-Pera|Frutas|verde|dulce|árbol
-Uva|Frutas|racimo|vino|morada
-Durazno|Frutas|pelusa|hueso|dulce
-Cereza|Frutas|roja|palo|dulce
-Limón|Frutas|ácido|amarillo|jugo
-Naranja|Frutas|gajos|jugo|cáscara
-Toronja|Frutas|amarga|rosa|gajos
-Kiwi|Frutas|verde|semillas|peludo
-Piña|Frutas|corona|tropical|amarilla
-Coco|Frutas|agua|cáscara|blanco
-Papaya|Frutas|semillas|naranja|tropical
-Guayaba|Frutas|semillas|rosa|aroma
-Melón|Frutas|verde|semillas|verano
-Ciruela|Frutas|hueso|morada|dulce
-Higo|Frutas|semillas|dulce|morado
-Granada|Frutas|semillas|rojas|corona
-Frambuesa|Frutas|roja|pequeña|ácida
-Zarzamora|Frutas|morada|arbusto|dulce
-Arándano|Frutas|azul|pequeño|antioxidante
-Mandarina|Frutas|gajos|cáscara|dulce
-Lima|Frutas|verde|ácida|jugo
-Tuna|Frutas|nopal|semillas|dulce
-Mamey|Frutas|naranja|hueso|dulce
-Chirimoya|Frutas|semillas|blanca|dulce
-Guanábana|Frutas|espinas|blanca|ácida
-Maracuyá|Frutas|semillas|ácida|tropical
-Lechuga|Verduras|hojas|ensalada|verde
-Tomate|Verduras|rojo|ensalada|jugo
-Cebolla|Verduras|lágrimas|capas|cocina
-Ajo|Verduras|dientes|olor|cocina
-Zanahoria|Verduras|naranja|conejo|cruda
-Papa|Verduras|frita|tierra|almidón
-Pepino|Verduras|verde|fresco|ensalada
-Brócoli|Verduras|árbol|verde|vapor
-Coliflor|Verduras|blanca|vapor|verdura
-Espinaca|Verduras|hojas|verde|hierro
-Calabaza|Verduras|naranja|semillas|sopa
-Ejote|Verduras|verde|vainas|cocido
-Chícharo|Verduras|verde|vaina|dulce
-Betabel|Verduras|rojo|tierra|dulce
-Rábano|Verduras|rojo|picante|ensalada
-Apio|Verduras|tallos|verde|crujiente
-Pimiento|Verduras|colores|ensalada|dulce
-Berenjena|Verduras|morada|frita|verdura
-Champiñón|Verduras|hongo|sombrero|cocina
-Elote baby|Verduras|maíz|pequeño|ensalada
-Nopalito|Verduras|espinas|verde|guisado
+Perro|Animales|ladra|mascota|hueso
+Gato|Animales|maúlla|bigotes|ratón
+Vaca|Animales|leche|muuu|granja
+Caballo|Animales|galope|silla de montar|herradura
+Cerdo|Animales|chiquero|rosa|lodo
+Gallina|Animales|huevos|cacarea|plumas
+Gallo|Animales|quiquiriquí|amanecer|cresta
+Pato|Animales|cuac|laguna|pico plano
+Borrego|Animales|lana|bee|rebaño
+Chivo|Animales|cuernos|cabra|monte
+Burro|Animales|rebuzna|orejas largas|carga
+Conejo|Animales|zanahoria|orejas largas|brinca
+Ratón|Animales|queso|chiquito|ratonera
+Perico|Animales|habla|verde|jaula
+Pez|Animales|pecera|nada|aletas
+León|Animales|melena|rey de la selva|ruge
+Tigre|Animales|rayas|felino|naranja
+Elefante|Animales|trompa|enorme|colmillos
+Jirafa|Animales|cuello largo|manchas|alta
+Cebra|Animales|rayas|blanco y negro|África
+Mono|Animales|plátano|árbol|cola
+Oso|Animales|miel|hiberna|peludo
+Lobo|Animales|aúlla|luna|manada
+Zorro|Animales|astuto|cola esponjosa|naranja
+Venado|Animales|cuernos|bosque|Bambi
+Ardilla|Animales|nueces|cola esponjosa|árbol
+Tortuga|Animales|caparazón|lenta|vive mucho
+Rana|Animales|croac|salta|charco
+Serpiente|Animales|veneno|se arrastra|lengua
+Cocodrilo|Animales|dientes|río|reptil
+Iguana|Animales|reptil|verde|sol
+Águila|Animales|bandera|vuela alto|garras
+Búho|Animales|noche|ojos grandes|sabio
+Paloma|Animales|parque|blanca|paz
+Colibrí|Animales|pequeño|flores|aletea rápido
+Pingüino|Animales|frío|no vuela|smoking
+Delfín|Animales|mar|inteligente|salta
+Tiburón|Animales|aleta|dientes|mar
+Ballena|Animales|enorme|mar|chorro de agua
+Pulpo|Animales|ocho brazos|tinta|mar
+Abeja|Animales|miel|pica|panal
+Mariposa|Animales|alas de colores|oruga|flores
+Hormiga|Animales|fila|pequeña|azúcar
+Araña|Animales|telaraña|ocho patas|rincón
+Mosca|Animales|zumbido|basura|molesta
+Mosquito|Animales|pica|zumbido|noche
+Cucaracha|Animales|cocina|asco|chancla
+Alacrán|Animales|cola|pica|veneno
+Murciélago|Animales|noche|cueva|vampiro
+Camello|Animales|joroba|desierto|arena
+Canguro|Animales|salta|bolsa|Australia
+Panda|Animales|bambú|blanco y negro|oso
+Koala|Animales|árbol|Australia|duerme
+Flamenco|Animales|rosa|una pata|laguna
+Pavo|Animales|Navidad|plumas|cena
+Ajolote|Animales|Xochimilco|anfibio|sonríe
+Taco|Comida mexicana|tortilla|salsa|taquería
+Tamal|Comida mexicana|hoja de maíz|atole|Candelaria
+Pozole|Comida mexicana|maíz|15 de septiembre|rábano
+Enchiladas|Comida mexicana|salsa|tortilla enrollada|queso
+Quesadilla|Comida mexicana|queso|tortilla doblada|comal
+Chilaquiles|Comida mexicana|totopos|desayuno|salsa verde
+Mole|Comida mexicana|chocolate|pollo|Puebla
+Guacamole|Comida mexicana|aguacate|verde|totopos
+Sope|Comida mexicana|masa gruesa|frijoles|crema
+Gordita|Comida mexicana|masa|rellena|chicharrón
+Tostada|Comida mexicana|crujiente|tinga|plana
+Torta|Comida mexicana|bolillo|jamón|lonchería
+Elote|Comida mexicana|mayonesa|chile|mazorca
+Esquites|Comida mexicana|vasito|granos|limón
+Birria|Comida mexicana|Jalisco|consomé|res
+Barbacoa|Comida mexicana|hoyo|domingo|borrego
+Carnitas|Comida mexicana|cerdo|Michoacán|cazo
+Pozole verde|Comida mexicana|Guerrero|pepita|jueves
+Tlayuda|Comida mexicana|Oaxaca|grande|asiento
+Huarache|Comida mexicana|masa alargada|forma de sandalia|salsa
+Flautas|Comida mexicana|largas|fritas|crema
+Chiles en nogada|Comida mexicana|bandera|granada|septiembre
+Menudo|Comida mexicana|panza|cruda|caldo rojo
+Pambazo|Comida mexicana|pan rojo|papa con chorizo|salsa
+Tacos al pastor|Comida mexicana|trompo|piña|adobo
+Tinga|Comida mexicana|pollo deshebrado|chipotle|tostada
+Frijoles|Comida mexicana|refritos|negros|olla
+Arroz rojo|Comida mexicana|jitomate|guarnición|sopa
+Chicharrón|Comida mexicana|cerdo|crujiente|truena
+Salsa verde|Comida mexicana|tomate verde|molcajete|picante
+Totopos|Comida mexicana|crujientes|triángulos|salsa
+Burrito|Comida mexicana|tortilla de harina|enrollado|norte
+Nachos|Comida mexicana|queso derretido|totopos|cine
+Ceviche|Comida mexicana|limón|pescado crudo|tostada
+Aguachile|Comida mexicana|camarón|picante|Sinaloa
+Cochinita pibil|Comida mexicana|Yucatán|achiote|cebolla morada
+Pizza|Comida|queso|rebanadas|italiana
+Hamburguesa|Comida|carne|pan|papas
+Hot dog|Comida|salchicha|pan|cátsup
+Sushi|Comida|arroz|japonés|palillos
+Pasta|Comida|italiana|tenedor|salsa
+Espagueti|Comida|largos|salsa roja|italiano
+Ensalada|Comida|lechuga|sana|aderezo
+Sándwich|Comida|pan de caja|jamón|lonche
+Papas fritas|Comida|cátsup|crujientes|freidora
+Pollo frito|Comida|empanizado|crujiente|cubeta
+Alitas|Comida|búfalo|picantes|partido
+Huevo|Comida|gallina|yema|estrellado
+Pan|Comida|panadería|horno|harina
+Bolillo|Comida|telera|torta|panadería
+Queso|Comida|leche|amarillo|derretido
+Jamón|Comida|rebanadas|sándwich|cerdo
+Salchicha|Comida|hot dog|cerdo|alargada
+Tocino|Comida|crujiente|desayuno|cerdo
+Arroz|Comida|blanco|granos|chino
+Cereal|Comida|leche|desayuno|tazón
+Hot cakes|Comida|miel|desayuno|esponjosos
+Sopa|Comida|cuchara|caliente|plato hondo
+Carne asada|Comida|parrilla|domingo|carbón
+Pescado|Comida|mar|espinas|frito
+Camarones|Comida|mar|coctel|rosados
+Mantequilla|Comida|pan|amarilla|untar
+Mayonesa|Comida|blanca|untar|sándwich
+Cátsup|Comida|roja|papas|botella
+Mostaza|Comida|amarilla|hot dog|botella
+Sal|Comida|salero|blanca|mar
+Manzana|Frutas|roja|árbol|Blancanieves
+Plátano|Frutas|amarillo|mono|cáscara
+Naranja|Frutas|jugo|gajos|cítrico
+Limón|Frutas|verde|ácido|tacos
+Fresa|Frutas|roja|crema|semillitas
+Uva|Frutas|racimo|vino|Año Nuevo
+Sandía|Frutas|roja por dentro|verde por fuera|semillas negras
+Melón|Frutas|naranja por dentro|redondo|dulce
+Piña|Frutas|corona|tropical|picosita
+Mango|Frutas|chamoy|amarillo|hueso
+Papaya|Frutas|naranja|semillas negras|desayuno
+Pera|Frutas|verde|forma rara|jugosa
+Durazno|Frutas|pelusa|hueso|almíbar
+Cereza|Frutas|roja|pastel|pareja
+Coco|Frutas|agua|playa|duro
+Kiwi|Frutas|verde|peludo|pequeño
+Guayaba|Frutas|ponche|olor fuerte|semillas
+Mandarina|Frutas|pequeña|pelar fácil|naranja
+Toronja|Frutas|amarga|rosa|grande
+Tuna|Frutas|nopal|espinas|verde o roja
+Mamey|Frutas|naranja|hueso grande|licuado
 Jitomate|Verduras|rojo|salsa|ensalada
-Chayote|Verduras|verde|caldo|suave
-Camote|Verduras|dulce|naranja|horno
-Yuca|Verduras|raíz|almidón|frita
-Destornillador|Herramientas|tornillo|punta|taller
-Taladro|Herramientas|broca|agujero|ruido
-Sierra|Herramientas|dientes|cortar|madera
-Pinzas|Herramientas|agarrar|metal|taller
-Llave inglesa|Herramientas|tuerca|ajuste|taller
-Cinta métrica|Herramientas|medir|metros|obra
-Nivel|Herramientas|burbuja|recto|obra
-Clavo|Herramientas|martillo|punta|madera
-Tornillo|Herramientas|rosca|destornillador|metal
-Tuerca|Herramientas|rosca|tornillo|metal
-Alicate|Herramientas|cortar|alambre|mango
-Serrucho|Herramientas|madera|dientes|corte
-Formón|Herramientas|madera|filo|tallar
-Lija|Herramientas|áspera|suavizar|madera
-Brocha|Herramientas|pintura|cerdas|pared
-Rodillo|Herramientas|pintura|pared|cubeta
-Escalera de mano|Herramientas|peldaños|altura|obra
-Carretilla|Herramientas|rueda|carga|obra
-Pala|Herramientas|tierra|cavar|mango
-Pico|Herramientas|punta|tierra|obra
-Cúter|Herramientas|navaja|cortar|cartón
-Grapadora|Herramientas|grapas|papel|oficina
-Pegamento|Herramientas|unir|blanco|secado
-Cinta|Herramientas|adhesivo|pegar|rollo
-Flexómetro|Herramientas|medir|cinta|obra
-Llave allen|Herramientas|hexágono|tornillo|mueble
-Soldadura|Herramientas|calor|metal|chispa
-Soplete|Herramientas|llama|calor|metal
-Prensa|Herramientas|apretar|madera|taller
-Escofina|Herramientas|raspar|madera|áspera
-Lluvia|Clima|agua|nubes|paraguas
-Viento|Clima|aire|ráfagas|frío
-Granizo|Clima|hielo|bolitas|tormenta
-Relámpago|Clima|luz|trueno|cielo
-Neblina|Clima|blanco|mañana|poca
-Rocío|Clima|gotas|mañana|pasto
-Helada|Clima|hielo|frío|pasto
-Calor|Clima|sol|verano|sudor
-Frío|Clima|invierno|abrigo|temblar
-Brisa|Clima|aire|suave|playa
-Chaparrón|Clima|lluvia|fuerte|corto
-Llovizna|Clima|lluvia|fina|gris
-Ventisca|Clima|nieve|viento|frío
-Sequía|Clima|seco|calor|tierra
-Monzón|Clima|lluvia|temporada|trópico
-Ciclón|Clima|viento|lluvia|giro
-Manga|Clima|agua|tromba|mar
-Arco|Clima|colores|lluvia|cielo
-Niebla densa|Clima|blanco|carretera|poca
-Chubasco|Clima|lluvia|súbita|nube
-Marte|Espacio|rojo|planeta|rover
-Júpiter|Espacio|gigante|mancha|planeta
-Saturno|Espacio|anillos|planeta|gas
-Venus|Espacio|caliente|planeta|brillante
-Mercurio|Espacio|pequeño|sol|planeta
-Urano|Espacio|inclinado|planeta|frío
-Neptuno|Espacio|azul|planeta|lejano
-Plutón|Espacio|enano|hielo|lejano
-Cometa|Espacio|cola|hielo|órbita
-Asteroide|Espacio|roca|cinturón|espacio
-Meteoro|Espacio|estrella|fugaz|cielo
-Galaxia|Espacio|estrellas|espiral|universo
-Nebulosa|Espacio|gas|colores|estrellas
-Agujero negro|Espacio|gravedad|oscuridad|espacio
-Constelación|Espacio|estrellas|figura|cielo
-Órbita|Espacio|giro|planeta|satélite
-Cohete espacial|Espacio|fuego|lanzamiento|nasa
-Traje espacial|Espacio|casco|oxígeno|astronauta
-Estación espacial|Espacio|órbita|módulos|astronautas
-Telescopio Hubble|Espacio|espejo|órbita|fotos
-Vía Láctea|Espacio|galaxia|estrellas|noche
-Supernova|Espacio|explosión|estrella|luz
-Eclipse lunar|Espacio|luna|sombra|roja
-Cráter|Espacio|hueco|luna|impacto
-Anillos|Espacio|Saturno|hielo|planeta
-Ancla|Mar|barco|fondo|metal
-Timón|Mar|barco|dirección|rueda
-Velero|Mar|velas|viento|barco
-Submarino nuclear|Mar|profundo|agua|inmersión
-Coral|Mar|arrecife|colores|mar
-Alga|Mar|verde|mar|planta
-Medusa|Mar|tentáculos|transparente|picadura
-Estrella de mar|Mar|brazos|arena|mar
-Cangrejo|Mar|pinzas|arena|caparazón
-Langosta|Mar|pinzas|mar|roja
-Camarón|Mar|cola|mar|rosado
-Ballena azul|Mar|gigante|océano|canto
-Delfín nariz|Mar|salto|sonar|gris
-Foca|Mar|bigotes|hielo|nadar
-Morsa|Mar|colmillos|hielo|bigotes
-Mantarraya|Mar|alas|mar|plana
-Caballito de mar|Mar|cola|vertical|pequeño
-Erizo|Mar|púas|fondo|redondo
-Perla|Mar|ostra|brillo|joya
-Farol marino|Mar|luz|barco|noche
-Boyas|Mar|flotar|marca|mar
-Marea alta|Mar|sube|playa|luna
-Ola|Mar|cresta|surf|espuma
-Mosca|Insectos|zumbido|alas|basura
-Mosquito|Insectos|picadura|zumbido|noche
-Hormiga|Insectos|fila|hormiguero|pequeña
-Cucaracha|Insectos|cocina|rápida|oscura
-Grillo|Insectos|canto|noche|salto
-Libélula|Insectos|alas|charco|colores
-Saltamontes|Insectos|salto|verde|campo
-Mariquita|Insectos|puntos|roja|jardín
-Luciérnaga|Insectos|luz|noche|verano
-Escarabajo|Insectos|caparazón|duro|jardín
-Avispa|Insectos|aguijón|rayas|panal
-Abejorro|Insectos|peludo|zumbido|flores
-Polilla|Insectos|noche|luz|alas
-Ciempiés|Insectos|patas|suelo|largo
-Oruga|Insectos|hojas|capullo|verde
-Chicharra|Insectos|canto|verano|árbol
-Pulga|Insectos|salto|perro|pequeña
-Garrapata|Insectos|sangre|perro|pequeña
-Termita|Insectos|madera|colonia|casa
-Mantis|Insectos|rezar|verde|caza
-Tiranosaurio|Dinosaurios|dientes|rey|jurásico
-Triceratops|Dinosaurios|cuernos|cresta|herbívoro
-Velociraptor|Dinosaurios|garras|rápido|caza
-Braquiosaurio|Dinosaurios|cuello|gigante|hojas
-Estegosaurio|Dinosaurios|placas|cola|picos
-Pterodáctilo|Dinosaurios|alas|vuelo|pico
-Diplodocus|Dinosaurios|cuello|cola|largo
-Anquilosaurio|Dinosaurios|armadura|cola|mazazo
-Espinosaurio|Dinosaurios|vela|agua|dientes
-Plesiosaurio|Dinosaurios|cuello|mar|aletas
-Iguanodonte|Dinosaurios|pulgar|herbívoro|grande
-Parasaurolophus|Dinosaurios|cresta|pico|herbívoro
-Alosaurio|Dinosaurios|garras|caza|jurásico
-Carnotauro|Dinosaurios|cuernos|corto|caza
-Compsognato|Dinosaurios|pequeño|rápido|caza
-Patagosaurus|Dinosaurios|cuello|herbívoro|grande
-Ammonites|Dinosaurios|concha|fósil|mar
-Fósil|Dinosaurios|hueso|piedra|museo
-Receso escolar|Escuela|patio|descanso|juego
-Mochila escolar|Escuela|libros|espalda|útiles
-Libreta|Escuela|hojas|apuntes|espiral
+Tomate verde|Verduras|cáscara|salsa verde|ácido
+Cebolla|Verduras|lloras|capas|blanca
+Ajo|Verduras|dientes|olor fuerte|vampiros
+Zanahoria|Verduras|naranja|conejo|vista
+Papa|Verduras|frita|puré|tierra
+Lechuga|Verduras|hojas|ensalada|verde
+Pepino|Verduras|verde|fresco|rodajas
+Brócoli|Verduras|arbolito|verde|vapor
+Calabacita|Verduras|verde|pequeña|guisado
+Chile|Verduras|picante|jalapeño|rojo o verde
+Nopal|Verduras|espinas|verde|bandera
+Elote crudo|Verduras|maíz|mazorca|granos
+Rábano|Verduras|rojo|pozole|picosito
+Cilantro|Verduras|hierba|tacos|verde
+Espinaca|Verduras|Popeye|hojas|fuerza
+Champiñón|Verduras|hongo|blanco|sombrero
+Chayote|Verduras|verde|espinas|caldo
+Ejotes|Verduras|verdes|largos|vaina
+Chícharos|Verduras|verdes|bolitas|lata
+Betabel|Verduras|morado|mancha|jugo
+Agua|Bebidas|transparente|sed|garrafón
+Refresco|Bebidas|gas|lata|burbujas
+Coca-Cola|Bebidas|roja|negra|refresco
+Jugo de naranja|Bebidas|desayuno|exprimido|vitamina
+Leche|Bebidas|vaca|blanca|vaso
+Café|Bebidas|negro|mañana|taza
+Chocolate caliente|Bebidas|taza|abuelita|invierno
+Té|Bebidas|bolsita|caliente|hierbas
+Horchata|Bebidas|arroz|canela|agua fresca
+Agua de jamaica|Bebidas|roja|flor|agua fresca
+Agua de limón|Bebidas|chía|ácida|jarra
+Atole|Bebidas|maíz|caliente|tamales
+Champurrado|Bebidas|chocolate|atole|espeso
+Licuado|Bebidas|plátano|leche|licuadora
+Malteada|Bebidas|helado|popote|espesa
+Tequila|Bebidas|agave|Jalisco|caballito
+Mezcal|Bebidas|Oaxaca|ahumado|gusano
+Cerveza|Bebidas|espuma|fría|caguama
+Michelada|Bebidas|chile|limón|cerveza
+Vino|Bebidas|uvas|copa|tinto
+Pulque|Bebidas|maguey|blanco|pulquería
+Helado|Dulces|cono|frío|sabores
+Paleta de hielo|Dulces|palito|fría|agua
+Chocolate|Dulces|cacao|café|tableta
+Pastel|Dulces|cumpleaños|velas|betún
+Gelatina|Dulces|tiembla|colores|fiesta
+Flan|Dulces|caramelo|huevo|tembloroso
+Churros|Dulces|azúcar|canela|chocolate
+Dona|Dulces|agujero|glaseada|panadería
+Concha|Dulces|pan dulce|azúcar|café
+Pan de muerto|Dulces|huesitos|noviembre|azúcar
+Rosca de reyes|Dulces|muñequito|6 de enero|tamales
+Mazapán|Dulces|cacahuate|se desmorona|rosa
+Cajeta|Dulces|leche de cabra|café|Celaya
+Chamoy|Dulces|rojo|picante|fruta
+Tamarindo|Dulces|cáscara café|ácido|chile
+Alegría|Dulces|amaranto|miel|redonda
+Glorias|Dulces|nuez|cajeta|celofán rojo
+Algodón de azúcar|Dulces|feria|rosa|nube
+Paleta|Dulces|caramelo|palito|lengua de color
+Chicle|Dulces|masticar|bomba|pegajoso
+Gomitas|Dulces|ositos|colores|suaves
+Arroz con leche|Dulces|canela|postre|cremoso
+Buñuelos|Dulces|piloncillo|crujientes|Navidad
+Galleta de animalitos|Dulces|figuras|niños|leche
+Pay de queso|Dulces|rebanada|frío|galleta
+Cama|Casa|dormir|almohada|cobija
+Almohada|Casa|cabeza|dormir|suave
+Cobija|Casa|calientita|cama|invierno
+Sillón|Casa|sala|sentarse|cojines
+Mesa|Casa|comer|patas|mantel
+Silla|Casa|sentarse|cuatro patas|respaldo
+Puerta|Casa|abrir|llave|tocar
+Ventana|Casa|vidrio|cortina|abrir
+Escalera|Casa|subir|escalones|barandal
+Techo|Casa|arriba|lluvia|azotea
+Azotea|Casa|tendedero|arriba|tinaco
+Tinaco|Casa|agua|azotea|negro
+Patio|Casa|afuera|perro|lavadero
+Lavadero|Casa|tallar ropa|patio|cemento
+Tendedero|Casa|ropa|pinzas|sol
+Cochera|Casa|carro|portón|estacionar
+Sala|Casa|sillón|tele|visitas
+Recámara|Casa|cama|dormir|cuarto
+Baño|Casa|excusado|regadera|lavabo
+Cocina|Casa|estufa|cocinar|refri
+Comedor|Casa|mesa|comer|sillas
+Televisión|Casa|canales|control|sala
+Refrigerador|Casa|frío|imanes|comida
+Estufa|Casa|lumbre|gas|ollas
+Microondas|Casa|calentar|bip|plato que gira
+Licuadora|Casa|salsa|ruido|vaso
+Lavadora|Casa|ropa sucia|jabón|gira
+Plancha|Casa|arrugas|caliente|ropa
+Ventilador|Casa|calor|aspas|aire
+Foco|Casa|luz|apagador|bombilla
+Reloj de pared|Casa|hora|tic tac|manecillas
+Espejo|Casa|reflejo|baño|vidrio
+Closet|Casa|ropa|ganchos|recámara
+Cortina|Casa|ventana|tela|cerrar
+Tapete|Casa|piso|entrada|suave
+Florero|Casa|flores|agua|mesa
+Olla|Cocina|frijoles|tapa|grande
+Sartén|Cocina|freír|huevo|mango
+Cuchara|Cocina|sopa|cubierto|redonda
+Tenedor|Cocina|picos|cubierto|pinchar
+Cuchillo|Cocina|cortar|filo|cubierto
+Plato|Cocina|comer|redondo|lavar trastes
+Vaso|Cocina|beber|agua|vidrio
+Taza|Cocina|café|asa|caliente
+Molcajete|Cocina|piedra|salsa|tejolote
+Comal|Cocina|tortillas|calentar|plano
+Tortillero|Cocina|tortillas calientitas|tela|canasta
+Cucharón|Cocina|servir sopa|grande|olla
+Tabla de picar|Cocina|cortar|madera|cuchillo
+Rallador|Cocina|queso|agujeros|zanahoria
+Exprimidor|Cocina|limón|jugo|apretar
+Abrelatas|Cocina|lata|girar|atún
+Olla express|Cocina|presión|silba|frijoles
+Popote|Cocina|sorber|refresco|tubito
+Servilleta|Cocina|limpiarse|papel|mesa
+Mantel|Cocina|mesa|tela|cubrir
+Jarra|Cocina|agua fresca|asa|servir
+Escuela|Escuela|maestra|salón|recreo
+Salón de clases|Escuela|pupitres|pizarrón|alumnos
+Maestra|Escuela|enseña|tarea|calificaciones
+Alumno|Escuela|estudia|uniforme|mochila
+Pizarrón|Escuela|gis|plumón|borrar
+Lápiz|Escuela|escribir|grafito|sacapuntas
+Pluma|Escuela|tinta|escribir|azul
+Goma|Escuela|borrar|errores|blanca
+Sacapuntas|Escuela|lápiz|punta|viruta
+Cuaderno|Escuela|hojas|apuntes|cuadrícula
+Libro|Escuela|páginas|leer|biblioteca
+Mochila|Escuela|espalda|útiles|cierre
 Regla|Escuela|medir|centímetros|recta
-Sacapuntas|Escuela|punta|lápiz|viruta
-Pegamento escolar|Escuela|blanco|barras|unir
-Tijeras escolares|Escuela|cortar|papel|punta
-Mapa|Escuela|países|geografía|colores
-Globo terráqueo|Escuela|mundo|girar|países
-Pizarrón blanco|Escuela|marcador|clase|borrar
-Marcador|Escuela|tinta|pizarra|color
-Gis|Escuela|blanco|pizarra|polvo
-Borrador escolar|Escuela|goma|lápiz|error
-Compás escolar|Escuela|círculo|punta|mate
-Transportador|Escuela|ángulos|grados|semicírculo
-Calculadora escolar|Escuela|números|sumas|mate
-Diccionario|Escuela|palabras|definiciones|letras
-Enciclopedia|Escuela|tomos|saber|consulta
-Uniforme escolar|Escuela|camisa|escuela|igual
-Corbata escolar|Escuela|nudo|uniforme|formal
-Recreo|Escuela|patio|juego|campana
-Tarea escolar|Escuela|casa|libreta|maestro
-Examen escolar|Escuela|preguntas|calificación|hoja
-Diploma escolar|Escuela|papel|graduación|logro
-Laboratorio escolar|Escuela|bata|ciencia|tubos
-Microscopio escolar|Escuela|lentes|células|ciencia
-Aula|Escuela|pupitres|maestro|clase
-Pupitre|Escuela|mesa|silla|aula
-Campana escolar|Escuela|recreo|sonido|patio
-Director|Escuela|oficina|escuela|autoridad
-Película|Cine|pantalla|palomitas|sala
-Director de cine|Cine|cámara|escena|película
-Guion|Cine|diálogos|historia|papel
-Claqueta|Cine|acción|número|toma
-Cámara de cine|Cine|lente|rodaje|filme
-Actor de cine|Cine|papel|escena|fama
-Oscar|Cine|estatuilla|premio|dorada
-Trailer|Cine|avance|película|corto
-Butaca|Cine|asiento|sala|reclinable
-Pantalla|Cine|proyección|oscura|gigante
-Proyector|Cine|luz|película|sala
-Subtítulos|Cine|letras|abajo|idioma
-Doblaje|Cine|voces|idioma|actores
-Estreno|Cine|premiere|boletos|nuevo
-Boleto|Cine|entrada|fila|asiento
-Créditos|Cine|nombres|final|música
-Escena|Cine|toma|plano|acción
-Villano|Cine|malo|héroe|trama
-Héroe|Cine|bueno|capa|rescate
-Musical|Cine|canciones|baile|escenario
-Documental|Cine|real|hechos|cámara
-Animación|Cine|dibujos|frames|color
-Terror|Cine|miedo|susto|oscuridad
-Comedia|Cine|risa|chiste|ligera
-Ajedrez|Juegos|rey|tablero|piezas
-Damas|Juegos|fichas|tablero|salto
+Tijeras|Escuela|cortar|papel|punta
+Pegamento|Escuela|pegar|barra|resistol
+Colores|Escuela|pintar|caja|dibujar
+Crayolas|Escuela|cera|colores|niños
+Calculadora|Escuela|números|sumar|matemáticas
+Examen|Escuela|preguntas|calificación|nervios
+Tarea|Escuela|casa|maestra|hacer
+Recreo|Escuela|patio|torta|jugar
+Uniforme|Escuela|todos iguales|suéter|escudo
+Director|Escuela|oficina|regaño|jefe de la escuela
+Boleta|Escuela|calificaciones|firma|papás
+Graduación|Escuela|toga|birrete|diploma
+Playa|Lugares|arena|mar|vacaciones
+Hospital|Lugares|doctores|enfermos|ambulancia
+Mercado|Lugares|puestos|marchante|frutas
+Tianguis|Lugares|puestos|calle|un día a la semana
+Supermercado|Lugares|carrito|pasillos|cajas
+Tiendita|Lugares|esquina|papitas|fiado
+Farmacia|Lugares|medicinas|receta|Similares
+Panadería|Lugares|charola|pinzas|pan dulce
+Tortillería|Lugares|kilo|fila|maíz
+Cine|Lugares|película|palomitas|pantalla grande
+Parque|Lugares|árboles|columpios|bancas
+Iglesia|Lugares|misa|campanas|padre
+Zócalo|Lugares|bandera gigante|plaza|centro
+Estadio|Lugares|futbol|afición|gradas
+Aeropuerto|Lugares|aviones|maletas|vuelos
+Central de autobuses|Lugares|camiones|boletos|viaje
+Banco|Lugares|dinero|cajero|fila
+Gimnasio|Lugares|pesas|ejercicio|caminadora
+Museo|Lugares|exposiciones|historia|cuadros
+Zoológico|Lugares|animales|jaulas|Chapultepec
+Feria|Lugares|juegos mecánicos|algodón de azúcar|rueda de la fortuna
+Circo|Lugares|carpa|payasos|trapecio
+Panteón|Lugares|tumbas|Día de Muertos|flores
+Rancho|Lugares|vacas|campo|caballos
+Pirámide|Lugares|Teotihuacán|piedra|escalones
+Volcán|Lugares|Popocatépetl|lava|ceniza
+Montaña|Lugares|alta|escalar|cima
+Bosque|Lugares|árboles|pinos|acampar
+Desierto|Lugares|arena|cactus|calor
+Selva|Lugares|árboles|animales|húmeda
+Río|Lugares|agua que corre|puente|peces
+Lago|Lugares|agua quieta|lancha|patos
+Cascada|Lugares|agua que cae|alta|ruido
+Cenote|Lugares|Yucatán|agua azul|cueva
+Isla|Lugares|rodeada de agua|playa|palmeras
+Cueva|Lugares|oscura|murciélagos|piedra
+Plaza comercial|Lugares|tiendas|cine|paseo
+Restaurante|Lugares|mesero|menú|propina
+Taquería|Lugares|trompo|taquero|salsas
+Oficina|Lugares|escritorio|computadora|jefe
+Doctor|Profesiones|bata|receta|consultorio
+Enfermera|Profesiones|hospital|inyección|cuidar
+Dentista|Profesiones|dientes|muela|taladro
+Maestro|Profesiones|clases|escuela|enseñar
+Policía|Profesiones|patrulla|uniforme|ladrones
+Bombero|Profesiones|fuego|manguera|camión rojo
+Chef|Profesiones|cocina|gorro blanco|restaurante
+Mesero|Profesiones|charola|propina|restaurante
+Taquero|Profesiones|trompo|tacos|cuchillo
+Panadero|Profesiones|pan|horno|harina
+Carpintero|Profesiones|madera|martillo|muebles
+Albañil|Profesiones|ladrillos|cemento|obra
+Plomero|Profesiones|tubos|fugas|baño
+Electricista|Profesiones|cables|luz|focos
+Mecánico|Profesiones|carros|taller|grasa
+Chofer|Profesiones|maneja|volante|ruta
+Taxista|Profesiones|taxi|pasajeros|taxímetro
+Piloto|Profesiones|avión|cabina|vuelo
+Astronauta|Profesiones|espacio|cohete|traje
+Cantante|Profesiones|micrófono|canciones|escenario
+Actor|Profesiones|películas|telenovela|actúa
+Futbolista|Profesiones|balón|goles|cancha
+Abogado|Profesiones|leyes|juicio|traje
+Veterinario|Profesiones|mascotas|animales|vacunas
+Peluquero|Profesiones|tijeras|corte de pelo|estética
+Cartero|Profesiones|cartas|buzón|correo
+Granjero|Profesiones|campo|animales|cosecha
+Pescador|Profesiones|caña|lancha|peces
+Payaso|Profesiones|nariz roja|fiesta infantil|zapatos grandes
+Mago|Profesiones|trucos|conejo|sombrero
+Pintor|Profesiones|brocha|cuadros|colores
+Fotógrafo|Profesiones|cámara|fotos|flash
+Periodista|Profesiones|noticias|entrevista|micrófono
+Fútbol|Deportes|balón|gol|portero
+Básquetbol|Deportes|canasta|botar|alto
+Béisbol|Deportes|bate|jonrón|guante
+Tenis|Deportes|raqueta|pelota amarilla|red
+Natación|Deportes|alberca|nadar|goggles
+Box|Deportes|guantes|ring|golpes
+Lucha libre|Deportes|máscara|ring|luchador
+Voleibol|Deportes|red|playa|remate
+Ciclismo|Deportes|bicicleta|casco|pedalear
+Atletismo|Deportes|correr|pista|olimpiadas
+Golf|Deportes|hoyo|palo|bandera
+Karate|Deportes|cinta negra|patada|kimono
+Surf|Deportes|olas|tabla|playa
+Patinaje|Deportes|patines|hielo|ruedas
+Charrería|Deportes|charro|caballo|reata
+Futbol americano|Deportes|casco|touchdown|ovalado
+Ping pong|Deportes|mesa|raqueta pequeña|pelotita
+Boliche|Deportes|pinos|chuza|bola pesada
+Gimnasia|Deportes|piruetas|flexible|olimpiadas
+Clavados|Deportes|trampolín|alberca|salto
+Carreras de carros|Deportes|Fórmula 1|pista|velocidad
+Camisa|Ropa|botones|cuello|manga
+Playera|Ropa|manga corta|algodón|estampado
+Pantalón|Ropa|piernas|cinturón|bolsas
+Mezclilla|Ropa|azul|jeans|pantalón
+Falda|Ropa|piernas|niñas|uniforme
+Vestido|Ropa|fiesta|largo|elegante
+Short|Ropa|corto|calor|piernas
+Suéter|Ropa|frío|lana|manga larga
+Chamarra|Ropa|frío|cierre|abrigo
+Sudadera|Ropa|gorro|deportiva|frío
+Pijama|Ropa|dormir|noche|cómoda
+Calcetines|Ropa|pies|par|zapatos
+Calzones|Ropa|ropa interior|elástico|cajón
+Zapatos|Ropa|pies|agujetas|par
+Tenis deportivos|Ropa|correr|agujetas|deportivos
+Chanclas|Ropa|mamá|playa|vuelan
+Huaraches|Ropa|cuero|tejidos|sandalias
+Botas|Ropa|vaquero|altas|cuero
+Gorra|Ropa|visera|cabeza|sol
+Sombrero|Ropa|charro|ala ancha|sol
+Bufanda|Ropa|cuello|frío|lana
+Guantes|Ropa|manos|frío|dedos
+Corbata|Ropa|traje|nudo|cuello
+Traje|Ropa|saco|corbata|elegante
+Cinturón|Ropa|hebilla|pantalón|cuero
+Rebozo|Ropa|tejido|hombros|mujer
+Poncho|Ropa|frío|lana|cabeza por en medio
+Impermeable|Ropa|lluvia|plástico|capucha
+Lentes|Ropa|vista|armazón|ojos
+Lentes de sol|Ropa|oscuros|playa|sol
+Cabeza|Cuerpo|pelo|cerebro|arriba
+Ojo|Cuerpo|ver|parpadear|pestañas
+Nariz|Cuerpo|oler|estornudar|moco
+Boca|Cuerpo|labios|hablar|comer
+Diente|Cuerpo|morder|cepillo|muela
+Lengua|Cuerpo|saborear|rosada|sacarla
+Oreja|Cuerpo|oír|aretes|lóbulo
+Pelo|Cuerpo|peine|cabello|corte
+Mano|Cuerpo|cinco dedos|saludar|aplaudir
+Dedo|Cuerpo|uña|cinco|señalar
+Uña|Cuerpo|esmalte|cortaúñas|dedo
+Brazo|Cuerpo|codo|músculo|abrazo
+Pierna|Cuerpo|rodilla|caminar|muslo
+Pie|Cuerpo|zapato|dedos|olor
+Rodilla|Cuerpo|pierna|doblar|raspón
+Codo|Cuerpo|brazo|doblar|hueso
+Espalda|Cuerpo|atrás|columna|dolor
+Panza|Cuerpo|ombligo|comer mucho|barriga
+Ombligo|Cuerpo|panza|hoyito|centro
+Corazón|Cuerpo|late|amor|pecho
+Cerebro|Cuerpo|pensar|cabeza|inteligencia
+Hueso|Cuerpo|esqueleto|duro|perro
+Sangre|Cuerpo|roja|herida|venas
+Carro|Transporte|volante|gasolina|cuatro llantas
+Camión|Transporte|pasaje|parada|chofer
+Microbús|Transporte|pesero|ruta|bajan en la esquina
+Taxi|Transporte|pasajero|taxímetro|amarillo
+Bicicleta|Transporte|pedales|dos ruedas|casco
+Moto|Transporte|casco|dos ruedas|rápida
+Avión|Transporte|alas|aeropuerto|piloto
+Helicóptero|Transporte|hélices|aterriza vertical|ruido
+Barco|Transporte|mar|capitán|ancla
+Lancha|Transporte|motor|lago|pequeña
+Tren|Transporte|vías|vagones|estación
+Metro|Transporte|subterráneo|vagones|andén
+Ambulancia|Transporte|sirena|hospital|emergencia
+Patrulla|Transporte|policía|sirena|torreta
+Camión de bomberos|Transporte|rojo|escalera|incendio
+Tráiler|Transporte|carretera|caja grande|carga
+Grúa|Transporte|arrastra carros|corralón|gancho
+Trajinera|Transporte|Xochimilco|colores|canales
+Patineta|Transporte|ruedas|trucos|tabla
+Cohete|Transporte|espacio|despegue|fuego
+Submarino|Transporte|bajo el agua|amarillo|periscopio
+Celular|Tecnología|llamadas|pantalla|apps
+Computadora|Tecnología|teclado|pantalla|internet
+Laptop|Tecnología|portátil|teclado|batería
+Tablet|Tecnología|pantalla táctil|grande|apps
+Internet|Tecnología|wifi|navegar|páginas
+WhatsApp|Tecnología|mensajes|palomitas azules|verde
+Facebook|Tecnología|red social|likes|azul
+TikTok|Tecnología|videos cortos|bailes|scroll
+YouTube|Tecnología|videos|suscribirse|rojo
+Instagram|Tecnología|fotos|historias|filtros
+Google|Tecnología|buscador|preguntar|internet
+Netflix|Tecnología|series|películas|maratón
+Videojuego|Tecnología|control|consola|jugar
+Audífonos|Tecnología|música|orejas|cable
+Bocina|Tecnología|música|volumen|bluetooth
+Cargador|Tecnología|batería|cable|enchufe
+Control remoto|Tecnología|tele|botones|canales
+Cámara|Tecnología|fotos|lente|flash
+Impresora|Tecnología|papel|tinta|imprimir
+Robot|Tecnología|máquina|metal|futuro
+Dron|Tecnología|vuela|cámara|control
+Selfie|Tecnología|foto|tú mismo|celular
+Contraseña|Tecnología|secreta|entrar|olvidar
+Wifi|Tecnología|señal|contraseña|router
+Sol|Naturaleza|calor|día|amarillo
+Luna|Naturaleza|noche|llena|hombre lobo
+Estrella|Naturaleza|brilla|noche|fugaz
+Nube|Naturaleza|cielo|blanca|lluvia
+Lluvia|Naturaleza|agua|paraguas|charcos
+Arcoíris|Naturaleza|colores|después de la lluvia|olla de oro
+Rayo|Naturaleza|tormenta|luz|trueno
+Viento|Naturaleza|aire|sopla|papalote
+Nieve|Naturaleza|blanca|frío|muñeco
+Granizo|Naturaleza|hielo|tormenta|bolitas
+Temblor|Naturaleza|alerta sísmica|se mueve el suelo|septiembre
+Huracán|Naturaleza|viento fuerte|costa|lluvia
+Tornado|Naturaleza|remolino|viento|destruye
+Árbol|Naturaleza|hojas|tronco|sombra
+Flor|Naturaleza|pétalos|olor|jardín
+Rosa|Naturaleza|espinas|roja|amor
+Girasol|Naturaleza|amarillo|semillas|sol
+Cempasúchil|Naturaleza|naranja|Día de Muertos|ofrenda
+Cactus|Naturaleza|espinas|desierto|verde
+Pasto|Naturaleza|verde|jardín|podar
+Hoja|Naturaleza|árbol|verde|otoño
+Piedra|Naturaleza|dura|suelo|roca
+Arena|Naturaleza|playa|castillos|reloj
+Tierra|Naturaleza|lodo|planta|suelo
+Fuego|Naturaleza|caliente|quema|fogata
+Día de Muertos|Tradiciones|ofrenda|calaveras|2 de noviembre
+Navidad|Tradiciones|regalos|árbol|25 de diciembre
+Año Nuevo|Tradiciones|uvas|doce campanadas|brindis
+Posada|Tradiciones|piñata|diciembre|pedir posada
+Piñata|Tradiciones|dulces|palo|ojos vendados
+Grito de Independencia|Tradiciones|15 de septiembre|¡Viva México!|campana
+Día de Reyes|Tradiciones|rosca|6 de enero|juguetes
+Día de las madres|Tradiciones|10 de mayo|flores|mamá
+Cumpleaños|Tradiciones|pastel|velas|mañanitas
+Las Mañanitas|Tradiciones|canción|cumpleaños|despertar
+Boda|Tradiciones|novia|anillos|vestido blanco
+Quinceañera|Tradiciones|vestido|vals|chambelanes
+Bautizo|Tradiciones|bebé|padrinos|iglesia
+Ofrenda|Tradiciones|velas|fotos|cempasúchil
+Catrina|Tradiciones|calavera|elegante|sombrero
+Calaverita|Tradiciones|verso|Día de Muertos|dulce
+Halloween|Tradiciones|disfraces|dulces|calabaza
+Día de la Candelaria|Tradiciones|tamales|2 de febrero|muñequito
+Nacimiento|Tradiciones|pesebre|Niño Dios|Navidad
+Árbol de Navidad|Tradiciones|esferas|luces|estrella
+Santa Claus|Tradiciones|barba blanca|regalos|trineo
+Reyes Magos|Tradiciones|tres|regalos|camello
+Mariachi|Música|trompeta|sombrero|serenata
+Guitarra|Música|cuerdas|rasguear|acordes
+Piano|Música|teclas|blanco y negro|pianista
+Batería|Música|tambores|baquetas|platillos
+Violín|Música|arco|cuerdas|orquesta
+Trompeta|Música|soplar|metal|mariachi
+Micrófono|Música|cantar|escenario|voz
+Karaoke|Música|cantar|letra en pantalla|fiesta
+Concierto|Música|escenario|público|banda
+Banda|Música|tuba|Sinaloa|tambora
+Cumbia|Música|bailar|sonidero|güira
+Reggaetón|Música|perreo|Bad Bunny|bailar
+Corrido|Música|historia|norteño|acordeón
+Acordeón|Música|norteño|fuelle|teclas
+Bailar|Música|pista|pasos|pareja
+Canción|Música|letra|cantar|melodía
+Pelota|Juegos|redonda|rebota|patear
+Muñeca|Juegos|niña|vestido|jugar a la casita
+Carrito|Juegos|ruedas|juguete|pista
+Trompo|Juegos|gira|cuerda|punta
+Yoyo|Juegos|sube y baja|hilo|trucos
+Canicas|Juegos|vidrio|bolitas|tirito
+Lotería|Juegos|cartas|frijolitos|¡Lotería!
+Papalote|Juegos|viento|hilo|cola
+Rompecabezas|Juegos|piezas|armar|imagen
+Ajedrez|Juegos|rey|tablero|jaque mate
 Dominó|Juegos|fichas|puntos|mesa
-Lotería|Juegos|cartas|frijoles|grito
-Serpientes|Juegos|tablero|dados|escaleras
-Memoria|Juegos|pares|cartas|voltear
-Uno|Juegos|cartas|colores|roba
-Poker|Juegos|cartas|apuesta|mesa
-Rompecabezas|Juegos|piezas|imagen|armar
-Cubo Rubik|Juegos|colores|caras|girar
-Canicas|Juegos|bolitas|vidrio|suelo
-Trompo|Juegos|girar|punta|cuerda
-Yoyo|Juegos|hilo|sube|baja
-Cometa de juego|Juegos|viento|hilo|cielo
-Papalote|Juegos|viento|cola|hilo
-Resorte|Juegos|salta|metal|espiral
-Nintendo|Juegos|consola|mando|mario
-Playstation|Juegos|consola|mando|sony
-Xbox|Juegos|consola|mando|microsoft
-Minecraft|Juegos|bloques|construir|pixel
-Among Us|Juegos|nave|impostor|tripulación
-Mario|Juegos|fontanero|hongos|saltos
-Tetris|Juegos|bloques|líneas|caer
-Pacman|Juegos|fantasmas|puntos|laberinto
-Póker de mesa|Juegos|fichas|cartas|apuesta
-Dados|Juegos|puntos|cubo|azar
-Ruleta|Juegos|giro|números|casino
-Billar|Juegos|taco|bolas|mesa
-Pinball|Juegos|palancas|bola|luces
-Escritorio|Oficina|mesa|computadora|silla
-Silla de oficina|Oficina|ruedas|respaldo|escritorio
-Archivero|Oficina|cajones|papeles|oficina
-Engrapadora|Oficina|grapas|papel|metal
-Clip|Oficina|papel|metal|sujetar
-Carpeta|Oficina|papeles|pestañas|archivo
-Sobre|Oficina|carta|sello|correo
-Sello|Oficina|tinta|correo|estampa
-Calculadora de oficina|Oficina|números|sumas|teclas
-Teléfono de oficina|Oficina|llamada|auricular|extensión
-Impresora de oficina|Oficina|papel|tinta|hojas
-Escáner|Oficina|papel|digital|copia
-Fotocopiadora|Oficina|copias|papel|tóner
-Tóner|Oficina|tinta|impresora|negro
-Monitor|Oficina|pantalla|escritorio|imagen
-Teclado de oficina|Oficina|letras|escribir|teclas
-Mouse|Oficina|clic|flecha|alfombrilla
-Agenda|Oficina|citas|días|notas
-Post-it|Oficina|nota|amarillo|pegar
-Pluma|Oficina|tinta|escribir|punta
-Bolígrafo|Oficina|tinta|escribir|click
-Marcatextos|Oficina|amarillo|resaltar|texto
-Organizador|Oficina|cajitas|clips|escritorio
-Rosa|Jardín|pétalos|espinas|roja
-Tulipán|Jardín|bulbo|color|tallo
-Girasol|Jardín|amarillo|semillas|sol
-Margarita|Jardín|blanca|pétalos|centro
-Orquídea|Jardín|elegante|pétalos|maceta
-Clavel|Jardín|rizado|olor|ramo
-Jazmín|Jardín|blanco|aroma|noche
-Lavanda|Jardín|morada|aroma|campo
-Helecho|Jardín|hojas|sombra|verde
-Hiedra|Jardín|trepa|pared|verde
-Bonsái|Jardín|árbol|mini|maceta
-Maceta|Jardín|tierra|planta|barro
-Regadera|Jardín|agua|chorro|plantas
-Manguera|Jardín|agua|jardín|enrollar
-Tijeras de podar|Jardín|cortar|ramas|jardín
-Rastrillo|Jardín|hojas|dientes|césped
-Pala de jardín|Jardín|tierra|cavar|mango
-Semilla|Jardín|tierra|brotar|planta
-Abono|Jardín|tierra|nutriente|plantas
-Cesped|Jardín|verde|cortar|pasto
-Invernadero|Jardín|vidrio|plantas|calor
-Compost|Jardín|hojas|tierra|orgánico
-Enredadera|Jardín|trepa|muro|hojas
-Petunia|Jardín|color|maceta|flor
-Geranio|Jardín|rojo|maceta|balcón
+Uno|Juegos|cartas|colores|¡Uno!
+Serpientes y escaleras|Juegos|dados|tablero|subir y bajar
+Escondidas|Juegos|contar|esconderse|encontrar
+Stop|Juegos|letra|categorías|¡Stop!
+Columpio|Juegos|parque|mecer|cadenas
+Resbaladilla|Juegos|parque|deslizarse|bajar
+Sube y baja|Juegos|dos niños|parque|tabla
+Lego|Juegos|bloques|construir|piezas
+Peluche|Juegos|osito|suave|abrazar
+Paraguas|Objetos|lluvia|abrir|mango
+Reloj despertador|Objetos|alarma|mañana|despertar
+Lámpara|Objetos|luz|foco|buró
+Vela|Objetos|cera|mecha|cumpleaños
+Cerillos|Objetos|fuego|caja|prender
+Encendedor|Objetos|fuego|chispa|bolsillo
+Pila|Objetos|energía|control|AA
+Moneda|Objetos|dinero|redonda|metal
+Billete|Objetos|dinero|papel|cartera
+Tarjeta de crédito|Objetos|pagar|banco|plástico
+Libreta|Objetos|hojas|apuntes|espiral
+Carta|Objetos|sobre|correo|escribir
+Periódico|Objetos|noticias|papel|diario
+Revista|Objetos|fotos|portada|páginas
+Caja|Objetos|cartón|guardar|cuadrada
+Bolsa de plástico|Objetos|súper|cargar|mandado
+Botella|Objetos|agua|tapa|plástico
+Lata|Objetos|refresco|aluminio|abrir
+Globo|Objetos|inflar|fiesta|reventar
+Regalo|Objetos|moño|envoltura|sorpresa
+Peine|Objetos|cabello|dientes|peinar
+Cepillo de dientes|Objetos|pasta|dientes|baño
+Jabón|Objetos|espuma|lavar|baño
+Shampoo|Objetos|cabello|espuma|botella
+Toalla|Objetos|secarse|baño|playa
+Papel de baño|Objetos|rollo|baño|blanco
+Pasta de dientes|Objetos|cepillo|menta|tubo
+Desodorante|Objetos|axilas|olor|sudor
+Perfume|Objetos|olor|botellita|rociar
+Maquillaje|Objetos|labial|cara|rubor
+Rastrillo|Objetos|afeitar|barba|navaja
+Secadora de pelo|Objetos|aire caliente|cabello|ruido
+Martillo|Objetos|clavo|golpear|carpintero
+Desarmador|Objetos|tornillo|girar|punta
+Clavo|Objetos|martillo|pared|punta
+Tornillo|Objetos|desarmador|rosca|metal
+Cinta adhesiva|Objetos|pegar|rollo|diurex
+Cuerda|Objetos|amarrar|nudo|soga
+Candado|Objetos|llave|seguridad|cerrar
+Escalera de mano|Objetos|subir|peldaños|alcanzar
+Manguera|Objetos|agua|jardín|regar
+Pala|Objetos|tierra|cavar|mango
+Brocha|Objetos|pintura|pared|cerdas
+Linterna|Objetos|luz|oscuridad|pilas
+Llavero|Objetos|llaves|aro|colgante
+Silbato|Objetos|soplar|árbitro|sonido
+Tijeras de cocina|Objetos|cortar|filo|mango
+Imán|Objetos|refri|metal|atrae
+Dinosaurio|Fantasía|extinto|enorme|Jurassic Park
 Dragón|Fantasía|fuego|alas|escamas
-Unicornio|Fantasía|cuerno|magia|blanco
-Hada|Fantasía|alas|polvo|magia
-Mago|Fantasía|varita|sombrero|hechizo
-Bruja|Fantasía|escoba|caldero|sombrero
-Hechicero|Fantasía|varita|hechizo|capa
-Elfo|Fantasía|orejas|bosque|arco
-Enano|Fantasía|barba|hacha|mina
-Gigante|Fantasía|alto|fuerza|castillo
-Duende|Fantasía|travieso|verde|sombrero
-Gnomo|Fantasía|jardín|gorro|pequeño
-Sirena|Fantasía|cola|mar|canto
-Centauro|Fantasía|caballo|humano|arco
-Minotauro|Fantasía|toro|laberinto|cuernos
-Fénix|Fantasía|fuego|renacer|alas
-Grifo|Fantasía|águila|león|alas
-Hidra|Fantasía|cabezas|serpiente|veneno
-Kraken|Fantasía|tentáculos|mar|barco
-Vampiro|Fantasía|colmillos|noche|capa
-Hombre lobo|Fantasía|luna|pelaje|aullido
-Zombi|Fantasía|muerto|lento|cerebro
-Esqueleto|Fantasía|huesos|cueva|armadura
-Golem|Fantasía|piedra|gigante|runas
-Varita|Fantasía|mago|hechizo|madera
-Caldero|Fantasía|poción|bruja|burbujas
-Poción|Fantasía|frasco|magia|líquido
-París|Ciudades|torre|Francia|Sena
-Londres|Ciudades|bigben|Inglaterra|lluvia
-Roma|Ciudades|coliseo|Italia|pasta
-Madrid|Ciudades|España|plaza|rey
-Barcelona|Ciudades|Gaudí|playa|rambla
-Nueva York|Ciudades|estatua|rascacielos|taxi
-Tokio|Ciudades|Japón|neón|sushi
-Pekín|Ciudades|muralla|China|palacio
-El Cairo|Ciudades|pirámides|Egipto|Nilo
-Río|Ciudades|Brasil|Cristo|playa
-Buenos Aires|Ciudades|tango|Argentina|obelisco
-Bogotá|Ciudades|Colombia|montaña|café
-Santiago|Ciudades|Chile|cordillera|vino
-Montevideo|Ciudades|Uruguay|rambla|mate
-La Habana|Ciudades|Cuba|malecon|autos
-Cancún ciudad|Ciudades|playa|Caribe|hoteles
-Guadalajara|Ciudades|México|mariachi|tequila
-Monterrey|Ciudades|México|cerro|industria
-Oaxaca|Ciudades|México|mole|mezcal
-Mérida|Ciudades|México|yucateca|blanca
-Puebla|Ciudades|México|mole|catedral
-Querétaro|Ciudades|México|acueducto|centro
-Veracruz|Ciudades|México|puerto|jarocho
-Tijuana|Ciudades|frontera|México|taco
-Chicago|Ciudades|viento|EUA|lago
-Los Ángeles|Ciudades|hollywood|playa|tráfico
-Miami|Ciudades|playa|calor|palmeras
-Toronto|Ciudades|Canadá|torre|frío
-Sídney|Ciudades|ópera|Australia|puerto
-Francia|Países|París|torre|vino
-Italia|Países|Roma|pasta|pizza
-España|Países|Madrid|flamenco|paella
-Alemania|Países|Berlín|cerveza|castillos
-Japón|Países|Tokio|sushi|cerezo
-China|Países|muralla|dragón|arroz
-India|Países|Taj|curry|sari
-Brasil|Países|carnaval|fútbol|Amazonas
-Argentina|Países|tango|asado|Messi
-Canadá|Países|maple|frío|hockey
-Australia|Países|canguros|Sídney|desierto
-Egipto|Países|pirámides|Nilo|faraón
-México país|Países|taco|bandera|águila
-Estados Unidos|Países|bandera|dólar|hollywood
-Inglaterra|Países|té|reina|lluvia
-Portugal|Países|Lisboa|pastel|mar
-Grecia|Países|Atenas|olivo|islas
-Turquía|Países|Estambul|mezquita|kebab
-Rusia|Países|Moscú|frío|matrioska
-Suecia|Países|IKEA|frío|bosques
-Noruega|Países|fiordos|frío|aurora
-Suiza|Países|Alpes|chocolate|relojes
-Perú|Países|Machu|ceviche|Andes
-Colombia|Países|café|flores|Caribe
-Chile país|Países|cordillera|vino|desierto
-Cuba|Países|Habana|ron|son
-Irlanda|Países|verde|trébol|lluvia
-Marruecos|Países|desierto|té|zocos
-Tailandia|Países|templos|picante|playas
-Rojo|Colores|fuego|rosa|stop
-Azul|Colores|cielo|mar|frío
-Verde|Colores|pasto|hoja|esperanza
-Amarillo|Colores|sol|plátano|luz
-Naranja color|Colores|atardecer|fruta|cálido
-Morado|Colores|uva|realeza|noche
-Rosa color|Colores|flor|dulce|suave
-Negro|Colores|noche|tinta|oscuro
-Blanco|Colores|nieve|leche|luz
-Gris|Colores|nube|ceniza|neutro
-Café color|Colores|madera|chocolate|tierra
-Dorado|Colores|oro|brillo|premio
-Plateado|Colores|plata|metal|luna
-Turquesa|Colores|mar|piedra|azulverde
-Beige|Colores|arena|neutro|claro
-Violeta|Colores|flor|morado|suave
-Alegría emoción|Emociones|risa|fiesta|salto
-Tristeza|Emociones|llanto|gris|bajo
-Miedo|Emociones|susto|temblor|oscuridad
-Enojo|Emociones|grito|rojo|ceño
-Sorpresa|Emociones|ojos|boca|inesperado
-Calma|Emociones|paz|respirar|suave
-Amor emoción|Emociones|corazón|abrazo|cariño
-Vergüenza|Emociones|sonrojo|mirada|ocultar
-Orgullo|Emociones|pecho|logro|alto
-Envidia|Emociones|verde|deseos|ajeno
-Culpa|Emociones|peso|error|disculpa
-Esperanza|Emociones|luz|futuro|ánimo
-Nostalgia|Emociones|recuerdo|suspiro|antes
-Ternura|Emociones|suave|abrazo|pequeño
-Euforia|Emociones|grito|salto|fiesta
-Ansiedad|Emociones|nervios|pulso|espera
-Koala gris|Animales|eucalipto|Australia|siesta
-Panda rojo|Animales|cola|bambú|árbol
-Lemur|Animales|cola|Madagascar|anillos
-Pereza|Animales|lento|árbol|garras
-Armadillo|Animales|caparazón|bola|tierra
-Erizo terrestre|Animales|púas|bola|jardín
-Mapache|Animales|antifaz|basura|cola
-Mofeta|Animales|olor|raya|noche
-Castor|Animales|dientes|represa|cola
-Nutria|Animales|río|piedras|juguetona
-Foca gris|Animales|playa|pescado|aletas
-León marino|Animales|ladrido|rocas|bigotes
-Orca|Animales|ballena|blanco|negro
-Narval|Animales|colmillo|ártico|mar
-Beluga|Animales|blanca|ártico|cabeza
-Manatí|Animales|lento|río|bigotes
-Iguana|Animales|verde|sol|cresta
-Camaleón|Animales|color|lengua|ojos
-Gecko|Animales|pared|patas|noche
-Salamandra|Animales|húmeda|cola|anfibio
-Ajolote|Animales|México|branquias|sonrisa
-Sapo|Animales|verrugas|charco|noche
-Tucán|Animales|pico|colores|selva
-Guacamaya|Animales|colores|pico|selva
-Loro|Animales|habla|pico|verde
-Colibrí|Animales|pico|néctar|rápido
-Cuervo|Animales|negro|inteligente|grajido
-Paloma|Animales|plaza|blanca|arrullo
-Gaviota|Animales|playa|grito|blanca
-Pelícano|Animales|pico|bolsa|mar
-Cisne|Animales|blanco|cuello|lago
-Pavo|Animales|plumas|granja|gluglú
-Gallina|Animales|huevo|granja|cacareo
-Gallo|Animales|cresta|canto|mañana
-Pato|Animales|pico|laguna|cuac
-Ganso|Animales|cuello|graznido|laguna
-Burro|Animales|orejas|rebuzno|carga
-Caballo|Animales|crin|galope|herradura
-Vaca|Animales|leche|muu|cuernos
-Cerdo|Animales|hocico|rosado|granja
-Oveja|Animales|lana|balido|rebaño
-Cabra|Animales|barba|leche|cuernos
-Llama animal|Animales|escupe|Andes|lana
-Alpaca|Animales|lana|suave|Andes
-Búfalo|Animales|cuernos|manada|sabana
-Rinoceronte|Animales|cuerno|piel|sabana
-Guepardo|Animales|manchas|rápido|sabana
-Leopardo|Animales|manchas|árbol|sigiloso
-Pantera|Animales|negra|selva|sigilosa
-Jaguar|Animales|manchas|selva|América
-Puma|Animales|montaña|beige|sigiloso
-Lince|Animales|orejas|pincel|bosque
-Hiena|Animales|risa|manada|carroña
-Suricata|Animales|centinela|desierto|grupo
-Murciélago|Animales|noche|alas|cueva
-Ardilla|Animales|cola|nueces|árbol
-Ratón|Animales|queso|pequeño|bigotes
-Hamster|Animales|mejillas|rueda|jaula
-Cobaya|Animales|cuy|peludo|pequeño
-Chinchilla|Animales|suave|polvo|Andes
-Hurón|Animales|largo|juguetón|tubo
-Erizo mascota|Animales|púas|bola|nocturno
-Perezoso|Animales|lento|garra|selva
-Tapir|Animales|hocico|selva|herbívoro
-Okapi|Animales|rayas|selva|cuello
-Wombat|Animales|Australia|madriguera|corto
-Demonio de Tasmania|Animales|grito|Australia|negro
-Kiwi ave|Animales|pico|noche|plumas
-Casuario|Animales|casco|selva|peligroso
-Avestruz|Animales|grande|corre|huevo
-Emú|Animales|Australia|corre|plumas
-Ñandú|Animales|pampa|corre|plumas
-Cóndor|Animales|Andes|alas|carroña
-Halcón|Animales|caza|pico|rápido
-Buitre|Animales|calvo|carroña|vuela
-Cigüeña|Animales|pico|nido|bebé
-Garza|Animales|patas|laguna|pico
-Ibis|Animales|pico|curvo|Egipto
-Flamenco andino|Animales|rosa|laguna|patas
-Pez payaso|Animales|naranja|anémona|rayas
-Pez espada|Animales|pico|mar|rápido
-Atún|Animales|lata|mar|rojo
-Salmón|Animales|rosa|río|desove
-Trucha|Animales|río|manchas|pesca
-Piraña|Animales|dientes|río|cardumen
-Anguila|Animales|larga|río|resbalosa
-Bagre|Animales|bigotes|río|fondo
-Mantarraya gigante|Animales|alas|mar|plana
-Tiburón blanco|Animales|dientes|aleta|mar
-Tiburón martillo|Animales|cabeza|ojos|mar
-Caballito marino|Animales|cola|vertical|pequeño
-Estrella marina|Animales|brazos|arena|mar
-Erizo de mar|Animales|púas|fondo|redondo
-Langostino|Animales|cola|mar|rosado
-Centollo|Animales|pinzas|mar|patas
-Calamar|Animales|tinta|tentáculos|mar
-Sepia|Animales|tinta|camuflaje|mar
-Nautilo|Animales|concha|espiral|mar
-Caracol|Animales|concha|baba|lento
-Babosa|Animales|baba|jardín|lenta
-Lombriz|Animales|tierra|anillos|húmeda
-Medusa luna|Animales|transparente|tentáculos|mar
-Anémona|Animales|tentáculos|coral|fija
-Coral vivo|Animales|arrecife|colores|mar
-Esponja|Animales|poros|mar|suave
-Esturión|Animales|caviar|río|grande
-Mantarraya moteada|Animales|puntos|mar|plana
-Pozole rojo|Comida|maíz|caldo|orégano
-Mole poblano|Comida|chocolate|chile|pollo
-Tacos al pastor|Comida|trompo|piña|cerdo
-Quesadilla|Comida|tortilla|queso|comal
-Sopes|Comida|masa|frijoles|salsa
-Gorditas|Comida|masa|relleno|antojito
-Huarache|Comida|masa|alargado|frijoles
-Tlayuda|Comida|Oaxaca|tortilla|grande
-Cochinita|Comida|puerco|achiote|Yucatán
-Barbacoa|Comida|horno|consomé|borrego
-Birria|Comida|consomé|chivo|taco
-Menudo|Comida|panza|caldo|picante
-Sopa|Comida|caldo|cuchara|caliente
-Crema|Comida|espesa|cuchara|caliente
-Ensalada|Comida|lechuga|verduras|fresca
-Sándwich|Comida|pan|relleno|loncha
-Wrap|Comida|tortilla|rollo|relleno
-Burrito|Comida|tortilla|grande|relleno
-Nachos|Comida|queso|totopos|botana
-Totopos|Comida|triángulo|fritos|botana
-Elote asado|Comida|maíz|mayonesa|chile
-Esquites|Comida|maíz|vaso|limón
-Churro relleno|Comida|chocolate|azúcar|feria
-Crepa|Comida|delgada|dulce|Nutella
-Waffle|Comida|cuadros|miel|desayuno
-Panqueque|Comida|miel|desayuno|pila
-Hotcake|Comida|miel|desayuno|redondo
-Avena|Comida|hojuelas|leche|desayuno
-Granola|Comida|avena|nueces|yogur
-Yogur|Comida|lácteo|fruta|vaso
-Mermelada|Comida|fruta|pan|dulce
-Mantequilla|Comida|pan|amarilla|lácteo
-Miel|Comida|abeja|dulce|pan
-Nuez|Comida|cáscara|cerebro|dulce
-Almendra|Comida|cáscara|leche|fruto
-Cacahuate|Comida|cáscara|salado|botana
-Pistache|Comida|verde|cáscara|botana
-Semilla de girasol|Comida|cáscara|salada|botana
-Palomita dulce|Comida|caramelo|cine|maíz
-Chicharrón|Comida|cerdo|crujiente|botana
-Pepita|Comida|calabaza|verde|botana
-Chapulín|Comida|Oaxaca|sal|limón
-Escamoles|Comida|hormiga|lujo|México
-Chapulines|Comida|insecto|sal|Oaxaca
-Tostada|Comida|crujiente|frijoles|salsa
-Pambazo|Comida|chile|papa|pan
-Torta|Comida|telera|milanesa|aguacate
-Cemita|Comida|Puebla|pan|pápalo
-Pelona|Comida|torta|relleno|pan
-Mollete|Comida|bolillo|frijoles|queso
-Bolillo|Comida|pan|crujiente|telera
-Telera|Comida|pan|torta|suave
-Baguette|Comida|pan|largo|Francia
-Croissant|Comida|mantequilla|cuerno|Francia
-Brioche|Comida|mantequilla|dulce|pan
-Pretzel|Comida|sal|nudo|horno
-Bagel|Comida|agujero|semillas|desayuno
-Sushi nigiri|Comida|pescado|arroz|Japón
-Sashimi|Comida|pescado|crudo|láminas
-Tempura|Comida|frito|ligero|Japón
-Ramen picante|Comida|fideos|caldo|chile
-Udon|Comida|fideos|gruesos|caldo
-Soba|Comida|alforfón|fideos|Japón
-Gyoza|Comida|dumpling|frito|Japón
-Onigiri|Comida|arroz|triángulo|alga
-Wasabi|Comida|verde|picante|sushi
-Salsa soya|Comida|oscura|salada|sushi
-Jengibre|Comida|rosado|sushi|raíz
-Paella|Comida|arroz|azafrán|mariscos
-Risotto|Comida|arroz|cremoso|Italia
-Lasaña|Comida|capas|pasta|queso
-Ravioles|Comida|pasta|relleno|salsa
-Ñoquis|Comida|papa|pasta|salsa
-Espagueti|Comida|fideos|salsa|tenedor
-Fetuccini|Comida|cintas|salsa|pasta
-Canelones|Comida|tubos|relleno|bechamel
-Pizza margarita|Comida|tomate|albahaca|queso
-Calzone|Comida|pizza|cerrada|horno
-Focaccia|Comida|pan|romero|aceite
-Bruschetta|Comida|pan|tomate|ajo
-Carpaccio|Comida|láminas|crudo|aceite
-Tiramisú|Comida|café|queso|cacao
-Panna cotta|Comida|nata|vainilla|molde
-Gelato|Comida|Italia|helado|cremoso
-Sorbet|Comida|fruta|helado|frío
-Macaron|Comida|merengue|relleno|color
-Éclair|Comida|chocolate|relleno|alargado
-Profiterol|Comida|bola|relleno|chocolate
-Cannoli|Comida|tubo|ricota|Sicilia
-Churros con chocolate|Comida|azúcar|taza|feria
-Buñuelos de viento|Comida|azúcar|ligeros|fiesta
-Rosca de reyes|Comida|higo|fruta|enero
-Tamales oaxaqueños|Comida|hoja|mole|masa
-Tamales dulces|Comida|pasas|masa|hoja
-Atole de fresa|Comida|maíz|rosa|taza
-Champurrado|Comida|chocolate|maíz|taza
-Café de olla|Comida|piloncillo|canela|barro
-Agua de horchata|Comida|arroz|canela|vaso
-Agua de jamaica|Comida|flor|roja|vaso
-Michelada|Comida|cerveza|limón|chile
-Clericot|Comida|vino|fruta|copa
-Sangría|Comida|vino|fruta|jarra
-Margarita cóctel|Comida|tequila|limón|sal
-Piña colada|Comida|coco|piña|ron
-Mojito|Comida|hierbabuena|ron|lima
-Tablet|Tecnología|pantalla|táctil|apps
-Laptop|Tecnología|teclado|portátil|batería
-Smartwatch|Tecnología|muñeca|pasos|notificaciones
-Router|Tecnología|wifi|antenas|internet
-Módem|Tecnología|internet|caja|señal
-Servidor|Tecnología|datos|red|computadoras
-Nube|Tecnología|archivos|internet|guardar
-Bluetooth|Tecnología|inalámbrico|audífonos|pareo
-USB|Tecnología|puerto|memoria|cable
-Memoria USB|Tecnología|archivos|pequeña|puerto
-Disco duro|Tecnología|almacenar|gigas|computadora
-SSD|Tecnología|rápido|almacenar|disco
-Procesador|Tecnología|chip|velocidad|computadora
-Memoria RAM|Tecnología|rápida|programas|computadora
-Tarjeta gráfica|Tecnología|juegos|imagen|chip
-Monitor gamer|Tecnología|pantalla|hercios|juegos
-Teclado mecánico|Tecnología|clics|switches|escribir
-Mouse gamer|Tecnología|botones|luces|puntero
-Webcam|Tecnología|cámara|videollamada|lente
-Micrófono USB|Tecnología|podcast|voz|grabar
-Altavoz|Tecnología|sonido|bluetooth|música
-Bocina|Tecnología|sonido|fiesta|grave
-Soundbar|Tecnología|tele|barra|sonido
-Televisor|Tecnología|pantalla|canales|remoto
-Smart TV|Tecnología|apps|pantalla|wifi
-Control remoto|Tecnología|botones|tele|infrarrojo
-Consola|Tecnología|juegos|mando|tele
-Mando|Tecnología|botones|consola|jugar
-Joystick|Tecnología|palanca|arcade|botón
-Arcade|Tecnología|ficha|palanca|luces
-Realidad virtual|Tecnología|lentes|inmersión|juego
-Casco VR|Tecnología|lentes|sensores|juego
-Drone cámara|Tecnología|hélices|video|aire
-GoPro|Tecnología|cámara|deporte|pequeña
-Celular|Tecnología|pantalla|apps|bolsillo
-Smartphone|Tecnología|táctil|apps|cámara
-Cargador|Tecnología|cable|batería|enchufe
-Power bank|Tecnología|batería|portátil|carga
-Cable HDMI|Tecnología|video|tele|conector
-Adaptador|Tecnología|enchufe|viaje|corriente
-Enchufe|Tecnología|corriente|pared|clavija
-Interruptor|Tecnología|luz|apagador|pared
-Foco LED|Tecnología|luz|ahorro|rosca
-Sensor|Tecnología|detecta|movimiento|señal
-Chip|Tecnología|circuito|pequeño|silicio
-Código QR|Tecnología|cuadro|escanear|enlace
-Aplicación móvil|Tecnología|icono|celular|descarga
-Sistema operativo|Tecnología|ventanas|android|inicio
-Android|Tecnología|robot|apps|google
-iPhone|Tecnología|manzana|ios|cámara
-Windows|Tecnología|ventanas|computadora|microsoft
-Linux|Tecnología|pingüino|código|terminal
-Navegador|Tecnología|pestañas|internet|buscar
-Correo|Tecnología|bandeja|mensaje|arroba
-Emoji|Tecnología|carita|mensaje|amarillo
-Memes|Tecnología|risa|imagen|internet
-Streaming|Tecnología|video|play|internet
-Podcast|Tecnología|audio|episodio|voces
-Playlist|Tecnología|canciones|lista|música
-Algoritmo|Tecnología|pasos|datos|programa
-Inteligencia artificial|Tecnología|robot|chat|datos
-Robot aspiradora|Tecnología|ruedas|piso|sensores
-Impresora 3D|Tecnología|filamento|capas|modelo
-Escáner 3D|Tecnología|modelo|láser|forma
-Proyector portátil|Tecnología|luz|pared|película
-Kindle|Tecnología|libros|tinta|pantalla
-E-reader|Tecnología|libros|pantalla|lectura
-GPS|Tecnología|mapa|ruta|satélite
-Localizador|Tecnología|buscar|llaves|señal
-Cámara de seguridad|Tecnología|vigilancia|lente|noche
-Timbre inteligente|Tecnología|cámara|puerta|aviso
-Termostato|Tecnología|temperatura|casa|control
-Bombilla inteligente|Tecnología|color|app|luz
-Asistente de voz|Tecnología|hablar|altavoz|comandos
-Auriculares|Tecnología|orejas|música|inalámbrico
-Audífonos gamer|Tecnología|micrófono|orejas|juego
-Teclado virtual|Tecnología|pantalla|letras|táctil
-Lápiz digital|Tecnología|pantalla|dibujar|punta
-Tableta gráfica|Tecnología|dibujo|pluma|diseño
-Servidor web|Tecnología|página|datos|internet
-Dominio|Tecnología|punto|nombre|web
-Contraseña|Tecnología|secreto|asteriscos|cuenta
-Huella|Tecnología|dedo|desbloqueo|sensor
-Face ID|Tecnología|cara|desbloqueo|cámara
-Código PIN|Tecnología|números|desbloqueo|secreto
-Batería de litio|Tecnología|carga|celular|energía
-Panel solar|Tecnología|sol|energía|techo
-Turbina|Tecnología|viento|aspas|energía
-Microchip|Tecnología|circuito|pequeño|datos
-Nanotecnología|Tecnología|diminuto|ciencia|átomos
-Holograma|Tecnología|luz|imagen|flotante
-Láser|Tecnología|luz|puntero|rojo
-Puntero|Tecnología|láser|presentación|rojo
-Escáner de mano|Tecnología|código|tienda|beep
-Caja registradora|Tecnología|dinero|ticket|tienda
-Datáfono|Tecnología|tarjeta|pago|beep
-Tarjeta|Tecnología|chip|pago|banco
-Cajero|Tecnología|efectivo|tarjeta|banco
-Bitcoin|Tecnología|moneda|digital|blockchain
-App de mapas|Tecnología|ruta|pin|calles
-Videollamada|Tecnología|cámara|pantalla|hablar
-Chat|Tecnología|mensajes|burbujas|escribir
-Notificación|Tecnología|aviso|campana|pantalla
-Actualización|Tecnología|descarga|versión|nueva
-Bug|Tecnología|error|programa|fallo
-Firewall|Tecnología|seguridad|red|bloqueo
-Antivirus|Tecnología|virus|escudo|computadora
-Virus informático|Tecnología|malware|archivo|daño
-Phishing|Tecnología|engaño|correo|clave
-Copia de seguridad|Tecnología|respaldo|nube|archivos
-Papelera|Tecnología|borrar|archivos|recuperar
-Carpeta digital|Tecnología|archivos|icono|organizar
-Archivo PDF|Tecnología|documento|hoja|leer
-Hoja de cálculo|Tecnología|celdas|números|tabla
-Presentación|Tecnología|diapositivas|proyector|exponer
-Diapositiva|Tecnología|lámina|texto|presentar
-Cursor|Tecnología|flecha|pantalla|clic
-Píxel|Tecnología|punto|pantalla|imagen
-Resolución|Tecnología|nitidez|pantalla|píxeles
-Atajo|Tecnología|teclas|rápido|comando
-Comando|Tecnología|orden|teclado|programa
-Terminal|Tecnología|texto|comandos|negro
-Código fuente|Tecnología|programar|letras|programa
-Variable|Tecnología|dato|nombre|programa
-Bucle|Tecnología|repetir|código|veces
-Función|Tecnología|bloque|código|tarea
-Base de datos|Tecnología|tablas|registros|guardar
-Servidor de correo|Tecnología|mensajes|bandeja|enviar
-Emoji de fuego|Tecnología|llama|mensaje|reacción
-Sticker|Tecnología|imagen|chat|pegar
-Filtro|Tecnología|cara|cámara|efecto
-Selfie|Tecnología|cara|cámara|frente
-Flash|Tecnología|luz|foto|noche
-Zoom|Tecnología|acercar|lente|imagen
-Trípode|Tecnología|cámara|tres|estable
-Estabilizador|Tecnología|cámara|suave|video
-Micrófono de solapa|Tecnología|pequeño|ropa|voz
-Mezcladora|Tecnología|audio|perillas|sonido
-Sintetizador|Tecnología|teclas|electrónico|sonido
-Tocadiscos|Tecnología|vinilo|aguja|música
-Vinilo|Tecnología|disco|negro|música
-Cassette|Tecnología|cinta|música|ochentas
-CD|Tecnología|disco|láser|música
-DVD|Tecnología|película|disco|reproductor
-Blu-ray|Tecnología|película|disco|azul
-Reproductor|Tecnología|play|música|botón
-Auriculares con cable|Tecnología|jack|orejas|música
-Jack|Tecnología|conector|audio|cable
-HDMI|Tecnología|video|cable|tele
-Ethernet|Tecnología|cable|red|internet
-Fibra óptica|Tecnología|luz|internet|rápida
-Antena|Tecnología|señal|tele|metal
-Radio|Tecnología|frecuencia|música|ondas
-Walkie|Tecnología|radio|botón|hablar
-Localización|Tecnología|mapa|punto|buscar
-Brújula digital|Tecnología|norte|pantalla|flecha
-Podómetro|Tecnología|pasos|contar|muñeca
-Oxímetro|Tecnología|dedo|oxígeno|luz
-Termómetro digital|Tecnología|fiebre|pantalla|beep
-Báscula|Tecnología|peso|números|pies
-Tensiómetro|Tecnología|presión|brazo|números
-Glucómetro|Tecnología|azúcar|sangre|tira
-Desfibrilador|Tecnología|corazón|descarga|urgencia
-Rayos X|Tecnología|huesos|imagen|hospital
-Resonancia|Tecnología|imán|cuerpo|imagen
-Ultrasonido|Tecnología|bebé|imagen|gel
-Marcapasos|Tecnología|corazón|ritmo|implante
-Prótesis|Tecnología|miembro|artificial|movimiento
-Implante|Tecnología|oído|coclear|sonido
-Lentes de contacto|Tecnología|ojo|visión|delgados
-Gafas de realidad|Tecnología|lentes|virtual|juego
-Exoesqueleto|Tecnología|traje|fuerza|caminar
-Dron de carreras|Tecnología|rápido|hélices|piloto
-Coche eléctrico|Tecnología|batería|enchufe|silencioso
-Cargador de auto|Tecnología|enchufe|batería|estación
-Autopilot|Tecnología|volante|sensores|solo
-Sensor de reversa|Tecnología|beep|auto|obstáculo
-Dashcam|Tecnología|cámara|parabrisas|video
-GPS de auto|Tecnología|ruta|voz|mapa
-Tablero|Tecnología|velocímetro|auto|luces
-Velocímetro|Tecnología|aguja|velocidad|km
-Tacómetro|Tecnología|revoluciones|motor|aguja
-Airbag|Tecnología|bolsa|choque|seguridad
-Cinturón de seguridad|Tecnología|hebilla|asiento|choque
-ABS|Tecnología|frenos|bloqueo|auto
-Frenos|Tecnología|parar|disco|pedal
-Acelerador|Tecnología|pedal|velocidad|motor
-Claxon|Tecnología|bocina|volante|aviso
-Intermitente|Tecnología|luz|giro|palanca
-Limpiaparabrisas|Tecnología|lluvia|cristal|escobilla
-Parabrisas|Tecnología|vidrio|frente|auto
-Retrovisor|Tecnología|espejo|auto|atrás
-Maletero|Tecnología|cajuela|equipaje|auto
-Cofre|Tecnología|motor|capó|auto
-Motor|Tecnología|pistones|ruido|fuerza
-Batería de auto|Tecnología|corriente|bornes|arranque
-Radiador|Tecnología|agua|calor|motor
-Escape|Tecnología|humo|tubo|ruido
-Llantas|Tecnología|caucho|aire|rodar
-Rin|Tecnología|metal|llanta|aro
-Amortiguador|Tecnología|baches|suspensión|auto
-Volante|Tecnología|girar|manos|auto
-Palanca|Tecnología|cambios|velocidades|auto
-Embrague|Tecnología|pedal|cambios|disco
-Gasolina|Tecnología|combustible|bomba|olor
-Diésel|Tecnología|combustible|camión|negro
-Hidrógeno|Tecnología|combustible|agua|pila
-Bicicleta eléctrica|Tecnología|pedal|batería|motor
-Patinete eléctrico|Tecnología|ruedas|batería|manillar
-Hoverboard|Tecnología|equilibrio|ruedas|batería
-Segway|Tecnología|equilibrio|manillar|ruedas
-Monopatín|Tecnología|tabla|ruedas|truco
-Longboard|Tecnología|tabla|larga|ruedas
-Scooter|Tecnología|manillar|patada|ruedas
-Motocicleta eléctrica|Tecnología|casco|batería|dos
-Cuatrimoto|Tecnología|cuatro|llantas|terreno
-Jet ski|Tecnología|agua|motor|chorro
-Lancha|Tecnología|motor|mar|velocidad
-Yate|Tecnología|lujo|mar|cubierta
-Submarino de bolsillo|Tecnología|inmersión|ventana|mar
-Globo|Tecnología|helio|flotar|fiesta
-Zepelín|Tecnología|dirigible|aire|grande
-Helicóptero de juguete|Tecnología|hélices|control|aire
-Planeador|Tecnología|alas|viento|silencioso
-Paracaídas|Tecnología|tela|caída|cuerdas
-Alas delta|Tecnología|tela|viento|volar
-Tirolina|Tecnología|cable|polea|altura
-Teleférico|Tecnología|cabina|cable|montaña
-Funicular|Tecnología|riel|cuesta|cabina
-Tranvía|Tecnología|rieles|ciudad|eléctrico
-Metro|Tecnología|subterráneo|andén|tren
-Andén|Tecnología|estación|tren|espera
-Taquilla|Tecnología|boletos|ventana|fila
-Maleta con ruedas|Tecnología|viaje|asa|equipaje
-Mochila de viaje|Tecnología|espalda|viaje|compartimentos
-Pasaporte|Tecnología|viaje|foto|frontera
-Visa|Tecnología|sello|viaje|permiso
-Boarding pass|Tecnología|vuelo|asiento|puerta
-Escáner de aeropuerto|Tecnología|rayos|maleta|seguridad
-Detector de metales|Tecnología|beep|arco|seguridad
-Torre de control|Tecnología|aviones|radar|pista
-Pista de aterrizaje|Tecnología|luces|avión|asfalto
-Hangar|Tecnología|avión|techo|guardar
-Caja negra|Tecnología|vuelo|datos|naranja
-Radar|Tecnología|ondas|avión|pantalla
-Sonar|Tecnología|sonido|submarino|eco
-Periscopio|Tecnología|espejos|submarino|ver
-Brújula de barco|Tecnología|norte|timón|aguja
-Ancla de barco|Tecnología|fondo|cadena|metal
-Boyas de puerto|Tecnología|flotar|luz|marca
-Faro costero|Tecnología|luz|torre|barcos
-Sirena de barco|Tecnología|bocina|niebla|aviso
-Chaleco salvavidas|Tecnología|flotar|naranja|agua
-Balsa|Tecnología|inflable|naufragio|agua
-Remo|Tecnología|agua|bote|pala
-Canoa|Tecnología|remo|río|estrecha
-Kayak|Tecnología|remo|cubierta|río
-Tabla de surf|Tecnología|ola|quilla|cera
-Neopreno|Tecnología|traje|frío|agua
-Snorkel|Tecnología|tubo|máscara|mar
-Aletas|Tecnología|pies|nadar|goma
-Tanque|Tecnología|oxígeno|buzo|espalda
-Regulador|Tecnología|aire|buzo|boca
-Máscara de buceo|Tecnología|vidrio|nariz|agua
-Arpón|Tecnología|punta|pesca|submarina
-Red|Tecnología|pesca|malla|peces
-Caña de pescar|Tecnología|anzuelo|carrete|río
-Anzuelo|Tecnología|punta|cebo|pesca
-Carrete|Tecnología|hilo|pesca|girar
-Cebo|Tecnología|gusano|pesca|atraer
-Nasa|Tecnología|trampa|mariscos|jaula
+Unicornio|Fantasía|cuerno|caballo|arcoíris
+Sirena|Fantasía|cola de pez|mar|canta
+Hada|Fantasía|alas|varita|pequeña
+Bruja|Fantasía|escoba|sombrero picudo|hechizo
+Fantasma|Fantasía|sábana blanca|asusta|casa embrujada
+Vampiro|Fantasía|colmillos|sangre|ataúd
+Zombi|Fantasía|muerto viviente|cerebros|camina lento
+Momia|Fantasía|vendas|Egipto|sarcófago
+Hombre lobo|Fantasía|luna llena|aúlla|pelo
+Llorona|Fantasía|¡Ay, mis hijos!|río|leyenda
+Chupacabras|Fantasía|leyenda|chivos|mito
+Extraterrestre|Fantasía|ovni|verde|otro planeta
+Superhéroe|Fantasía|capa|poderes|salva al mundo
+Pirata|Fantasía|parche|barco|tesoro
+Princesa|Fantasía|corona|castillo|príncipe
+Robot gigante|Fantasía|metal|pelea|enorme
+Cohete espacial|Espacio|despegue|astronautas|NASA
+Planeta|Espacio|gira|Sol|redondo
+Marte|Espacio|rojo|planeta|marcianos
+Saturno|Espacio|anillos|planeta|grande
+Estrella fugaz|Espacio|deseo|cae|cielo
+Ovni|Espacio|platillo volador|extraterrestres|luces
+Telescopio|Espacio|ver lejos|estrellas|lente
+Agujero negro|Espacio|traga todo|oscuro|gravedad
+Cometa|Espacio|cola brillante|cielo|hielo
+México|Países|tacos|águila|verde blanco y rojo
+Estados Unidos|Países|gringos|dólar|frontera
+Japón|Países|sushi|anime|Tokio
+China|Países|muralla|arroz|mucha gente
+España|Países|paella|Madrid|olé
+Francia|Países|París|Torre Eiffel|baguette
+Italia|Países|pizza|Roma|pasta
+Brasil|Países|samba|futbol|carnaval
+Argentina|Países|Messi|tango|asado
+Canadá|Países|hoja de maple|frío|norte
+Egipto|Países|pirámides|faraones|desierto
+Inglaterra|Países|Londres|té|reina
+Benito Juárez|Personajes|presidente|indígena|respeto al derecho ajeno
+Frida Kahlo|Personajes|pintora|cejas|autorretratos
+Miguel Hidalgo|Personajes|cura|campana|independencia
+Chespirito|Personajes|Chavo del 8|comedia|Chapulín
+El Chavo|Personajes|barril|torta de jamón|vecindad
+Cantinflas|Personajes|bigotito|cómico|ahí está el detalle
+Pedro Infante|Personajes|cantante|cine de oro|amorcito corazón
+Selena|Personajes|cantante|Texas|bidi bidi bom bom
+Juan Gabriel|Personajes|el Divo de Juárez|cantante|Querida
+Luis Miguel|Personajes|el Sol|cantante|serie
+Messi|Personajes|Argentina|futbolista|10
+Cristiano Ronaldo|Personajes|siuuu|Portugal|futbolista
+Mario Bros|Personajes|fontanero|bigote|hongos
+Pikachu|Personajes|Pokémon|amarillo|eléctrico
+Mickey Mouse|Personajes|Disney|ratón|orejas redondas
+Bob Esponja|Personajes|amarillo|piña|fondo del mar
+Batman|Personajes|murciélago|Gotham|capa negra
+Spider-Man|Personajes|telaraña|araña|rojo y azul
+Superman|Personajes|capa roja|vuela|S en el pecho
+Shrek|Personajes|ogro|verde|pantano
 `.trim().split("\n").map(line => {
   const [w, c, ...h] = line.split("|");
   return { w, c, h };
 });
 
 const KEY = "impostor-config-v3";
-const ROTATION_KEY = "impostor-served-v1";
+const ROTATION_KEY = "impostor-rotation-v2";
+const LEGACY_ROTATION_KEY = "impostor-served-v1";
+const WORDS_KEY = "impostor-words-v2";
+const RING = 2 * Math.PI * 88;
 const $ = (id) => document.getElementById(id);
 const screens = [...document.querySelectorAll(".screen")];
 function show(id) {
   screens.forEach(s => s.classList.toggle("on", s.id === id));
+  const sc = $(id).querySelector(".scroll");
+  if (sc) sc.scrollTop = 0;
 }
 let playersN = 4, impostorsN = 1, hintMode = "same";
 let names = ["Jugador 1", "Jugador 2", "Jugador 3", "Jugador 4"];
-let game = null, timerId = null;
-function maxImp(n) { return Math.max(1, n - 2); }
+let game = null, timerId = null, wakeLock = null, toastId = null;
+function maxImp(n) { return Math.max(1, Math.floor((n - 1) / 2)); }
 function roundSeconds(n) { return (5 + Math.floor(n / 2)) * 60; }
 function fmt(s) {
   s = Math.max(0, s | 0);
@@ -1656,24 +1340,127 @@ function shuffle(a) {
 function esc(s) {
   return String(s).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
 }
+function readJSON(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch (e) {
+    return fallback;
+  }
+}
+function writeJSON(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
+}
 function beep(freq = 440) {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = beep.ctx || (beep.ctx = new (window.AudioContext || window.webkitAudioContext)());
     const o = ctx.createOscillator();
     const g = ctx.createGain();
     o.frequency.value = freq;
     o.connect(g);
     g.connect(ctx.destination);
     g.gain.setValueAtTime(0.05, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.12);
     o.start();
-    o.stop(ctx.currentTime + 0.08);
+    o.stop(ctx.currentTime + 0.12);
   } catch (e) {}
   if (navigator.vibrate) navigator.vibrate(12);
 }
-function saveConfig() {
+function toast(text) {
+  const t = $("toast");
+  t.textContent = text;
+  t.classList.add("on");
+  clearTimeout(toastId);
+  toastId = setTimeout(() => t.classList.remove("on"), 2200);
+}
+
+function isFullscreen() {
+  return !!(document.fullscreenElement || document.webkitFullscreenElement);
+}
+function exitFullscreen() {
+  const ex = document.exitFullscreen || document.webkitExitFullscreen;
+  if (ex) { try { const p = ex.call(document); if (p && p.catch) p.catch(() => {}); } catch (e) {} }
+}
+function syncFullscreen() {
+  const on = isFullscreen();
+  document.body.classList.toggle("is-fs", on);
+  document.querySelectorAll(".fsbtn").forEach(b => {
+    b.setAttribute("aria-label", on ? "Salir de pantalla completa" : "Pantalla completa");
+    b.title = on ? "Salir de pantalla completa" : "Pantalla completa";
+  });
+}
+if (!(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen)) document.body.classList.add("no-fs");
+document.addEventListener("fullscreenchange", syncFullscreen);
+document.addEventListener("webkitfullscreenchange", syncFullscreen);
+document.querySelectorAll(".fsbtn").forEach(b => b.onclick = () => { if (isFullscreen()) exitFullscreen(); else enterFullscreen(); });
+syncFullscreen();
+function lockPortrait() {
   try {
-    localStorage.setItem(KEY, JSON.stringify({ playersN, impostorsN, hintMode, names: names.slice(0, playersN) }));
+    const o = screen.orientation;
+    if (o && o.lock) o.lock("portrait").catch(() => {});
   } catch (e) {}
+}
+function enterFullscreen() {
+  const el = document.documentElement;
+  if (!isFullscreen()) {
+    const req = el.requestFullscreen || el.webkitRequestFullscreen;
+    if (req) {
+      try {
+        const p = req.call(el, { navigationUI: "hide" });
+        if (p && p.then) p.then(lockPortrait, () => {});
+        else lockPortrait();
+      } catch (e) {}
+    }
+  } else {
+    lockPortrait();
+  }
+  keepAwake();
+}
+async function keepAwake() {
+  try {
+    if ("wakeLock" in navigator && !wakeLock) {
+      wakeLock = await navigator.wakeLock.request("screen");
+      wakeLock.addEventListener("release", () => { wakeLock = null; });
+    }
+  } catch (e) {}
+}
+function releaseAwake() {
+  try { if (wakeLock) wakeLock.release(); } catch (e) {}
+  wakeLock = null;
+}
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && game) keepAwake();
+});
+
+let sheetYes = null, sheetNo = null;
+function ask(title, text, yesLabel, onYes, onNo) {
+  $("sheetTitle").textContent = title;
+  $("sheetText").textContent = text;
+  $("sheetYes").textContent = yesLabel;
+  sheetYes = onYes;
+  sheetNo = onNo || null;
+  $("sheet").hidden = false;
+  $("sheetNo").focus();
+}
+function closeSheet(confirmed) {
+  const fn = confirmed ? sheetYes : sheetNo;
+  $("sheet").hidden = true;
+  sheetYes = sheetNo = null;
+  if (fn) fn();
+}
+$("sheetYes").onclick = () => closeSheet(true);
+$("sheetNo").onclick = () => closeSheet(false);
+$("sheet").onclick = (e) => { if (e.target.id === "sheet") closeSheet(false); };
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("sheet").hidden) closeSheet(false); });
+
+function saveConfig() {
+  writeJSON(KEY, { playersN, impostorsN, hintMode, names: names.slice(0, playersN) });
+}
+function bump(id) {
+  const el = $(id);
+  el.classList.remove("bump");
+  void el.offsetWidth;
+  el.classList.add("bump");
 }
 function renderNames() {
   names = names.slice(0, playersN);
@@ -1681,27 +1468,57 @@ function renderNames() {
   const box = $("nameList");
   box.innerHTML = "";
   names.forEach((n, i) => {
+    const row = document.createElement("label");
+    row.className = "name-row";
+    const idx = document.createElement("span");
+    idx.className = "idx";
+    idx.textContent = i + 1;
     const input = document.createElement("input");
     input.value = n;
     input.maxLength = 18;
-    input.setAttribute("aria-label", "Jugador " + (i + 1));
+    input.placeholder = "Jugador " + (i + 1);
+    input.setAttribute("aria-label", "Nombre del jugador " + (i + 1));
     input.autocomplete = "off";
-    input.addEventListener("input", () => { names[i] = input.value; saveConfig(); });
-    box.appendChild(input);
+    input.enterKeyHint = i === names.length - 1 ? "done" : "next";
+    input.addEventListener("focus", () => input.select());
+    input.addEventListener("input", () => { names[i] = input.value; saveConfig(); renderRotation(); });
+    input.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter") return;
+      e.preventDefault();
+      const next = box.querySelectorAll("input")[i + 1];
+      if (next) next.focus(); else input.blur();
+    });
+    row.append(idx, input);
+    box.appendChild(row);
   });
-  $("pCount").textContent = playersN;
+  renderCounters();
+  renderRotation();
+  saveConfig();
+}
+function renderCounters() {
   impostorsN = Math.min(Math.max(1, impostorsN), maxImp(playersN));
+  $("pCount").textContent = playersN;
   $("iCount").textContent = impostorsN;
+  $("impSub").textContent = "Máximo " + maxImp(playersN) + " con " + playersN + " jugadores";
+  $("minusP").disabled = playersN <= 3;
+  $("plusP").disabled = playersN >= 16;
+  $("minusI").disabled = impostorsN <= 1;
+  $("plusI").disabled = impostorsN >= maxImp(playersN);
   $("timerPreview").textContent = fmt(roundSeconds(playersN));
   $("modeSame").classList.toggle("on", hintMode === "same");
   $("modeDiff").classList.toggle("on", hintMode === "diff");
-  saveConfig();
+  $("modeSame").setAttribute("aria-pressed", hintMode === "same");
+  $("modeDiff").setAttribute("aria-pressed", hintMode === "diff");
+  $("modeNote").textContent = impostorsN < 2
+    ? "Con un solo impostor ambas opciones funcionan igual."
+    : hintMode === "same"
+      ? "Todos los impostores reciben la misma pista."
+      : "Cada impostor recibe una pista diferente.";
 }
 function loadConfig() {
   try {
-    const raw = localStorage.getItem(KEY) || localStorage.getItem("impostor-config-v2") || localStorage.getItem("impostor-names");
-    if (!raw) return;
-    const data = JSON.parse(raw);
+    const data = readJSON(KEY, null) || readJSON("impostor-config-v2", null) || readJSON("impostor-names", null);
+    if (!data) return;
     if (Array.isArray(data)) { names = data; playersN = Math.min(16, Math.max(3, data.length)); return; }
     if (Array.isArray(data.names)) names = data.names;
     if (data.playersN) playersN = Math.min(16, Math.max(3, data.playersN));
@@ -1709,61 +1526,94 @@ function loadConfig() {
     if (data.hintMode === "diff" || data.hintMode === "same") hintMode = data.hintMode;
   } catch (e) {}
 }
-loadConfig();
-renderNames();
-$("minusP").onclick = () => { if (playersN > 3) { playersN--; renderNames(); } };
-$("plusP").onclick = () => { if (playersN < 16) { playersN++; renderNames(); } };
-$("minusI").onclick = () => { if (impostorsN > 1) { impostorsN--; renderNames(); } };
-$("plusI").onclick = () => { if (impostorsN < maxImp(playersN)) { impostorsN++; renderNames(); } };
-$("modeSame").onclick = () => { hintMode = "same"; renderNames(); };
-$("modeDiff").onclick = () => { hintMode = "diff"; renderNames(); };
-$("goSetup").onclick = () => show("setup");
-$("setupBack").onclick = () => show("home");
 function cleanNames() {
   const used = {};
   return names.slice(0, playersN).map((n, i) => {
-    let base = (n || "").trim() || ("Jugador " + (i + 1));
+    const base = (n || "").trim() || ("Jugador " + (i + 1));
     let name = base, k = 2;
     while (used[name.toLowerCase()]) { name = base + " " + k; k++; }
     used[name.toLowerCase()] = true;
     return name;
   });
 }
-function loadServed() {
-  try {
-    const data = JSON.parse(localStorage.getItem(ROTATION_KEY) || "[]");
-    return new Set(Array.isArray(data) ? data.map(n => String(n).toLowerCase()) : []);
-  } catch (e) {
-    return new Set();
+function keyOf(n) { return String(n).trim().toLowerCase(); }
+
+function loadRotation() {
+  const data = readJSON(ROTATION_KEY, null);
+  if (data && Array.isArray(data.served)) {
+    return { served: data.served.map(keyOf), last: Array.isArray(data.last) ? data.last.map(keyOf) : [] };
   }
+  const legacy = readJSON(LEGACY_ROTATION_KEY, []);
+  return { served: Array.isArray(legacy) ? legacy.map(keyOf) : [], last: [] };
 }
-function saveServed(served) {
-  try { localStorage.setItem(ROTATION_KEY, JSON.stringify([...served])); } catch (e) {}
-}
+function saveRotation(rot) { writeJSON(ROTATION_KEY, rot); }
 function pickImpostorIndexes(playerNames) {
-  const served = loadServed();
-  const keys = playerNames.map(n => n.toLowerCase());
-  let fresh = [];
-  keys.forEach((k, i) => { if (!served.has(k)) fresh.push(i); });
-  if (!fresh.length) {
-    served.clear();
-    fresh = keys.map((_, i) => i);
+  const rot = loadRotation();
+  const keys = playerNames.map(keyOf);
+  const present = new Set(keys);
+  const absent = rot.served.filter(k => !present.has(k));
+  let served = new Set(rot.served.filter(k => present.has(k)));
+  const recent = new Set(rot.last);
+  const all = keys.map((_, i) => i);
+  const chosen = [];
+  const order = (pool) => shuffle(pool.filter(i => !recent.has(keys[i]))).concat(shuffle(pool.filter(i => recent.has(keys[i]))));
+  let queue = order(all.filter(i => !served.has(keys[i])));
+  while (chosen.length < impostorsN) {
+    if (!queue.length) {
+      served = new Set(chosen.map(i => keys[i]));
+      queue = order(all.filter(i => !chosen.includes(i)));
+      if (!queue.length) break;
+    }
+    const i = queue.shift();
+    chosen.push(i);
+    served.add(keys[i]);
   }
-  const chosen = shuffle(fresh).slice(0, impostorsN);
-  if (chosen.length < impostorsN) {
-    const used = new Set(chosen);
-    const rest = shuffle(keys.map((_, i) => i).filter(i => !used.has(i)));
-    while (chosen.length < impostorsN && rest.length) chosen.push(rest.pop());
-  }
-  const keep = new Set(keys);
-  [...served].forEach(k => { if (!keep.has(k)) served.delete(k); });
-  chosen.forEach(i => served.add(keys[i]));
-  if (keys.every(k => served.has(k))) served.clear();
-  saveServed(served);
+  if (keys.every(k => served.has(k))) served = new Set();
+  saveRotation({ served: absent.concat([...served]), last: chosen.map(i => keys[i]) });
   return new Set(chosen);
 }
+function renderRotation() {
+  const list = cleanNames();
+  const served = new Set(loadRotation().served);
+  const done = list.filter(n => served.has(keyOf(n)));
+  const total = list.length;
+  $("rotFill").style.width = (total ? (done.length / total) * 100 : 0) + "%";
+  $("rotText").textContent = done.length
+    ? done.length + " de " + total + " ya fueron impostor. No se repiten hasta que pasen todos."
+    : "Nadie ha sido impostor todavía en esta vuelta.";
+  $("rotReset").disabled = !done.length;
+  $("rotFaces").innerHTML = list.map(n => `<span class="face${served.has(keyOf(n)) ? " done" : ""}">${esc(n)}</span>`).join("");
+}
+$("rotReset").onclick = () => ask(
+  "¿Reiniciar turnos?",
+  "Todos volverán a poder ser impostor desde ya.",
+  "Reiniciar",
+  () => { saveRotation({ served: [], last: [] }); renderRotation(); toast("Turnos reiniciados"); }
+);
+
+function pickEntry() {
+  let used = new Set(readJSON(WORDS_KEY, []));
+  let pool = PACK.filter(e => !used.has(e.w));
+  if (!pool.length) { used = new Set(); pool = PACK; }
+  const entry = pool[Math.floor(Math.random() * pool.length)];
+  used.add(entry.w);
+  writeJSON(WORDS_KEY, [...used]);
+  return entry;
+}
+
+loadConfig();
+renderNames();
+$("minusP").onclick = () => { if (playersN > 3) { playersN--; renderNames(); bump("pCount"); } };
+$("plusP").onclick = () => { if (playersN < 16) { playersN++; renderNames(); bump("pCount"); } };
+$("minusI").onclick = () => { if (impostorsN > 1) { impostorsN--; renderCounters(); saveConfig(); bump("iCount"); } };
+$("plusI").onclick = () => { if (impostorsN < maxImp(playersN)) { impostorsN++; renderCounters(); saveConfig(); bump("iCount"); } };
+$("modeSame").onclick = () => { hintMode = "same"; renderCounters(); saveConfig(); };
+$("modeDiff").onclick = () => { hintMode = "diff"; renderCounters(); saveConfig(); };
+$("goSetup").onclick = () => { renderRotation(); show("setup"); };
+$("setupBack").onclick = () => show("home");
+
 function assign() {
-  const entry = PACK[Math.floor(Math.random() * PACK.length)];
+  const entry = pickEntry();
   const bag = hintMode === "same"
     ? Array(impostorsN).fill(entry.h[Math.floor(Math.random() * entry.h.length)])
     : shuffle(entry.h);
@@ -1772,13 +1622,9 @@ function assign() {
   let hi = 0;
   const people = playerNames.map((name, i) => {
     const role = impostorAt.has(i) ? "imp" : "crew";
-    return {
-      name,
-      role,
-      hint: role === "imp" ? bag[hi++ % bag.length] : null,
-      alive: true
-    };
+    return { name, role, hint: role === "imp" ? bag[hi++ % bag.length] : null, alive: true };
   });
+  const seconds = roundSeconds(people.length);
   game = {
     word: entry.w,
     category: entry.c,
@@ -1786,17 +1632,34 @@ function assign() {
     order: shuffle(people.map((_, i) => i)),
     cursor: 0,
     revealed: false,
-    seconds: roundSeconds(people.length),
+    seconds,
+    total: seconds,
     paused: false,
     mustVote: false,
+    extra: false,
+    pick: null,
     starter: people[Math.floor(Math.random() * people.length)].name
   };
 }
-$("startBtn").onclick = () => { saveConfig(); assign(); openPass(); show("pass"); };
+function startGame() {
+  enterFullscreen();
+  saveConfig();
+  assign();
+  openPass();
+  show("pass");
+}
+$("startBtn").onclick = startGame;
+
+function renderDots() {
+  $("dots").innerHTML = game.order.map((_, i) =>
+    `<i class="${i < game.cursor ? "done" : i === game.cursor ? "now" : ""}"></i>`).join("");
+}
 function openPass() {
   const p = game.people[game.order[game.cursor]];
   $("passName").textContent = p.name;
-  $("passHelp").textContent = (game.cursor + 1) + " de " + game.order.length;
+  $("passHelp").textContent = "Turno " + (game.cursor + 1) + " de " + game.order.length;
+  $("coverText").innerHTML = `Solo <b>${esc(p.name)}</b> debe ver la pantalla. Los demás, volteen.`;
+  renderDots();
   $("afterReveal").hidden = true;
   $("beforeReveal").hidden = false;
   $("tapReveal").classList.add("call");
@@ -1812,9 +1675,10 @@ function openPass() {
   cover.style.transition = "";
   game.revealed = false;
   card.className = "role " + p.role;
+  const others = game.people.filter(x => x.role === "imp" && x !== p).length;
   card.innerHTML = p.role === "imp"
-    ? `<div class="badge">IMPOSTOR</div><div class="hint-label">Tu pista</div><div class="secret">${esc(p.hint)}</div>`
-    : `<div class="badge">LA PALABRA</div><div class="secret">${esc(game.word)}</div><div class="cat">${esc(game.category)}</div>`;
+    ? `<div class="badge">ERES EL IMPOSTOR</div><div class="hint-label">Tu pista</div><div class="secret">${esc(p.hint)}</div><div class="cat">${esc(game.category)}</div><div class="role-tip">${others ? "Hay " + (others + 1) + " impostores en total. Disimula." : "No conoces la palabra. Disimula."}</div>`
+    : `<div class="badge">LA PALABRA ES</div><div class="secret">${esc(game.word)}</div><div class="cat">${esc(game.category)}</div><div class="role-tip">Habla de ella sin decirla. Encuentra al impostor.</div>`;
 }
 function revealRole() {
   if (!game || game.revealed) return;
@@ -1826,6 +1690,7 @@ function revealRole() {
   $("tapReveal").classList.remove("call");
   $("beforeReveal").hidden = true;
   $("afterReveal").hidden = false;
+  $("hidePass").textContent = game.cursor + 1 >= game.order.length ? "Ocultar y empezar" : "Ocultar y pasar";
   beep(620);
 }
 $("tapReveal").onclick = revealRole;
@@ -1834,21 +1699,29 @@ $("hidePass").onclick = () => {
   if (game.cursor >= game.order.length) beginDiscuss();
   else openPass();
 };
+
 function beginDiscuss() {
   show("discuss");
-  $("startNote").textContent = "Empieza " + game.starter;
+  $("starterLabel").textContent = "Empieza";
+  $("starterName").textContent = game.starter;
   renderAlive();
   startClock();
 }
 function renderAlive() {
-  const alive = game.people.filter(p => p.alive);
-  $("alivePill").textContent = alive.length + " vivos";
-  $("aliveList").innerHTML = alive.map(p => `<div class="alive-row">${esc(p.name)}</div>`).join("");
+  const alive = game.people.filter(p => p.alive).length;
+  $("alivePill").textContent = alive + " vivos";
+  $("aliveList").innerHTML = game.people
+    .map(p => `<span class="pchip${p.alive ? "" : " out"}">${esc(p.name)}</span>`).join("");
 }
 function paintTimer() {
-  const el = $("timer");
-  el.textContent = fmt(game.seconds);
-  el.className = "timer" + (game.seconds <= 30 ? " late" : game.seconds <= 60 ? " warn" : "");
+  const wrap = $("ringWrap");
+  $("timer").textContent = fmt(game.seconds);
+  const ratio = game.total ? Math.max(0, game.seconds) / game.total : 0;
+  const fg = $("ringFg");
+  fg.style.strokeDasharray = RING;
+  fg.style.strokeDashoffset = RING * (1 - ratio);
+  wrap.className = "ring-wrap" + (game.paused ? " paused" : game.seconds <= 30 ? " late" : game.seconds <= 60 ? " warn" : "");
+  $("timerSub").textContent = game.paused ? "En pausa" : game.extra ? "Tiempo extra" : "Restante";
 }
 function startClock() {
   clearInterval(timerId);
@@ -1856,16 +1729,19 @@ function startClock() {
   $("pauseBtn").textContent = "Pausa";
   paintTimer();
   timerId = setInterval(() => {
-    if (game.paused) return;
+    if (!game || game.paused) return;
     game.seconds--;
+    if (game.seconds === 60 || game.seconds === 30) beep(880);
     paintTimer();
-    if (game.seconds <= 0) { clearInterval(timerId); forceVote(); }
+    if (game.seconds <= 0) { clearInterval(timerId); beep(330); forceVote(); }
   }, 1000);
 }
-$("pauseBtn").onclick = () => {
-  game.paused = !game.paused;
-  $("pauseBtn").textContent = game.paused ? "Seguir" : "Pausa";
-};
+function setPaused(v) {
+  game.paused = v;
+  $("pauseBtn").textContent = v ? "Seguir" : "Pausa";
+  paintTimer();
+}
+$("pauseBtn").onclick = () => setPaused(!game.paused);
 $("toVote").onclick = () => { game.paused = true; game.mustVote = false; beginVote(); };
 function forceVote() {
   game.mustVote = true;
@@ -1874,32 +1750,54 @@ function forceVote() {
 }
 function beginVote() {
   show("vote");
-  $("voteTitle").textContent = game.mustVote ? "Voto obligatorio" : "¿A quién echan?";
-  $("voteList").innerHTML = "";
+  game.pick = null;
+  $("voteTitle").textContent = game.mustVote ? "¡Se acabó el tiempo!" : "¿A quién echan?";
+  $("voteHint").textContent = game.mustVote ? "Tienen que echar a alguien ahora." : "Pónganse de acuerdo y toquen un nombre.";
   $("backDiscuss").hidden = game.mustVote;
-  game.people.filter(p => p.alive).forEach(p => {
+  updateConfirm();
+  const list = $("voteList");
+  list.innerHTML = "";
+  game.people.forEach((p, idx) => {
+    if (!p.alive) return;
     const b = document.createElement("button");
     b.className = "pbtn";
-    b.textContent = p.name;
-    b.onclick = () => expelPlayer(p.name);
-    $("voteList").appendChild(b);
+    b.type = "button";
+    b.innerHTML = `<span class="av">${esc(p.name.charAt(0).toUpperCase())}</span><span>${esc(p.name)}</span>`;
+    b.onclick = () => {
+      game.pick = game.pick === idx ? null : idx;
+      list.querySelectorAll(".pbtn").forEach(x => x.classList.toggle("sel", x === b && game.pick === idx));
+      updateConfirm();
+    };
+    list.appendChild(b);
   });
 }
+function updateConfirm() {
+  const btn = $("confirmVote");
+  const p = game.pick === null ? null : game.people[game.pick];
+  btn.disabled = !p;
+  btn.textContent = p ? "Echar a " + p.name : "Elijan a alguien";
+}
+$("confirmVote").onclick = () => { if (game.pick !== null) expelPlayer(game.pick); };
 $("backDiscuss").onclick = () => {
   if (game.mustVote) return;
   show("discuss");
   if (game.seconds > 0) startClock();
 };
-function expelPlayer(name) {
-  const person = game.people.find(x => x.name === name);
+function expelPlayer(idx) {
+  const person = game.people[idx];
   person.alive = false;
   show("expel");
   const imp = person.role === "imp";
+  const alive = game.people.filter(p => p.alive);
+  const impsLeft = alive.filter(p => p.role === "imp").length;
   $("expelBox").className = "expel-card " + person.role;
   const safe = esc(person.name);
+  const left = impsLeft === 1 ? "Queda 1 impostor" : "Quedan " + impsLeft + " impostores";
   $("expelBox").innerHTML = imp
-    ? `<div class="badge" style="background:var(--pink);color:#fff">IMPOSTOR</div><div class="who-big">${safe}</div><div class="cat">Sí lo era</div>`
-    : `<div class="badge" style="background:#2a2a2a;color:#fff">NO ERA</div><div class="who-big">${safe}</div><div class="cat">Sigue la ronda</div>`;
+    ? `<div class="badge imp">ERA IMPOSTOR</div><div class="who-big">${safe}</div><div class="cat">${impsLeft ? left : "¡Ya no queda ninguno!"}</div>`
+    : `<div class="badge crew">NO ERA IMPOSTOR</div><div class="who-big">${safe}</div><div class="cat">Echaron a un inocente</div>`;
+  const finished = impsLeft === 0 || impsLeft >= alive.length - impsLeft;
+  $("continueBtn").textContent = finished ? "Ver resultado" : "Seguir discutiendo";
   beep(imp ? 520 : 220);
 }
 $("continueBtn").onclick = () => {
@@ -1908,11 +1806,12 @@ $("continueBtn").onclick = () => {
   const crew = alive.length - imps;
   if (imps === 0) return endGame("crew");
   if (imps >= crew) return endGame("imp");
-  if (game.seconds <= 0) game.seconds = 180;
+  if (game.seconds <= 0) { game.seconds = 180; game.total = 180; game.extra = true; }
   game.mustVote = false;
   game.starter = alive[Math.floor(Math.random() * alive.length)].name;
   show("discuss");
-  $("startNote").textContent = game.seconds === 180 ? "3 min más" : ("Empieza " + game.starter);
+  $("starterLabel").textContent = "Ahora empieza";
+  $("starterName").textContent = game.starter;
   renderAlive();
   startClock();
 };
@@ -1920,24 +1819,26 @@ function endGame(winner) {
   clearInterval(timerId);
   const imps = game.people.filter(p => p.role === "imp");
   const impostorsWon = winner === "imp";
+  const hints = [...new Set(imps.map(p => p.hint))].join(", ");
   show("win");
   $("win").classList.remove("imp", "crew");
   $("win").classList.add(impostorsWon ? "imp" : "crew");
   celebrate(impostorsWon ? "imp" : "crew");
   $("winBox").innerHTML = `
-    <p class="kicker">GANARON</p>
+    <p class="kicker">GANARON LOS</p>
     <h1 class="win-title">${impostorsWon ? "Impostores" : "Jugadores"}</h1>
-    <p class="win-sub">${impostorsWon ? "No lograron echarlos" : "Echaron a todos los impostores"}</p>
-    <div class="imps-label">ERAN IMPOSTORES</div>
+    <p class="win-sub">${impostorsWon ? "Nadie logró descubrirlos" : "Echaron a todos los impostores"}</p>
+    <div class="imps-label">${imps.length > 1 ? "ERAN IMPOSTORES" : "EL IMPOSTOR ERA"}</div>
     ${imps.map(p => `<div class="imp-name">${esc(p.name)}</div>`).join("")}
-    <div class="wordbox"><span>LA PALABRA</span><b>${esc(game.word)}</b></div>`;
+    <div class="wordbox"><span>LA PALABRA ERA</span><b>${esc(game.word)}</b><small>Pista: ${esc(hints)}</small></div>`;
+  beep(impostorsWon ? 260 : 760);
 }
 function celebrate(kind) {
   const layer = $("fx");
   layer.replaceChildren();
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const fiesta = kind === "crew";
-  const colors = ["#ff2d6a", "#ffe14a", "#8ee6b0", "#7ecbff", "#ffffff", "#ff8fbf"];
+  const colors = ["#ff2d6a", "#ffd84a", "#53f0a0", "#7cb8ff", "#ffffff", "#8b6cff"];
   const total = fiesta ? 54 : 28;
   for (let i = 0; i < total; i++) {
     const bit = document.createElement("i");
@@ -1956,16 +1857,34 @@ function celebrate(kind) {
     layer.appendChild(bit);
   }
 }
+function toSetup() {
+  clearInterval(timerId);
+  $("fx").replaceChildren();
+  game = null;
+  releaseAwake();
+  renderNames();
+  show("setup");
+}
 $("againBtn").onclick = () => {
   $("fx").replaceChildren();
   names = game.people.map(p => p.name);
   playersN = names.length;
-  saveConfig();
-  assign();
-  openPass();
-  show("pass");
+  startGame();
 };
-$("menuBtn").onclick = () => { clearInterval(timerId); $("fx").replaceChildren(); show("setup"); renderNames(); };
+$("menuBtn").onclick = toSetup;
+document.querySelectorAll(".quit").forEach(b => b.onclick = () => {
+  if (!game) return toSetup();
+  const was = game.paused;
+  game.paused = true;
+  if ($("discuss").classList.contains("on")) paintTimer();
+  ask(
+    "¿Terminar la partida?",
+    "Se pierde esta ronda. Los turnos de impostor se quedan guardados.",
+    "Terminar",
+    toSetup,
+    () => { if (game) { game.paused = was; if ($("discuss").classList.contains("on")) paintTimer(); } }
+  );
+});
 </script>
 </body>
 </html>
