@@ -33,12 +33,12 @@
     --safe-t: env(safe-area-inset-top, 0px);
     --safe-b: env(safe-area-inset-bottom, 0px);
     --frame-w: min(100vw, calc(100vh * 9 / 16));
-    --frame-h: min(100vh, calc(100vw * 16 / 9));
+    --frame-h: 100vh;
   }
   @supports (height: 100dvh) {
     :root {
       --frame-w: min(100vw, calc(100dvh * 9 / 16));
-      --frame-h: min(100dvh, calc(100vw * 16 / 9));
+      --frame-h: 100dvh;
     }
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -72,8 +72,8 @@
     overflow: hidden;
     isolation: isolate;
   }
-  @media (min-aspect-ratio: 10/16), (max-aspect-ratio: 8/16) {
-    #app { border-radius: 28px; box-shadow: 0 0 0 1px var(--line), 0 30px 90px rgba(0, 0, 0, .65); }
+  @media (min-aspect-ratio: 10/16) {
+    #app { box-shadow: 0 0 0 1px var(--line), 0 0 90px rgba(0, 0, 0, .65); }
   }
   :fullscreen #app { border-radius: 0; }
 
