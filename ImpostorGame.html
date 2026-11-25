@@ -3,51 +3,95 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#07060a">
+<meta name="theme-color" content="#141213" id="themeMeta">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Impostor</title>
+<title>¿Quién es el impostor?</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #07060a;
-    --app-1: #17121f;
-    --app-2: #0d0b13;
-    --surface: rgba(255, 255, 255, .055);
-    --surface-2: rgba(255, 255, 255, .095);
-    --surface-3: rgba(255, 255, 255, .15);
-    --line: rgba(255, 255, 255, .08);
-    --ink: #f7f4fa;
-    --muted: #a9a2b6;
-    --faint: #6e6779;
-    --pink: #ff2d6a;
-    --pink-2: #ff7aa0;
-    --pink-dim: rgba(255, 45, 106, .16);
-    --violet: #8b6cff;
-    --mint: #53f0a0;
-    --yellow: #ffd84a;
-    --blue: #7cb8ff;
+    --md-bg: #141213;
+    --md-outer: #0c0a0b;
+    --md-surface: #141213;
+    --md-surface-low: #1d1a1c;
+    --md-surface-mid: #232022;
+    --md-surface-high: #2d292b;
+    --md-surface-highest: #393437;
+    --md-on-surface: #ece0e2;
+    --md-on-surface-var: #cfc2c5;
+    --md-outline: #988d90;
+    --md-outline-var: #4d4447;
+    --md-primary: #d92642;
+    --md-on-primary: #ffffff;
+    --md-primary-ink: #ffb2bc;
+    --md-primary-container: #5c1120;
+    --md-on-primary-container: #ffd9dd;
+    --md-crew: #7ab8ff;
+    --md-crew-container: #103254;
+    --md-on-crew-container: #d4e7ff;
+    --md-safe: #5fd38d;
+    --md-safe-container: #113a22;
+    --md-on-safe-container: #c6f6d5;
+    --md-warn: #f5b841;
+    --md-warn-container: #3e2b07;
+    --md-on-warn-container: #fde6b0;
+    --md-inverse-surface: #ece0e2;
+    --md-inverse-on-surface: #201d1e;
+    --md-state-hover: rgba(236, 224, 226, .08);
+    --md-state-press: rgba(236, 224, 226, .14);
+    --md-ripple: rgba(236, 224, 226, .18);
+    --md-scrim: rgba(0, 0, 0, .56);
     --safe-t: env(safe-area-inset-top, 0px);
     --safe-b: env(safe-area-inset-bottom, 0px);
-    --frame-w: min(100vw, calc(100vh * 9 / 16));
+    --frame-w: 100vw;
     --frame-h: 100vh;
   }
+  body.light {
+    --md-bg: #fff8f7;
+    --md-outer: #ebe3e2;
+    --md-surface: #fff8f7;
+    --md-surface-low: #faf1f0;
+    --md-surface-mid: #f4e9e8;
+    --md-surface-high: #eee2e1;
+    --md-surface-highest: #e7dbda;
+    --md-on-surface: #22191a;
+    --md-on-surface-var: #534345;
+    --md-outline: #857375;
+    --md-outline-var: #d8c2c4;
+    --md-primary: #c81e3a;
+    --md-on-primary: #ffffff;
+    --md-primary-ink: #b51933;
+    --md-primary-container: #ffdad9;
+    --md-on-primary-container: #410009;
+    --md-crew: #1565c0;
+    --md-crew-container: #d6e7ff;
+    --md-on-crew-container: #001c3a;
+    --md-safe: #1e7e45;
+    --md-safe-container: #c9f2d7;
+    --md-on-safe-container: #00210e;
+    --md-warn: #b26a00;
+    --md-warn-container: #ffe8ba;
+    --md-on-warn-container: #2d1700;
+    --md-inverse-surface: #362e2f;
+    --md-inverse-on-surface: #fbefed;
+    --md-state-hover: rgba(34, 25, 26, .07);
+    --md-state-press: rgba(34, 25, 26, .12);
+    --md-ripple: rgba(34, 25, 26, .14);
+    --md-scrim: rgba(0, 0, 0, .44);
+  }
   @supports (height: 100dvh) {
-    :root {
-      --frame-w: min(100vw, calc(100dvh * 9 / 16));
-      --frame-h: 100dvh;
-    }
+    :root { --frame-h: 100dvh; }
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { margin: 0; height: 100%; background: var(--bg); }
+  html, body { margin: 0; height: 100%; background: var(--md-outer); }
   body {
     display: grid;
     place-items: center;
-    color: var(--ink);
-    font-family: "Outfit", Roboto, "Segoe UI", system-ui, sans-serif;
+    color: var(--md-on-surface);
+    font-family: "Roboto", system-ui, -apple-system, sans-serif;
     overflow: hidden;
     user-select: none;
     -webkit-user-select: none;
@@ -56,7 +100,7 @@
   button { cursor: pointer; border: 0; background: none; padding: 0; }
   button:disabled { cursor: default; }
   input { user-select: text; -webkit-user-select: text; }
-  :focus-visible { outline: 2px solid var(--pink-2); outline-offset: 2px; }
+  :focus-visible { outline: 2px solid var(--md-primary-ink); outline-offset: 2px; }
 
   #app {
     position: relative;
@@ -64,424 +108,898 @@
     height: var(--frame-h);
     display: flex;
     flex-direction: column;
-    padding: calc(10px + var(--safe-t)) 18px calc(14px + var(--safe-b));
-    background:
-      radial-gradient(120% 55% at 50% -12%, #3d1430 0%, transparent 62%),
-      radial-gradient(90% 45% at 105% 108%, #1f1745 0%, transparent 62%),
-      linear-gradient(180deg, var(--app-1), var(--app-2));
+    padding: var(--safe-t) 16px calc(16px + var(--safe-b));
+    background: var(--md-surface);
     overflow: hidden;
-    isolation: isolate;
   }
-  @media (min-aspect-ratio: 10/16) {
-    #app { box-shadow: 0 0 0 1px var(--line), 0 0 90px rgba(0, 0, 0, .65); }
+  @media (min-width: 601px) {
+    #app {
+      width: min(100vw, 430px);
+      border-left: 1px solid var(--md-outline-var);
+      border-right: 1px solid var(--md-outline-var);
+    }
   }
-  :fullscreen #app { border-radius: 0; }
+  :fullscreen #app { width: 100vw; max-width: none; border-left: 0; border-right: 0; }
 
   .screen { display: none; flex: 1; min-height: 0; flex-direction: column; }
-  .screen.on { display: flex; animation: enter 320ms cubic-bezier(.2, .8, .2, 1) both; }
-  @keyframes enter {
-    from { opacity: 0; transform: translateY(10px); }
+  .screen.on { display: flex; animation: m3enter 240ms cubic-bezier(.2, 0, 0, 1) both; }
+  @keyframes m3enter {
+    from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: none; }
   }
   .scroll {
-    overflow: auto; flex: 1; min-height: 0; padding-bottom: 10px;
+    overflow: auto;
+    flex: 1;
+    min-height: 0;
+    padding-bottom: 12px;
     scrollbar-width: none;
-    mask-image: linear-gradient(180deg, #000 calc(100% - 18px), transparent);
-    -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 18px), transparent);
   }
   .scroll::-webkit-scrollbar { display: none; }
 
-  .appbar { display: flex; align-items: center; gap: 6px; min-height: 56px; margin-bottom: 6px; }
-  .appbar h2 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -.3px; }
+  .appbar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 64px;
+    margin: 0 -8px 4px;
+    padding: 0 4px;
+    flex: none;
+  }
+  .appbar h2 {
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 28px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   .iconbtn {
-    width: 44px; height: 44px; border-radius: 14px; flex: none;
-    display: grid; place-items: center; color: var(--ink);
-    background: var(--surface);
-    transition: background .15s, transform .15s;
+    position: relative;
+    overflow: hidden;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    flex: none;
+    display: grid;
+    place-items: center;
+    color: var(--md-on-surface-var);
+    transition: background .15s;
   }
-  .iconbtn:active { background: var(--surface-3); transform: scale(.94); }
-  .pill {
-    margin-left: auto;
-    display: inline-flex; align-items: center; gap: 6px;
-    background: var(--surface-2);
-    border-radius: 999px;
-    padding: 8px 13px;
-    font-weight: 700;
+  .iconbtn:hover { background: var(--md-state-hover); }
+  .iconbtn:active { background: var(--md-state-press); }
+  .meta-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 8px;
+    color: var(--md-on-surface-var);
     font-size: 14px;
+    font-weight: 500;
     font-variant-numeric: tabular-nums;
+    white-space: nowrap;
   }
-  .pill svg { opacity: .7; }
   .fsbtn .fs-off, .is-fs .fsbtn .fs-on { display: none; }
   .is-fs .fsbtn .fs-off { display: block; }
   .no-fs .fsbtn { display: none; }
-  .home-top { display: flex; justify-content: flex-end; min-height: 44px; }
+  .themebtn .th-dark { display: none; }
+  body.light .themebtn .th-light { display: none; }
+  body.light .themebtn .th-dark { display: block; }
 
-  .primary, .ghost {
-    min-height: 58px;
-    border-radius: 20px;
-    font-size: 17px;
-    font-weight: 800;
+  .btn {
+    position: relative;
+    overflow: hidden;
+    min-height: 52px;
+    border-radius: 9999px;
+    font-size: 15px;
+    font-weight: 500;
     letter-spacing: .01em;
     width: 100%;
-    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-    transition: transform .12s, background .2s, opacity .2s, box-shadow .2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 24px;
+    transition: background .18s, color .18s, transform .1s;
   }
-  .primary {
-    background: linear-gradient(180deg, #ff4a7f, var(--pink));
-    color: #fff;
-    box-shadow: 0 10px 30px -8px rgba(255, 45, 106, .65), inset 0 1px 0 rgba(255, 255, 255, .25);
+  .btn:not(:disabled):active { transform: scale(.985); }
+  .btn-filled {
+    background: var(--md-primary);
+    color: var(--md-on-primary);
   }
-  .primary:disabled { background: var(--surface-2); color: var(--faint); box-shadow: none; }
-  .primary.danger { background: linear-gradient(180deg, #ff5a5a, #e0284a); }
-  .ghost { background: var(--surface-2); color: var(--ink); }
-  .primary:not(:disabled):active, .ghost:active { transform: scale(.975); }
-  .stack { display: grid; gap: 10px; margin-top: auto; padding-top: 12px; }
-  .stack.two { grid-template-columns: 1fr 1.6fr; }
+  .btn-filled:disabled {
+    background: var(--md-surface-high);
+    color: var(--md-outline);
+  }
+  .btn-tonal {
+    background: var(--md-surface-high);
+    color: var(--md-on-surface);
+  }
+  .btn-text {
+    min-height: 40px;
+    width: auto;
+    padding: 0 14px;
+    font-size: 14px;
+    color: var(--md-primary-ink);
+  }
+  .btn-text:hover { background: var(--md-state-hover); }
+  .btn-text:disabled { color: var(--md-outline); opacity: .5; }
+  .rip {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--md-ripple);
+    transform: scale(0);
+    animation: m3rip 420ms cubic-bezier(.2, 0, 0, 1) forwards;
+    pointer-events: none;
+  }
+  @keyframes m3rip {
+    to { transform: scale(2.6); opacity: 0; }
+  }
+  .stack { display: grid; gap: 10px; margin-top: auto; padding-top: 12px; flex: none; }
+  .stack.two { grid-template-columns: 1fr 1.5fr; }
   .stack[hidden] { display: none; }
 
-  #home { justify-content: flex-end; }
+  .home-top {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 56px;
+    margin: 0 -8px;
+    flex: none;
+  }
   .hero {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; text-align: center; gap: 6px;
+    flex: 1;
     min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 8px;
+    padding: 8px 0;
   }
-  .mark-wrap { position: relative; margin-bottom: 14px; }
-  .mark-wrap::before {
-    content: ""; position: absolute; inset: -18px; border-radius: 50%;
-    background: radial-gradient(closest-side, rgba(255, 45, 106, .45), transparent);
-    filter: blur(8px); z-index: -1;
-    animation: breathe 4s ease-in-out infinite;
-  }
-  @keyframes breathe { 50% { transform: scale(1.12); opacity: .7; } }
   .mark {
     display: block;
-    width: 116px; height: 116px; border-radius: 34px;
+    width: 96px;
+    height: 96px;
+    border-radius: 26px;
     object-fit: cover;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, .12), 0 18px 40px rgba(0, 0, 0, .5);
-    background: var(--surface-2);
+    border: 1px solid var(--md-outline-var);
+    background: var(--md-surface-mid);
+    margin-bottom: 6px;
   }
   .wordmark {
-    margin: 0; font-size: 54px; font-weight: 900; letter-spacing: -2px; line-height: .95;
-    background: linear-gradient(180deg, #fff 30%, #ffc2d3);
-    -webkit-background-clip: text; background-clip: text; color: transparent;
+    margin: 0;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 38px;
+    letter-spacing: -.4px;
+    color: var(--md-on-surface);
   }
-  .tag { margin: 4px 0 0; color: var(--muted); font-size: 17px; font-weight: 500; }
-  .steps { width: 100%; display: grid; gap: 8px; margin: 18px 0 4px; text-align: left; }
-  .stepcard {
-    display: flex; gap: 14px; align-items: center;
-    background: var(--surface); border: 1px solid var(--line);
-    border-radius: 20px; padding: 12px 14px;
+  .tag {
+    margin: 0 0 12px;
+    color: var(--md-on-surface-var);
+    font-size: 15px;
+    line-height: 22px;
   }
-  .numdot {
-    width: 38px; height: 38px; border-radius: 12px; flex: none;
-    display: grid; place-items: center;
-    background: var(--pink-dim); color: var(--pink-2); font-weight: 900; font-size: 17px;
+  .group {
+    width: 100%;
+    background: var(--md-surface-mid);
+    border-radius: 24px;
+    overflow: hidden;
   }
-  .stepcard b { display: block; font-size: 16px; font-weight: 700; }
-  .stepcard span { color: var(--muted); font-size: 14px; }
+  .divider {
+    height: 1px;
+    background: var(--md-outline-var);
+    margin: 0 16px;
+  }
+  .guide-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    text-align: left;
+  }
+  .guide-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    flex: none;
+    display: grid;
+    place-items: center;
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .guide-row b {
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 20px;
+    color: var(--md-on-surface);
+  }
+  .guide-row span {
+    display: block;
+    font-size: 13px;
+    line-height: 18px;
+    color: var(--md-on-surface-var);
+    margin-top: 2px;
+  }
 
-  .label {
-    font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
-    color: var(--faint); margin: 16px 4px 8px;
+  .sec-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--md-primary-ink);
+    margin: 20px 4px 8px;
   }
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 22px;
-    padding: 4px 16px;
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 68px;
+    padding: 10px 16px;
   }
-  .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 68px; }
-  .divider { height: 1px; background: var(--line); }
-  .k { font-size: 17px; font-weight: 700; }
-  .sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
-  .stepper { display: flex; align-items: center; gap: 2px; background: rgba(0, 0, 0, .25); border-radius: 16px; padding: 4px; }
+  .k { font-size: 16px; font-weight: 500; line-height: 22px; color: var(--md-on-surface); }
+  .sub { font-size: 13px; line-height: 18px; color: var(--md-on-surface-var); margin-top: 2px; }
+  .stepper { display: flex; align-items: center; gap: 6px; }
   .stepper button {
-    width: 40px; height: 40px; border-radius: 12px;
-    background: var(--surface-2); color: #fff; font-size: 22px; font-weight: 600;
-    display: grid; place-items: center;
-    transition: transform .12s, opacity .2s;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--md-surface-highest);
+    color: var(--md-on-surface);
+    font-size: 20px;
+    font-weight: 500;
+    display: grid;
+    place-items: center;
+    transition: transform .12s, opacity .2s, background .15s;
   }
-  .stepper button:active { transform: scale(.9); }
-  .stepper button:disabled { opacity: .3; }
-  .num { font-size: 22px; font-weight: 900; min-width: 38px; text-align: center; font-variant-numeric: tabular-nums; }
-  .num.bump { animation: bump 220ms ease; }
-  @keyframes bump { 40% { transform: scale(1.25); color: var(--pink-2); } }
-  .names { display: grid; gap: 8px; padding: 12px; }
+  .stepper button:not(:disabled):active { transform: scale(.92); background: var(--md-outline-var); }
+  .stepper button:disabled { opacity: .35; }
+  .num {
+    font-size: 20px;
+    font-weight: 700;
+    min-width: 34px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .num.bump { animation: m3bump 200ms ease; }
+  @keyframes m3bump { 40% { transform: scale(1.2); color: var(--md-primary-ink); } }
+
+  .seg {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid var(--md-outline);
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+  .seg button {
+    position: relative;
+    overflow: hidden;
+    min-height: 42px;
+    padding: 0 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--md-on-surface);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: background .18s, color .18s;
+  }
+  .seg button + button { border-left: 1px solid var(--md-outline); }
+  .seg button .chk { display: none; }
+  .seg button.on {
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+  }
+  .seg button.on .chk { display: inline-block; }
+  .seg-note { font-size: 13px; line-height: 18px; color: var(--md-on-surface-var); margin: 8px 4px 0; }
+
+  .rules-trigger {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--md-surface-mid);
+    border-radius: 24px;
+    text-align: left;
+    transition: background .15s;
+  }
+  .rules-trigger:active { background: var(--md-surface-high); }
+  .rules-ico {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    flex: none;
+    display: grid;
+    place-items: center;
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+  }
+  .rules-copy { flex: 1; min-width: 0; }
+  .rules-copy .sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .names { display: flex; flex-direction: column; }
   .name-row {
-    display: flex; align-items: center; gap: 10px;
-    background: rgba(0, 0, 0, .28); border-radius: 15px; padding-left: 8px;
-    transition: box-shadow .15s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 16px;
+    min-height: 56px;
   }
-  .name-row:focus-within { box-shadow: inset 0 0 0 2px var(--pink); }
+  .name-row + .name-row { border-top: 1px solid var(--md-outline-var); }
   .idx {
-    width: 30px; height: 30px; border-radius: 10px; flex: none;
-    display: grid; place-items: center;
-    background: var(--surface-2); color: var(--muted); font-size: 13px; font-weight: 800;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    flex: none;
+    display: grid;
+    place-items: center;
+    background: var(--md-surface-highest);
+    color: var(--md-on-surface-var);
+    font-size: 13px;
+    font-weight: 700;
   }
   .name-row input {
-    flex: 1; min-width: 0; min-height: 50px; border: 0; background: none;
-    color: #fff; font-size: 16px; font-weight: 600; padding: 0 12px 0 2px; outline: none;
+    flex: 1;
+    min-width: 0;
+    min-height: 48px;
+    border: 0;
+    background: none;
+    color: var(--md-on-surface);
+    font-size: 16px;
+    font-weight: 400;
+    padding: 0;
+    outline: none;
   }
-  .name-row input::placeholder { color: var(--faint); }
-  .segment {
-    position: relative;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
-    background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 4px;
+  .name-row input::placeholder { color: var(--md-outline); }
+  .name-row:focus-within .idx {
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
   }
-  .segment button {
-    min-height: 46px; border-radius: 14px; font-weight: 700; font-size: 15px; color: var(--muted);
-    transition: background .2s, color .2s;
-  }
-  .segment button.on { background: var(--surface-3); color: var(--ink); }
-  .seg-note { font-size: 13px; color: var(--muted); margin: 8px 6px 0; }
-  .rot { padding: 14px 16px; margin-top: 16px; }
-  .rot-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .chip {
-    flex: none; padding: 9px 13px; border-radius: 12px; background: var(--surface-2);
-    font-size: 13px; font-weight: 700; color: var(--ink);
-  }
-  .chip:active { background: var(--surface-3); }
-  .chip:disabled { opacity: .35; }
-  .rot-bar { height: 8px; border-radius: 99px; background: rgba(0, 0, 0, .35); margin-top: 12px; overflow: hidden; }
-  .rot-bar i { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, var(--violet), var(--pink)); transition: width .4s ease; }
-  .rot-faces { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-  .face {
-    font-size: 12px; font-weight: 700; padding: 5px 9px; border-radius: 99px;
-    background: rgba(0, 0, 0, .3); color: var(--muted);
-  }
-  .face.done { background: var(--pink-dim); color: var(--pink-2); text-decoration: line-through; text-decoration-thickness: 2px; }
 
-  .pass-top { display: flex; align-items: center; gap: 12px; min-height: 48px; }
-  .dots { flex: 1; display: flex; gap: 5px; }
-  .dots i { flex: 1; height: 5px; border-radius: 99px; background: var(--surface-2); transition: background .3s; }
-  .dots i.done { background: var(--pink); }
-  .dots i.now { background: var(--pink-2); animation: blink 1.2s ease-in-out infinite; }
-  @keyframes blink { 50% { opacity: .45; } }
-  .who {
-    text-align: center; color: var(--muted); font-size: 13px; font-weight: 800;
-    letter-spacing: .14em; text-transform: uppercase; margin-top: 14px;
+  .rot { padding: 16px; }
+  .rot-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .m3-progress {
+    height: 6px;
+    border-radius: 99px;
+    background: var(--md-surface-highest);
+    margin-top: 12px;
+    overflow: hidden;
   }
+  .m3-progress.slim { height: 4px; margin: 0 0 12px; flex: none; }
+  .m3-progress i {
+    display: block;
+    height: 100%;
+    width: 0;
+    border-radius: inherit;
+    background: var(--md-primary);
+    transition: width .35s cubic-bezier(.2, 0, 0, 1);
+  }
+  .rot-faces { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .m3-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--md-outline-var);
+    background: var(--md-surface-low);
+    color: var(--md-on-surface);
+  }
+  .m3-chip.done {
+    background: var(--md-primary-container);
+    border-color: transparent;
+    color: var(--md-on-primary-container);
+    text-decoration: line-through;
+  }
+  .m3-chip.safe {
+    background: var(--md-safe-container);
+    border-color: transparent;
+    color: var(--md-on-safe-container);
+  }
+  .m3-chip.out {
+    opacity: .42;
+    text-decoration: line-through;
+  }
+
   .pname {
-    text-align: center; font-size: 40px; font-weight: 900;
-    letter-spacing: -1px; margin: 2px 0 16px; line-height: 1.05; word-break: break-word;
+    text-align: center;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 36px;
+    margin: 4px 0 14px;
+    word-break: break-word;
+    flex: none;
   }
   .stage { flex: 1; position: relative; min-height: 0; }
   .role, .cover {
-    position: absolute; inset: 0; border-radius: 30px;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center; text-align: center; padding: 24px;
-    border: 1px solid var(--line);
+    position: absolute;
+    inset: 0;
+    border-radius: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
   }
-  .role { background: var(--surface); visibility: hidden; overflow: hidden; }
+  .role { visibility: hidden; overflow: hidden; }
   .role.in { visibility: visible; }
-  .role.imp { background: radial-gradient(120% 80% at 50% 0%, #5a1430, #1a0810 70%); border-color: rgba(255, 45, 106, .35); }
-  .role.crew { background: radial-gradient(120% 80% at 50% 0%, #1c2c48, #0f1420 70%); border-color: rgba(124, 184, 255, .25); }
+  .role.imp {
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+  }
+  .role.crew {
+    background: var(--md-crew-container);
+    color: var(--md-on-crew-container);
+  }
   .cover {
-    background:
-      repeating-linear-gradient(135deg, rgba(255, 255, 255, .025) 0 14px, transparent 14px 28px),
-      linear-gradient(180deg, #221b2d, #18131f);
+    background: var(--md-surface-high);
     z-index: 2;
     opacity: 1;
     visibility: visible;
-    transition: none;
   }
   .cover.off {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transform: scale(1.03);
-    transition: opacity 220ms ease, transform 220ms ease, visibility 0s linear 220ms;
+    transform: scale(.98);
+    transition: opacity 200ms ease, transform 200ms ease, visibility 0s linear 200ms;
   }
   .lock {
-    width: 84px; height: 84px; border-radius: 28px;
-    background: rgba(0, 0, 0, .35); display: grid; place-items: center; margin-bottom: 18px;
-    box-shadow: 0 0 0 1px rgba(255, 45, 106, .25), 0 0 40px rgba(255, 45, 106, .2);
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--md-surface-highest);
+    color: var(--md-primary-ink);
+    display: grid;
+    place-items: center;
+    margin-bottom: 16px;
   }
-  .cover p { margin: 0; color: var(--muted); font-size: 16px; font-weight: 500; max-width: 240px; line-height: 1.4; }
-  .cover p b { color: var(--ink); }
-  .badge {
-    font-size: 13px; font-weight: 900; letter-spacing: .16em;
-    border-radius: 999px; padding: 7px 14px; margin-bottom: 12px;
+  .cover p {
+    margin: 0;
+    color: var(--md-on-surface-var);
+    font-size: 15px;
+    line-height: 22px;
+    max-width: 260px;
   }
-  .role.imp .badge { background: var(--pink); color: #fff; box-shadow: 0 0 30px rgba(255, 45, 106, .5); }
-  .role.crew .badge { background: rgba(124, 184, 255, .16); color: #d6e8ff; }
-  .hint-label { color: var(--pink-2); font-size: 15px; font-weight: 600; }
+  .cover p b { color: var(--md-on-surface); font-weight: 500; }
+  .role-ico {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    margin-bottom: 12px;
+    background: var(--md-surface);
+  }
+  .role.imp .role-ico { color: var(--md-primary); }
+  .role.crew .role-ico { color: var(--md-crew); }
+  .role-kicker {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    opacity: .85;
+  }
   .secret {
-    font-size: 52px; font-weight: 900; line-height: 1; margin: 10px 0;
-    letter-spacing: -1.5px; word-break: break-word;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 10px 0 8px;
+    word-break: break-word;
   }
-  .role.in .secret { animation: rise 460ms cubic-bezier(.2, .85, .2, 1.08) both; }
-  .cat {
-    color: var(--muted); font-size: 14px; font-weight: 700;
-    background: rgba(0, 0, 0, .3); padding: 6px 12px; border-radius: 99px;
-  }
-  .role-tip { position: absolute; bottom: 18px; left: 18px; right: 18px; font-size: 13px; color: var(--muted); }
-  @keyframes rise {
-    from { transform: translateY(18px) scale(.94); opacity: 0; }
+  .role.in .secret { animation: m3rise 300ms cubic-bezier(.2, 0, 0, 1) both; }
+  @keyframes m3rise {
+    from { transform: translateY(12px); opacity: 0; }
     to { transform: none; opacity: 1; }
   }
-
-  .call { position: relative; }
-  .call::after {
-    content: "";
-    position: absolute; inset: 0; border-radius: inherit;
-    border: 2px solid var(--pink-2);
-    animation: ring 1.6s cubic-bezier(.2, .7, .2, 1) infinite;
-    pointer-events: none;
+  .role-cat {
+    font-size: 14px;
+    font-weight: 500;
+    opacity: .85;
   }
-  @keyframes ring {
-    0% { transform: scale(1); opacity: .85; }
-    100% { transform: scale(1.08, 1.3); opacity: 0; }
+  .role-tip {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    font-size: 13px;
+    line-height: 18px;
+    opacity: .85;
   }
 
   .starter {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    font-size: 15px; color: var(--muted); font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 16px;
+    background: var(--md-surface-mid);
+    font-size: 14px;
+    color: var(--md-on-surface-var);
+    flex: none;
   }
-  .starter b { color: var(--ink); font-size: 17px; font-weight: 800; }
+  .starter b { color: var(--md-on-surface); font-size: 16px; font-weight: 700; }
   .ring-wrap {
-    position: relative; width: min(62%, 240px); aspect-ratio: 1; margin: 10px auto 14px;
-    display: grid; place-items: center; flex: none;
+    position: relative;
+    width: min(58%, 220px);
+    aspect-ratio: 1;
+    margin: 14px auto;
+    display: grid;
+    place-items: center;
+    flex: none;
   }
   .ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
   .ring circle { fill: none; stroke-width: 10; }
-  .ring-bg { stroke: var(--surface-2); }
-  .ring-fg { stroke: var(--mint); stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke .4s; }
-  .ring-wrap.warn .ring-fg { stroke: var(--yellow); }
-  .ring-wrap.late .ring-fg { stroke: var(--pink); }
-  .ring-wrap.paused .ring-fg { stroke: var(--faint); }
+  .ring-bg { stroke: var(--md-surface-highest); }
+  .ring-fg { stroke: var(--md-safe); stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke .35s; }
+  .ring-wrap.warn .ring-fg { stroke: var(--md-warn); }
+  .ring-wrap.late .ring-fg { stroke: var(--md-primary); }
+  .ring-wrap.paused .ring-fg { stroke: var(--md-outline); }
   .timer-box { text-align: center; }
-  .timer { font-size: 58px; font-weight: 900; letter-spacing: -2px; line-height: 1; font-variant-numeric: tabular-nums; }
-  .ring-wrap.warn .timer { color: var(--yellow); }
-  .ring-wrap.late .timer { color: var(--pink); animation: blink 1s ease-in-out infinite; }
-  .ring-wrap.paused .timer { opacity: .5; }
-  .timer-sub { font-size: 13px; font-weight: 800; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; margin-top: 4px; }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  .pchip {
-    padding: 10px 14px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line);
-    font-weight: 700; font-size: 15px;
+  .timer {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
   }
-  .pchip.out { color: var(--faint); text-decoration: line-through; background: transparent; }
+  .ring-wrap.warn .timer { color: var(--md-warn); }
+  .ring-wrap.late .timer { color: var(--md-primary-ink); }
+  .ring-wrap.paused .timer { color: var(--md-outline); }
+  .timer-sub {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    color: var(--md-on-surface-var);
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
 
-  .hint { margin: -2px 4px 12px; color: var(--muted); font-size: 15px; }
+  .hint { margin: 0 4px 12px; color: var(--md-on-surface-var); font-size: 14px; line-height: 20px; }
   .players { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .pbtn {
-    min-height: 64px; text-align: left; padding: 0 16px; border-radius: 18px;
-    background: var(--surface); border: 1px solid var(--line); color: #fff; font-size: 17px; font-weight: 700;
-    width: 100%; display: flex; align-items: center; gap: 10px;
-    transition: background .15s, border-color .15s, transform .12s;
+    position: relative;
     overflow: hidden;
+    min-height: 60px;
+    text-align: left;
+    padding: 0 12px;
+    border-radius: 16px;
+    background: var(--md-surface-mid);
+    border: 1px solid var(--md-outline-var);
+    color: var(--md-on-surface);
+    font-size: 15px;
+    font-weight: 500;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background .15s, border-color .15s, color .15s;
   }
-  .pbtn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pbtn span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .pbtn .av {
-    width: 32px; height: 32px; border-radius: 11px; flex: none; display: grid; place-items: center;
-    background: var(--surface-2); font-size: 14px; font-weight: 900; color: var(--muted);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    flex: none;
+    display: grid;
+    place-items: center;
+    background: var(--md-surface-highest);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--md-on-surface-var);
   }
-  .pbtn:active { transform: scale(.97); }
-  .pbtn.sel { background: var(--pink-dim); border-color: var(--pink); }
-  .pbtn.sel .av { background: var(--pink); color: #fff; }
-
-  .result {
-    flex: 1; min-height: 0; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; text-align: center; overflow: auto;
+  .pbtn .av-chk { display: none; }
+  .pbtn.sel {
+    background: var(--md-primary-container);
+    border-color: var(--md-primary);
+    color: var(--md-on-primary-container);
   }
-  .kicker { margin: 0; font-size: 14px; font-weight: 800; letter-spacing: .22em; color: var(--muted); }
-  .win-title { margin: 6px 0 0; font-size: 60px; line-height: .92; font-weight: 900; letter-spacing: -2px; }
-  #win.imp .win-title { color: var(--pink); text-shadow: 0 0 40px rgba(255, 45, 106, .45); }
-  #win.crew .win-title { color: var(--mint); text-shadow: 0 0 40px rgba(83, 240, 160, .35); }
-  .win-sub { margin: 10px 0 22px; color: var(--muted); font-size: 17px; }
-  .imps-label { font-size: 12px; font-weight: 800; letter-spacing: .16em; color: var(--pink-2); margin-bottom: 8px; }
-  .imp-name { font-size: 36px; font-weight: 900; line-height: 1.1; letter-spacing: -.5px; }
-  .wordbox {
-    margin-top: 22px; background: var(--surface); border: 1px solid var(--line); border-radius: 22px;
-    padding: 16px 22px; width: 100%;
-  }
-  .wordbox span { color: var(--muted); font-size: 12px; font-weight: 800; letter-spacing: .14em; }
-  .wordbox b { display: block; font-size: 30px; font-weight: 900; margin-top: 4px; }
-  .wordbox small { display: block; color: var(--muted); font-size: 14px; margin-top: 2px; }
-  #win { position: relative; }
-  .fx { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 4; }
-  .scrap, .ink { position: absolute; top: -8%; opacity: 0; animation: fall linear forwards; }
-  .scrap {
-    border-radius: 1px;
-    clip-path: polygon(8% 0, 18% 22%, 0 22%, 0 100%, 100% 100%, 100% 22%, 82% 22%, 70% 0, 52% 18%, 34% 0);
-  }
-  .ink { width: 9px; height: 28px; border-radius: 10px; background: #ff2d6a; box-shadow: 0 14px 0 #2a0610; }
-  @keyframes fall {
-    0% { transform: translate3d(0, -12vh, 0) rotate(0deg); opacity: 1; }
-    85% { opacity: 1; }
-    100% { transform: translate3d(var(--dx), 118vh, 0) rotate(var(--rot)); opacity: 0; }
-  }
+  .pbtn.sel .av { background: var(--md-primary); color: var(--md-on-primary); }
+  .pbtn.sel .av-char { display: none; }
+  .pbtn.sel .av-chk { display: block; }
 
   .expel-card {
-    flex: 1; border-radius: 30px; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; text-align: center; padding: 24px;
-    border: 1px solid var(--line);
+    flex: 1;
+    border-radius: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+    margin-top: 12px;
+    animation: m3enter 260ms cubic-bezier(.2, 0, 0, 1) both;
   }
-  .expel-card.imp { background: radial-gradient(120% 80% at 50% 0%, #5a1430, #1a0810 70%); border-color: rgba(255, 45, 106, .35); }
-  .expel-card.crew { background: var(--surface); }
-  .expel-card .badge.imp { background: var(--pink); color: #fff; }
-  .expel-card .badge.crew { background: var(--surface-3); color: #fff; }
-  .expel-card .who-big { font-size: 48px; font-weight: 900; line-height: 1; margin: 6px 0 14px; letter-spacing: -1px; word-break: break-word; }
-  .expel-card { animation: pop 420ms cubic-bezier(.2, .9, .3, 1.2) both; }
-  @keyframes pop { from { transform: scale(.9); opacity: 0; } to { transform: none; opacity: 1; } }
+  .expel-card.imp {
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+  }
+  .expel-card.crew {
+    background: var(--md-surface-mid);
+    color: var(--md-on-surface);
+  }
+  .expel-card .who-big {
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 8px 0 10px;
+    word-break: break-word;
+  }
+
+  #win { position: relative; }
+  .result {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: auto;
+    padding: 12px 0;
+  }
+  .win-ico {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    margin-bottom: 12px;
+  }
+  #win.imp .win-ico { background: var(--md-primary-container); color: var(--md-primary-ink); }
+  #win.crew .win-ico { background: var(--md-safe-container); color: var(--md-safe); }
+  .win-title {
+    margin: 0;
+    font-size: 32px;
+    line-height: 38px;
+    font-weight: 700;
+  }
+  #win.imp .win-title { color: var(--md-primary-ink); }
+  #win.crew .win-title { color: var(--md-safe); }
+  .win-sub { margin: 6px 0 20px; color: var(--md-on-surface-var); font-size: 15px; }
+  .sum-row {
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .sum-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--md-on-surface-var);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+  .sum-val {
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 4px;
+    color: var(--md-on-surface);
+    word-break: break-word;
+  }
+  .sum-val.imp-names { color: var(--md-primary-ink); }
+  .sum-sub { font-size: 14px; color: var(--md-on-surface-var); margin-top: 4px; }
+  .fx { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 4; }
+  .scrap { position: absolute; top: -6%; border-radius: 2px; opacity: 0; animation: fall linear forwards; }
+  @keyframes fall {
+    0% { transform: translate3d(0, -10vh, 0) rotate(0deg); opacity: 1; }
+    85% { opacity: 1; }
+    100% { transform: translate3d(var(--dx), 112vh, 0) rotate(var(--rot)); opacity: 0; }
+  }
 
   .sheet {
-    position: absolute; inset: 0; z-index: 20;
-    background: rgba(5, 4, 8, .7);
-    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-    display: flex; align-items: flex-end; padding: 12px;
-    animation: fade .2s ease both;
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    background: var(--md-scrim);
+    display: flex;
+    align-items: flex-end;
+    animation: m3fade .18s ease both;
   }
   .sheet[hidden] { display: none; }
   .sheet-card {
-    width: 100%; background: #1d1726; border: 1px solid var(--line); border-radius: 26px;
-    padding: 22px 18px calc(18px + var(--safe-b));
-    animation: up .28s cubic-bezier(.2, .9, .3, 1) both;
+    width: 100%;
+    background: var(--md-surface-low);
+    border-radius: 28px 28px 0 0;
+    padding: 12px 18px calc(18px + var(--safe-b));
+    animation: m3up .24s cubic-bezier(.2, 0, 0, 1) both;
+    display: flex;
+    flex-direction: column;
   }
-  .sheet-card h3 { margin: 0 0 6px; font-size: 22px; font-weight: 800; }
-  .sheet-card p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.45; }
-  @keyframes fade { from { opacity: 0; } }
-  @keyframes up { from { transform: translateY(40px); opacity: 0; } }
+  .sheet-card.sheet-tall { max-height: 86%; }
+  .sheet-handle {
+    width: 32px;
+    height: 4px;
+    border-radius: 99px;
+    background: var(--md-outline);
+    margin: 0 auto 14px;
+    flex: none;
+  }
+  .sheet-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .sheet-card h3 { margin: 0; font-size: 20px; font-weight: 500; line-height: 28px; }
+  .sheet-card p { margin: 4px 0 0; color: var(--md-on-surface-var); font-size: 14px; line-height: 20px; }
+  @keyframes m3fade { from { opacity: 0; } }
+  @keyframes m3up { from { transform: translateY(36px); opacity: 0; } }
 
-  .toast {
-    position: absolute; left: 50%; top: calc(14px + var(--safe-t)); z-index: 30;
-    transform: translate(-50%, -20px); opacity: 0; pointer-events: none;
-    background: #2a2236; border: 1px solid var(--line); border-radius: 14px;
-    padding: 10px 14px; font-size: 14px; font-weight: 600; white-space: nowrap;
-    transition: opacity .25s, transform .25s;
+  .rules-meta {
+    margin: 10px 0 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--md-primary-ink);
   }
-  .toast.on { opacity: 1; transform: translate(-50%, 0); }
+  .rules-scroll {
+    overflow: auto;
+    min-height: 0;
+    flex: 1;
+    scrollbar-width: none;
+    margin: 4px -4px 8px;
+    padding: 0 4px;
+  }
+  .rules-scroll::-webkit-scrollbar { display: none; }
+  .rule-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 0;
+  }
+  .rule-item + .rule-item { border-top: 1px solid var(--md-outline-var); }
+  .rule-who {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .seg3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--md-outline-var);
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+  .seg3 button {
+    position: relative;
+    overflow: hidden;
+    min-height: 36px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--md-on-surface-var);
+    background: var(--md-surface-mid);
+    transition: background .15s, color .15s;
+  }
+  .seg3 button + button { border-left: 1px solid var(--md-outline-var); }
+  .seg3 button.on-auto {
+    background: var(--md-surface-highest);
+    color: var(--md-on-surface);
+  }
+  .seg3 button.on-never {
+    background: var(--md-safe-container);
+    color: var(--md-on-safe-container);
+  }
+  .seg3 button.on-always {
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+  }
+  .switch-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0 4px;
+    border-top: 1px solid var(--md-outline-var);
+  }
+  .m3-switch {
+    position: relative;
+    width: 52px;
+    height: 32px;
+    border-radius: 9999px;
+    flex: none;
+    background: var(--md-surface-highest);
+    border: 2px solid var(--md-outline);
+    transition: background .18s, border-color .18s;
+  }
+  .m3-switch::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 6px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--md-outline);
+    transform: translateY(-50%);
+    transition: transform .18s, width .18s, height .18s, background .18s;
+  }
+  .m3-switch[aria-checked="true"] {
+    background: var(--md-primary);
+    border-color: var(--md-primary);
+  }
+  .m3-switch[aria-checked="true"]::after {
+    width: 24px;
+    height: 24px;
+    background: var(--md-on-primary);
+    transform: translate(18px, -50%);
+  }
+
+  .snackbar {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: calc(82px + var(--safe-b));
+    z-index: 30;
+    transform: translateY(16px);
+    opacity: 0;
+    pointer-events: none;
+    background: var(--md-inverse-surface);
+    color: var(--md-inverse-on-surface);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    transition: opacity .2s, transform .2s;
+  }
+  .snackbar.on { opacity: 1; transform: translateY(0); }
 
   @media (max-height: 640px) {
-    .steps { display: none; }
-    .ring-wrap { width: min(48%, 180px); }
-    .timer { font-size: 44px; }
-    .secret { font-size: 42px; }
+    .hero .group { display: none; }
+    .ring-wrap { width: min(46%, 172px); }
+    .timer { font-size: 38px; }
+    .secret { font-size: 32px; }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
-    .scrap, .ink { opacity: 0; }
+    .scrap { opacity: 0; }
   }
 </style>
 </head>
 <body>
 <div id="app">
   <section class="screen on" id="home">
-    <div class="home-top"><button type="button" class="iconbtn fsbtn" aria-label="Pantalla completa"><svg class="fs-on" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="fs-off" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    <div class="home-top">
+      <button type="button" class="iconbtn themebtn" aria-label="Cambiar tema">
+        <svg class="th-light" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="th-dark" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </button>
+      <button type="button" class="iconbtn fsbtn" aria-label="Pantalla completa">
+        <svg class="fs-on" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="fs-off" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
     <div class="hero">
-      <div class="mark-wrap"><img class="mark" src="https://files.catbox.moe/e58ywh.jpg" alt="" width="116" height="116"></div>
-      <h1 class="wordmark">Impostor</h1>
-      <p class="tag">Pasa el celular. Encuentra quién miente.</p>
-      <div class="steps">
-        <div class="stepcard"><div class="numdot">1</div><div><b>Mira tu rol</b><span>Solo tú. El resto aparta la vista.</span></div></div>
-        <div class="stepcard"><div class="numdot">2</div><div><b>Habla de la palabra</b><span>El impostor solo tiene una pista.</span></div></div>
-        <div class="stepcard"><div class="numdot">3</div><div><b>Voten y echen</b><span>Si se quedan, ganan ellos.</span></div></div>
+      <img class="mark" src="https://files.catbox.moe/e58ywh.jpg" alt="Icono de ¿Quién es el impostor?" width="96" height="96">
+      <h1 class="wordmark">¿Quién es el impostor?</h1>
+      <p class="tag">Pasa el teléfono y descubre quién miente.</p>
+      <div class="group">
+        <div class="guide-row"><div class="guide-num">1</div><div><b>Mira tu rol en secreto</b><span>Solo tú ves la pantalla. El resto aparta la vista.</span></div></div>
+        <div class="divider"></div>
+        <div class="guide-row"><div class="guide-num">2</div><div><b>Hablen de la palabra</b><span>El impostor solo recibe una pista para disimular.</span></div></div>
+        <div class="divider"></div>
+        <div class="guide-row"><div class="guide-num">3</div><div><b>Voten y expulsen</b><span>Si quedan igual o menos inocentes, ganan los impostores.</span></div></div>
       </div>
     </div>
     <div class="stack">
-      <button class="primary" id="goSetup">Jugar
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <button class="btn btn-filled" id="goSetup">Jugar
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
   </section>
@@ -489,17 +1007,24 @@
   <section class="screen" id="setup">
     <header class="appbar">
       <button class="iconbtn" id="setupBack" aria-label="Atrás">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5L8 12l7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <h2>Nueva partida</h2>
-      <span class="pill" title="Duración de la ronda">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="13" r="8" stroke="currentColor" stroke-width="2.2"/><path d="M12 9v4l2.5 2M9 2h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <span class="meta-time" title="Duración de la ronda">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="13" r="8" stroke="currentColor" stroke-width="2"/><path d="M12 9v4l2.5 2M9 2h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         <span id="timerPreview">07:00</span>
       </span>
-      <button type="button" class="iconbtn fsbtn" aria-label="Pantalla completa"><svg class="fs-on" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="fs-off" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button type="button" class="iconbtn themebtn" aria-label="Cambiar tema">
+        <svg class="th-light" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="th-dark" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </button>
+      <button type="button" class="iconbtn fsbtn" aria-label="Pantalla completa">
+        <svg class="fs-on" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="fs-off" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </header>
     <div class="scroll">
-      <div class="card">
+      <div class="group">
         <div class="row">
           <div><div class="k">Jugadores</div><div class="sub">De 3 a 16</div></div>
           <div class="stepper"><button type="button" id="minusP" aria-label="Menos jugadores">−</button><div class="num" id="pCount">4</div><button type="button" id="plusP" aria-label="Más jugadores">+</button></div>
@@ -511,98 +1036,128 @@
         </div>
       </div>
 
-      <div class="label">Pistas del impostor</div>
-      <div class="segment" role="group" aria-label="Pistas">
-        <button type="button" id="modeSame">Misma pista</button>
-        <button type="button" id="modeDiff">Pistas distintas</button>
+      <div class="sec-label">Pistas del impostor</div>
+      <div class="seg" role="group" aria-label="Pistas">
+        <button type="button" id="modeSame">
+          <svg class="chk" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Misma pista
+        </button>
+        <button type="button" id="modeDiff">
+          <svg class="chk" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Pistas distintas
+        </button>
       </div>
       <p class="seg-note" id="modeNote"></p>
 
-      <div class="label">Nombres</div>
-      <div class="card names" id="nameList"></div>
+      <div class="sec-label">Control de impostores</div>
+      <button type="button" class="rules-trigger" id="openRules">
+        <span class="rules-ico" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="rules-copy">
+          <span class="k">Elegir o proteger jugadores</span>
+          <span class="sub" id="rulesSummary">Aleatorio para todos</span>
+        </span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
 
-      <div class="card rot">
+      <div class="sec-label">Jugadores</div>
+      <div class="group names" id="nameList"></div>
+
+      <div class="sec-label">Turnos de impostor</div>
+      <div class="group rot">
         <div class="rot-top">
-          <div><div class="k">Turnos de impostor</div><div class="sub" id="rotText"></div></div>
-          <button type="button" class="chip" id="rotReset">Reiniciar</button>
+          <div><div class="k">Rotación justa</div><div class="sub" id="rotText"></div></div>
+          <button type="button" class="btn btn-text" id="rotReset">Reiniciar</button>
         </div>
-        <div class="rot-bar"><i id="rotFill"></i></div>
+        <div class="m3-progress"><i id="rotFill"></i></div>
         <div class="rot-faces" id="rotFaces"></div>
       </div>
     </div>
     <div class="stack">
-      <button class="primary" id="startBtn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <button class="btn btn-filled" id="startBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5v14l11-7-11-7Z" fill="currentColor"/></svg>
         Empezar
       </button>
     </div>
   </section>
 
   <section class="screen" id="pass">
-    <div class="pass-top">
+    <header class="appbar">
       <button class="iconbtn quit" aria-label="Terminar partida">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
       </button>
-      <div class="dots" id="dots"></div>
-      <button type="button" class="iconbtn fsbtn" aria-label="Pantalla completa"><svg class="fs-on" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="fs-off" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    </div>
-    <div class="who" id="passHelp">Turno 1 de 4</div>
+      <h2 id="passHelp">Turno 1 de 4</h2>
+      <button type="button" class="iconbtn fsbtn" aria-label="Pantalla completa">
+        <svg class="fs-on" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="fs-off" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </header>
+    <div class="m3-progress slim"><i id="passBar"></i></div>
     <div class="pname" id="passName">—</div>
     <div class="stage" id="stage">
       <div class="role" id="roleCard" aria-hidden="true"></div>
       <div class="cover" id="cover">
         <div class="lock" aria-hidden="true">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2.5" stroke="#ff2d6a" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="#ff2d6a" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="15.5" r="1.4" fill="#ff2d6a"/></svg>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2.5" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="15.5" r="1.4" fill="currentColor"/></svg>
         </div>
         <p id="coverText">Rol oculto.</p>
       </div>
     </div>
     <div class="stack" id="beforeReveal">
-      <button class="primary call" id="tapReveal">Ver mi rol</button>
+      <button class="btn btn-filled" id="tapReveal">Ver mi rol</button>
     </div>
     <div class="stack" id="afterReveal" hidden>
-      <button class="primary" id="hidePass">Ocultar y pasar</button>
+      <button class="btn btn-filled" id="hidePass">Ocultar y pasar</button>
     </div>
   </section>
 
   <section class="screen" id="discuss">
     <header class="appbar">
       <button class="iconbtn quit" aria-label="Terminar partida">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
       </button>
       <h2>Discusión</h2>
-      <span class="pill" id="alivePill">4 vivos</span>
-      <button type="button" class="iconbtn fsbtn" aria-label="Pantalla completa"><svg class="fs-on" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="fs-off" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span class="meta-time" id="alivePill">4 vivos</span>
+      <button type="button" class="iconbtn fsbtn" aria-label="Pantalla completa">
+        <svg class="fs-on" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="fs-off" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </header>
     <div class="starter"><span id="starterLabel">Empieza</span><b id="starterName">—</b></div>
     <div class="ring-wrap" id="ringWrap">
       <svg class="ring" viewBox="0 0 200 200" aria-hidden="true"><circle class="ring-bg" cx="100" cy="100" r="88"/><circle class="ring-fg" id="ringFg" cx="100" cy="100" r="88"/></svg>
       <div class="timer-box">
         <div class="timer" id="timer">07:00</div>
-        <div class="timer-sub" id="timerSub">restante</div>
+        <div class="timer-sub" id="timerSub">Restante</div>
       </div>
     </div>
     <div class="scroll"><div class="chips" id="aliveList"></div></div>
     <div class="stack two">
-      <button class="ghost" id="pauseBtn">Pausa</button>
-      <button class="primary" id="toVote">Votar</button>
+      <button class="btn btn-tonal" id="pauseBtn">Pausa</button>
+      <button class="btn btn-filled" id="toVote">Votar</button>
     </div>
   </section>
 
   <section class="screen" id="vote">
-    <header class="appbar"><h2 id="voteTitle">¿A quién echan?</h2></header>
+    <header class="appbar">
+      <button class="iconbtn" id="backDiscussTop" aria-label="Volver a la discusión">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <h2 id="voteTitle">¿A quién echan?</h2>
+    </header>
     <p class="hint" id="voteHint">Toquen a quien quieran echar.</p>
     <div class="scroll"><div class="players" id="voteList"></div></div>
     <div class="stack">
-      <button class="primary" id="confirmVote" disabled>Elijan a alguien</button>
-      <button class="ghost" id="backDiscuss">Volver a la discusión</button>
+      <button class="btn btn-filled" id="confirmVote" disabled>Elijan a alguien</button>
+      <button class="btn btn-tonal" id="backDiscuss">Volver a la discusión</button>
     </div>
   </section>
 
   <section class="screen" id="expel">
     <div class="expel-card" id="expelBox"></div>
     <div class="stack">
-      <button class="primary" id="continueBtn">Seguir</button>
+      <button class="btn btn-filled" id="continueBtn">Seguir</button>
     </div>
   </section>
 
@@ -610,22 +1165,46 @@
     <div class="fx" id="fx" aria-hidden="true"></div>
     <div class="result" id="winBox"></div>
     <div class="stack">
-      <button class="primary" id="againBtn">Otra ronda</button>
-      <button class="ghost" id="menuBtn">Editar jugadores</button>
+      <button class="btn btn-filled" id="againBtn">Otra ronda</button>
+      <button class="btn btn-tonal" id="menuBtn">Editar jugadores</button>
     </div>
   </section>
 
-  <div class="sheet" id="sheet" hidden>
-    <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
-      <h3 id="sheetTitle"></h3>
-      <p id="sheetText"></p>
+  <div class="sheet" id="rulesSheet" hidden>
+    <div class="sheet-card sheet-tall" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      <div class="sheet-head">
+        <h3 id="rulesTitle">Control de impostores</h3>
+        <button type="button" class="btn btn-text" id="rulesClear">Limpiar</button>
+      </div>
+      <p>Marca quién nunca será impostor o elige manualmente quién sí lo será.</p>
+      <div class="rules-meta" id="rulesMeta"></div>
+      <div class="rules-scroll" id="rulesList"></div>
+      <div class="switch-row">
+        <div>
+          <div class="k">Solo para esta ronda</div>
+          <div class="sub">Quita los impostores elegidos al empezar</div>
+        </div>
+        <button type="button" class="m3-switch" id="oneShotSwitch" role="switch" aria-checked="true" aria-label="Solo para esta ronda"></button>
+      </div>
       <div class="stack">
-        <button class="primary danger" id="sheetYes"></button>
-        <button class="ghost" id="sheetNo">Cancelar</button>
+        <button type="button" class="btn btn-filled" id="rulesDone">Listo</button>
       </div>
     </div>
   </div>
-  <div class="toast" id="toast" role="status"></div>
+
+  <div class="sheet" id="sheet" hidden>
+    <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      <h3 id="sheetTitle"></h3>
+      <p id="sheetText"></p>
+      <div class="stack">
+        <button class="btn btn-filled" id="sheetYes"></button>
+        <button class="btn btn-tonal" id="sheetNo">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  <div class="snackbar" id="toast" role="status"></div>
 </div>
 <script>
 const PACK = `
@@ -1308,7 +1887,8 @@ Shrek|Personajes|ogro|verde|pantano
   return { w, c, h };
 });
 
-const KEY = "impostor-config-v3";
+const KEY = "impostor-config-v4";
+const THEME_KEY = "impostor-theme-v1";
 const ROTATION_KEY = "impostor-rotation-v2";
 const LEGACY_ROTATION_KEY = "impostor-served-v1";
 const WORDS_KEY = "impostor-words-v2";
@@ -1322,6 +1902,9 @@ function show(id) {
 }
 let playersN = 4, impostorsN = 1, hintMode = "same";
 let names = ["Jugador 1", "Jugador 2", "Jugador 3", "Jugador 4"];
+let playerRoles = ["auto", "auto", "auto", "auto"];
+let forcedOneShot = true;
+let theme = "dark";
 let game = null, timerId = null, wakeLock = null, toastId = null;
 function maxImp(n) { return Math.max(1, n - 2); }
 function roundSeconds(n) { return (5 + Math.floor(n / 2)) * 60; }
@@ -1371,8 +1954,49 @@ function toast(text) {
   t.textContent = text;
   t.classList.add("on");
   clearTimeout(toastId);
-  toastId = setTimeout(() => t.classList.remove("on"), 2200);
+  toastId = setTimeout(() => t.classList.remove("on"), 2400);
 }
+
+function applyTheme(next) {
+  theme = next === "light" ? "light" : "dark";
+  document.body.classList.toggle("light", theme === "light");
+  const meta = $("themeMeta");
+  if (meta) meta.setAttribute("content", theme === "light" ? "#fff8f7" : "#141213");
+  document.querySelectorAll(".themebtn").forEach(b => {
+    const label = theme === "light" ? "Cambiar a modo oscuro" : "Cambiar a modo claro";
+    b.setAttribute("aria-label", label);
+    b.title = label;
+  });
+}
+function initTheme() {
+  const saved = readJSON(THEME_KEY, null);
+  applyTheme(saved || "dark");
+}
+document.querySelectorAll(".themebtn").forEach(b => {
+  b.onclick = () => {
+    const next = theme === "light" ? "dark" : "light";
+    applyTheme(next);
+    writeJSON(THEME_KEY, next);
+  };
+});
+initTheme();
+
+$("app").addEventListener("pointerdown", (e) => {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const host = e.target.closest(".btn, .iconbtn, .pbtn, .rules-trigger, .seg button, .seg3 button");
+  if (!host || host.disabled) return;
+  const rect = host.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  const rip = document.createElement("span");
+  rip.className = "rip";
+  rip.style.width = rip.style.height = size + "px";
+  const x = e.clientX ? e.clientX - rect.left : rect.width / 2;
+  const y = e.clientY ? e.clientY - rect.top : rect.height / 2;
+  rip.style.left = (x - size / 2) + "px";
+  rip.style.top = (y - size / 2) + "px";
+  host.appendChild(rip);
+  rip.addEventListener("animationend", () => rip.remove(), { once: true });
+});
 
 function isFullscreen() {
   return !!(document.fullscreenElement || document.webkitFullscreenElement);
@@ -1451,10 +2075,41 @@ function closeSheet(confirmed) {
 $("sheetYes").onclick = () => closeSheet(true);
 $("sheetNo").onclick = () => closeSheet(false);
 $("sheet").onclick = (e) => { if (e.target.id === "sheet") closeSheet(false); };
-document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("sheet").hidden) closeSheet(false); });
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  if (!$("sheet").hidden) closeSheet(false);
+  else if (!$("rulesSheet").hidden) closeRulesSheet();
+});
+
+function sanitizeRole(r) {
+  return r === "never" || r === "always" ? r : "auto";
+}
+function normalizeRoles() {
+  impostorsN = Math.min(Math.max(1, impostorsN), maxImp(playersN));
+  playerRoles = playerRoles.slice(0, playersN).map(sanitizeRole);
+  while (playerRoles.length < playersN) playerRoles.push("auto");
+  let alwaysIdx = [];
+  for (let i = 0; i < playersN; i++) if (playerRoles[i] === "always") alwaysIdx.push(i);
+  while (alwaysIdx.length > impostorsN) {
+    playerRoles[alwaysIdx.pop()] = "auto";
+  }
+  let neverIdx = [];
+  for (let i = 0; i < playersN; i++) if (playerRoles[i] === "never") neverIdx.push(i);
+  while (playersN - neverIdx.length < impostorsN && neverIdx.length) {
+    playerRoles[neverIdx.pop()] = "auto";
+  }
+}
 
 function saveConfig() {
-  writeJSON(KEY, { playersN, impostorsN, hintMode, names: names.slice(0, playersN) });
+  normalizeRoles();
+  writeJSON(KEY, {
+    playersN,
+    impostorsN,
+    hintMode,
+    names: names.slice(0, playersN),
+    roles: playerRoles.slice(0, playersN),
+    forcedOneShot
+  });
 }
 function bump(id) {
   const el = $(id);
@@ -1465,6 +2120,7 @@ function bump(id) {
 function renderNames() {
   names = names.slice(0, playersN);
   while (names.length < playersN) names.push("Jugador " + (names.length + 1));
+  normalizeRoles();
   const box = $("nameList");
   box.innerHTML = "";
   names.forEach((n, i) => {
@@ -1492,11 +2148,12 @@ function renderNames() {
     box.appendChild(row);
   });
   renderCounters();
+  renderRulesSummary();
   renderRotation();
   saveConfig();
 }
 function renderCounters() {
-  impostorsN = Math.min(Math.max(1, impostorsN), maxImp(playersN));
+  normalizeRoles();
   $("pCount").textContent = playersN;
   $("iCount").textContent = impostorsN;
   $("impSub").textContent = "Máximo " + maxImp(playersN) + " con " + playersN + " jugadores";
@@ -1515,15 +2172,125 @@ function renderCounters() {
       ? "Todos los impostores reciben la misma pista."
       : "Cada impostor recibe una pista diferente.";
 }
+function renderRulesSummary() {
+  normalizeRoles();
+  const neverN = playerRoles.filter(r => r === "never").length;
+  const alwaysN = playerRoles.filter(r => r === "always").length;
+  const el = $("rulesSummary");
+  if (!neverN && !alwaysN) {
+    el.textContent = "Aleatorio para todos";
+  } else if (neverN && !alwaysN) {
+    el.textContent = neverN === 1 ? "1 jugador nunca será impostor" : neverN + " jugadores nunca serán impostores";
+  } else if (!neverN && alwaysN) {
+    el.textContent = alwaysN === 1 ? "1 impostor elegido manualmente" : alwaysN + " impostores elegidos manualmente";
+  } else {
+    el.textContent = alwaysN + (alwaysN === 1 ? " impostor elegido" : " impostores elegidos") + " · " + neverN + (neverN === 1 ? " protegido" : " protegidos");
+  }
+}
+function setPlayerRole(idx, nextRole) {
+  normalizeRoles();
+  if (nextRole === "never") {
+    const otherNever = playerRoles.filter((r, i) => i !== idx && r === "never").length;
+    if (playersN - (otherNever + 1) < impostorsN) {
+      toast("Necesitas al menos " + impostorsN + " jugador" + (impostorsN > 1 ? "es" : "") + " disponible" + (impostorsN > 1 ? "s" : "") + " para impostor");
+      return;
+    }
+    playerRoles[idx] = "never";
+  } else if (nextRole === "always") {
+    const otherAlways = playerRoles.filter((r, i) => i !== idx && r === "always").length;
+    if (impostorsN === 1) {
+      playerRoles = playerRoles.map((r, i) => i === idx ? "always" : r === "always" ? "auto" : r);
+    } else if (otherAlways >= impostorsN) {
+      toast("Ya elegiste los " + impostorsN + " impostores. Quita uno o sube el límite.");
+      return;
+    } else {
+      playerRoles[idx] = "always";
+    }
+  } else {
+    playerRoles[idx] = "auto";
+  }
+  saveConfig();
+  renderRulesSheet();
+  renderRulesSummary();
+  renderRotation();
+}
+function renderRulesSheet() {
+  normalizeRoles();
+  const list = cleanNames();
+  const alwaysN = playerRoles.filter(r => r === "always").length;
+  const neverN = playerRoles.filter(r => r === "never").length;
+  $("rulesMeta").textContent = "Impostores elegidos: " + alwaysN + " de " + impostorsN + " · Protegidos: " + neverN;
+  $("rulesClear").disabled = alwaysN === 0 && neverN === 0;
+  $("oneShotSwitch").setAttribute("aria-checked", String(forcedOneShot));
+  const box = $("rulesList");
+  box.innerHTML = "";
+  list.forEach((name, i) => {
+    const role = playerRoles[i] || "auto";
+    const item = document.createElement("div");
+    item.className = "rule-item";
+    const who = document.createElement("div");
+    who.className = "rule-who";
+    const label = document.createElement("span");
+    label.textContent = name;
+    who.appendChild(label);
+    const seg = document.createElement("div");
+    seg.className = "seg3";
+    seg.setAttribute("role", "group");
+    seg.setAttribute("aria-label", "Rol para " + name);
+    [
+      ["auto", "Auto"],
+      ["never", "Nunca"],
+      ["always", "Impostor"]
+    ].forEach(([val, txt]) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = txt;
+      if (role === val) b.className = "on-" + val;
+      b.setAttribute("aria-pressed", String(role === val));
+      b.onclick = () => setPlayerRole(i, val);
+      seg.appendChild(b);
+    });
+    item.append(who, seg);
+    box.appendChild(item);
+  });
+}
+function openRulesSheet() {
+  renderRulesSheet();
+  $("rulesSheet").hidden = false;
+  $("rulesDone").focus();
+}
+function closeRulesSheet() {
+  $("rulesSheet").hidden = true;
+}
+$("openRules").onclick = openRulesSheet;
+$("rulesDone").onclick = closeRulesSheet;
+$("rulesSheet").onclick = (e) => { if (e.target.id === "rulesSheet") closeRulesSheet(); };
+$("rulesClear").onclick = () => {
+  playerRoles = playerRoles.map(() => "auto");
+  saveConfig();
+  renderRulesSheet();
+  renderRulesSummary();
+  renderRotation();
+  toast("Reglas limpiadas");
+};
+$("oneShotSwitch").onclick = () => {
+  forcedOneShot = !forcedOneShot;
+  $("oneShotSwitch").setAttribute("aria-checked", String(forcedOneShot));
+  saveConfig();
+};
+
 function loadConfig() {
   try {
-    const data = readJSON(KEY, null) || readJSON("impostor-config-v2", null) || readJSON("impostor-names", null);
+    const data = readJSON(KEY, null) || readJSON("impostor-config-v3", null) || readJSON("impostor-config-v2", null) || readJSON("impostor-names", null);
     if (!data) return;
-    if (Array.isArray(data)) { names = data; playersN = Math.min(16, Math.max(3, data.length)); return; }
+    if (Array.isArray(data)) { names = data; playersN = Math.min(16, Math.max(3, data.length)); normalizeRoles(); return; }
     if (Array.isArray(data.names)) names = data.names;
     if (data.playersN) playersN = Math.min(16, Math.max(3, data.playersN));
     if (data.impostorsN) impostorsN = data.impostorsN;
     if (data.hintMode === "diff" || data.hintMode === "same") hintMode = data.hintMode;
+    if (Array.isArray(data.roles)) playerRoles = data.roles.map(sanitizeRole);
+    if (typeof data.forcedOneShot === "boolean") forcedOneShot = data.forcedOneShot;
+    normalizeRoles();
   } catch (e) {}
 }
 function cleanNames() {
@@ -1548,6 +2315,7 @@ function loadRotation() {
 }
 function saveRotation(rot) { writeJSON(ROTATION_KEY, rot); }
 function pickImpostorIndexes(playerNames) {
+  normalizeRoles();
   const rot = loadRotation();
   const keys = playerNames.map(keyOf);
   const present = new Set(keys);
@@ -1555,38 +2323,55 @@ function pickImpostorIndexes(playerNames) {
   let served = new Set(rot.served.filter(k => present.has(k)));
   const recent = new Set(rot.last);
   const all = keys.map((_, i) => i);
+  const blocked = new Set();
   const chosen = [];
+  for (let i = 0; i < playerNames.length; i++) {
+    if (playerRoles[i] === "never") blocked.add(i);
+    else if (playerRoles[i] === "always" && chosen.length < impostorsN) chosen.push(i);
+  }
+  const eligible = all.filter(i => !blocked.has(i));
+  chosen.forEach(i => served.add(keys[i]));
   const order = (pool) => shuffle(pool.filter(i => !recent.has(keys[i]))).concat(shuffle(pool.filter(i => recent.has(keys[i]))));
-  let queue = order(all.filter(i => !served.has(keys[i])));
+  let queue = order(eligible.filter(i => !chosen.includes(i) && !served.has(keys[i])));
   while (chosen.length < impostorsN) {
     if (!queue.length) {
       served = new Set(chosen.map(i => keys[i]));
-      queue = order(all.filter(i => !chosen.includes(i)));
+      queue = order(eligible.filter(i => !chosen.includes(i)));
       if (!queue.length) break;
     }
     const i = queue.shift();
     chosen.push(i);
     served.add(keys[i]);
   }
-  if (keys.every(k => served.has(k))) served = new Set();
+  if (eligible.length && eligible.every(i => served.has(keys[i]))) served = new Set();
   saveRotation({ served: absent.concat([...served]), last: chosen.map(i => keys[i]) });
   return new Set(chosen);
 }
 function renderRotation() {
+  normalizeRoles();
   const list = cleanNames();
   const served = new Set(loadRotation().served);
-  const done = list.filter(n => served.has(keyOf(n)));
-  const total = list.length;
+  const eligible = list.filter((_, i) => playerRoles[i] !== "never");
+  const done = eligible.filter(n => served.has(keyOf(n)));
+  const total = eligible.length;
   $("rotFill").style.width = (total ? (done.length / total) * 100 : 0) + "%";
-  $("rotText").textContent = done.length
-    ? done.length + " de " + total + " ya fueron impostor. No se repiten hasta que pasen todos."
-    : "Nadie ha sido impostor todavía en esta vuelta.";
+  $("rotText").textContent = !total
+    ? "No hay jugadores disponibles para impostor."
+    : done.length
+      ? done.length + " de " + total + " ya fueron impostor. No se repiten hasta que pasen todos."
+      : "Nadie ha sido impostor todavía en esta vuelta.";
   $("rotReset").disabled = !done.length;
-  $("rotFaces").innerHTML = list.map(n => `<span class="face${served.has(keyOf(n)) ? " done" : ""}">${esc(n)}</span>`).join("");
+  $("rotFaces").innerHTML = list.map((n, i) => {
+    if (playerRoles[i] === "never") {
+      return `<span class="m3-chip safe" title="Nunca impostor"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>${esc(n)}</span>`;
+    }
+    const isDone = served.has(keyOf(n));
+    return `<span class="m3-chip${isDone ? " done" : ""}">${esc(n)}</span>`;
+  }).join("");
 }
 $("rotReset").onclick = () => ask(
   "¿Reiniciar turnos?",
-  "Todos volverán a poder ser impostor desde ya.",
+  "Todos los jugadores disponibles volverán a poder ser impostor desde ya.",
   "Reiniciar",
   () => { saveRotation({ served: [], last: [] }); renderRotation(); toast("Turnos reiniciados"); }
 );
@@ -1605,11 +2390,11 @@ loadConfig();
 renderNames();
 $("minusP").onclick = () => { if (playersN > 3) { playersN--; renderNames(); bump("pCount"); } };
 $("plusP").onclick = () => { if (playersN < 16) { playersN++; renderNames(); bump("pCount"); } };
-$("minusI").onclick = () => { if (impostorsN > 1) { impostorsN--; renderCounters(); saveConfig(); bump("iCount"); } };
-$("plusI").onclick = () => { if (impostorsN < maxImp(playersN)) { impostorsN++; renderCounters(); saveConfig(); bump("iCount"); } };
+$("minusI").onclick = () => { if (impostorsN > 1) { impostorsN--; renderCounters(); renderRulesSummary(); saveConfig(); bump("iCount"); } };
+$("plusI").onclick = () => { if (impostorsN < maxImp(playersN)) { impostorsN++; renderCounters(); renderRulesSummary(); saveConfig(); bump("iCount"); } };
 $("modeSame").onclick = () => { hintMode = "same"; renderCounters(); saveConfig(); };
 $("modeDiff").onclick = () => { hintMode = "diff"; renderCounters(); saveConfig(); };
-$("goSetup").onclick = () => { renderRotation(); show("setup"); };
+$("goSetup").onclick = () => { renderRotation(); renderRulesSummary(); show("setup"); };
 $("setupBack").onclick = () => show("home");
 
 function assign() {
@@ -1619,6 +2404,11 @@ function assign() {
     : shuffle(entry.h);
   const playerNames = cleanNames();
   const impostorAt = pickImpostorIndexes(playerNames);
+  if (forcedOneShot && playerRoles.some(r => r === "always")) {
+    playerRoles = playerRoles.map(r => r === "always" ? "auto" : r);
+    saveConfig();
+    renderRulesSummary();
+  }
   let hi = 0;
   const people = playerNames.map((name, i) => {
     const role = impostorAt.has(i) ? "imp" : "crew";
@@ -1650,19 +2440,18 @@ function startGame() {
 }
 $("startBtn").onclick = startGame;
 
-function renderDots() {
-  $("dots").innerHTML = game.order.map((_, i) =>
-    `<i class="${i < game.cursor ? "done" : i === game.cursor ? "now" : ""}"></i>`).join("");
+function renderPassProgress() {
+  const pct = game.order.length ? ((game.cursor + 1) / game.order.length) * 100 : 0;
+  $("passBar").style.width = pct + "%";
 }
 function openPass() {
   const p = game.people[game.order[game.cursor]];
   $("passName").textContent = p.name;
   $("passHelp").textContent = "Turno " + (game.cursor + 1) + " de " + game.order.length;
-  $("coverText").innerHTML = `Solo <b>${esc(p.name)}</b> debe ver la pantalla. Los demás, volteen.`;
-  renderDots();
+  $("coverText").innerHTML = `Solo <b>${esc(p.name)}</b> debe ver la pantalla. Los demás aparten la vista.`;
+  renderPassProgress();
   $("afterReveal").hidden = true;
   $("beforeReveal").hidden = false;
-  $("tapReveal").classList.add("call");
   const cover = $("cover");
   const card = $("roleCard");
   card.className = "role";
@@ -1677,8 +2466,8 @@ function openPass() {
   card.className = "role " + p.role;
   const others = game.people.filter(x => x.role === "imp" && x !== p).length;
   card.innerHTML = p.role === "imp"
-    ? `<div class="badge">ERES EL IMPOSTOR</div><div class="hint-label">Tu pista</div><div class="secret">${esc(p.hint)}</div><div class="cat">${esc(game.category)}</div><div class="role-tip">${others ? "Hay " + (others + 1) + " impostores en total. Disimula." : "No conoces la palabra. Disimula."}</div>`
-    : `<div class="badge">LA PALABRA ES</div><div class="secret">${esc(game.word)}</div><div class="cat">${esc(game.category)}</div><div class="role-tip">Habla de ella sin decirla. Encuentra al impostor.</div>`;
+    ? `<div class="role-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v5c0 5.5 3.8 10 9 11 5.2-1 9-5.5 9-11V7l-9-5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 8v5M12 16.5h.01" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div><div class="role-kicker">Eres el impostor</div><div class="secret">${esc(p.hint)}</div><div class="role-cat">Tu pista · ${esc(game.category)}</div><div class="role-tip">${others ? "Hay " + (others + 1) + " impostores en total. Disimula." : "No conoces la palabra secreta. Disimula."}</div>`
+    : `<div class="role-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="role-kicker">La palabra secreta es</div><div class="secret">${esc(game.word)}</div><div class="role-cat">Categoría: ${esc(game.category)}</div><div class="role-tip">Habla de ella sin decirla. Encuentra al impostor.</div>`;
 }
 function revealRole() {
   if (!game || game.revealed) return;
@@ -1687,7 +2476,6 @@ function revealRole() {
   $("roleCard").removeAttribute("aria-hidden");
   $("roleCard").classList.add("in");
   game.revealed = true;
-  $("tapReveal").classList.remove("call");
   $("beforeReveal").hidden = true;
   $("afterReveal").hidden = false;
   $("hidePass").textContent = game.cursor + 1 >= game.order.length ? "Ocultar y empezar" : "Ocultar y pasar";
@@ -1711,7 +2499,7 @@ function renderAlive() {
   const alive = game.people.filter(p => p.alive).length;
   $("alivePill").textContent = alive + " vivos";
   $("aliveList").innerHTML = game.people
-    .map(p => `<span class="pchip${p.alive ? "" : " out"}">${esc(p.name)}</span>`).join("");
+    .map(p => `<span class="m3-chip${p.alive ? "" : " out"}">${esc(p.name)}</span>`).join("");
 }
 function paintTimer() {
   const wrap = $("ringWrap");
@@ -1754,6 +2542,7 @@ function beginVote() {
   $("voteTitle").textContent = game.mustVote ? "¡Se acabó el tiempo!" : "¿A quién echan?";
   $("voteHint").textContent = game.mustVote ? "Tienen que echar a alguien ahora." : "Pónganse de acuerdo y toquen un nombre.";
   $("backDiscuss").hidden = game.mustVote;
+  $("backDiscussTop").hidden = game.mustVote;
   updateConfirm();
   const list = $("voteList");
   list.innerHTML = "";
@@ -1762,7 +2551,7 @@ function beginVote() {
     const b = document.createElement("button");
     b.className = "pbtn";
     b.type = "button";
-    b.innerHTML = `<span class="av">${esc(p.name.charAt(0).toUpperCase())}</span><span>${esc(p.name)}</span>`;
+    b.innerHTML = `<span class="av"><span class="av-char">${esc(p.name.charAt(0).toUpperCase())}</span><svg class="av-chk" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>${esc(p.name)}</span>`;
     b.onclick = () => {
       game.pick = game.pick === idx ? null : idx;
       list.querySelectorAll(".pbtn").forEach(x => x.classList.toggle("sel", x === b && game.pick === idx));
@@ -1778,11 +2567,13 @@ function updateConfirm() {
   btn.textContent = p ? "Echar a " + p.name : "Elijan a alguien";
 }
 $("confirmVote").onclick = () => { if (game.pick !== null) expelPlayer(game.pick); };
-$("backDiscuss").onclick = () => {
+function goBackDiscuss() {
   if (game.mustVote) return;
   show("discuss");
   if (game.seconds > 0) startClock();
-};
+}
+$("backDiscuss").onclick = goBackDiscuss;
+$("backDiscussTop").onclick = goBackDiscuss;
 function expelPlayer(idx) {
   const person = game.people[idx];
   person.alive = false;
@@ -1794,8 +2585,8 @@ function expelPlayer(idx) {
   const safe = esc(person.name);
   const left = impsLeft === 1 ? "Queda 1 impostor" : "Quedan " + impsLeft + " impostores";
   $("expelBox").innerHTML = imp
-    ? `<div class="badge imp">ERA IMPOSTOR</div><div class="who-big">${safe}</div><div class="cat">${impsLeft ? left : "¡Ya no queda ninguno!"}</div>`
-    : `<div class="badge crew">NO ERA IMPOSTOR</div><div class="who-big">${safe}</div><div class="cat">Echaron a un inocente</div>`;
+    ? `<div class="role-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="role-kicker">Era impostor</div><div class="who-big">${safe}</div><div class="role-cat">${impsLeft ? left : "¡Ya no queda ninguno!"}</div>`
+    : `<div class="role-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></div><div class="role-kicker">No era impostor</div><div class="who-big">${safe}</div><div class="role-cat">Echaron a un inocente</div>`;
   const finished = impsLeft === 0 || alive.length - impsLeft <= 1;
   $("continueBtn").textContent = finished ? "Ver resultado" : "Seguir discutiendo";
   beep(imp ? 520 : 220);
@@ -1824,36 +2615,44 @@ function endGame(winner) {
   $("win").classList.remove("imp", "crew");
   $("win").classList.add(impostorsWon ? "imp" : "crew");
   celebrate(impostorsWon ? "imp" : "crew");
+  const ico = impostorsWon
+    ? `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2L3 7v5c0 5.5 3.8 10 9 11 5.2-1 9-5.5 9-11V7l-9-5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 8v5M12 16.5h.01" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>`
+    : `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
   $("winBox").innerHTML = `
-    <p class="kicker">GANARON LOS</p>
-    <h1 class="win-title">${impostorsWon ? "Impostores" : "Jugadores"}</h1>
+    <div class="win-ico">${ico}</div>
+    <h1 class="win-title">${impostorsWon ? "Ganaron los impostores" : "Ganaron los jugadores"}</h1>
     <p class="win-sub">${impostorsWon ? "Nadie logró descubrirlos" : "Echaron a todos los impostores"}</p>
-    <div class="imps-label">${imps.length > 1 ? "ERAN IMPOSTORES" : "EL IMPOSTOR ERA"}</div>
-    ${imps.map(p => `<div class="imp-name">${esc(p.name)}</div>`).join("")}
-    <div class="wordbox"><span>LA PALABRA ERA</span><b>${esc(game.word)}</b><small>Pista: ${esc(hints)}</small></div>`;
+    <div class="group">
+      <div class="sum-row">
+        <div class="sum-label">${imps.length > 1 ? "Eran impostores" : "El impostor era"}</div>
+        <div class="sum-val imp-names">${imps.map(p => esc(p.name)).join(", ")}</div>
+      </div>
+      <div class="divider"></div>
+      <div class="sum-row">
+        <div class="sum-label">La palabra era</div>
+        <div class="sum-val">${esc(game.word)}</div>
+        <div class="sum-sub">Categoría: ${esc(game.category)} · Pista: ${esc(hints)}</div>
+      </div>
+    </div>`;
   beep(impostorsWon ? 260 : 760);
 }
 function celebrate(kind) {
   const layer = $("fx");
   layer.replaceChildren();
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const fiesta = kind === "crew";
-  const colors = ["#ff2d6a", "#ffd84a", "#53f0a0", "#7cb8ff", "#ffffff", "#8b6cff"];
-  const total = fiesta ? 54 : 28;
-  for (let i = 0; i < total; i++) {
+  if (kind !== "crew" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const colors = ["#d92642", "#7ab8ff", "#5fd38d", "#f5b841", "#ece0e2"];
+  for (let i = 0; i < 42; i++) {
     const bit = document.createElement("i");
-    bit.className = fiesta ? "scrap" : "ink";
+    bit.className = "scrap";
     bit.style.left = (Math.random() * 100) + "%";
-    bit.style.animationDelay = ((Math.random() * 3.2) - 2.4) + "s";
-    bit.style.animationDuration = ((fiesta ? 4.8 : 6.2) + Math.random() * 2.2) + "s";
-    bit.style.setProperty("--dx", (Math.random() * 90 - 45) + "px");
-    bit.style.setProperty("--rot", ((Math.random() * 640) - 320) + "deg");
-    if (fiesta) {
-      const w = 10 + Math.random() * 12;
-      bit.style.width = w + "px";
-      bit.style.height = (w * 0.72) + "px";
-      bit.style.background = colors[i % colors.length];
-    }
+    bit.style.animationDelay = ((Math.random() * 2.8) - 2.0) + "s";
+    bit.style.animationDuration = (4.4 + Math.random() * 2.0) + "s";
+    bit.style.setProperty("--dx", (Math.random() * 80 - 40) + "px");
+    bit.style.setProperty("--rot", ((Math.random() * 540) - 270) + "deg");
+    const w = 8 + Math.random() * 8;
+    bit.style.width = w + "px";
+    bit.style.height = (w * 0.7) + "px";
+    bit.style.background = colors[i % colors.length];
     layer.appendChild(bit);
   }
 }
